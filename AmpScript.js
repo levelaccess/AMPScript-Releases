@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.0.0
+// @version      6.1.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -61,98 +61,104 @@ function dataCustom() {
    return custom;
 }
 function dataReviews() {
-   var reviews = [{
+  const reviews = [
+    {
       id: "reviews-inQA",
       div: "Reviews",
       text: "Under Review",
       date: "name",
-      var1: "in_qa"
+      var1: "in_qa",
     },
     {
-     id: "reviews-clearQA",
-     text: "Updated",
-     var1: "in_qa"
-   },
+      id: "reviews-clearQA",
+      text: "Updated",
+      var1: "in_qa",
+    },
     {
       id: "reviews-completeQA",
       text: "Complete",
-      var1: "new"
+      var1: "new",
     },
     {
-     id: "reviews-missingQA",
-     text: "Missing or Unidentified Violation",
-     date: "name",
-     var1: "in_qa"
+      id: "reviews-missingQA",
+      text: "Missing or Unidentified Violation",
+      date: "name",
+      var1: "in_qa",
     },
     {
       id: "reviews-snippetQA",
       text: "Code snippet length too long",
       date: "name",
-      var1: "in_qa"
+      var1: "in_qa",
     },
     {
-    id: "reviews-cceMissingQA",
-    text: "Compliant Code Example or Recommendation Missing (Web Only)",
-    date: "name",
-    var1: "in_qa"
+      id: "reviews-cceMissingQA",
+      text: "Compliant Code Example or Recommendation Missing (Web Only)",
+      date: "name",
+      var1: "in_qa",
     },
     {
-    id: "reviews-cceNotRequiredQA",
-    text: "Compliant Code Example Not Required (Mobile Only)",
-    date: "name",
-    var1: "in_qa"
+      id: "reviews-cceNotRequiredQA",
+      text: "Compliant Code Example Not Required (Mobile Only)",
+      date: "name",
+      var1: "in_qa",
     },
     {
-     id: "reviews-meaningQA",
-     text: "Issue does not make sense",
-     date: "name",
-     var1: "in_qa"
-   },
-   {
-    id: "reviews-misalignmentQA",
-    text: "Issue Misalignment - Success Criteria or Best Practice",
-    date: "name",
-    var1: "in_qa"
-   },
-  {
-   id: "reviews-notIssueQA",
-   text: "Not an Issue, removal required",
-   date: "name",
-   var1: "in_qa"
- },
- {
-  id: "reviews-patternWrongQA",
-  text: "Pattern incorrectly used",
-  date: "name",
-  var1: "in_qa"
-},
-{
- id: "reviews-recommendationBadQA",
- text: "Recommendation does not make sense",
- date: "name",
- var1: "in_qa"
-},
-  {
-  id: "reviews-sillyQA",
-  text: "Silly Mistake",
-  date: "name",
-  var1: "in_qa"
-  },
-  {
-   id: "reviews-typosQA",
-   text: "Typo or Grammar Issue",
-   date: "name",
-   var1: "in_qa"
- },
-  {
-  id: "reviews-ucResultQA",
-  text: "Use case result issue missing",
-  date: "name",
-  var1: "in_qa"
-  }
-   ];
-   return reviews;
-
+      id: "reviews-meaningQA",
+      text: "Issue does not make sense",
+      date: "name",
+      var1: "in_qa",
+    },
+    {
+      id: "reviews-misalignmentQA",
+      text: "Issue Misalignment - Success Criteria or Best Practice",
+      date: "name",
+      var1: "in_qa",
+    },
+    {
+      id: "reviews-notIssueQA",
+      text: "Not an Issue, removal required",
+      date: "name",
+      var1: "in_qa",
+    },
+    {
+      id: "reviews-patternWrongQA",
+      text: "Pattern incorrectly used",
+      date: "name",
+      var1: "in_qa",
+    },
+    {
+      id: "reviews-recommendationBadQA",
+      text: "Recommendation does not make sense",
+      date: "name",
+      var1: "in_qa",
+    },
+    {
+      id: "reviews-sillyQA",
+      text: "Silly Mistake",
+      date: "name",
+      var1: "in_qa",
+    },
+    {
+      id: "reviews-typosQA",
+      text: "Typo or Grammar Issue",
+      date: "name",
+      var1: "in_qa",
+    },
+    {
+      id: "reviews-ucResultQA",
+      text: "Use case result issue missing",
+      date: "name",
+      var1: "in_qa",
+    },
+    {
+      id: "reviews-questionForPT",
+      text: "Question for PT",
+      date: "name",
+      var1: "in_qa",
+    }
+  ];
+  return reviews;
 }
 function dataStatus() {
    var status = [
@@ -243,6 +249,11 @@ function dataStatus() {
 }
 function dataReading() {
   const reading = [
+    {
+      id: "reading-blank",
+      text: "Blank",
+      value: "",
+    },
     {
       id: "reading-accordions",
       text: "Accordions",
@@ -797,20 +808,6 @@ function dataPreferred() {
       bps: [338],
     },
     {
-      id: "response-button-no-name",
-      text: "Button with no name",
-      issue:
-        "There are buttons without accessible names. Examples include:\n- ",
-      impact:
-        "Screen reader users will be unable to determine the purpose of these buttons. Speech input users will have difficulty activating them.",
-      recommendation:
-        "Provide a valid label for form fields. This includes providing accessible names for buttons. The accessible name of a button can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive.",
-      compliantExample: "",
-      keepElement: true,
-      keepAttribute: true,
-      bps: [338],
-    },
-    {
       id: "response-field-with-unassociated-label",
       text: "Field with unassociated label",
       issue:
@@ -858,7 +855,7 @@ function dataPreferred() {
       issue:
         "There is repetitive content without a mechanism to skip past it. Examples include:\n- ",
       impact:
-        "Keyboard-only users will have to execute numerous keypresses in order to get to the following content.",
+        "Keyboard users will have to execute numerous keypresses in order to get to the following content.",
       recommendation:
         "Provide a mechanism for skipping past repetitive content. There must be a keyboard-only means of skipping past repeated blocks of content that occur on multiple pages, such as a link. This control must be the first focusable element before the repeated content and must visually appear on keyboard focus. When the control is activated, keyboard focus must be moved beyond the repeated content.",
       compliantExample: "",
@@ -871,7 +868,7 @@ function dataPreferred() {
       text: "Skip link broken",
       issue: "The skip link does not target the main content.",
       impact:
-        "Keyboard-only users will have to execute numerous keypresses in order to get to the following content.",
+        "Keyboard users will have to execute numerous keypresses in order to get to the following content.",
       recommendation:
         "Provide a mechanism for skipping past repetitive content. There must be a keyboard-only means of skipping past repeated blocks of content that occur on multiple pages, such as a link. This control must be the first focusable element before the repeated content and must visually appear on keyboard focus. When the control is activated, keyboard focus must be moved beyond the repeated content.",
       compliantExample: "",
@@ -885,7 +882,7 @@ function dataPreferred() {
       issue:
         "A skip link exists, but it does not skip past all repetitive content.",
       impact:
-        "Keyboard-only users will have to execute numerous keypresses in order to get to the main content in the page.",
+        "Keyboard users will have to execute numerous keypresses in order to get to the main content in the page.",
       recommendation:
         "Provide a mechanism for skipping past repetitive content. There must be a keyboard-only means of skipping past repeated blocks of content that occur on multiple pages, such as a link. This control must be the first focusable element before the repeated content and must visually appear on keyboard focus. When the control is activated, keyboard focus must be moved beyond the repeated content.",
       compliantExample: "",
@@ -913,7 +910,7 @@ function dataPreferred() {
       issue:
         "There are <img> elements with an ismap attribute. Examples include:\n- ",
       impact:
-        "Keyboard-only users and screen reader users will be prevented from accessing the link in server-side image maps. Without alternative routes, these users will not be able to access the image map regions.",
+        "Keyboard users and screen reader users will be prevented from accessing the link in server-side image maps. Without alternative routes, these users will not be able to access the image map regions.",
       recommendation:
         "Provide alternatives for server-side image maps. Convert server-side image maps to client-side image maps or remove them altogether. If conversion or removal of the image maps is not possible, alternative links must be provided for each server-side image map.",
       compliantExample: "",
@@ -927,7 +924,7 @@ function dataPreferred() {
       issue:
         "There are elements that use only mouse-related event handlers. Examples include:\n- ",
       impact:
-        "Keyboard-only users will be prevented from accessing the functionality provided by these controls.",
+        "Keyboard users will be prevented from accessing the functionality provided by these controls.",
       recommendation:
         'Avoid the sole use of device-dependent event handlers. The best way to accomplish this is by using appropriate native controls, which come with keyboard functionality built in.\n\nIf using a native control is not possible, the control must have tabindex="0" and appropriate key-based JavaScript event handlers.',
       compliantExample: "",
@@ -1491,7 +1488,7 @@ function dataPreferred() {
       issue:
         "There are links that cannot receive keyboard focus. Examples include:\n- ",
       impact:
-        "Keyboard-only users will be prevented from accessing the functionality provided by these controls.",
+        "Keyboard users will be prevented from accessing the functionality provided by these controls.",
       recommendation:
         'Ensure all active elements receive keyboard focus or can be activated with the keyboard. In order for an <a> element to be focusable with the keyboard, it must have an href attribute set to a non-null value, or it must have tabindex="0".',
       compliantExample: "",
@@ -1533,7 +1530,7 @@ function dataPreferred() {
       issue:
         'There are keyboard-focusable controls with aria-hidden="true". Examples include:\n- ',
       impact:
-        "Keyboard-only users will be able to navigate to this element even if it is off screen. Screen reader users will be able to focus this element if they press Tab, but they will be unable to determine its purpose.",
+        "Keyboard users will be able to navigate to this element even if it is off screen. Screen reader users will be able to focus this element if they press Tab, but they will be unable to determine its purpose.",
       recommendation:
         "Avoid placing inactive elements in the focus order. If content is meant to be hidden from all users, hide it with display: none or visibility: hidden. If content is meant to be accessed by all users, remove any aria-hidden attributes.",
       compliantExample: "",
@@ -1632,7 +1629,7 @@ function dataPreferred() {
       impact:
         "Screen reader users will have difficulty determining the purpose and state of these controls.",
       recommendation:
-        "Ensure custom controls provide proper textual name, role, and state information. Properly structured native controls provide this information automatically. For custom controls, developers must explicitly add this information by using ARIA attributes.\n\nMost modern browsers have an Accessibility section in the developer tools panel that will display an element's calculated name, role, and state information.\n\nA control's name must represent the general purpose of the control and include any visible labeling text. It can be set through a variety of methods. Custom controls typically use the aria-label attribute or the aria-labelledby attribute to supply the name.\n\nA control's role indicates the type of control, such as \"checkbox\" or \"button\". For custom controls, the role must be set with the role attribute. The ARIA specification only permits certain values for this attribute. Additionally, the ARIA in HTML specification does prevents the use of certain roles on some elements. For a list of HTML elements and their permitted roles, see the ARIA in HTML specification: https://www.w3.org/TR/html-aria/#docconformance\n\nA control's state indicates several possible pieces of information. Common states include expanded, current, selected, checked, and disabled. Most are indicated with similarly named ARIA attributes. Certain states can only be used with certain roles. For a list of roles and their allowed states, see the ARIA specification: https://www.w3.org/TR/wai-aria/#role_definitions\n\nThe Web Accessibility Initiative (WAI) of the W3C publishes suggested patterns for custom controls in the WAI-ARIA Authoring Practices: https://www.w3.org/WAI/ARIA/apg/ These patterns are not tested or endorsed by the W3C, but they often serve as good starting points for developing custom controls.",
+        "Ensure custom controls provide proper textual name, role, and state information. Properly structured native controls provide this information automatically. For custom controls, developers must explicitly add this information by using ARIA attributes.\n\nMost modern browsers have an Accessibility section in the developer tools panel that will display an element's calculated name, role, and state information.\n\nA control's name must represent the general purpose of the control and include any visible labeling text. It can be set through a variety of methods. Custom controls typically use the aria-label attribute or the aria-labelledby attribute to supply the name.\n\nA control's role indicates the type of control, such as \"checkbox\" or \"button\". For custom controls, the role must be set with the role attribute. The ARIA specification only permits certain values for this attribute. Additionally, the ARIA in HTML specification prevents the use of certain roles on some elements. For a list of HTML elements and their permitted roles, see the ARIA in HTML specification: https://www.w3.org/TR/html-aria/#docconformance\n\nA control's state indicates several possible pieces of information. Common states include expanded, current, selected, checked, and disabled. Most are indicated with similarly named ARIA attributes. Certain states can only be used with certain roles. For a list of roles and their allowed states, see the ARIA specification: https://www.w3.org/TR/wai-aria/#role_definitions\n\nThe Web Accessibility Initiative (WAI) of the W3C publishes suggested patterns for custom controls in the WAI-ARIA Authoring Practices: https://www.w3.org/WAI/ARIA/apg/ These patterns are not tested or endorsed by the W3C, but they often serve as good starting points for developing custom controls.",
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
@@ -1793,12 +1790,26 @@ function dataPreferred() {
       bps: [602],
     },
     {
+      id: "response-button-no-name",
+      text: "Buttons - No accessible names",
+      issue:
+        "There are buttons without accessible names. Examples include:\n- ",
+      impact:
+        "Screen reader users will be unable to determine the purpose of these buttons. Speech input users will have difficulty activating them.",
+      recommendation:
+        "Ensure custom controls provide proper textual name, role, and state information. The accessible name of a button can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive.",
+      compliantExample: "",
+      keepElement: true,
+      keepAttribute: true,
+      bps: [602],
+    },
+    {
       id: "response-focus-not-moved-to-dialog",
       text: "Focus not moved to dialog",
       issue:
         "There are dialogs that do not receive focus when they appear. Examples include:\n- ",
       impact:
-        "Screen reader users will be unable to determine that these dialogs have appeared unless they review the entire page. Keyboard-only users will have difficulty navigating into the dialog.",
+        "Screen reader users and screen magnification users will be unable to determine that these dialogs have appeared unless they review the entire page. Keyboard users will have difficulty navigating into the dialog.",
       recommendation:
         "Ensure content updates define focus updates appropriately. When modal dialogs appear, focus must move to the first focusable element in the dialog. Use the JavaScript focus() method to move keyboard focus to this element.",
       compliantExample: "N/A",
@@ -1812,7 +1823,7 @@ function dataPreferred() {
       issue:
         "There are top-of-form errors that do not receive focus when they appear. Examples include:\n- ",
       impact:
-        "Screen reader users will be unable to determine that these errors have appeared unless they review the entire page.",
+        "Screen reader users and screen magnification users will be unable to determine that these errors have appeared unless they review the entire page.",
       recommendation:
         'Ensure content updates define focus updates appropriately. When top-of-form errors appear, focus must move to the container of the error. Set tabindex="-1" on the element, then use the JavaScript focus() method to move keyboard focus to this element.\n\nAlternatively, a properly structured ARIA live region may be used to announce the error when it appears.',
       compliantExample: "N/A",
@@ -1826,9 +1837,37 @@ function dataPreferred() {
       issue:
         "After submitting a form when inline errors are present, focus does not move to the first field in error.",
       impact:
-        "Screen reader users will be unable to determine that these errors have appeared unless they review the entire page.",
+        "Screen reader users and screen magnification users will be unable to determine that these errors have appeared unless they review the entire page.",
       recommendation:
         "Ensure content updates define focus updates appropriately. When inline errors appear, focus must move to the first field in error and the form field must have aria-describedby set to the ID of the error so that the error is announced when the field is focused.",
+      compliantExample: "N/A",
+      keepElement: true,
+      keepAttribute: true,
+      bps: [605],
+    },
+    {
+      id: "response-focus-not-returned-to-trigger",
+      text: "Focus not returned to triggering element",
+      issue:
+        "After closing a dialog, focus does not return to the element that opened the dialog.",
+      impact:
+        "Screen reader users and screen magnification users may become disoriented. Keyboard users will have to navigate through the contents of the page in order to return to the opening control.",
+      recommendation:
+        "Ensure content updates define focus updates appropriately. When a dialog is closed, return focus to the control that opened the dialog. Use the JavaScript focus() method to move keyboard focus to this element.",
+      compliantExample: "N/A",
+      keepElement: true,
+      keepAttribute: true,
+      bps: [605],
+    },
+    {
+      id: "response-focus-load-more",
+      text: "Focus not updated with load more controls",
+      issue:
+        "After activating a load more control, focus does not move to the newly revealed content.",
+      impact:
+        "Screen reader users and screen magnification users may become disoriented. Keyboard users will have to navigate backwards through the page to locate the newly revealed content.",
+      recommendation:
+        "Ensure content updates define focus updates appropriately. When new content appears after activating a load more control, keyboard focus must move to the newly revealed content. Use the JavaScript focus() method to move keyboard focus to the first focusable element in the newly revealed content.",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -1843,6 +1882,20 @@ function dataPreferred() {
         "Screen reader users will have difficulty determining which fields are in error and which errors correspond with which field.",
       recommendation:
         "Ensure form field constraints and errors are associated with their corresponding field.\n\nFor most form controls, the best way to associate the error is to use an aria-describedby attribute on the field set to the ID of the corresponding error.\n\nFor groups of form controls like radio buttons and checkboxes, it is best to include the error text inside the element that labels the group (such as a <legend>).",
+      compliantExample: "",
+      keepElement: true,
+      keepAttribute: true,
+      bps: [609],
+    },
+    {
+      id: "response-inline-unassociated-constraints",
+      text: "Unassociated constraints",
+      issue:
+        "There are constraints that are not programmatically associated with their corresponding fields. Examples include:\n- ",
+      impact:
+        "Screen reader users will have difficulty determining which constraints correspond with which field.",
+      recommendation:
+        "Ensure form field constraints and errors are associated with their corresponding field.\n\nFor most form controls, the best way to associate the constraint is to use an aria-describedby attribute on the field set to the ID of the corresponding constraint.\n\nFor groups of form controls like radio buttons and checkboxes, it is best to include the constraint text inside the element that labels the group (such as a <legend>).",
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
@@ -1965,7 +2018,7 @@ function dataPreferred() {
       issue:
         "The document is 20 pages or longer but does not provide a linked table of contents.",
       impact:
-        "Keyboard-only users will have difficulty efficiently navigating the document.",
+        "Keyboard users will have difficulty efficiently navigating the document.",
       recommendation:
         "Provide a linked table of contents in lengthy documents. A document is considered lengthy if it is greater than 20 pages.",
       compliantExample: "",
@@ -1979,7 +2032,7 @@ function dataPreferred() {
       issue:
         "The document is 20 pages or longer but does not provide bookmarks.",
       impact:
-        "Keyboard-only users will have difficulty efficiently navigating the document.",
+        "Keyboard users will have difficulty efficiently navigating the document.",
       recommendation:
         'Ensure that lengthy documents provide bookmarks. A document is considered lengthy if it is greater than 20 pages. Each bookmark should be named after a heading and should closely mirror the structure of the table of contents.\n\nTo add bookmarks automatically based on heading structure in Acrobat Pro:\n1. Open the Bookmarks panel.\n2. From the Options menu, select "New Bookmarks from Structure."\n3. Select the tags you would like to create bookmarks from. In most cases, H1-H3 tags are appropriate.\n4. In the Bookmarks panel, edit the bookmarks as desired.',
       compliantExample: "",
@@ -2114,7 +2167,7 @@ function dataPreferred() {
       issue:
         "There are modal dialogs that allow keyboard and/or screen reader access to elements behind the dialog. Examples include:\n- ",
       impact:
-        "Keyboard-only and/or screen reader users will have difficulty determining their position in the page. They could also have unintended access to controls behind the dialog.",
+        "Keyboard and/or screen reader users will have difficulty determining their position in the page. They could also have unintended access to controls behind the dialog.",
       recommendation:
         'Ensure content that is intended to be hidden from all users is not rendered by assistive technology. This includes content behind modal dialogs.\n\nThe best way to prevent access to content behind dialogs is with the "inert" attribute and associated polyfill.\n- Move the dialog element to be a sibling of the element containing the rest of the page content. This makes it easier to control keyboard access to underlying content.\n- Add the following polyfill script to the page: https://github.com/WICG/inert\n- When the dialog is present, add the "inert" attribute to the container of the rest of the site content. When the dialog is absent, remove the inert attribute.',
       compliantExample: "N/A",
@@ -2128,7 +2181,7 @@ function dataPreferred() {
       issue:
         "There are radio buttons that trigger focus or context changes upon selection. Examples include:\n- ",
       impact:
-        "Screen reader and keyboard-only users will be unable to select the option they want after focus or context updates occur.",
+        "Screen reader and keyboard users will be unable to select the option they want after focus or context updates occur.",
       recommendation:
         "Avoid using event handlers that trigger focus or context changes on user input. Instead of moving focus or changing context when a radio button is selected, add a submission button for the change. Other alternatives include applying the change when the entire group of radio buttons loses focus or warning the user of this behavior in visible text before the controls.",
       compliantExample: "",
@@ -2142,7 +2195,7 @@ function dataPreferred() {
       issue:
         "There are select controls that trigger focus or context changes upon selection. Examples include:\n- ",
       impact:
-        "Screen reader and keyboard-only users will be unable to select the option they want after focus or context updates occur.",
+        "Screen reader and keyboard users will be unable to select the option they want after focus or context updates occur.",
       recommendation:
         "Avoid using event handlers that trigger focus or context changes on user input. Instead of moving focus or changing context when a select's option is selected, add a submission button for the change. Other alternatives include applying the change when the select loses focus or warning the user of this behavior in visible text before the control.",
       compliantExample: "",
@@ -2156,7 +2209,7 @@ function dataPreferred() {
       issue:
         "There are text fields that trigger focus or context changes after text is entered. Examples include:\n- ",
       impact:
-        "Screen reader users and keyboard-only users will have difficulty reviewing the contents of these fields",
+        "Screen reader users and keyboard users will have difficulty reviewing the contents of these fields",
       recommendation:
         "Avoid using event handlers that trigger focus or context changes on user input. Instead of moving focus or changing context when text is entered, add a submission button for the change. Other alternatives include applying the change when the field loses focus or warning the user of this behavior in visible text before the field.",
       compliantExample: "",
@@ -2169,7 +2222,7 @@ function dataPreferred() {
       text: "Focus order not meaningful",
       issue: "The following focus order is illogical:\n1. ",
       impact:
-        "Screen reader users and keyboard-only users will have difficulty efficiently navigating the site.",
+        "Screen reader users and keyboard users will have difficulty efficiently navigating the site.",
       recommendation:
         "Ensure the focus order of interactive elements on the page is logical. The best way to set the focus order is to reorder the elements in the DOM.",
       compliantExample: "",
@@ -2183,7 +2236,7 @@ function dataPreferred() {
       issue:
         "There are elements that trigger a focus or context change as soon as they receive focus. Examples include:\n- ",
       impact:
-        "Screen reader users and keyboard-only users will lose their spot on the page and may be prevented from accessing the information they intended.",
+        "Screen reader users and keyboard users will lose their spot on the page and may be prevented from accessing the information they intended.",
       recommendation:
         "Avoid forced focus changes that are not user-initiated. Do not shift focus after a control receives focus except when immediate user interaction is needed (such as time-based alerts).",
       compliantExample: "",
@@ -2211,7 +2264,7 @@ function dataPreferred() {
       issue:
         "There are links that are not structured as <Link> tags with a Link - OBJR child. Examples include:\n- ",
       impact:
-        "Keyboard-only users will be prevented from accessing this link. Screen reader users will be unable to determine that it is a link.",
+        "Keyboard users will be prevented from accessing this link. Screen reader users will be unable to determine that it is a link.",
       recommendation:
         'Ensure links are tagged structurally as links with a Link OBJR tag. The Link - OBJR tag should open the link URL.\n\nTo add a link in Acrobat Pro:\n1. Open the Order panel and select Show reading order panel from the Options menu. \n2. Draw a rectangle around the text you intend to turn into a link and select Text/Paragraph.\n3. Locate the newly created object with the text of the URL in the Tags panel. \n4. Create a new Link tag as a sibling to this text and relocate the text inside of the Link tag. \n5.  Finally, go to Tools > Edit PDF > Link > Add/Edit Web or Document Link.\n6. Draw a rectangle that encompasses all lines of content that contain the target link, even if those lines contain content unrelated to the link. \n7. Choose "Invisible Rectangle" in the Link Type field, select Open a web page from the Link Action radio button list, then select Next. \n8. In the Enter a URL for this link field, enter the URL of the link as it is written. \n9. Next, open the Tags panel and select Find... from the Options menu. \n10. Choose Unmarked Links from the Find field, and select the Search Document radio button, then press Find until the newly created link is highlighted. \n11. Choose "Tag Element". Open the Tags panel and locate the Link tag that contains the text of the link and ensure that the Link - OBJR tag has been moved there; if not, relocate the newly created Link - OBJR tag into that Link tag.',
       compliantExample: "",
@@ -2498,7 +2551,7 @@ function dataPreferred() {
       issue:
         "There are controls that trap keyboard focus. Examples include:\n- ",
       impact:
-        "Keyboard-only users will have difficulty accessing controls of the page beyond this point.",
+        "Keyboard users will have difficulty accessing controls of the page beyond this point.",
       recommendation:
         "Ensure keyboard focus is not trapped. Users must be able to use the keyboard alone to move away from controls. When moving away from the component requires more than arrow keys, Tab, Shift+Tab, or Esc, the user must be advised of the method for moving focus away.",
       compliantExample: "",
@@ -2595,7 +2648,7 @@ function dataPreferred() {
       issue:
         "There are interactive elements without a visible keyboard focus indicator. Examples include:\n- ",
       impact:
-        "Keyboard-only users will have difficulty determining their position on the page.",
+        "Keyboard users will have difficulty determining their position on the page.",
       recommendation:
         "Ensure keyboard focus is indicated visually. When interactive elements receive focus, the element must appear on screen and a visible focus indicator must be present.\n\nFocus can be indicated in a variety of ways. Most commonly, the browser default outline is used. To use the browser default, remove any outline: none or outline: 0 CSS declarations. Alternatives to the browser default outline include underlines, a change of background, and borders. As of WCAG 2.1, a custom focus indicator must have a minimum contrast ratio of 3.00:1 against the background.",
       compliantExample: "",
@@ -2883,7 +2936,7 @@ function dataPreferred() {
       issue:
         "There are dialogs that do not receive focus when they appear. Examples include:\n- ",
       impact:
-        "Screen reader users will be unable to determine that these dialogs have appeared unless they review the entire screen. Keyboard-only users will have difficulty navigating into the dialog.",
+        "Screen reader users will be unable to determine that these dialogs have appeared unless they review the entire screen. Keyboard users will have difficulty navigating into the dialog.",
       recommendation:
         "Ensure focus is logically set when a module opens and when pop-up alerts close. When modal dialogs appear, focus must move to the first focusable element in the dialog. Post a UIAccessibilityScreenChangedNotification to move focus to this element.",
       compliantExample: "",
@@ -3022,7 +3075,7 @@ function dataPreferred() {
       issue:
         'There are keyboard-focusable controls with aria-hidden="true". Examples include:\n- ',
       impact:
-        "Keyboard-only users will be able to navigate to this element even if it is off screen. Screen reader users will be able to focus this element if they press Tab, but they will be unable to determine its purpose.",
+        "Keyboard users will be able to navigate to this element even if it is off screen. Screen reader users will be able to focus this element if they press Tab, but they will be unable to determine its purpose.",
       recommendation:
         "Avoid inappropriate use of ARIA roles, states, and properties. If content is meant to be hidden from all users, hide it with display: none or visibility: hidden. If content is meant to be accessed by all users, remove any aria-hidden attributes.",
       compliantExample: "",
@@ -3078,7 +3131,7 @@ function dataPreferred() {
       issue:
         "There are modal dialogs that allow keyboard and/or screen reader access to elements behind the dialog. Examples include:\n- ",
       impact:
-        "Keyboard-only and/or screen reader users will have difficulty determining their position in the screen. They could also have unintended access to controls behind the dialog.",
+        "Keyboard and/or screen reader users will have difficulty determining their position in the screen. They could also have unintended access to controls behind the dialog.",
       recommendation:
         "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. This includes content behind modal dialogs.\n\nThe best way to prevent access to content behind dialogs is to:\n- Ensure that the dialog container is separate from the container that holds the rest of the screen's content.\n- For the container that holds the rest of the screen's content, set the accessibilityElementsHidden property to YES.\n- When the dialog is closed, remove the accessibilityElementsHidden property.",
       compliantExample: "",
@@ -3216,7 +3269,7 @@ function dataPreferred() {
       issue:
         "There are dialogs that do not receive focus when they appear. Examples include:\n- ",
       impact:
-        "Screen reader users will be unable to determine that these dialogs have appeared unless they review the entire screen. Keyboard-only users will have difficulty navigating into the dialog.",
+        "Screen reader users will be unable to determine that these dialogs have appeared unless they review the entire screen. Keyboard users will have difficulty navigating into the dialog.",
       recommendation:
         "Ensure focus is logically set when a module opens and when pop-up alerts close. When modal dialogs appear, focus must move to the first focusable element in the dialog. Use the sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED) method to move keyboard focus to this element.",
       compliantExample: "",
@@ -3230,7 +3283,7 @@ function dataPreferred() {
       issue:
         "There are controls that cannot be navigated to with the keyboard. Examples include:\n- ",
       impact:
-        "Keyboard-only users will be prevented from accessing these controls.",
+        "Keyboard users will be prevented from accessing these controls.",
       recommendation:
         'Ensure all elements and controls can receive focus. Set the android:focusable attribute of interactive elements to "true".',
       compliantExample: "",
@@ -3370,7 +3423,7 @@ function dataPreferred() {
       issue:
         "There are modal dialogs that allow keyboard and/or screen reader access to elements behind the dialog. Examples include:\n- ",
       impact:
-        "Keyboard-only and/or screen reader users will have difficulty determining their position in the screen. They could also have unintended access to controls behind the dialog.",
+        "Keyboard and/or screen reader users will have difficulty determining their position in the screen. They could also have unintended access to controls behind the dialog.",
       recommendation:
         "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. This includes content behind modal dialogs.\n\nThe best way to prevent access to content behind dialogs is to:\n- Ensure that the dialog container is separate from the container that holds the rest of the screen's content.\n- For the container that holds the rest of the screen's content, set the android:importantForAccessibility attribute to \"noHideDescendants\".\n- When the dialog is closed, remove the importantForAccessibility attribute from the container holding the rest of the screen's contents.",
       compliantExample: "",
@@ -3384,7 +3437,7 @@ function dataPreferred() {
       issue:
         "There are controls that cannot be operated with the keyboard. Examples include:\n- ",
       impact:
-        "Keyboard-only users will be prevented from accessing these controls.",
+        "Keyboard users will be prevented from accessing these controls.",
       recommendation:
         "Ensure access to alternative input methods. This includes external keyboards, which may be used directly by people with dexterity disabilities or as an interface for switch controls and Braille displays. Generally, controls should be activatable with the Enter key or allow selection with the arrow keys. To respond to keyboard events, implement methods from the KeyEvent.Callback interface,such as onKeyUp().",
       compliantExample: "",
@@ -3564,7 +3617,7 @@ function dataPreferred() {
       issue:
         "There are controls that cannot be navigated to with the keyboard. Examples include:\n- ",
       impact:
-        "Keyboard-only users will be prevented from accessing these controls.",
+        "Keyboard users will be prevented from accessing these controls.",
       recommendation:
         "Ensure all input elements and controls can receive focus. This can generally be accomplished by using standard input controls or supporting becoming a first responder on custom input fields.",
       compliantExample: "",
@@ -3884,7 +3937,7 @@ function dataPreferred() {
       issue:
         "There is content that appears on hover and/or focus, obscures other content, and cannot be dismissed without moving focus or the cursor. Examples include:\n- ",
       impact:
-        "Screen magnification users will have difficulty moving the cursor or focus off the trigger while still keeping the content behind the revealed content in view. Keyboard-only users will be unable to review the content behind the revealed content.",
+        "Screen magnification users will have difficulty moving the cursor or focus off the trigger while still keeping the content behind the revealed content in view. Keyboard users will be unable to review the content behind the revealed content.",
       recommendation:
         "Ensure that content that appears on hover or focus may be dismissed by the user. The best way to do this is to allow the hover/focus content to be hidden with the Esc key.",
       compliantExample: "",
@@ -4106,7 +4159,7 @@ function dataPreferred() {
       issue:
         "There are interactive controls that cannot be navigated to and/or operated with the keyboard alone. Examples include:\n- ",
       impact:
-        "Keyboard-only users will be prevented from accessing the functionality provided by these controls.",
+        "Keyboard users will be prevented from accessing the functionality provided by these controls.",
       recommendation:
         'Ensure all interactive functionality is operable with the keyboard. The best way to accomplish this is by using appropriate native controls, which come with keyboard functionality built in.\n\nIf using a native control is not possible, the control must have tabindex="0" and have JavaScript event listeners that allow the control to be activated when Enter is pressed.',
       compliantExample: "",
@@ -4136,7 +4189,7 @@ function dataPreferred() {
       impact:
         "Users with dexterity and mobility disabilities may be unable to perform dragging movements to use this functionality.",
       recommendation:
-        "Ensure all functionality that uses a dragging movement can be operated by a single pointer without dragging. One way to meet this requirement is to require users to perform a series of single-pointer, non-path-based interactions instead of dragging. Keyboard-only alternatives are not sufficient to meet this requirement. Exceptions include freeform drawing or games that require dragging.",
+        "Ensure all functionality that uses a dragging movement can be operated by a single pointer without dragging. One way to meet this requirement is to require users to perform a series of single-pointer, non-path-based interactions instead of dragging. Keyboard alternatives are not sufficient to meet this requirement. Exceptions include freeform drawing or games that require dragging.",
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
@@ -4202,7 +4255,7 @@ function dataPreferred() {
       issue:
         "There are focused elements that are fully obscured by other content. Examples include:\n- ",
       impact:
-        "Keyboard-only users will have difficulty finding their position on the page.",
+        "Keyboard users will have difficulty finding their position on the page.",
       recommendation:
         "Ensure keyboard-operable elements which have focus are not fully obscured. Examples include focusable content behind sticky headers/footers and non-modal dialogs. This requirement applies to each page variation, such as responsive breakpoints.\n\nIf the interface allows the user to move elements, only the first positions of the movable content must meet this requirement. However, authors must ensure that the first positions do not fully obscure focused elements even if users can move or resize the obscuring element.",
       compliantExample: "",
@@ -4216,7 +4269,7 @@ function dataPreferred() {
       issue:
         "There are keyboard focus indicators that are too small or have insufficient contrast. Examples include:\n- ",
       impact:
-        "Keyboard-only users, especially those with low vision, will have difficulty finding their position on the page.",
+        "Keyboard users, especially those with low vision, will have difficulty finding their position on the page.",
       recommendation:
         "Ensure keyboard focus indicators have sufficient size and contrast with focused and unfocused states and with adjacent component colors. The indicator must meet one or both of the following requirements:\n\n- The indicator must enclose the component. That is, the indicator must be a solid outline around the component with no dashes or dots. It must have a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states. It must also have a contrast ratio of at least 3:1 against adjacent non-focus-indicator colors.\n\n- Alternatively, an area of the focus indicator must be of a certain size. It must either be at least as large as the area of a 1 CSS-pixel-thick perimeter of the unfocused component, or at least as large as a 4-CSS-pixel-thick line along the shortest side of the minimum bounding box of the unfocused component. It must also have a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states. Finally, it must have a contrast ratio of at least 3:1 against adjacent non-focus-indicator colors, or it must have a width or height of at least 2 CSS pixels.\n\nFocus indicators do not have to meet these requirements if the author has not changed the focus indicator styles and the color behind the indicator.",
       compliantExample: "",
@@ -4301,9 +4354,8 @@ function dataCSS() {
       "#kpmPrefs p": "margin: 0 !important; padding: 0 !important;",
 
       // Warnings about content
-      ".kpmAlert, .kpmAlert2": "margin: 0 0 0.2em 0 !important; padding: 0.25em !important; font-weight: bold; font-size: 0.9em;",
-      ".kpmAlert": "color: #000 !important; background-color: #5cd344;",
-      ".kpmAlert2": "color: #ffffff !important; background-color: #552c9f;",
+      ".kpmAlert": "display: flex; gap: 0.3em; margin: 0 0 0.2em 0 !important; padding: 0.25em !important; font-weight: bold; font-size: 0.9em; color: #FFFFFF !important; background-color: #B60000;",
+      ".kpmAlert > svg": "margin: 0.2em 0 0 0.1em;",
 
       // Buttons
       "button:focus, a:focus, input:focus, select:focus, select > option:focus": "text-decoration: underline; outline: 3px solid #000;",
@@ -4790,6 +4842,161 @@ function dataBadSites() {
   ];
   return sites;
 }
+function dataSchemas() {
+  const adobeSchema = {
+    description: {
+      requiredToExist: [
+        "SUMMARY - Bug title for Jira.",
+        "CONTEXT - Keep one or customize. Enter your actual versions numbers.",
+        "STEPS TO REPRODUCE - Keep one or customize. Enter your actual versions numbers.",
+        "ACTUAL BEHAVIOR - Required. Examples or non-compliant code is optional.",
+        "AFFECTED POPULATIONS - Optional. Only if different from default FPC.",
+        "WCAG PRIMARY SC - Required. Use the SC the issue should be identified under in an ACR.",
+        "SCREENSHOT(S) - Optional. Use when it's the easiest way to explain.",
+      ],
+      requiredToHaveContent: [
+        "SUMMARY - Bug title for Jira",
+        "CONTEXT - Keep one or customize. Enter your actual versions numbers.",
+        "STEPS TO REPRODUCE - Keep one or customize. Enter your actual versions numbers.",
+        "ACTUAL BEHAVIOR - Required. Examples or non-compliant code is optional.",
+        "WCAG PRIMARY SC - Required. Use the SC the issue should be identified under in an ACR.",
+      ],
+      requiredToHaveCode: [],
+    },
+    note: {
+      requiredToExist: [
+        "EXPECTED BEHAVIOR - Description is required. Compliant code is optional.",
+        "ADDITIONAL INFORMATION - Optional link to a resource. Use sparingly.",
+      ],
+      requiredToHaveContent: [
+        "EXPECTED BEHAVIOR - Description is required. Compliant code is optional.",
+      ],
+      requiredToHaveCode: [],
+    },
+  };
+
+  const wellsFargoSchema = {
+    description: {
+      requiredToExist: ["Summary", "Issue Description", "Devices"],
+      requiredToHaveContent: ["Summary", "Issue Description", "Devices"],
+      requiredToHaveCode: ["Non-Compliant Example"],
+    },
+    note: {
+      requiredToExist: ["Recommendation"],
+      requiredToHaveContent: ["Recommendation"],
+      requiredToHaveCode: ["Compliant Example"],
+    },
+  };
+
+  const progressiveAPQSchema = {
+    description: {
+      requiredToExist: ["Issue", "User Impact", "Steps to Reproduce", "Type"],
+      requiredToHaveContent: [
+        "Issue",
+        "User Impact",
+        "Occurrences",
+        "Steps to Reproduce",
+        "Type",
+        "Code Reference",
+      ],
+      requiredToHaveCode: ["Code Reference"],
+    },
+    note: {
+      requiredToExist: ["Recommendation"],
+      requiredToHaveContent: [
+        "Recommendation",
+        "Compliant Code Example",
+        "Recommended Reading",
+      ],
+      requiredToHaveCode: ["Compliant Code Example"],
+    },
+  };
+
+  const progressiveDQSchema = {
+    description: {
+      requiredToExist: ["Issue", "User Impact", "Steps to Reproduce", "Type"],
+      requiredToHaveContent: [
+        "Issue",
+        "User Impact",
+        "Steps to Reproduce",
+        "Type",
+        "Platform",
+        "Code Reference",
+      ],
+      requiredToHaveCode: ["Code Reference"],
+    },
+    note: {
+      requiredToExist: ["Recommendation"],
+      requiredToHaveContent: [
+        "Recommendation",
+        "Compliant Code Example",
+        "Recommended Reading",
+      ],
+      requiredToHaveCode: ["Compliant Code Example"],
+    },
+  };
+
+  const salesforceSchema = {
+    description: {
+      requiredToExist: [
+        "Issue",
+        "User Impact",
+        "Salesforce Prioritization",
+        "Screen Reader",
+        "Include in ACR",
+        "Image File - Optional. Use when it's the easiest way to explain.",
+      ],
+      requiredToHaveContent: [
+        "Issue",
+        "User Impact",
+        "Salesforce Prioritization",
+        "Code Reference",
+      ],
+      requiredToHaveCode: ["Code Reference"],
+    },
+    note: {
+      requiredToExist: ["Recommendation"],
+      requiredToHaveContent: [
+        "Recommendation",
+        "Compliant Code Example",
+        "Recommended Reading",
+      ],
+      requiredToHaveCode: ["Compliant Code Example"],
+    },
+  };
+
+  const defaultSchema = {
+    description: {
+      requiredToExist: ["Issue", "User Impact"],
+      requiredToHaveContent: [
+        "Issue",
+        "User Impact",
+        "Occurrences",
+        "Code Reference",
+      ],
+      requiredToHaveCode: ["Code Reference"],
+    },
+    note: {
+      requiredToExist: ["Recommendation"],
+      requiredToHaveContent: [
+        "Recommendation",
+        "Compliant Code Example",
+        "Recommended Reading",
+      ],
+      requiredToHaveCode: ["Compliant Code Example"],
+    },
+  };
+
+  const schemaMap = new Map();
+  schemaMap.set("adobe", adobeSchema);
+  schemaMap.set("wellsFargo", wellsFargoSchema);
+  schemaMap.set("progressiveAPQ", progressiveAPQSchema);
+  schemaMap.set("progressiveDQ", progressiveDQSchema);
+  schemaMap.set("salesforce", salesforceSchema);
+  schemaMap.set("default", defaultSchema);
+
+  return schemaMap;
+}
 /* Experimental stuff I am working on */
 
 // EXPERIMENTAL: use Ajax to grab something from another page
@@ -4887,56 +5094,131 @@ function mainNav(reportID, moduleID) {
    return linksDIV;
 }
 
-/* Multi Page: Things that are used in multiple plaaces */
+/* Multi Page: Things that are used in multiple places */
 
-// MULTI PAGE: Function to search for errors and create error messages on TD or Textarea fields
-function injectWarning(data) {
-   var array = dataErrors();
-   var alert = "";
-   var lastChar = data.text().trim().slice(-1);
-   var firstChar = data.text().trim().slice(0, 1);
-   var i = 0;
-   for (i = 0; i < array.length; i++) {
-      if (data.text().match(array[i].css)) {
-         alert +='<p class="kpmAlert">Warning: Contains "' + array[i].css +'" attribute (Injected by ' + array[i].cause + ")</p>";
+// Error generation
+function getIssueColumn(element) {
+  const rawString = element.innerText;
+  const tokens = rawString.split(/(^\[[ -Z\\^-~]*\]\s*$)(?!\{)/gmu);
+  const sectionMap = new Map();
+  const sectionHeaderRegex = /^\[[ -Z\\^-~]*\]\s*$/mu;
+  tokens.forEach((token, index) => {
+    const nextToken = tokens[index + 1] ?? "";
+    if (token.match(sectionHeaderRegex)) {
+      const cleanedSectionHeader = token.replace(/[[\]]/gmu, "").trim();
+      if (!nextToken.match(sectionHeaderRegex)) {
+        const cleanedSectionContents = nextToken.trim();
+        sectionMap.set(cleanedSectionHeader, cleanedSectionContents);
       }
-   }
-   const sites = dataBadSites();
-   sites.forEach((site) => {
-     if (data.text().match(site.url)) {
-       alert += `<p class="kpmAlert">Found ${site.reason} site link (${site.url}...). Please change or remove this link.`;
-     }
-   });
-   var warning = "";
-   var br = "<br>";
-   if (data.text().match("]\n\n\n")) {
-      warning += "Has an empty section heading ([****]). " + br;
-   }
-   if (lastChar === "]") {
-      warning += "Ends with a brace (Probable unfinished [Code Reference] or [Compliant Code Example]). " + br;
-   }
-   if (firstChar === "<") {
-      warning += "Leads with HTML (Probable automatic that needs editing). " + br;
-   }
-   if (data.text().match("aria-labeledby")) {
-      warning += "ARIA-Labelledby misspelled. " + br;
-   }
-   if (data.text().match("\n\\*\\*")) {
-      warning += "Probable custom instruction from template needs to be replaced (a line starts with '**'). " + br;
-   }
-   if (data.text().match("\\:\n\n\\[")) {
-      warning += "Content is missing (Probably in the [Issue] section). " + br;
-   }
-
-   if (data.text().match(/:\s*-\s*\[/g)) {
-      warning += "Content is missing (Probably in the [Issue] section). " + br;
-   }
-
-   if (warning) {
-      alert += '<p class="kpmAlert2">Warning: ' + warning + "</p>";
-   }
-   return alert;
+    }
+  });
+  return sectionMap;
 }
+
+function getSchema() {
+  const schemaMap = dataSchemas();
+  let currentSchema = {};
+  if (getCookieValue("kpmCustom-custom-adobe")) {
+    currentSchema = schemaMap.get("adobe");
+  } else if (getCookieValue("kpmCustom-custom-wf")) {
+    currentSchema = schemaMap.get("wellsFargo");
+  } else if (getCookieValue("kpmCustom-custom-progressive-apq")) {
+    currentSchema = schemaMap.get("progressiveAPQ");
+  } else if (getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")) {
+    currentSchema = schemaMap.get("progressiveDQ");
+  } else if (getCookieValue("kpmCustom-custom-salesforce")) {
+    currentSchema = schemaMap.get("salesforce");
+  } else {
+    currentSchema = schemaMap.get("default");
+  }
+  return currentSchema;
+}
+
+function determineErrors(sectionType, sectionMap) {
+  const currentSchema = getSchema();
+  const badCodeStrings = dataErrors();
+  const badSiteStrings = dataBadSites();
+  const errorArray = [];
+  let sections = {};
+  if (sectionType === "description") {
+    sections = currentSchema.description;
+  } else if (sectionType === "note") {
+    sections = currentSchema.note;
+  }
+
+  // Check for existence of all required sections
+  sections.requiredToExist.forEach((section) => {
+    if (!sectionMap.has(section)) {
+      errorArray.push(
+        `Error: Required section [${section}] was not found. Please add this section or double-check its spelling.`
+      );
+    }
+  });
+
+  sectionMap.forEach((sectionContents, sectionName) => {
+    if (sections.requiredToHaveContent.includes(sectionName)) {
+      if (sectionContents === "") {
+        errorArray.push(
+          `Error: [${sectionName}] appears to be empty. Please add content in this section.`
+        );
+      }
+    }
+
+    if (sections.requiredToHaveCode.includes(sectionName)) {
+      if (!sectionContents.match(/[<>{}]|(\/\*)|(\*\/)|^N\/A|^None|^$/gmu)) {
+        errorArray.push(
+          `Error: [${sectionName}] does not appear to contain code. Please ensure HTML or CSS code is present.`
+        );
+      }
+
+      badCodeStrings.forEach((badString) => {
+        if (sectionContents.includes(badString.css)) {
+          errorArray.push(
+            `Error: [${sectionName}] contains ${badString.css} attribute injected by ${badString.cause}. Please remove this attribute.`
+          );
+        }
+      });
+    }
+
+    badSiteStrings.forEach((badString) => {
+      if (sectionContents.includes(badString.url)) {
+        errorArray.push(
+          `Error: [${sectionName}] contains ${badString.reason} site ${badString.url}. Please change or remove this link.`
+        );
+      }
+    });
+
+    if (sectionContents.at(-1) === ":" || sectionContents.match(/^-\s*$/gmu)) {
+      errorArray.push(`Error: Content appears to be missing in [${sectionName}].`);
+    }
+  });
+  return errorArray;
+}
+
+function displayErrors(element, errorObject) {
+  let errorContainer = document.createElement("div");
+  errorObject.forEach((error) => {
+    const errorElement = document.createElement("p");
+    errorElement.className = "kpmAlert";
+    const errorContent = document.createTextNode(error);
+    errorElement.appendChild(errorContent);
+    errorContainer.appendChild(errorElement);
+  });
+  element.prepend(errorContainer);
+}
+
+function generateIssueErrors(issueRow, descEl, noteEl) {
+  // description section
+  const descriptionMap = getIssueColumn(descEl);
+  const descriptionErrorObject = determineErrors("description", descriptionMap);
+  displayErrors(descEl, descriptionErrorObject);
+
+  // note section
+  const noteObject = getIssueColumn(noteEl);
+  const noteErrorObject = determineErrors("note", noteObject);
+  displayErrors(noteEl, noteErrorObject);
+}
+
 
 // MUTLI PAGE: Function for building the best practice buttons
 function buildIcon(thisTitle, thisClass, thisURL, thisID) {
@@ -5774,41 +6056,69 @@ function createAddInstanceButtons(preferred,response,status,reading,code,reviews
    return createButtons;
 }
 
+// Adds a button to the View Modules page that copies a plain text list of the modules to the clipboard.
+// This list can be pasted into the delivery deck instead of having to copying and pasting the modules one by one.
+function copyModuleListToClipboard() {
+  let moduleList = "";
+  let moduleHeaderElements = document.querySelectorAll('th[scope="row"]').forEach(moduleHeaderElement => {
+    moduleList = moduleList.concat(moduleHeaderElement.innerText, "\n");
+  });
+
+  let successfulCopy = () => {
+    alert('Success: Copied plain text list of modules to clipboard!');
+  }
+
+  let failedCopy = (err) => {
+    console.error('Async: Could not copy modules', err);
+  }
+
+  navigator.clipboard.writeText(moduleList).then(successfulCopy, failedCopy);
+}
+
 /* These are the containers of functions that are called below dynamically using mutation observers or delays */
 
 // This looks at the view modules page.
 function viewModules() {
-   $("td:contains('http')").each(function () {
-      var thisTD = $(this);
-      var thisURL = thisTD.html();
-      thisTD.html("<a href=\"" + thisURL + "\" target=\"_blank\">" + thisURL + "<span class=\"accessibleAltText\"> (Opens in New Window)</span></a>");
-   });
+  $("td:contains('http')").each(function () {
+    var thisTD = $(this);
+    var thisURL = thisTD.html();
+    thisTD.html(
+      '<a href="' +
+        thisURL +
+        '" target="_blank">' +
+        thisURL +
+        '<span class="accessibleAltText"> (Opens in New Window)</span></a>'
+    );
+  });
 
-   // TODO: Make this a function since I also do this for the instance page
-   if (!getCookieValue("kpmPref-thumbALT")) {
-      viewDivAltText()
-   };
+  // Adds button for copying/pasting module list.
+  let copyModulesElement = document.createElement("button");
+  copyModulesElement.classList.add("dt-button");
+  copyModulesElement.setAttribute("aria-label", "Copy Modules");
+  let copyModulesIconElement = document.createElement("i");
+  copyModulesIconElement.classList.add("fas", "fa-copy");
+  let copyModulesTextNode = document.createTextNode("Modules");
+  copyModulesElement.appendChild(copyModulesIconElement);
+  copyModulesElement.appendChild(copyModulesTextNode);
+  copyModulesElement.addEventListener("click", copyModuleListToClipboard);
+  document
+    .querySelector("div.dt-button.disabled.spacer")
+    .after(copyModulesElement);
+
+  // TODO: Make this a function since I also do this for the instance page
+  if (!getCookieValue("kpmPref-thumbALT")) {
+    viewDivAltText();
+  }
 }
 
 // This looks at the View All Instances list page.
 function viewInstance() {
-
-   //TODO: Find all these and turn them into a single function
-   if (!getCookieValue('kpmPref-tableWarning')) {
-      $('th[scope="row"]').each(function () {
-         const thisTH = $(this),
-            alert = injectWarning(thisTH);
-         if (alert) {
-            thisTH.prepend(alert);
-         }
-      });
-   }
-   if (!getCookieValue("kpmPref-retestColor")) {
-      retestColor();
-   }
-   if (!getCookieValue("kpmPref-thumbALT")) {
-      viewDivAltText()
-   };
+  if (!getCookieValue("kpmPref-retestColor")) {
+    retestColor();
+  }
+  if (!getCookieValue("kpmPref-thumbALT")) {
+    viewDivAltText();
+  }
 }
 
 // Format the element
@@ -6171,18 +6481,23 @@ function handleEditModuleForm(reportID) {
 // This is the function for the Add Instance module.
 function addEditor(reportID) {
    if ($("#amp_modal_reportModal").length !== 0 && $("#AmpOpts").length === 0 && window.location.href.indexOf("view_use_cases.php") <= -1) {
+     // Create the new best practice lists
+     $("select[id*='violation_']:first").before(
+       "<label for='ampOptsInpt'>Find a Best Practice: </label><br><input id='ampOptsInpt' list='AmpOpts' autocomplete='off'><datalist id='AmpOpts'></datalist><br>"
+     );
+     $("#AmpOpts").append(
+       bestPracticeList2("select[id*='violation_']:first option")
+     );
 
-      // Create the new best practice lists
-      $("select[id*='violation_']:first").before("<label for='ampOptsInpt'>Find a Best Practice: </label><br><input id='ampOptsInpt' list='AmpOpts' autocomplete='off'><datalist id='AmpOpts'></datalist><br>");
-      $("#AmpOpts").append(bestPracticeList2("select[id*='violation_']:first option"));
-
-      var instanceID = $("#instance_id-").attr("value");
-      if (instanceID) {
-         $("#modal_dialog_message_reportModal_title").append(": ID#" + instanceID)
-         $("#ajax_submit").click(function(){
-            setTimeOut($('#' + instanceID).focus(),1000);
-        });
-      }
+     var instanceID = $("#instance_id-").attr("value");
+     if (instanceID) {
+       $("#modal_dialog_message_reportModal_title").append(
+         ": ID#" + instanceID
+       );
+       $("#ajax_submit").click(function () {
+         setTimeOut($("#" + instanceID).focus(), 1000);
+       });
+     }
 
       var currentID = parseInt($("[id*='violation_']").children("option:selected").attr("value"));
 
@@ -6204,20 +6519,26 @@ function addEditor(reportID) {
          }
       });
 
-      // Button to add "Go to best practice"
-      $("#GoToBP").on("click", function () {
-         var inputValue = $("#ampOptsInpt").val().trim();
-         var newBP = $("#AmpOpts option[value=\"" + inputValue + "\"]").attr("data-value");
-         if (!newBP) {
-            newBP = $("select[id*='violation_']:first").val();
-         }
-         if (newBP && newBP > 0) {
-            var newBPURL = "/public/standards/view_best_practice.php?violation_id=" + newBP + "&report_id=" + reportID;
-            window.open(newBPURL, "_blank");
-         } else {
-            alert("No Best Practice Selected");
-         }
-      });
+     // Button to add "Go to best practice"
+     $("#GoToBP").on("click", function () {
+       var inputValue = $("#ampOptsInpt").val().trim();
+       var newBP = $('#AmpOpts option[value="' + inputValue + '"]').attr(
+         "data-value"
+       );
+       if (!newBP) {
+         newBP = $("select[id*='violation_']:first").val();
+       }
+       if (newBP && newBP > 0) {
+         var newBPURL =
+           "/public/standards/view_best_practice.php?violation_id=" +
+           newBP +
+           "&report_id=" +
+           reportID;
+         window.open(newBPURL, "_blank");
+       } else {
+         alert("No Best Practice Selected");
+       }
+     });
 
       // Two single use statuses - Blank and clear everything
       $("#addLangBlank").on("click", function () {
@@ -6227,54 +6548,64 @@ function addEditor(reportID) {
            origVal = stripAngularFeatures(origVal);
          }
          newText += origVal;
-
+reportID
          var origVal2 = $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val();
          var newText2 = formatAttribute();
          newText2 += origVal2;
 
-         $("textarea[id*='element']:first").val(newText);
-         $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val(newText2);
-      });
+       $("textarea[id*='element']:first").val(newText);
+       $("textarea[id*='attribute']:first")
+         .add("textarea[id*='note']:first")
+         .val(newText2);
+     });
 
-      $("#clearFields").on("click", function () {
-         $("textarea[id*='element']:first").val("");
-         $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val("");
-      });
+     $("#clearFields").on("click", function () {
+       $("textarea[id*='element']:first").val("");
+       $("textarea[id*='attribute']:first")
+         .add("textarea[id*='note']:first")
+         .val("");
+     });
 
-      // When a response is given, this fills in the fields.
-      $("body").delegate("[id*='response-']","click",function () {
-         var clickID = $(this).attr("id");
-         var response = dataResponse2();
-         var newArray = multiArrayFlatten(response);
+     // When a response is given, this fills in the fields.
+     $("body").delegate("[id*='response-']", "click", function () {
+       var clickID = $(this).attr("id");
+       var response = dataResponse2();
+       var newArray = multiArrayFlatten(response);
 
          var combinedArray = $.merge(dataPreferred(),newArray);
 
-         var entry = combinedArray.find(function (e) {
-            return e.id === clickID;
-         });
+       var entry = combinedArray.find(function (e) {
+         return e.id === clickID;
+       });
 
-         // Inject color contrast data
-         if (entry["convertColorContrastText"]) {
-           var oldVar2 = $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val();
+       // Inject color contrast data
+       if (entry["convertColorContrastText"]) {
+         var oldVar2 = $("textarea[id*='attribute']:first")
+           .add("textarea[id*='note']:first")
+           .val();
 
-           let colorContrastStats = convertColorContrastTextFromAE(oldVar2);
+         let colorContrastStats = convertColorContrastTextFromAE(oldVar2);
 
-           if (colorContrastStats) {
-            let issueLines = entry.issue.split("\n\n");
-            entry.issue = issueLines[0] + colorContrastStats + "\n\n" + issueLines[2];
-           }            
+         if (colorContrastStats) {
+           let issueLines = entry.issue.split("\n\n");
+           entry.issue =
+             issueLines[0] + colorContrastStats + "\n\n" + issueLines[2];
          }
+       }
 
-         var newVar1 = formatElement(entry.issue, entry.impact);
-         var newVar2 = formatAttribute(entry.recommendation,entry.codeReference);
+       var newVar1 = formatElement(entry.issue, entry.impact);
+       var newVar2 = formatAttribute(entry.recommendation, entry.codeReference);
 
-         if (newVar1) {
-            var oldVar1 = $("textarea[id*='element']:first").val();
-            if (getCookieValue("kpmCustom-custom-progressive-apq") || getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")) {
-              oldVar1 = stripAngularFeatures(oldVar1);
-            }
-            $("textarea[id*='element']:first").val(newVar1 + oldVar1);
+       if (newVar1) {
+         var oldVar1 = $("textarea[id*='element']:first").val();
+         if (
+           getCookieValue("kpmCustom-custom-progressive-apq") ||
+           getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
+         ) {
+           oldVar1 = stripAngularFeatures(oldVar1);
          }
+         $("textarea[id*='element']:first").val(newVar1 + oldVar1);
+       }
 
          if (newVar2) {
             var oldVar2 = $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val();
@@ -6307,229 +6638,289 @@ function addEditor(reportID) {
          //         var thisIndex1 = str1.indexOf("[Issue]");
          var formatted1 = str1.substr(thisIndex1);
 
-         var entry1 = reviews.find(function (e) {
-            return e.id === clickID;
-         });
-         // For Under Review or Missing
-         if (entry1.date == "name") {
-            var name1 = $("#userinfo ul li:first").text();
-            var newText1 = entry1.text.split("-")[0].trim();
-            text1 = "[" + newText1.toUpperCase() + " -" + name1 + "]\nPlease review the 'Defect Comments' area for more details\n\n--------------------------\n\n" + $("textarea[id*='element']:first").val();
-         } else {
+       var entry1 = reviews.find(function (e) {
+         return e.id === clickID;
+       });
+       // For Under Review or Missing
+       if (entry1.date == "name") {
+         var name1 = $("#userinfo ul li:first").text();
+         var newText1 = entry1.text.split("-")[0].trim();
+         text1 =
+           "[" +
+           newText1.toUpperCase() +
+           " -" +
+           name1 +
+           "]\nPlease review the 'Defect Comments' area for more details\n\n--------------------------\n\n" +
+           $("textarea[id*='element']:first").val();
+       } else {
          // For Clear Review
-            var $today1 = new Date();
-            var dd1 = $today1.getDate();
-            var mm1 = $today1.getMonth() + 1;
-            var yyyy1 = $today1.getFullYear();
-            $today1 = mm1 + "/" + dd1 + "/" + yyyy1;
-            if(entry1.text == "Complete"){
-               text1 = formatted1;
-            }else if(entry1.text == "Updated"){
-               text1 = "[" + $today1 + ": " + entry1.text.toUpperCase() + "]\n\n--------------------------\n\n" + formatted1;
-            }else{
-               text1 = "[" + $today1 + ": " + entry1.text.toUpperCase() + "]\n\n--------------------------\n\n" + $("textarea[id*='element']:first").val();
-            }
-         }
-         // For Clear Review
-         if (entry1.var1) {
-            $("select[id*='defect_status_']:first").val(entry1.var1);
-            if(entry1.var1 == 'new')
-            {
-               if(entry1.text == "Complete"){
-                     $("textarea[id*='defect_comments_']:first").val('');
-               }else{
-                  $("textarea[id*='defect_comments_']:first").val('Please go into the baseline list and locate the test for this missing violation.');
-               }
-            }
-         }
-         if (entry1.text) {
-            $("textarea[id*='element']:first").val(text1);
-         }
-      });
-      // When a status is given, this prepends the first field
-      $("[id*='status-']").click(function () {
-         var clickID = $(this).attr("id");
-         var status = dataStatus();
-         var entry = status.find(function (e) {
-            return e.id === clickID;
-         });
-         var text = "";
-         if (clickID.indexOf("status-wcag") >= 0) {
-            var level = clickID.split("-")[2].toUpperCase();
-            text = "[WCAG Level: " + level + "]\n\n" + $("textarea[id*='element']:first").val();
-         } else if (entry.date == "name") {
-            var name = $("#userinfo ul li:first").text();
-            var newText = entry.text.split("-")[0].trim();
-            text = "[" + newText.toUpperCase() + " -" + name + "]\n\n" + $("textarea[id*='element']:first").val();
-         } else if (entry.date == "no") {
-            text = "[" + entry.text.toUpperCase() + "]\n\n" + $("textarea[id*='element']:first").val();
+         var $today1 = new Date();
+         var dd1 = $today1.getDate();
+         var mm1 = $today1.getMonth() + 1;
+         var yyyy1 = $today1.getFullYear();
+         $today1 = mm1 + "/" + dd1 + "/" + yyyy1;
+         if (entry1.text == "Complete") {
+           text1 = formatted1;
+         } else if (entry1.text == "Updated") {
+           text1 =
+             "[" +
+             $today1 +
+             ": " +
+             entry1.text.toUpperCase() +
+             "]\n\n--------------------------\n\n" +
+             formatted1;
          } else {
-            var $today = new Date();
-            var dd = $today.getDate();
-            var mm = $today.getMonth() + 1;
-            var yyyy = $today.getFullYear();
-            $today = mm + "/" + dd + "/" + yyyy;
-            text = "[" + $today + ": " + entry.text.toUpperCase() + "]\n\n--------------------------\n\n" + $("textarea[id*='element']:first").val();
+           text1 =
+             "[" +
+             $today1 +
+             ": " +
+             entry1.text.toUpperCase() +
+             "]\n\n--------------------------\n\n" +
+             $("textarea[id*='element']:first").val();
          }
-         if (entry.text) {
-            $("textarea[id*='element']:first").val(text);
+       }
+       // For Clear Review
+       if (entry1.var1) {
+         $("select[id*='defect_status_']:first").val(entry1.var1);
+         if (entry1.var1 == "new") {
+           if (entry1.text == "Complete") {
+             $("textarea[id*='defect_comments_']:first").val("");
+           } else {
+             $("textarea[id*='defect_comments_']:first").val(
+               "Please go into the baseline list and locate the test for this missing violation."
+             );
+           }
          }
-         if (entry.var1) {
-            $("select[id*='defect_status_']:first").val(entry.var1);
-         }
-      });
-
-      // When code is given, this appends the second field
-      $("[id*='css-']").click(function () {
-         var clickID = $(this).attr("id");
-         var cssCode = dataCode();
-         var entry = cssCode.find(function (e) {
-            return e.id === clickID;
-         });
-
-         var prefix = "\n\n";
-         var text = $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val() + prefix + entry.value;
-         if (entry.value) {
-            $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val(text);
-         }
-      });
-
-      // When a reading is given, this appends the second field
-      $("[id*='reading-']").click(function () {
-         var clickID = $(this).attr("id");
-         var reading = dataReading();
-         var entry = reading.find(function (e) {
-            return e.id === clickID;
-         });
-
-         var prefix = "\n\n[Recommended Reading]\n";
-         var text = $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val() + prefix + entry.value;
-
-         if (entry.value) {
-            $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val(text);
-         }
-      });
-
-      // When a special is given, this appends the second field
-      $("[id*='special-']").click(function () {
-         var clickID = $(this).attr("id");
-         var status = dataStatus();
-         var entry = status.find(function (e) {
-            return e.id === clickID;
-         });
-
-         if (entry.var1 && entry.loc == "1") {
-            var text = "[" + entry.var1 + "]\n\n" + $("textarea[id*='element']:first").val();
-            $("textarea[id*='element']:first").val(text);
-            } else if (entry.var1) {
-            var text2 = "[" + entry.var1 + "]\n\n" + "textarea[id*='attribute']:first".add("textarea[id*='note']:first").val();
-            $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val(text2);
-            }
-      });
-
-      // Extras: Bottom of first field
-      $("[id*='extras-']").click(function () {
-         var clickID = $(this).attr("id");
-         var status = dataStatus();
-         var entry = status.find(function (e) {
-            return e.id === clickID;
-         });
-         var text = $("textarea[id*='element']:first").val();
-         text += "\n\n[" + entry.var1 + "]\n";
+       }
+       if (entry1.text) {
+         $("textarea[id*='element']:first").val(text1);
+       }
+     });
+     // When a status is given, this prepends the first field
+     $("[id*='status-']").click(function () {
+       var clickID = $(this).attr("id");
+       var status = dataStatus();
+       var entry = status.find(function (e) {
+         return e.id === clickID;
+       });
+       var text = "";
+       if (clickID.indexOf("status-wcag") >= 0) {
+         var level = clickID.split("-")[2].toUpperCase();
+         text =
+           "[WCAG Level: " +
+           level +
+           "]\n\n" +
+           $("textarea[id*='element']:first").val();
+       } else if (entry.date == "name") {
+         var name = $("#userinfo ul li:first").text();
+         var newText = entry.text.split("-")[0].trim();
+         text =
+           "[" +
+           newText.toUpperCase() +
+           " -" +
+           name +
+           "]\n\n" +
+           $("textarea[id*='element']:first").val();
+       } else if (entry.date == "no") {
+         text =
+           "[" +
+           entry.text.toUpperCase() +
+           "]\n\n" +
+           $("textarea[id*='element']:first").val();
+       } else {
+         var $today = new Date();
+         var dd = $today.getDate();
+         var mm = $today.getMonth() + 1;
+         var yyyy = $today.getFullYear();
+         $today = mm + "/" + dd + "/" + yyyy;
+         text =
+           "[" +
+           $today +
+           ": " +
+           entry.text.toUpperCase() +
+           "]\n\n--------------------------\n\n" +
+           $("textarea[id*='element']:first").val();
+       }
+       if (entry.text) {
          $("textarea[id*='element']:first").val(text);
-      });
+       }
+       if (entry.var1) {
+         $("select[id*='defect_status_']:first").val(entry.var1);
+       }
+     });
 
-      // Pattern: Add Pattern and Name if Available to the top of the First field.
-      $("#code-pattern").click(function () {
-         var pattern = "";
-         var patternID = "name_" + $("#pattern_id-").attr("value");
-         var patternName = $("#" + patternID).val();
-         if (!patternName) {
-            patternName = $("h3:contains(Pattern Members)").text().split("-").slice(1).join("-");
-         }
-         if (patternName) {
-            pattern = patternName;
-         }
-         var text = "[Pattern: " + pattern + "]\n\n";
-         text += $("textarea[id*='element']:first").val();
-         // if (!getCookieValue("kpmPref-addOccurances")) { text += "\n\n[Occurrences]\n"; }
+     // When code is given, this appends the second field
+     $("[id*='css-']").click(function () {
+       var clickID = $(this).attr("id");
+       var cssCode = dataCode();
+       var entry = cssCode.find(function (e) {
+         return e.id === clickID;
+       });
+
+       var prefix = "\n\n";
+       var text =
+         $("textarea[id*='attribute']:first")
+           .add("textarea[id*='note']:first")
+           .val() +
+         prefix +
+         entry.value;
+       if (entry.value) {
+         $("textarea[id*='attribute']:first")
+           .add("textarea[id*='note']:first")
+           .val(text);
+       }
+     });
+
+     // When a reading is given, this appends the second field
+     $("[id*='reading-']").click(function () {
+       var clickID = $(this).attr("id");
+       var reading = dataReading();
+       var entry = reading.find(function (e) {
+         return e.id === clickID;
+       });
+
+       var prefix = "\n\n[Recommended Reading]\n";
+       var text =
+         $("textarea[id*='attribute']:first")
+           .add("textarea[id*='note']:first")
+           .val() +
+         prefix +
+         entry.value;
+
+       if (entry.value) {
+         $("textarea[id*='attribute']:first")
+           .add("textarea[id*='note']:first")
+           .val(text);
+       }
+     });
+
+     // When a special is given, this appends the second field
+     $("[id*='special-']").click(function () {
+       var clickID = $(this).attr("id");
+       var status = dataStatus();
+       var entry = status.find(function (e) {
+         return e.id === clickID;
+       });
+
+       if (entry.var1 && entry.loc == "1") {
+         var text =
+           "[" +
+           entry.var1 +
+           "]\n\n" +
+           $("textarea[id*='element']:first").val();
          $("textarea[id*='element']:first").val(text);
-      });
+       } else if (entry.var1) {
+         var text2 =
+           "[" +
+           entry.var1 +
+           "]\n\n" +
+           "textarea[id*='attribute']:first"
+             .add("textarea[id*='note']:first")
+             .val();
+         $("textarea[id*='attribute']:first")
+           .add("textarea[id*='note']:first")
+           .val(text2);
+       }
+     });
 
-      // Special Use Case: Add Module Number and Instance ID to the Second Field
-      $("#code-modIns").click(function () {
-         var FirstDigit = "XX";
-         var SecondDigit = "XXX";
-         var ModID = $(document).attr("title");
-         ModID = ModID.substr(0, ModID.indexOf(" ")).replace(/\D/g, "");
-         if (ModID) {
-            FirstDigit = ModID;
-         }
-         var InstID = "";
-         InstID = $("#instance_id-").attr("value");
-         if (InstID) {
-            SecondDigit = InstID.slice(-3);
-         }
-         var text = "[" + FirstDigit + " / " + SecondDigit + "]\n\n";
-         text += $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val();
-         $("textarea[id*='attribute']:first").add("textarea[id*='note']:first").val(text);
-      });
+     // Extras: Bottom of first field
+     $("[id*='extras-']").click(function () {
+       var clickID = $(this).attr("id");
+       var status = dataStatus();
+       var entry = status.find(function (e) {
+         return e.id === clickID;
+       });
+       var text = $("textarea[id*='element']:first").val();
+       text += "\n\n[" + entry.var1 + "]\n";
+       $("textarea[id*='element']:first").val(text);
+     });
+
+     // Pattern: Add Pattern and Name if Available to the top of the First field.
+     $("#code-pattern").click(function () {
+       var pattern = "";
+       var patternID = "name_" + $("#pattern_id-").attr("value");
+       var patternName = $("#" + patternID).val();
+       if (!patternName) {
+         patternName = $("h3:contains(Pattern Members)")
+           .text()
+           .split("-")
+           .slice(1)
+           .join("-");
+       }
+       if (patternName) {
+         pattern = patternName;
+       }
+       var text = "[Pattern: " + pattern + "]\n\n";
+       text += $("textarea[id*='element']:first").val();
+       // if (!getCookieValue("kpmPref-addOccurances")) { text += "\n\n[Occurrences]\n"; }
+       $("textarea[id*='element']:first").val(text);
+     });
+
+     // Special Use Case: Add Module Number and Instance ID to the Second Field
+     $("#code-modIns").click(function () {
+       var FirstDigit = "XX";
+       var SecondDigit = "XXX";
+       var ModID = $(document).attr("title");
+       ModID = ModID.substr(0, ModID.indexOf(" ")).replace(/\D/g, "");
+       if (ModID) {
+         FirstDigit = ModID;
+       }
+       var InstID = "";
+       InstID = $("#instance_id-").attr("value");
+       if (InstID) {
+         SecondDigit = InstID.slice(-3);
+       }
+       var text = "[" + FirstDigit + " / " + SecondDigit + "]\n\n";
+       text += $("textarea[id*='attribute']:first")
+         .add("textarea[id*='note']:first")
+         .val();
+       $("textarea[id*='attribute']:first")
+         .add("textarea[id*='note']:first")
+         .val(text);
+     });
 
      // Special Use Case: Add Current Date to the 1st field
-	  $("#current-date").click(function () {
+     $("#current-date").click(function () {
+       var $today = new Date();
+       var dd = $today.getDate();
+       var mm = $today.getMonth() + 1;
+       var yy = $today.getFullYear();
 
-		var $today = new Date();
-		var dd = $today.getDate();
-		var mm = $today.getMonth() + 1;
-		var yy = $today.getFullYear();
+       var text = "[" + mm + "/" + dd + "/" + yy + "]\n\n";
+       text += $("textarea[id*='element']:first").val();
+       $("textarea[id*='element']:first").val(text);
+     });
 
-		var text = "[" + mm + "/" + dd + "/" + yy + "]\n\n";
-		text += $("textarea[id*='element']:first").val();
-		$("textarea[id*='element']:first").val(text);
-	});
+     // Miscellanious items for the add instance modal
+     // Resize the text areas
+     $("textarea[id*='element']:first").attr("rows", "12");
+     $("textarea[id*='attribute']:first").attr("rows", "12");
+     $("textarea[id*='note']:first").attr("rows", "12");
 
-      // Injects the alert on the textareas: TODO: make this dynamic on change.
-      if (!getCookieValue("kpmPref-addWarning")) {
-         $("textarea").each(function () {
-            var thisTA = $(this);
-            var alert = injectWarning(thisTA);
-            if (alert) {
-               thisTA.before(alert);
-            }
-         });
-      }
+     $("textarea[id*='element']:first").attr("cols", "75");
+     $("textarea[id*='attribute']:first").attr("cols", "75");
+     $("textarea[id*='note']:first").attr("cols", "75");
 
-      // Miscellanious items for the add instance modal
-      // Resize the text areas
-      $("textarea[id*='element']:first").attr("rows", "12");
-      $("textarea[id*='attribute']:first").attr("rows", "12");
-      $("textarea[id*='note']:first").attr("rows", "12");
+     // This section is to hide input fields 2-6 on ADD only.
+     if (!getCookieValue("kpmPref-showOne")) {
+       hideAdditionalInstances();
+     }
 
-      $("textarea[id*='element']:first").attr("cols", "75");
-      $("textarea[id*='attribute']:first").attr("cols", "75");
-      $("textarea[id*='note']:first").attr("cols", "75");
+     // For Salesforce Custom Success Criteria
+     // TODO: (Perla - Would be a better idea to link each BP to the level, name of sc, and version)
+     if (getCookieValue("kpmCustom-custom-salesforce")) {
+       $("select[id*='violation_']:first").after(addSuccessCriteria());
 
-      // This section is to hide input fields 2-6 on ADD only.
-      if (!getCookieValue("kpmPref-showOne")) {
-         hideAdditionalInstances();
-      }
+       // Add tags to the description field
+       $("#update-sc").click(function () {
+         // Format of options on-screen is: SC 1.1.1 Non-text Context (Level A) [WCAG 2.0]
+         var select_sc_val = $("#select-sc").val().split("[");
+         var wcag_sc = select_sc_val[0];
+         var wcag_version = select_sc_val[1].split("]")[0];
 
-      // For Salesforce Custom Success Criteria
-      // TODO: (Perla - Would be a better idea to link each BP to the level, name of sc, and version)
-      if (getCookieValue("kpmCustom-custom-salesforce")) {
-         $("select[id*='violation_']:first").after(addSuccessCriteria());
-
-         // Add tags to the description field
-         $("#update-sc").click(function(){
-          
-            // Format of options on-screen is: SC 1.1.1 Non-text Context (Level A) [WCAG 2.0]
-            var select_sc_val = $("#select-sc").val().split("[");
-            var wcag_sc = select_sc_val[0];
-            var wcag_version = select_sc_val[1].split("]")[0];
-
-            var text = $("textarea[id*='element']:first").val();
-            text += "\n\n[WCAG Success Criteria]\n" + wcag_sc; // Add success criteria
-            text += "\n\n[WCAG Standard]\n" + wcag_version; //Add version
+         var text = $("textarea[id*='element']:first").val();
+         text += "\n\n[WCAG Success Criteria]\n" + wcag_sc; // Add success criteria
+         text += "\n\n[WCAG Standard]\n" + wcag_version; //Add version
 
             $("textarea[id*='element']:first").val(text);
          });
@@ -6537,6 +6928,113 @@ function addEditor(reportID) {
       }
    }
 }
+
+// START USE CASE
+// This stuff is for adding use case related functionality
+function generateSummary() {
+  const UC_ISSUE_REGEXP =
+    /\[(?<score>[1-4])\s*(STOPPER)?:\s*(?<description>.*)\]/gi;
+  let ucGeneralComments = "";
+  let issues = [];
+  let finalScore = 0; // (1 through 5) The score of the lowest-scoring issue, or 5 if there are no issues.
+  const steps = document.querySelectorAll(
+    "textarea[name^='use_case_step_result']"
+  );
+  const rating = document.getElementById("rating");
+  ucGeneralComments = "";
+  for (let i = 0; i < steps.length; i++) {
+    //let stepInfo = document.querySelector("label[for=" + steps[i].id + "]").innerText;
+    matches = steps[i].value.matchAll(UC_ISSUE_REGEXP);
+    if (matches !== null) {
+      for (let item of matches) {
+        const issue = {
+          score: item.groups.score,
+          description: item.groups.description,
+        };
+
+        issues.push(issue);
+      } // end for (item of matches)
+    } // end if matches !== null
+  } // end for (i < steps.length)
+  if (issues.length > 0) {
+    issues.sort((a, b) => {
+      if (a.score < b.score) {
+        return -1;
+      }
+      if (a.score > b.score) {
+        return 1;
+      }
+      return 0;
+    });
+    finalScore = issues[0].score;
+    const uniqueIssues = [
+      ...new Map(issues.map((m) => [m.description.toLowerCase(), m])).values(),
+    ];
+    uniqueIssues.forEach((issue) => {
+      // This function gets called by the forEach on the list of issues sorted by score.
+      // scoreIndex will contain the current score. Since the list is sorted, the score will be the same for a while, then change. when it does, insert a new banner.
+      // lastScoreIndex is used to compare to see if a new banner needs to be inserted.
+      // Thanks stackoverflow for how to do static variables in js so I don't have to add globals.
+      const UC_BANNERS = [
+        "STOPPERS:",
+        "Major Issues:",
+        "Minor Issues:",
+        "Advisory Issues:",
+      ];    
+      let scoreIndex = issue.score - 1;
+      if (
+        typeof lastScoreIndex == "undefined" ||
+        scoreIndex != lastScoreIndex ||
+        ucGeneralComments.length == 0
+      ) {
+        lastScoreIndex = scoreIndex;
+        ucGeneralComments += UC_BANNERS[scoreIndex] + "\n";
+      }
+      if (issue.description.length > 0) {
+        ucGeneralComments += issue.description + "\n\n";
+      } else {
+        ucGeneralComments += "WARNING: Issue with no description.\n\n";
+      }
+    });
+    document.getElementById("description").value = ucGeneralComments;
+  } else {
+    finalScore = 5; // No accessibility issues.
+    document.getElementById("description").value = "No accessibility issues.\n";
+  }
+  for (const opt of rating.options) {
+    if (opt.value == finalScore) {
+      rating.selectedIndex = opt.index;
+      break;
+    }
+  }
+  document.getElementById("rating").focus();
+}
+
+function addGenerateSummaryButton() {
+  if (
+    $("#amp_modal_reportModal").length !== 0 &&
+    $("#AmpOpts").length === 0 &&
+    window.location.href.indexOf("view_use_cases.php") > -1
+  ) {
+    var generateSumElement = document.createElement("button");
+    var generateSumText = document.createTextNode("Generate Summary");
+    generateSumElement.appendChild(generateSumText);
+    generateSumElement.setAttribute("id", "generateSum");
+    generateSumElement.setAttribute("type", "button");
+    generateSumElement.style.display = "block";
+    generateSumElement.addEventListener("click", (event) => {
+      event.preventDefault();
+      generateSummary();
+    });
+    document
+      .querySelector(
+        "#modal_form > table > tbody > tr:last-of-type > td:nth-child(2)"
+      )
+      .appendChild(generateSumElement);
+  }
+}
+
+// END USE CASE
 
 /* This is what injects into the page */
 (function () {
@@ -6676,18 +7174,13 @@ function addEditor(reportID) {
             moveViewInstanceToActions();
          }
 
-         // Inject the warning if any of the conditions are true (for the lists)
-         // TODO: Create a single function for this
-         if (!getCookieValue("kpmPref-tableWarning")) {
-            $("td:not(:has(div.checkbox-wrapper))").each(function () {
-               var thisTD = $(this);
-               var alert = injectWarning(thisTD);
-               if (alert) {
-                  thisTD.prepend(alert);
-               }
-            });
-         }
-
+         // INJECT WARNINGS FOR EACH ISSUE
+         const issueRows = document.querySelectorAll("[id^='view_module_table'] tr:has(td.wrap.topvalign)");
+         issueRows.forEach(issueRow => {
+          const descriptionElement = issueRow.querySelector("td:nth-of-type(2)");
+          const noteElement = issueRow.querySelector("td:nth-of-type(3)");
+          generateIssueErrors(issueRow, descriptionElement, noteElement);
+         });
       }
 
       // TEST MODULE (test_module_alternate.php)
@@ -6770,6 +7263,8 @@ function addEditor(reportID) {
             if (addModal) {
               if ($(addModal).prop('action').indexOf("edit_module.php") >= 0) {
                 handleEditModuleForm(reportID);
+              } else if ($(addModal).prop('action').indexOf("perform_use_case_test.php") >= 0) {
+                addGenerateSummaryButton();
               } else {
                 addEditor(reportID);
               }
