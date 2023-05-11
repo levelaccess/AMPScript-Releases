@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.1.0
+// @version      6.1.1
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -7026,11 +7026,7 @@ function addGenerateSummaryButton() {
       event.preventDefault();
       generateSummary();
     });
-    document
-      .querySelector(
-        "#modal_form > table > tbody > tr:last-of-type > td:nth-child(2)"
-      )
-      .appendChild(generateSumElement);
+    document.querySelector("#description").after(generateSumElement);
   }
 }
 
