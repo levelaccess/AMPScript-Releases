@@ -14,8 +14,8 @@
 // @match        *.levelaccess.us/public/reporting/*
 // @match        *.levelaccess.us/public/audit/*
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
-// @downloadURL  https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
+// @updateURL    https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript-6-1-1.js
+// @downloadURL  https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript-6-1-1.js
 // @supportURL   https://level-access.slack.com/messages/CK79W4PPU/
 // @icon         https://labs.levelaccess.com/level_logo.png
 // ==/UserScript==
