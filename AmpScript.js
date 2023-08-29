@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.2.0
+// @version      6.2.1
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -1301,7 +1301,7 @@ function dataPreferred() {
       impact:
         "Screen reader users will be unable to determine what these images represent.",
       recommendation:
-        "Provide alternative text for images. Meaningful images must have a concise but descriptive textual equivalent. To add a textual equivalent to an <img> element, set its alt attribute to a descriptive value. To add a textual equivalent to a <svg> element, add an aria-label attribute set to the desired equivalent.",
+        "Provide alternative text for images. Meaningful images must have a concise but descriptive textual equivalent.\n\nTo add a textual equivalent to an <img> element, set its alt attribute to a descriptive value.\n\nTo add a textual equivalent to an <svg> element, add a <title> child to the SVG. Place the textual equivalent in the <title>, then add an ID to the <title>. Finally, on the <svg>, add an aria-labelledby attribute and set its value to the ID of the <title>.",
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
@@ -2571,7 +2571,7 @@ function dataPreferred() {
       impact:
         "Screen reader users will be unable to determine what these images represent.",
       recommendation:
-        'Ensure CSS background images that convey meaning have textual and visible equivalents.\n\nThe best way to do this is to use a real <img> or SVG element. To provide a textual equivalent for an <img> element, add an alt attribute set to the desired text. To provide a textual equivalent for an SVG, add role="img" to the <svg> element and add an aria-label attribute set to the desired text.',
+        "Ensure CSS background images that convey meaning have textual and visible equivalents.\n\nThe best way to do this is to use a real <img> or SVG element. To add a textual equivalent to an <img> element, set its alt attribute to a descriptive value.\n\nTo add a textual equivalent to an <svg> element, add a <title> child to the SVG. Place the textual equivalent in the <title>, then add an ID to the <title>. Finally, on the <svg>, add an aria-labelledby attribute and set its value to the ID of the <title>.",
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
@@ -7655,16 +7655,19 @@ function addEditor(reportID) {
       const newBP = parseInt(
         $(`#AmpOpts option[value="${inputValue}"]`).attr("data-value")
       );
-      // Console.log(inputValue + " * " + newBP);
-      $("select[id*='violation_']:first").val(newBP);
-      const BPValue = 0;
-      $("select[id*='severity_']:first").val(BPValue).val();
 
-      const newPreferredListList = dataPreferredFiltered(newBP);
-      if (newPreferredListList.length > 0) {
-        $("#kpmPreferred").replaceWith(
-          createList2(newPreferredListList, "Preferred", "kpmPreferred")
-        );
+      if (newBP && newBP > 0) {
+        $("select[id*='violation_']:first").val(newBP);
+        const BPValue = 0;
+        $("select[id*='severity_']:first").val(BPValue).val();
+        const newPreferredListList = dataPreferredFiltered(newBP);
+        if (newPreferredListList.length > 0) {
+          $("#kpmPreferred").replaceWith(
+            createList2(newPreferredListList, "Preferred", "kpmPreferred")
+          );
+        }
+      } else {
+        alert("No Best Practice Selected");
       }
     });
 
