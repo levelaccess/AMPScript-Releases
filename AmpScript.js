@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.2.1
+// @version      6.3.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -56,6 +56,10 @@ function dataCustom() {
     {
       id: "custom-salesforce",
       name: "Salesforce",
+    },
+    {
+      id: "custom-disney",
+      name: "Disney",
     },
   ];
   return custom;
@@ -7339,6 +7343,39 @@ function formatElement(issue, impact, codeReference) {
     if (codeReference && codeReference.length > 0) {
       output += codeReference.trim();
     }
+  } else if (getCookieValue("kpmCustom-custom-disney")) {
+    // Start of "custom-disney" template for the "Description" field.
+    output += "** Remove all lines that start and end with \"**\" (including these lines). **\n";
+    output += "** Edit all text between \"***\" marks (and remove the \"***\" marks!). **\n\n";
+
+    output += "[Type: *** DEV DESIGN DEV/DESIGN ***]\n\n";
+
+    output += "[WCAG Requirement]\n";
+    output += "** Insert WCAG Success Criterion **\n";
+    output += "** Example: **\n";
+    output += "*** 1.3.1 Info & Relationships ***\n";
+
+    output += "\n[Issue]\n";
+    if (issue && issue.length > 0) {
+      output += issue.trim();
+    }
+
+    output += "\n[Steps to Reproduce]\n";
+    output += "1. *** Step 1 ***\n";
+    output += "2. *** Step 2 ***\n";
+    output += "Actual result: *** Describe behavior (Example: TalkBack announces \"Unlabelled, Image\") ***\n";
+    output += "Expected result: *** Describe behavior (Example: TalkBack should announce \"Disney, Image\") ***";
+
+    output += "\n\n[User Impact]\n";
+    if (impact && impact.length > 0) {
+      output += impact.trim();
+    }
+
+    output += "\n\n[Code Reference]\n";
+    if (codeReference && codeReference.length > 0) {
+      output += codeReference.trim();
+    }
+    // End of "custom-disney" template for the "Description" field.
   } else {
     output += "[Issue]\n";
     if (issue && issue.length > 0) {
