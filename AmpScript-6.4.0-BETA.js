@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.3.0
+// @version      6.4.0-BETA
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -14,8 +14,6 @@
 // @match        *.levelaccess.us/public/reporting/*
 // @match        *.levelaccess.us/public/audit/*
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
-// @downloadURL  https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
 // @supportURL   https://level-access.slack.com/messages/CK79W4PPU/
 // @icon         https://labs.levelaccess.com/level_logo.png
 // ==/UserScript==
