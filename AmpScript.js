@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.3.0
+// @version      6.4.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -56,6 +56,10 @@ function dataCustom() {
     {
       id: "custom-salesforce",
       name: "Salesforce",
+    },
+    {
+      id: "custom-pod",
+      name: "Pod",
     },
     {
       id: "custom-disney",
@@ -1084,6 +1088,8 @@ function dataPreferred() {
       recommendation:
         'Ensure fieldsets are labelled appropriately. If role="radiogroup" is used, the element with this role must have an accessible name. This can be set with an aria-label or aria-labelledby attribute.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the radio buttons.\n2. Inspect them with Chrome DevTools.\n3. Select the role="radiogroup" element.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [332],
@@ -1098,6 +1104,8 @@ function dataPreferred() {
       recommendation:
         "Provide a valid label for form fields.\n\nLabels must meet the following requirements:\n- The label must be visible.\n- The label must be persistent. That is, a label must remain visible when text is entered into the field or an option is selected.\n- The label must be programmatically associated with the form field. The most common way to do this is with a <label> element with a for attribute set to the ID of the field.\n- The label must provide the accessible name of the field, or the label's exact text must be included in the accessible name.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the form field.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [338],
@@ -1112,6 +1120,8 @@ function dataPreferred() {
       recommendation:
         "Provide a valid label for form fields. The best way to do this is to use a <label> element with a for attribute set to the ID of the field it labels. For custom controls, use aria-labelledby on the control set to the ID of the labelling text.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the form field.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [338],
@@ -1126,6 +1136,8 @@ function dataPreferred() {
       recommendation:
         "Provide fieldsets for groups of form controls. Common groups of form controls include related radio buttons, checkboxes, and shipping/billing address groupings. The <fieldset> element must have a descriptive <legend> element as its first child. The form controls must appear as descendants of the fieldset.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the form field grouping.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
       keepElement: true,
       keepAttribute: true,
       bps: [341],
@@ -1140,6 +1152,8 @@ function dataPreferred() {
       recommendation:
         "Ensure area alternative text is meaningful and concise. Add an alt attribute to the <area>, then set its value to a proper textual equivalent.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the area.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [343],
@@ -1154,6 +1168,8 @@ function dataPreferred() {
       recommendation:
         "Provide a mechanism for skipping past repetitive content. There must be a keyboard-only means of skipping past repeated blocks of content that occur on multiple pages, such as a link. This control must be the first focusable element before the repeated content and must visually appear on keyboard focus. When the control is activated, keyboard focus must be moved beyond the repeated content.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly to navigate to the repeated content area.\n2. Notice that no mechanism to skip the content appears.",
       keepElement: true,
       keepAttribute: true,
       bps: [345],
@@ -1167,6 +1183,8 @@ function dataPreferred() {
       recommendation:
         "Provide a mechanism for skipping past repetitive content. There must be a keyboard-only means of skipping past repeated blocks of content that occur on multiple pages, such as a link. This control must be the first focusable element before the repeated content and must visually appear on keyboard focus. When the control is activated, keyboard focus must be moved beyond the repeated content.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly until the skip link is focused.\n2. Press Enter on the skip link.\n3. Notice that the skip link does not shift focus past the repeated content.",
       keepElement: true,
       keepAttribute: true,
       bps: [345],
@@ -1181,6 +1199,8 @@ function dataPreferred() {
       recommendation:
         "Provide a mechanism for skipping past repetitive content. There must be a keyboard-only means of skipping past repeated blocks of content that occur on multiple pages, such as a link. This control must be the first focusable element before the repeated content and must visually appear on keyboard focus. When the control is activated, keyboard focus must be moved beyond the repeated content.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly until the skip link is focused.\n2. Press Enter on the skip link.\n3. Notice that the skip link does not shift focus past all of the repeated content.",
       keepElement: true,
       keepAttribute: true,
       bps: [345],
@@ -1195,6 +1215,8 @@ function dataPreferred() {
       recommendation:
         "Ensure pages do not automatically refresh. Users must be able to turn off, adjust, or extend the refresh, unless it happens after 20 hours, involves a real-time data transaction, or if it is essential to the purpose of the page.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. Locate the <meta http-equiv="refresh"> element and notice that the content attribute is set to a value greater than zero.',
       keepElement: true,
       keepAttribute: true,
       bps: [347],
@@ -1209,6 +1231,8 @@ function dataPreferred() {
       recommendation:
         "Provide alternatives for server-side image maps. Convert server-side image maps to client-side image maps or remove them altogether. If conversion or removal of the image maps is not possible, alternative links must be provided for each server-side image map.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. Notice the presence of an ismap attribute.",
       keepElement: true,
       keepAttribute: true,
       bps: [358],
@@ -1223,6 +1247,8 @@ function dataPreferred() {
       recommendation:
         'Avoid the sole use of device-dependent event handlers. The best way to accomplish this is by using appropriate native controls, which come with keyboard functionality built in.\n\nIf using a native control is not possible, the control must have tabindex="0" and appropriate key-based JavaScript event handlers.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press the Tab button repeatedly until the control is focused.\n2. Attempt to interact with the control using Enter or Space.\n3. Notice that the control cannot be activated with these keys.",
       keepElement: true,
       keepAttribute: true,
       bps: [359],
@@ -1237,6 +1263,8 @@ function dataPreferred() {
       recommendation:
         "Ensure headers and cells are properly associated. All headers attributes must refer to existing IDs of elements that are descendants of the parent <table> element.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the table data cell.\n2. Inspect it with Chrome DevTools.\n3. Note that the values for the headers attribute do not refer to valid, existing IDs on the page.",
       keepElement: true,
       keepAttribute: true,
       bps: [361],
@@ -1251,6 +1279,8 @@ function dataPreferred() {
       recommendation:
         'Ensure headers and cells are properly associated. If a table header has a colspan or rowspan attribute set to a value other than "1", that header\'s scope attribute must be set to "colgroup" or "rowgroup" respectively.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the table header.\n2. Inspect it with Chrome DevTools.\n3. Note that no scope="rowgroup" or scope="colgroup" attribute is present.',
       keepElement: true,
       keepAttribute: true,
       bps: [361],
@@ -1265,6 +1295,8 @@ function dataPreferred() {
       recommendation:
         'Ensure headers and cells are properly associated. All <th> elements must have a scope attribute set to "row" or "col" depending on whether the cell is a row header or a column header.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the table header.\n2. Inspect it with Chrome DevTools.\n3. Note that no scope attribute is present.",
       keepElement: true,
       keepAttribute: true,
       bps: [361],
@@ -1279,6 +1311,8 @@ function dataPreferred() {
       recommendation:
         "Ensure headers and cells are properly associated. When the headers attribute is used on data cells to associate headers, every <th> element must have an id attribute.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the table header.\n2. Inspect it with Chrome DevTools.\n3. Note that no id attribute is present.",
       keepElement: true,
       keepAttribute: true,
       bps: [361],
@@ -1293,6 +1327,8 @@ function dataPreferred() {
       recommendation:
         "Ensure headers and cells are properly associated. If the headers attribute is used to associate headers with a data cell, every data cell in the table must have the headers attribute.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the table data cell.\n2. Inspect it with Chrome DevTools.\n3. Note that no headers attribute is present.",
       keepElement: true,
       keepAttribute: true,
       bps: [361],
@@ -1307,6 +1343,8 @@ function dataPreferred() {
       recommendation:
         "Provide alternative text for images. Meaningful images must have a concise but descriptive textual equivalent.\n\nTo add a textual equivalent to an <img> element, set its alt attribute to a descriptive value.\n\nTo add a textual equivalent to an <svg> element, add a <title> child to the SVG. Place the textual equivalent in the <title>, then add an ID to the <title>. Finally, on the <svg>, add an aria-labelledby attribute and set its value to the ID of the <title>.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [362],
@@ -1321,6 +1359,8 @@ function dataPreferred() {
       recommendation:
         'Provide alternative text for images. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an <img> element as decorative, set its alt attribute to "" (that is, alt="" exactly as written, with no space between the quotation marks). To mark an <svg> element as decorative, add aria-hidden="true" to the element.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
       keepElement: true,
       keepAttribute: true,
       bps: [362],
@@ -1334,6 +1374,8 @@ function dataPreferred() {
       recommendation:
         "Provide text equivalents for object, audio, and video elements. Add an aria-labelledby, aria-label, or title attribute set to an appropriate accessible name.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the object.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [363],
@@ -1348,6 +1390,8 @@ function dataPreferred() {
       recommendation:
         'Provide text equivalents for object, audio, and video elements. If a video serves a purely decorative purpose, such as a background, hide it from assistive technologies by setting aria-hidden="true" on the element.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
       keepElement: true,
       keepAttribute: true,
       bps: [363],
@@ -1361,6 +1405,8 @@ function dataPreferred() {
       recommendation:
         "Ensure pages use the title element. The title must contain both the name of the page and the name of the site.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Open Chrome DevTools.\n2. Locate the <head> element, if any.\n3. Notice that no <title> element is present.",
       keepElement: true,
       keepAttribute: true,
       bps: [364],
@@ -1375,6 +1421,8 @@ function dataPreferred() {
       recommendation:
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color and background color.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below the required value for this size of text.",
       keepElement: true,
       keepAttribute: true,
       convertColorContrastText: true,
@@ -1390,6 +1438,8 @@ function dataPreferred() {
       recommendation:
         "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color.\n4. Using a color picker, such as https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld to select a color from the background that touches the text.\n5.Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n6. Notice that the contrast ratio is below the required value for this size of text.",
       keepElement: true,
       keepAttribute: true,
       bps: [368],
@@ -1404,6 +1454,8 @@ function dataPreferred() {
       recommendation:
         "Ensure color is not the sole means of communicating information. Color can be used as long as other visual indicators of the information are also present. Common additional visual indicators include underlining, bolding, additional on-screen text conveying the information, or change in shape or size.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the content.\n2. Notice that the content conveys its meaning through color alone.",
       keepElement: true,
       keepAttribute: true,
       bps: [369],
@@ -1418,6 +1470,8 @@ function dataPreferred() {
       recommendation:
         "Ensure color is not the sole means of communicating information. Color can be used as long as other visual indicators of the information are also present. Common additional visual indicators for links include underlining or bolding.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the link.\n2. Notice that the link's presence is conveyed through the use of color alone.",
       keepElement: true,
       keepAttribute: true,
       bps: [369],
@@ -1432,6 +1486,8 @@ function dataPreferred() {
       recommendation:
         "Ensure images provide informative alternative text. Textual equivalents must be both concise and descriptive.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [370],
@@ -1446,6 +1502,8 @@ function dataPreferred() {
       recommendation:
         'Ensure images provide informative alternative text. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an <img> element as decorative, set its alt attribute to "" (that is, alt="" exactly as written, with no space between the quotation marks). To mark an <svg> element as decorative, add aria-hidden="true" to the element.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
       keepElement: true,
       keepAttribute: true,
       bps: [370],
@@ -1460,6 +1518,8 @@ function dataPreferred() {
       recommendation:
         'Ensure headings and labels are descriptive and unique. This includes the accessible names of buttons. The accessible name of a button can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive. Avoid including the word "button" in the accessible name, as this information is already supplied by the button\'s role.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [373],
@@ -1473,6 +1533,8 @@ function dataPreferred() {
         "Screen reader users will not be able to determine the relationships between cells in these tables.",
       recommendation:
         'Ensure data table headers are properly identified. Ensure all cells that function as row or column headers use <th> elements. Additionally, ensure all <th> elements have a scope attribute set to "row" or "col" depending on whether the particular cell is a row header or a column header. Finally, if a header cell spans multiple rows or columns, set its rowspan or colspan attributes to the number of rows or cells it spans.\n\nIf a table is sufficiently complex that these methods cannot associate a header with its cell, each cell must have a headers attribute set to a space-separated list of the IDs of the headers associated with the cell. This is often time-consuming and prone to error. Splitting complex tables into separate, simpler tables is strongly recommended.',
+      stepsToReproduce:
+        "1. Locate the table header.\n2. Inspect it with Chrome DevTools.\n3. Notice that it is missing scope, rowspan, and/or colspan attributes that reflect its visual structure.",
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
@@ -1489,6 +1551,8 @@ function dataPreferred() {
         'Ensure data tables are formatted using table elements. Table elements include <table>, <tr>, <th>, and <td>. <th> elements must have a scope attribute set to "col" or "row" according to whether it functions as a column header or a row header.',
       compliantExample: "",
       keepElement: true,
+      stepsToReproduce:
+        '1. Locate the table.\n2. Inspect it with Chrome DevTools.\n3. Notice that it does not use <table> and related elements or role="table" and related roles.',
       keepAttribute: true,
       bps: [376],
     },
@@ -1502,20 +1566,8 @@ function dataPreferred() {
       recommendation:
         "Ensure accessible usage of time based sessions and timed responses. Users must be able to extend, set, or remove any timeout unless the timeout is longer than 20 hours or the timeout is essential to the page's purpose (such as an auction).",
       compliantExample: "",
-      keepElement: true,
-      keepAttribute: true,
-      bps: [380],
-    },
-    {
-      id: "response-time-based-session-insufficient",
-      text: "Timing - Log out",
-      issue:
-        "There are time-based sessions or responses that cannot be turned off, extended, or accessibly adjusted. Examples include:\n- ",
-      impact:
-        "Users who require additional time to fill out forms will lose the information they've entered when a session times out.",
-      recommendation:
-        "Ensure accessible usage of time based sessions and timed responses. Users must be able to extend, set, or remove any timeout unless the timeout is longer than 20 hours or the timeout is essential to the page's purpose (such as an auction).",
-      compliantExample: "",
+      stepsToReproduce:
+        "1. Trigger the time-based session or response.\n2. Notice that the time limit is not essential, not longer than 20 hours, and that there is no way to extend, set, or remove the timeout.",
       keepElement: true,
       keepAttribute: true,
       bps: [380],
@@ -1530,6 +1582,8 @@ function dataPreferred() {
       recommendation:
         "Ensure heading level matches the heading's visual importance/level. The level of heading element used (<h1>, <h2>, etc.) must reflect its visual appearance in the hierarchy of the page.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the heading.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Level".',
       keepElement: true,
       keepAttribute: true,
       bps: [387],
@@ -1544,6 +1598,8 @@ function dataPreferred() {
       recommendation:
         "Ensure changes in natural language are identified inline. Elements containing text in a different language from the overall document must have a lang attribute set to a valid BCP 47 primary language subtag: https://r12a.github.io/app-subtags/",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. Notice that the lang attribute is missing or its value is incorrect.",
       keepElement: true,
       keepAttribute: true,
       bps: [389],
@@ -1556,6 +1612,8 @@ function dataPreferred() {
       recommendation:
         'Ensure sub-lists are marked up properly. <ul> and <ol> elements must only contain <li>, <script>, and <template> elements (without role attributes), and elements with role="listitem", as direct children. <li> elements must be direct children of an <ul> or an <ol> element.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the list items.\n2. Inspect them with Chrome DevTools.\n3. Notice that the <li> elements are not direct children of an <ul> or <ol> element.",
       keepElement: true,
       keepAttribute: true,
       bps: [393],
@@ -1568,8 +1626,10 @@ function dataPreferred() {
       impact:
         "Screen readers will treat this content as a data table, causing confusion about its layout and impeding navigation.",
       recommendation:
-        'Ensure layout tables indicate their use for presentation purposes. This can be done by adding role="presentation" to <table> elements used for a layout purpose. Additionally, convert any <th> cells to <td> cells. It is strongly recommended to use CSS instead of HTML table elements for layout purposes.',
+        'Ensure layout tables do not contain structural markup. This can be done by adding role="presentation" to <table> elements used for a layout purpose. Additionally, convert any <th> cells to <td> cells. It is strongly recommended to use CSS instead of HTML table elements for layout purposes.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the layout table.\n2. Inspect it with Chrome DevTools.\n3. Select the <table> element.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Verify that the accessibility node is not exposed.",
       keepElement: true,
       keepAttribute: true,
       bps: [395],
@@ -1584,6 +1644,8 @@ function dataPreferred() {
       recommendation:
         "Ensure links do not directly target images. Instead, include the image inside a page. Add a proper textual equivalent or mark the image as decorative.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the link to the image.\n2. Inspect it with Chrome DevTools.\n3. Notice that the href attribute references an image file directly.",
       keepElement: true,
       keepAttribute: true,
       bps: [401],
@@ -1598,6 +1660,8 @@ function dataPreferred() {
       recommendation:
         "Ensure text can be resized. Users must be able to resize text up to 200% zoom at a 1280-pixel viewport width without loss of content or functionality.\n\nMoving content to an accessible show/hide control, such as a hamburger menu, is acceptable.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Set the viewport width to 1280 pixels using Chrome DevTools.\n2. Increase the browser zoom level to 200% using Ctrl+Plus or by going to Customize and control Google Chrome > Zoom > Make Text Smaller.\n3. Refresh the page.\n4. Notice that content disappears, is cut off, or overlaps.",
       keepElement: true,
       keepAttribute: true,
       bps: [409],
@@ -1606,12 +1670,14 @@ function dataPreferred() {
       id: "response-meta-viewport",
       text: "Meta viewport maximum-scale/user-scalable",
       issue:
-        'The page has a <meta name="viewport"> element with a maximum-scale property set to less than 2 or a user-scalable property set to no.',
+        'The page has a <meta name="viewport"> element with a maximum-scale attribute set to less than 2 or a user-scalable attribute set to no.',
       impact:
-        "Some browsers prevent users from resizing a page if these properties are set, so users with low vision who rely on resizing text will be prevented from reading content on the page.",
+        "Some browsers prevent users from resizing a page if these attributes are set, so users with low vision who rely on resizing text will be prevented from reading content on the page.",
       recommendation:
         "Ensure containing elements allow text resize without loss of functionality. Users must be able to resize text up to 200% zoom at a 1280-pixel viewport width without loss of content or functionality.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. Locate the <meta name="viewport"> element.\n3. Notice that the maximum-scale attribute is set to a value less than 2 or the user-scalable attribute is set to "no".',
       keepElement: true,
       keepAttribute: true,
       bps: [410],
@@ -1626,6 +1692,8 @@ function dataPreferred() {
       recommendation:
         'Ensure implicit row header cells use th elements with row scope. Only one descendant of a table row may be a row header. Ensure that only one element in the row is a <th scope="row"> element.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the table row.\n2. Inspect it with Chrome DevTools.\n3. Notice that it contains multiple headers with scope="row".',
       keepElement: true,
       keepAttribute: true,
       bps: [414],
@@ -1639,6 +1707,8 @@ function dataPreferred() {
       recommendation:
         "Ensure applets provide valid text equivalents. This includes <object> elements. Alter the accessible name to a more descriptive value with an aria-label, aria-labelledby, or title attribute.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the object.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [423],
@@ -1652,6 +1722,8 @@ function dataPreferred() {
       recommendation:
         "Ensure the language of a document is set. <html> elements must have a lang attribute set to a valid BCP 47 primary language subtag: https://r12a.github.io/app-subtags/\n\nFor pages in multiple languages, choose whichever language is used most frequently on the page. If two languages are used equally, choose the language which occurs first on the page.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Open Chrome DevTools.\n2. Inspect the <html> element.\n3. Notice that the lang attribute is missing or set to an incorrect value.",
       keepElement: true,
       keepAttribute: true,
       bps: [429],
@@ -1665,6 +1737,8 @@ function dataPreferred() {
       recommendation:
         "Ensure the marquee element is avoided. Replace this element with another element. If movement is required, provide an accessible mechanism to pause, stop, or hide the movement, such as a pause button.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the marquee.\n2. Inspect it with Chrome DevTools.\n3. Notice that the <marquee> element is used.",
       keepElement: true,
       keepAttribute: true,
       bps: [441],
@@ -1679,19 +1753,23 @@ function dataPreferred() {
       recommendation:
         "Ensure embedded objects are directly accessible. The best way to do this is to set an aria-labelledby attribute on the video element to the ID of any visually present label for the video. Alternatively, add an aria-label attribute to the video with the video's name.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the video.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [444],
     },
     {
       id: "response-iframe-image",
-      text: "I",
+      text: "Iframe with image source",
       issue: "There are iframes with image sources. Examples include:\n- ",
       impact:
         "Screen reader users will be unable to determine what these images represent.",
       recommendation:
         "Ensure frames utilize markup files as their source. Place the image into the main document or change the iframe to target an HTML document or other accessible document type.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the iframe.\n2. Inspect it with Chrome DevTools.\n3. Notice that the src attribute refers to an image file directly.",
       keepElement: true,
       keepAttribute: true,
       bps: [456],
@@ -1706,6 +1784,8 @@ function dataPreferred() {
       recommendation:
         "Avoid the use of implicit headings. Text that visually appears as a heading for a section of content must use <h1>, <h2>, etc. elements. Additionally, ensure the level of the heading accurately reflects the element's position in the visual hierarchy.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the heading.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
       keepElement: true,
       keepAttribute: true,
       bps: [457],
@@ -1718,6 +1798,8 @@ function dataPreferred() {
       recommendation:
         'Ensure list items are found in a list container. <ul> and <ol> elements must only contain <li>, <script>, and <template> elements (without role attributes), and elements with role="listitem", as direct children. <li> elements must be direct children of an <ul> or an <ol> element.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the list items.\n2. Inspect them with Chrome DevTools.\n3. Notice that the <li> elements are not direct children of an <ul> or <ol> element.",
       keepElement: true,
       keepAttribute: true,
       bps: [464],
@@ -1731,6 +1813,8 @@ function dataPreferred() {
       recommendation:
         "Ensure list items are found in a list container. For description lists, ensure that any <dt> and <dd> elements are children of the <dl> element or that they are children of a <div> element that is a child of the <dl>.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the description terms or details.\n2. Inspect them with Chrome DevTools.\n3. Notice that the <dd>/<dt> elements are not descendants of a <dl> element.",
       keepElement: true,
       keepAttribute: true,
       bps: [464],
@@ -1745,6 +1829,8 @@ function dataPreferred() {
       recommendation:
         "Ensure pages use a consistent navigation structure. Navigational mechanisms that are repeated on multiple pages must occur in the same relative order each time they are used.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the navigation regions on the page.\n2. Notice that the order of items differs on different pages.",
       keepElement: true,
       keepAttribute: true,
       bps: [466],
@@ -1759,6 +1845,8 @@ function dataPreferred() {
       recommendation:
         "Ensure embedded elements and canvas elements provide a meaningful text equivalent.\nFor <canvas> elements, the best way to provide a textual equivalent is to add child HTML elements to the <canvas> element. Assistive technologies will access this content instead of the <canvas>.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the canvas.\n2. Inspect it with Chrome DevTools.\n3. Review its contents.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [476],
@@ -1773,6 +1861,8 @@ function dataPreferred() {
       recommendation:
         "Ensure hr elements utilize relative sizing. Specify the width of the <hr> element using relative units.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the horizontal rule.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, locate the value for the width property.\n4. Notice that the value is set in absolute units.",
       keepElement: true,
       keepAttribute: true,
       bps: [480],
@@ -1787,6 +1877,8 @@ function dataPreferred() {
       recommendation:
         'Ensure all active elements receive keyboard focus or can be activated with the keyboard. In order for an <a> element to be focusable with the keyboard, it must have an href attribute set to a non-null value, or it must have tabindex="0".',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly to navigate through the focusable elements on the page.\n2. Notice that the links are never focused.",
       keepElement: true,
       keepAttribute: true,
       bps: [490],
@@ -1801,6 +1893,8 @@ function dataPreferred() {
       recommendation:
         "Ensure frame titles are meaningful. All meaningful iframes must have a title attribute set to a short description of the iframe.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the frame.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [523],
@@ -1815,6 +1909,8 @@ function dataPreferred() {
       recommendation:
         'Ensure frame titles are meaningful. If an <iframe> is decorative or meant to be hidden, hide it with display: none. Alternatively, set aria-hidden="true", tabindex="-1", and title="empty" on the iframe.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the iframe.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
       keepElement: true,
       keepAttribute: true,
       bps: [523],
@@ -1829,6 +1925,8 @@ function dataPreferred() {
       recommendation:
         "Avoid placing inactive elements in the focus order. If content is meant to be hidden from all users, hide it with display: none or visibility: hidden. If content is meant to be accessed by all users, remove any aria-hidden attributes.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the control.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Notice that both "hidden" and "Focusable" are set to true.',
       keepElement: true,
       keepAttribute: true,
       bps: [524],
@@ -1842,6 +1940,8 @@ function dataPreferred() {
       recommendation:
         "Provide an informative, context-sensitive page title. The title must contain both the name of the page and the name of the site.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Inspect the page with Chrome DevTools.\n2. Locate the <title> element within the <head>.\n3. Review its text.",
       keepElement: true,
       keepAttribute: true,
       bps: [542],
@@ -1856,6 +1956,8 @@ function dataPreferred() {
       recommendation:
         "Ensure elements with multiple labels are rendered appropriately. Only one <label> element can be associated with a control at a time.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the form control.\n2. Inspect it with Chrome DevTools.\n3. Note the value of its id attribute.\n3. Search the source code for the id.\n4. Notice that multiple <label> elements reference this id in their for attributes.",
       keepElement: true,
       keepAttribute: true,
       bps: [551],
@@ -1870,6 +1972,8 @@ function dataPreferred() {
       recommendation:
         "Ensure implicit list markup is avoided. Lists must use <ul>, <ol>, <li>, <dl>, <dt>, and <dd> elements as appropriate.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the list.\n2. Inspect it with Chrome DevTools.\n3. Note that it does not use <ul>, <ol>, <dl> and related elements.",
       keepElement: true,
       keepAttribute: true,
       bps: [566],
@@ -1884,6 +1988,8 @@ function dataPreferred() {
       recommendation:
         "Avoid unnecessary use of heading elements. Only text that functions as a heading can use heading markup. Convert this content to a <div> or <span> element.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. Notice that the text uses <h1>-<h6> elements or role="heading".',
       keepElement: true,
       keepAttribute: true,
       bps: [588],
@@ -1898,6 +2004,8 @@ function dataPreferred() {
       recommendation:
         "Avoid using sub-tables in header elements. Do not nest <table> elements within <th> or <td> elements. Instead, use CSS to lay out content inside table cells.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the table.\n2. Inspect it with Chrome DevTools.\n3. Notice that there is a <table> element nested within another <table> element.",
       keepElement: true,
       keepAttribute: true,
       bps: [590],
@@ -1912,6 +2020,8 @@ function dataPreferred() {
       recommendation:
         'Ensure page tabs provide state and role.\n\nFor tabs, the following information is expected:\n- The container for the set of tabs must have role="tablist".\n- Each tab must have role="tab" and must be a descendant of the tablist element.\n- Each panel container must have role="tabpanel".\n- If the tablist has a visible label, the tablist element must have aria-labelledby set to the ID of the labelling element. Otherwise, the tablist element must have aria-label set to the accessible name.\n- Each tab must have aria-controls set to the ID of its corresponding tabpanel.\n- The selected tab must have aria-selected="true". All other tabs must have aria-selected="false".\n- Tabpanel elements must have aria-labelledby set to the ID of their corresponding tab.\n- If the tablist is vertically oriented, it must have aria-orientation="vertical".',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the tabs.\n2. Inspect them with Chrome DevTools.\n3. Review their nesting structure.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the values for "Role" and "Selected".',
       keepElement: true,
       keepAttribute: true,
       bps: [592],
@@ -1926,6 +2036,8 @@ function dataPreferred() {
       recommendation:
         "Ensure custom controls provide proper textual name, role, and state information. Properly structured native controls provide this information automatically. For custom controls, developers must explicitly add this information by using ARIA attributes.\n\nMost modern browsers have an Accessibility section in the developer tools panel that will display an element's calculated name, role, and state information.\n\nA control's name must represent the general purpose of the control and include any visible labeling text. It can be set through a variety of methods. Custom controls typically use the aria-label attribute or the aria-labelledby attribute to supply the name.\n\nA control's role indicates the type of control, such as \"checkbox\" or \"button\". For custom controls, the role must be set with the role attribute. The ARIA specification only permits certain values for this attribute. Additionally, the ARIA in HTML specification prevents the use of certain roles on some elements. For a list of HTML elements and their permitted roles, see the ARIA in HTML specification: https://www.w3.org/TR/html-aria/#docconformance\n\nA control's state indicates several possible pieces of information. Common states include expanded, current, selected, checked, and disabled. Most are indicated with similarly named ARIA attributes. Certain states can only be used with certain roles. For a list of roles and their allowed states, see the ARIA specification: https://www.w3.org/TR/wai-aria/#role_definitions\n\nThe Web Accessibility Initiative (WAI) of the W3C publishes suggested patterns for custom controls in the WAI-ARIA Authoring Practices: https://www.w3.org/WAI/ARIA/apg/ These patterns are not tested or endorsed by the W3C, but they often serve as good starting points for developing custom controls.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the control.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values in this section.",
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -1940,6 +2052,8 @@ function dataPreferred() {
       recommendation:
         'Ensure custom controls provide proper textual name, role, and state information.\n\nFor accordions, the following information is expected:\n- Each accordion header must be enclosed in a <button> element.\n- Each of these buttons must be enclosed in a heading element of an appropriate level. The <button> element must be the only child of this heading element.\n- When the panel is visible, the header button must have aria-expanded="true". When it is hidden, the header button must have aria-expanded="false".\n- The button must have aria-controls set to the ID of the panel container.\n- If a panel is visible and locked in the expanded state, its header button must have aria-disabled="true".',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the accordion header.\n2. Inspect its element with Chrome DevTools.\n3. Review its nesting structure.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the values for "Role", "Disabled", and "Expanded".',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -1954,6 +2068,8 @@ function dataPreferred() {
       recommendation:
         'Ensure custom controls provide proper textual name, role, and state information.\n\nFor breadcrumbs, the following information is expected:\n- The breadcrumb links must be contained in a <nav> element.\n- The <nav> element must have an accessible name provided by an aria-label or aria-labelledby attribute.\n- The link to the current page, if any, must have aria-current="true".',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the breadcrumbs.\n2. Inspect them with Chrome DevTools.\n3. Review their structure and attributes.\n4. If a <nav> element is present, select it. Then, in the Accessibility tab, expand the Computed Properties section. Review the value for "Name". ',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -1968,6 +2084,8 @@ function dataPreferred() {
       recommendation:
         'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, <button> elements would be most appropriate.\n\nIf conversion to native buttons is not possible, developers must add role="button" to these controls. If the buttons have insufficient internal text, developers must add an aria-label attribute or an aria-labelledby attribute to provide a name.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the button.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -1982,6 +2100,8 @@ function dataPreferred() {
       recommendation:
         'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, <input type="checkbox"> elements would be most appropriate.\n\nDevelopers can often achieve the same visual appearance using progressively enhanced CSS. Alternatively, they can visually hide the checkboxes with opacity: 0 and use SVGs to fake their appearance.\n\nIf conversion to native checkboxes is not possible, the following information is expected:\n- The element functioning as the checkbox must have role="checkbox".\n- This checkbox element must have a label provided by internal text, aria-label, or aria-labelledby.\n- When checked, the checkbox element must have aria-checked="true", and when not checked, it must have aria-checked="false". If partially checked, it must have aria-checked="mixed".\n- Checkboxes in a logical group must be children of an element with role="group". That element must have aria-labelledby set to the ID of text labelling the group.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the checkbox.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", and "Checked".',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -1996,6 +2116,8 @@ function dataPreferred() {
       recommendation:
         'Ensure custom controls provide proper textual name, role, and state information.\n\nFor comboboxes, the following information is expected:\n- The element that receives input and displays the value must have role="combobox".\n- The combobox must have aria-controls set to the ID of its suggestion popup.\n- The popup container must have role="listbox", "tree", "grid", or "dialog" depending on its function and include all other necessary ARIA properties for its role.\n- For tree, grid, and dialog popups, the combobox element must have aria-haspopup="grid", "tree", or "dialog" as appropriate.\n- When the popup is shown, the combobox element must have aria-expanded="true". Otherwise, it must be set to "false".\n- For listbox, grid, or tree popups, when a descendant element is visually focused, the actual keyboard focus must remain on the combobox and the combobox must have aria-activedescendant set to the ID of the visually focused element.\n- For listbox, grid, or tree popups, when a suggested value is visually selected, that value\'s element must have aria-selected="true".\n- The combobox element must have a label provided by a <label> with its for attribute set to the combobox ID, aria-label, or aria-labelledby.\n- The combobox must have aria-autocomplete set to an appropriate value. Use "none" if the suggestions are always the same, regardless of text entered. Use "list" if the suggestions change based on what is typed. Use "both" if the suggestions change based on what is typed and a suggested completion string is shown after the input text.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the combobox.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", "Has autocomplete", "hasPopup", "Expanded", "Active descendant", and "Controls".',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -2010,6 +2132,25 @@ function dataPreferred() {
       recommendation:
         'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, an <a> element with a non-null href would be most appropriate for these controls. An href is required because <a> elements without href attributes are not always considered links by assistive technology. If necessary, developers can set the href to "#" or "javascript:void(0);".\n\nIf using <a> elements is not possible, the links must be given role="link". If the links have insufficient internal text, developers must add an aria-label attribute or an aria-labelledby attribute to provide a name.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the link.\n2. Inspect its <a> or role="link" element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      keepElement: true,
+      keepAttribute: true,
+      bps: [602],
+    },
+
+    {
+      id: "response-custom-controls-radio",
+      text: "Custom controls - Radio buttons",
+      issue:
+        "There are radio buttons without appropriate name, role, and/or state information. Examples include:\n- ",
+      impact:
+        "Screen reader users will be unable to determine that only one of these controls can be checked or unchecked. They will also be prevented from reviewing which option they have chosen.",
+      recommendation:
+        'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, <input type="radio"> elements would be most appropriate.\n\nDevelopers can often achieve the same visual appearance using progressively enhanced CSS. Alternatively, they can visually hide the radio buttons with opacity: 0 and use SVGs to fake their appearance.\n\nIf conversion to native radio buttons is not possible, the following information is expected:\n- Radio buttons in the same logical group are children of an element with role="radiogroup".\n- Each radio button element has role="radio".\n- When a radio button is checked, it must have aria-checked="true". Otherwise, it must have aria-checked="false".\n- The radio button must have an accessible name provided by internal text, aria-label, or aria-labelledby.\n- The radiogroup element must have an accessible name set with aria-labelledby or aria-label.',
+      compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the radio button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", and "Checked".',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -2024,20 +2165,8 @@ function dataPreferred() {
       recommendation:
         'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, <select> elements would be most appropriate for these controls.\n\nIf conversion to native selects is not possible, the following information is expected:\n- The element that receives input and displays the value must have role="combobox".\n- The combobox element must have aria-controls set to the ID of its listbox.\n- The listbox container must have role="listbox". This element and its descendants must include all other ARIA attributes necessary for its role.\n- When the popup is shown, the combobox element must have aria-expanded="true". Otherwise, it must be set to "false".\n- When a descendant element is visually focused, the actual keyboard focus must remain on the combobox element, and it must have aria-activedescendant set to the ID of the visually focused element.\n- When an option is visually selected, that option element must have aria-selected="true".\n- The combobox element must have a label provided by a <label> with its for attribute set to the combobox ID, aria-label, or aria-labelledby.',
       compliantExample: "",
-      keepElement: true,
-      keepAttribute: true,
-      bps: [602],
-    },
-    {
-      id: "response-custom-controls-radio",
-      text: "Custom controls - Radio buttons",
-      issue:
-        "There are radio buttons without appropriate name, role, and/or state information. Examples include:\n- ",
-      impact:
-        "Screen reader users will be unable to determine that only one of these controls can be checked or unchecked. They will also be prevented from reviewing which option they have chosen.",
-      recommendation:
-        'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, <input type="radio"> elements would be most appropriate.\n\nDevelopers can often achieve the same visual appearance using progressively enhanced CSS. Alternatively, they can visually hide the radio buttons with opacity: 0 and use SVGs to fake their appearance.\n\nIf conversion to native radio buttons is not possible, the following information is expected:\n- Radio buttons in the same logical group are children of an element with role="radiogroup".\n- Each radio button element has role="radio".\n- When a radio button is checked, it must have aria-checked="true". Otherwise, it must have aria-checked="false".\n- The radio button must have an accessible name provided by internal text, aria-label, or aria-labelledby.\n- The radiogroup element must have an accessible name set with aria-labelledby or aria-label.',
-      compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the select.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", "hasPopup", and "Expanded".',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -2052,20 +2181,8 @@ function dataPreferred() {
       recommendation:
         'Ensure custom controls provide proper textual name, role, and state information.\n\nFor show/hide controls, the following information is expected:\n- The element that shows and hides a content area must be a <button>.\n- When the content area is visible, the button must have aria-expanded="true". Otherwise, the button must have aria-expanded="false".\n- The button must have an accessible name set with internal text, aria-label, or aria-labelledby.',
       compliantExample: "",
-      keepElement: true,
-      keepAttribute: true,
-      bps: [602],
-    },
-    {
-      id: "response-custom-controls-tooltips",
-      text: "Custom controls - Tooltips",
-      issue:
-        "There are tooltips without corresponding name and/or role information. Examples include:\n- ",
-      impact:
-        "Screen reader users will be unable to determine that these tooltips are present.",
-      recommendation:
-        'Ensure custom controls provide proper textual name, role, and state information.\n\nFor tooltips, the following information is expected:\n- The control that opens the tooltip must have aria-describedby set to the ID of the tooltip element.\n- The tooltip element must have role="tooltip".',
-      compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the show/hide control.\n2. Inspect its element with Chrome DevTools.\n3. Review its nesting structure.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the values for "Role" and "Expanded".',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -2080,6 +2197,24 @@ function dataPreferred() {
       recommendation:
         'Ensure custom controls provide proper textual name, role, and state information.\n\nIn this case, these elements function as "toggletips". A toggletip is any button that only exists to show a tooltip. Common examples include question mark buttons and information buttons. Although toggletips are similar to tooltips, they require different accessibility information.\n\nThe expected structure is as follows:\n- The control that opens the tooltip must be a <button>.\n- The button must have an accessible name set through internal text, aria-label, or aria-labelledby.\n- The tooltip container element must be available on page load, but it can be visually hidden with a .visually-hidden or .sr-only CSS class.\n- This tooltip container must have role="status".\n- To display the tooltip visually, inject text into this <div role="status"> element. If properly implemented, this will cause screen readers to announce the contents of the tooltip after the next pause in speech.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the control that opens the toggletip.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name" and "Role".\n5. Inspect the toggletip container with DevTools.\n6. In the Accessibility tab, review the values for "Name" and "Live region".',
+      keepElement: true,
+      keepAttribute: true,
+      bps: [602],
+    },
+    {
+      id: "response-custom-controls-tooltips",
+      text: "Custom controls - Tooltips",
+      issue:
+        "There are tooltips without corresponding name and/or role information. Examples include:\n- ",
+      impact:
+        "Screen reader users will be unable to determine that these tooltips are present.",
+      recommendation:
+        'Ensure custom controls provide proper textual name, role, and state information.\n\nFor tooltips, the following information is expected:\n- The control that opens the tooltip must have aria-describedby set to the ID of the tooltip element.\n- The tooltip element must have role="tooltip".',
+      compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the control that opens the tooltip.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", and "Description".',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -2094,6 +2229,8 @@ function dataPreferred() {
       recommendation:
         "Ensure custom controls provide proper textual name, role, and state information. The accessible name of a button can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [602],
@@ -2108,6 +2245,8 @@ function dataPreferred() {
       recommendation:
         "Ensure content updates define focus updates appropriately. When modal dialogs appear, focus must move to the first focusable element in the dialog. Use the JavaScript focus() method to move keyboard focus to this element.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the dialog trigger is focused.\n5. Press Enter on the dialog trigger.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n6. Notice that the focused element is not the first focusable element or the role="dialog" element.',
       keepElement: true,
       keepAttribute: true,
       bps: [605],
@@ -2122,6 +2261,8 @@ function dataPreferred() {
       recommendation:
         'Ensure content updates define focus updates appropriately. When top-of-form errors appear, focus must move to the container of the error. Set tabindex="-1" on the element, then use the JavaScript focus() method to move keyboard focus to this element.\n\nAlternatively, a properly structured ARIA live region may be used to announce the error when it appears.',
       compliantExample: "N/A",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the form submission control is focused.\n5. Press Enter on the submission control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n6. Notice that the focused element is not the top-of-form error container.',
       keepElement: true,
       keepAttribute: true,
       bps: [605],
@@ -2136,6 +2277,8 @@ function dataPreferred() {
       recommendation:
         "Ensure content updates define focus updates appropriately. When inline errors appear, focus must move to the first field in error and the form field must have aria-describedby set to the ID of the error so that the error is announced when the field is focused.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the form submission control is focused.\n5. Press Enter on the submission control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n6. Notice that the focused element is not the first form field with an error.',
       keepElement: true,
       keepAttribute: true,
       bps: [605],
@@ -2150,6 +2293,8 @@ function dataPreferred() {
       recommendation:
         "Ensure content updates define focus updates appropriately. When a dialog is closed, return focus to the control that opened the dialog. Use the JavaScript focus() method to move keyboard focus to this element.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the dialog close control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n6. Notice that the focused element is not the control that opened the dialog.',
       keepElement: true,
       keepAttribute: true,
       bps: [605],
@@ -2164,6 +2309,8 @@ function dataPreferred() {
       recommendation:
         "Ensure content updates define focus updates appropriately. When new content appears after activating a load more control, keyboard focus must move to the newly revealed content. Use the JavaScript focus() method to move keyboard focus to the first focusable element in the newly revealed content.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the load more control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n6. Notice that the focused element is not the first focusable element in the newly revealed content.',
       keepElement: true,
       keepAttribute: true,
       bps: [605],
@@ -2178,6 +2325,8 @@ function dataPreferred() {
       recommendation:
         "Ensure form field constraints and errors are associated with their corresponding field.\n\nFor most form controls, the best way to associate the error is to use an aria-describedby attribute on the field set to the ID of the corresponding error.\n\nFor groups of form controls like radio buttons and checkboxes, it is best to include the error text inside the element that labels the group (such as a <legend>).",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the form field with an inline error.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Description".',
       keepElement: true,
       keepAttribute: true,
       bps: [609],
@@ -2192,6 +2341,8 @@ function dataPreferred() {
       recommendation:
         "Ensure form field constraints and errors are associated with their corresponding field.\n\nFor most form controls, the best way to associate the constraint is to use an aria-describedby attribute on the field set to the ID of the corresponding constraint.\n\nFor groups of form controls like radio buttons and checkboxes, it is best to include the constraint text inside the element that labels the group (such as a <legend>).",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the form field with inline constraints or instructions.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Description".',
       keepElement: true,
       keepAttribute: true,
       bps: [609],
@@ -2452,6 +2603,8 @@ function dataPreferred() {
       recommendation:
         'Ensure content that is intended to be hidden from all users is not rendered by assistive technology. The best way to do this is by setting the display CSS property of the element to "none".',
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Open Chrome DevTools.\n2. Locate the cited HTML within the source code.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
       keepElement: true,
       keepAttribute: true,
       bps: [733],
@@ -2466,6 +2619,8 @@ function dataPreferred() {
       recommendation:
         'Ensure content that is intended to be hidden from all users is not rendered by assistive technology. This includes content behind modal dialogs.\n\nThe best way to prevent access to content behind dialogs is with the "inert" attribute and associated polyfill.\n- Move the dialog element to be a sibling of the element containing the rest of the page content. This makes it easier to control keyboard access to underlying content.\n- Add the following polyfill script to the page: https://github.com/WICG/inert\n- When the dialog is present, add the "inert" attribute to the container of the rest of the site content. When the dialog is absent, remove the inert attribute.',
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Press Tab repeatedly to focus controls on the page.\n2. Notice that focus can access controls behind the dialog.",
       keepElement: true,
       keepAttribute: true,
       bps: [733],
@@ -2480,6 +2635,8 @@ function dataPreferred() {
       recommendation:
         "Avoid using event handlers that trigger focus or context changes on user input. Instead of moving focus or changing context when a radio button is selected, add a submission button for the change. Other alternatives include applying the change when the entire group of radio buttons loses focus or warning the user of this behavior in visible text before the controls.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly until the radio button is focused.\n2. Notice that the keyboard focus changes immediately when the radio button is focused.",
       keepElement: true,
       keepAttribute: true,
       bps: [794],
@@ -2494,6 +2651,8 @@ function dataPreferred() {
       recommendation:
         "Avoid using event handlers that trigger focus or context changes on user input. Instead of moving focus or changing context when a select's option is selected, add a submission button for the change. Other alternatives include applying the change when the select loses focus or warning the user of this behavior in visible text before the control.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly until the select is focused.\n2. Press the Down Arrow key to change the selected option.\n3. Notice that the keyboard focus changes immediately when a new option is selected.",
       keepElement: true,
       keepAttribute: true,
       bps: [794],
@@ -2508,6 +2667,8 @@ function dataPreferred() {
       recommendation:
         "Avoid using event handlers that trigger focus or context changes on user input. Instead of moving focus or changing context when text is entered, add a submission button for the change. Other alternatives include applying the change when the field loses focus or warning the user of this behavior in visible text before the field.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly until the text field is focused.\n2. Enter text into the field.\n3. Notice that the keyboard focus changes immediately when text is entered.",
       keepElement: true,
       keepAttribute: true,
       bps: [794],
@@ -2521,6 +2682,8 @@ function dataPreferred() {
       recommendation:
         "Ensure the focus order of interactive elements on the page is logical. The best way to set the focus order is to reorder the elements in the DOM.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly to focus controls on the page.\n2. Notice the controls are focused in an illogical order.",
       keepElement: true,
       keepAttribute: true,
       bps: [796],
@@ -2535,6 +2698,8 @@ function dataPreferred() {
       recommendation:
         "Avoid forced focus changes that are not user-initiated. Do not shift focus after a control receives focus except when immediate user interaction is needed (such as time-based alerts).",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly until the control is focused.\n2. Notice the keyboard focus is immediately moved elsewhere when the control is focused.",
       keepElement: true,
       keepAttribute: true,
       bps: [801],
@@ -2549,6 +2714,8 @@ function dataPreferred() {
       recommendation:
         "Ensure radio button groups are properly formed. Radio buttons in a logical group must all have their name attribute set to the same value.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the radio buttons.\n2. Inspect them with Chrome DevTools.\n3. Review the values for their name attributes.\n4. Notice that radio buttons in the same group have different values for their name attribute.",
       keepElement: true,
       keepAttribute: true,
       bps: [802],
@@ -2577,6 +2744,8 @@ function dataPreferred() {
       recommendation:
         "Ensure CSS background images that convey meaning have textual and visible equivalents.\n\nThe best way to do this is to use a real <img> or SVG element. To add a textual equivalent to an <img> element, set its alt attribute to a descriptive value.\n\nTo add a textual equivalent to an <svg> element, add a <title> child to the SVG. Place the textual equivalent in the <title>, then add an ID to the <title>. Finally, on the <svg>, add an aria-labelledby attribute and set its value to the ID of the <title>.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. Notice that the image is not created with an <img>, <svg>, or role="img" element.',
       keepElement: true,
       keepAttribute: true,
       bps: [808],
@@ -2589,6 +2758,8 @@ function dataPreferred() {
       recommendation:
         "Ensure that the reading order of content is logical. The best way to set the reading order is to reorder the elements in the DOM.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Enable the JAWS screen reader.\n2. Navigate through the content using the Down Arrow key to move element by element.\n3. Review the order in which the screen reader announces content.",
       keepElement: true,
       keepAttribute: true,
       bps: [809],
@@ -2603,6 +2774,8 @@ function dataPreferred() {
       recommendation:
         'Ensure dialogs use proper structure. Dialog containers must have role="dialog". If the dialog has a visible title, set aria-labelledby on the dialog container to the ID of the visible title. For dialogs without a visible title, set a descriptive aria-label on the dialog element.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the dialog.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name" and "Role".',
       keepElement: true,
       keepAttribute: true,
       bps: [886],
@@ -2699,6 +2872,8 @@ function dataPreferred() {
       recommendation:
         "Ensure data table headers cells are not blank. The best way to resolve this issue is to add visual text to the table header. Alternatively, this text can be hidden with a .visually-hidden or .sr-only CSS class.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the table.\n2. Inspect it with Chrome DevTools.\n3. Notice that a <th> element does not contain content.",
       keepElement: true,
       keepAttribute: true,
       bps: [941],
@@ -2713,6 +2888,8 @@ function dataPreferred() {
       recommendation:
         "Ensure custom controls are keyboard accessible. Users must be able to navigate to and operate controls while a screen reader is running.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Enable the JAWS screen reader.\n2. Navigate to the control using the Down Arrow key or the Tab key\n3. Attempt to interact with Enter, Space, and arrow keys.\n4. Notice that the control cannot be interacted with using the keyboard while the screen reader is running.",
       keepElement: true,
       keepAttribute: true,
       bps: [954],
@@ -2726,6 +2903,8 @@ function dataPreferred() {
       recommendation:
         "Ensure CAPTCHAs are accessible both visually and audibly. Add an alternative visual challenge to the CAPTCHA.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the CAPTCHA.\n2. Notice that there is no way to complete the CAPTCHA that does not require hearing.",
       keepElement: true,
       keepAttribute: true,
       bps: [963],
@@ -2739,6 +2918,8 @@ function dataPreferred() {
       recommendation:
         "Ensure CAPTCHAs are accessible both visually and audibly. Add an alternative audio challenge to the CAPTCHA.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the CAPTCHA.\n2. Notice that there is no way to complete the CAPTCHA that does not require vision.",
       keepElement: true,
       keepAttribute: true,
       bps: [963],
@@ -2752,6 +2933,8 @@ function dataPreferred() {
       recommendation:
         "Avoid improper nesting of form elements and links. For example, <button> elements must not be nested in <a> elements. To detect many of these errors automatically, use the Nu Html Checker: https://validator.w3.org/nu/",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the controls.\n2. Open Chrome DevTools.\n3. Review the nesting structure of the controls.",
       keepElement: true,
       keepAttribute: true,
       bps: [967],
@@ -2766,6 +2949,8 @@ function dataPreferred() {
       recommendation:
         'Indicate live regions for dynamically changing content. Live regions can be created by adding a role attribute set to "log", "status", "alert", "progressbar", "marquee", or "timer" as appropriate. Alternatively, custom behavior can be created by using the aria-live, aria-atomic, and aria-relevant attributes. Text injected into this live region element will be announced by screen readers.\n\nImportantly, the element with the ARIA live attributes must be available when the page loads. Otherwise, many screen readers will not detect updates to the element. Additionally, the element must be empty on page load unless an immediate screen reader announcement is desired.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Turn on the JAWS screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by JAWS in response to the dynamic content update.",
       keepElement: true,
       keepAttribute: true,
       bps: [971],
@@ -2780,6 +2965,8 @@ function dataPreferred() {
       recommendation:
         'Provide a text transcript for audio only presentations. This transcript should be present on the same page as the audio. It should be in the same language as the spoken language. If the audio is provided by a <video> element, developers may provide a caption track instead using <track kind="captions">.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the audio.\n2. Notice that there is no transcript available for the content.",
       keepElement: true,
       keepAttribute: true,
       bps: [1143],
@@ -2794,6 +2981,8 @@ function dataPreferred() {
       recommendation:
         "Provide text transcript or audio track of video only presentations.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the video.\n2. Notice that there is no transcript or audio equivalent available for the content.",
       keepElement: true,
       keepAttribute: true,
       bps: [1144],
@@ -2808,6 +2997,8 @@ function dataPreferred() {
       recommendation:
         "Ensure text is used instead of images of text when technology allows unless it is essential. Common exceptions include logotypes or images of single letters.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. Notice that the text is created without text nodes.",
       keepElement: true,
       keepAttribute: true,
       bps: [1233],
@@ -2822,6 +3013,8 @@ function dataPreferred() {
       recommendation:
         "Ensure instructions do not rely solely on sensory characteristics. Examples include instructions that refer solely to shape, location, size, orientation, or sound, like 'Click the red button'. Rewrite the instructions to avoid using sensory descriptions.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the instructions.\n2. Notice that the instructions rely on sensory language to convey their meaning.",
       keepElement: true,
       keepAttribute: true,
       bps: [1237],
@@ -2836,6 +3029,8 @@ function dataPreferred() {
       recommendation:
         'Ensure proper markup is used to mark emphasized or special text formatting. For strikethrough text, such as old prices replaced with a sale price, use the <s> element to wrap the strikethrough text. Additionally, add visually hidden text before and after the strikethrough text that describes the meaning of the strikethrough, such as "Old price" and "New price."',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the stricken text.\n2. Inspect it with Chrome DevTools.\n3. Notice that the text does not use the <s> element and visually hidden text describing the meaning of the stricken text.",
       keepElement: true,
       keepAttribute: true,
       bps: [1238],
@@ -2850,6 +3045,8 @@ function dataPreferred() {
       recommendation:
         "Ensure keyboard focus is not trapped. Users must be able to use the keyboard alone to move away from controls. When moving away from the component requires more than arrow keys, Tab, Shift+Tab, or Esc, the user must be advised of the method for moving focus away.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly until the control is focused.\n2. Notice that there is no way to pass the control by pressing the Tab key or move before the control using Shift+Tab.",
       keepElement: true,
       keepAttribute: true,
       bps: [1243],
@@ -2864,6 +3061,8 @@ function dataPreferred() {
       recommendation:
         "Ensure auto-updating dynamic content can be paused, stopped, or hidden. Common examples include autoplaying videos (with or without audio) and GIFs. The best way to do this is to add an accessible pause <button> element near to the element that allows the movement to be stopped.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the content.\n2. Notice that there is no way to pause, stop, or hide the content.",
       keepElement: true,
       keepAttribute: true,
       bps: [1244],
@@ -2878,6 +3077,8 @@ function dataPreferred() {
       recommendation:
         "Ensure there is more than one way to locate a web page in a set of pages. Common methods include:\n- A site map\n- Links to other pages on the page, such as a navigation bar or menu\n- Site search\n- Table of contents\n\nPages that represent steps in a process (such as shipping and payment pages in a checkout flow) are exempt from this requirement.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Review the navigational structures and features of the page.\n2. Notice that there is only one method to locate the page.",
       keepElement: true,
       keepAttribute: true,
       bps: [1247],
@@ -2892,47 +3093,8 @@ function dataPreferred() {
       recommendation:
         'Ensure headings and labels are descriptive and unique. This includes the accessible names of buttons. The accessible name of a button can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive. Avoid including the word "button" in the accessible name, as this information is already supplied by the button\'s role.',
       compliantExample: "",
-      keepElement: true,
-      keepAttribute: true,
-      bps: [1248],
-    },
-    {
-      id: "response-button-labels-not-unique",
-      text: "Buttons with same name",
-      issue:
-        "There are buttons that perform different actions but have the same accessible name. Examples include:\n- ",
-      impact:
-        "Screen reader users will have difficulty distinguishing between these buttons.",
-      recommendation:
-        'Ensure headings and labels are descriptive and unique. This includes the accessible names of buttons. Buttons that perform different actions must have different accessible names. The accessible name of a button can be set with internal text, an aria-label attribute, or an aria-labelledby attribute.\n\nTo resolve the issue, add information to the buttons\' accessible names. For example, two "Add to Cart" buttons might become "Add to Cart, Apples" and "Add to Cart, Bananas." When altering the accessible name, be sure to include all of the button\'s visual text in the accessible name.',
-      compliantExample: "",
-      keepElement: true,
-      keepAttribute: true,
-      bps: [1248],
-    },
-    {
-      id: "response-headings-not-unique",
-      text: "Headings not unique",
-      issue: "There are headings that are not unique. Examples include:\n- ",
-      impact:
-        "Screen reader users and users with cognitive disabilities may have difficulty distinguishing between these sections.",
-      recommendation:
-        "Ensure headings and labels are descriptive and unique. Headings and labels must be unique unless there is sufficient context to allow users to differentiate between duplicated headings or labels.",
-      compliantExample: "",
-      keepElement: true,
-      keepAttribute: true,
-      bps: [1248],
-    },
-    {
-      id: "response-labels-not-unique",
-      text: "Labels not unique",
-      issue:
-        "There are form field labels that are not unique. Examples include:\n-",
-      impact:
-        "Screen reader users and users with cognitive disabilities may have difficulty distinguishing between these fields.",
-      recommendation:
-        "Ensure headings and labels are descriptive and unique. Headings and labels must be unique unless there is sufficient context to allow users to differentiate between duplicated headings or labels.",
-      compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [1248],
@@ -2941,12 +3103,14 @@ function dataPreferred() {
       id: "response-visual-keyboard-focus-missing",
       text: "Visual keyboard focus missing",
       issue:
-        "There are interactive elements without a visible keyboard focus indicator. Examples include:\n- ",
+        "There are interactive controls without a visible keyboard focus indicator. Examples include:\n- ",
       impact:
         "Keyboard users will have difficulty determining their position on the page.",
       recommendation:
-        "Ensure keyboard focus is indicated visually. When interactive elements receive focus, the element must appear on screen and a visible focus indicator must be present.\n\nFocus can be indicated in a variety of ways. Most commonly, the browser default outline is used. To use the browser default, remove any outline: none or outline: 0 CSS declarations. Alternatives to the browser default outline include underlines, a change of background, and borders. As of WCAG 2.1, a custom focus indicator must have a minimum contrast ratio of 3.00:1 against the background.",
+        "Ensure keyboard focus is indicated visually. When interactive controls receive focus, the control must appear on screen and a visible focus indicator must be present.\n\nFocus can be indicated in a variety of ways. Most commonly, the browser default outline is used. To use the browser default, remove any outline: none or outline: 0 CSS declarations. Alternatives to the browser default outline include underlines, a change of background, and borders. As of WCAG 2.1, a custom focus indicator must have a minimum contrast ratio of 3.00:1 against the background.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly until the control is focused.\n2. Notice that there is no visual indicator that the control is focused, such as an outline.",
       keepElement: true,
       keepAttribute: true,
       bps: [1249],
@@ -2961,6 +3125,8 @@ function dataPreferred() {
       recommendation:
         "Ensure that elements with the same functionality are consistently identified across pages. Use labels, names, and text alternatives to consistently identify elements with the same functionality across multiple pages.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the element.\n2. Compare its name and appearance to the same element on different pages.\n3. Notice that the element's name or appearance are different on different pages.",
       keepElement: true,
       keepAttribute: true,
       bps: [1253],
@@ -2975,6 +3141,8 @@ function dataPreferred() {
       recommendation:
         "Provide visual labels or instructions for user input. Labels for form controls must remain visible when content is entered or options are selected. Additionally, individual form controls in a group must each have their own labels.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the field.\n2. Enter text or select a value for the field.\n3. Notice that no visual label is available to indicate the purpose of the field after setting a value.",
       keepElement: true,
       keepAttribute: true,
       bps: [1254],
@@ -2989,6 +3157,8 @@ function dataPreferred() {
       recommendation:
         'Provide visual labels or instructions for user input. When asterisks are used to denote required fields, add text to the top of the form that explains their purpose, such as "Asterisks (*) indicate required fields."',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the asterisk.\n2. Notice that there is no visible text that explains the meaning of the asterisk.",
       keepElement: true,
       keepAttribute: true,
       bps: [1254],
@@ -3003,6 +3173,8 @@ function dataPreferred() {
       recommendation:
         "Provide suggestions for error messages when known. This can include specific examples of valid input or format examples.\n\nIf providing a suggestion would jeopardize the security of a page, the error message is exempt from this requirement. For example, a password field error is not required to suggest the correct password to the user.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the error.\n2. Notice that it does not provide suggestions on how to resolve the issue.",
       keepElement: true,
       keepAttribute: true,
       bps: [1255],
@@ -3017,6 +3189,8 @@ function dataPreferred() {
       recommendation:
         "Provide error prevention for legal commitments, financial transactions, test responses, and data changes. Examples of unprevented errors for financial transactions include credit card fields with no validation. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Submit a form that results in a financial transaction.\n2. Notice that there is no error checking for the transaction.",
       keepElement: true,
       keepAttribute: true,
       bps: [1256],
@@ -3031,6 +3205,8 @@ function dataPreferred() {
       recommendation:
         "Provide error prevention for legal commitments, financial transactions, test responses, and data changes. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Submit a form resulting in legal commitment.\n2. Notice that there is no error checking for the submission.",
       keepElement: true,
       keepAttribute: true,
       bps: [1256],
@@ -3045,6 +3221,8 @@ function dataPreferred() {
       recommendation:
         "Provide error prevention for legal commitments, financial transactions, test responses, and data changes. Examples of unprevented errors for data changes include editing a personal profile, posting to social media, or deleting an incoming email message. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Submit a form that results in the change or deletion of user data.\n2. Notice that there is no error checking for the submission.",
       keepElement: true,
       keepAttribute: true,
       bps: [1256],
@@ -3059,6 +3237,8 @@ function dataPreferred() {
       recommendation:
         "Provide error prevention for legal commitments, financial transactions, test responses, and data changes. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Submit a form with an empty or incomplete response.\n2. Notice that there is no error checking for the submission.",
       keepElement: true,
       keepAttribute: true,
       bps: [1256],
@@ -3113,6 +3293,8 @@ function dataPreferred() {
       recommendation:
         "Ensure link text is meaningful within context. The accessible name of a link can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the link.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [1301],
@@ -3127,6 +3309,8 @@ function dataPreferred() {
       recommendation:
         "Ensure link text is meaningful within context. A link's purpose must be determinable from the link's accessible name alone or in combination with the immediately surrounding paragraph, table cell, or associated table header. Good accessible names are both concise and descriptive.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the link.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [1301],
@@ -3141,6 +3325,8 @@ function dataPreferred() {
       recommendation:
         'Ensure link text is meaningful within context. Links that go to different locations must have different accessible names.\n\nTo resolve the issue, add information to the links\' accessible names. For example, two "Learn more" links might become "Learn more about products" and "Learn more about services." When altering the accessible name, be sure to include all of the link\'s visual text in the accessible name.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the link.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [1301],
@@ -3155,6 +3341,8 @@ function dataPreferred() {
       recommendation:
         "Ensure elements blink or flash in a safe threshold. Avoid flashing more than three times per second unless the content falls within the  safe threshold for dimness and size.\n\nFor size, the safe threshold can be calculated as 25% of 10 degrees. When calculated at a typical viewing distance of 11 to 26 inches for a 15-17 inch screen at a resolution of 1024x768, the area of flashing must be less than 21,824 pixels.\n\nIf a flashing element is larger than the threshold and flashes more than three times per second and cannot be changed, the flash must then be evaluated by a tool. The Trace Center Photosensitive Epilepsy Analysis Tool (PEAT) can be used for this purpose: http://trace.wisc.edu/peat/",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the content.\n2. Determine that the content flashes more than three times per second using manual means or by recording a video using the Photosensitive Epilepsy Analysis Tool (PEAT): http://trace.wisc.edu/peat/ to automatically analyze the content.\n3. Notice that the thresholds for flashing content are exceeded.",
       keepElement: true,
       keepAttribute: true,
       bps: [1342],
@@ -3168,6 +3356,8 @@ function dataPreferred() {
       recommendation:
         "Ensure markup documents contain well-formed elements. Elements must have only one instance of an attribute assigned to them. This can be tested by running the document through an HTML validator such as W3C's Nu Html Checker: https://validator.w3.org/nu/",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Use https://validator.w3.org/nu/ to review the source code of the page.\n2. Notice that there are "Duplicate attribute" errors.',
       keepElement: true,
       keepAttribute: true,
       bps: [1352],
@@ -3181,6 +3371,8 @@ function dataPreferred() {
       recommendation:
         "Ensure markup documents contain well-formed elements. Each ID in the page must be unique. This can be tested by running the document through an HTML validator such as W3C's Nu Html Checker: https://validator.w3.org/nu/",
       compliantExample: "N/A",
+      stepsToReproduce:
+        '1. Use https://validator.w3.org/nu/ to review the source code of the page.\n2. Notice that there are "Duplicate ID" errors.',
       keepElement: true,
       keepAttribute: true,
       bps: [1352],
@@ -3194,6 +3386,8 @@ function dataPreferred() {
       recommendation:
         "Ensure markup documents contain well-formed elements. Elements must be nested according to specification. This can be tested by running the document through an HTML validator such as W3C's Nu Html Checker: https://validator.w3.org/nu/",
       compliantExample: "N/A",
+      stepsToReproduce:
+        '1. Use https://validator.w3.org/nu/ to review the source code of the page.\n2. Notice that there are "Element X not allowed as child of element Y in this context" errors.',
       keepElement: true,
       keepAttribute: true,
       bps: [1352],
@@ -3207,6 +3401,8 @@ function dataPreferred() {
       recommendation:
         "Ensure markup documents contain well-formed elements. All elements must have complete start and end tags where required by the HTML specification. This can be tested by running the document through an HTML validator such as W3C's Nu Html Checker: https://validator.w3.org/nu/",
       compliantExample: "N/A",
+      stepsToReproduce:
+        '1. Use https://validator.w3.org/nu/ to review the source code of the page.\n2. Notice that there are "End tag for X seen, but there were unclosed elements" and/or "Unclosed element X" errors.',
       keepElement: true,
       keepAttribute: true,
       bps: [1352],
@@ -3221,6 +3417,8 @@ function dataPreferred() {
       recommendation:
         "Provide a clear indication of fields in error for information that is submitted. Include the name of the field in the error message.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the error.\n2. Notice that the error text does not include the name of the field(s) in error.",
       keepElement: true,
       keepAttribute: true,
       bps: [1471],
@@ -3332,6 +3530,8 @@ function dataPreferred() {
       recommendation:
         "Ensure ARIA roles, states, and properties are valid. Many ARIA attributes can only be used on certain elements. Some can only be used in combination with other attributes. Additionally, if an attribute references an ID, that ID must be present in the page.\n\nTo detect many of these errors automatically, use the Nu Html Checker: https://validator.w3.org/nu/",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Open Chrome DevTools.\n2. Locate the element identified in the code reference.\n3. Notice that the element's ARIA attributes and/or nesting do not conform to the ARIA specification: https://www.w3.org/TR/wai-aria/ and/or the ARIA in HTML specification: https://www.w3.org/TR/html-aria/",
       keepElement: true,
       keepAttribute: true,
       bps: [1626],
@@ -3360,6 +3560,8 @@ function dataPreferred() {
       recommendation:
         'Ensure layout tables indicate their use for presentation purposes. This can be done by adding role="presentation" to <table> elements used for a layout purpose. Additionally, convert any <th> cells to <td> cells. It is strongly recommended to use CSS instead of HTML table elements for layout purposes.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the layout table.\n2. Inspect it with Chrome DevTools.\n3. Select the <table> element.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Verify that the accessibility node is not exposed.",
       keepElement: true,
       keepAttribute: true,
       bps: [1775],
@@ -3374,6 +3576,8 @@ function dataPreferred() {
       recommendation:
         "Avoid inappropriate use of ARIA roles, states, and properties. If content is meant to be hidden from all users, hide it with display: none or visibility: hidden. If content is meant to be accessed by all users, remove any aria-hidden attributes.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the control.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Notice that both "hidden" and "Focusable" are set to true.',
       keepElement: true,
       keepAttribute: true,
       bps: [1871],
@@ -3388,6 +3592,8 @@ function dataPreferred() {
       recommendation:
         "Provide a descriptive dialog title. If the dialog has a visible title, set aria-labelledby on the dialog container to the ID of the visible title. For dialogs without a visible title, set a descriptive aria-label on the dialog element.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the dialog.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [1893],
@@ -3774,6 +3980,8 @@ function dataPreferred() {
       recommendation:
         "Ensure audio is not played automatically on load. If audio content must load automatically, ensure the audio output plays for a maximum of three seconds or that there is a mechanism near the top of the page to stop or pause the audio.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Open the page.\n2. Notice that audio plays automatically.",
       keepElement: true,
       keepAttribute: true,
       bps: [2042],
@@ -3788,6 +3996,8 @@ function dataPreferred() {
       recommendation:
         "Provide synchronized captions for video (which includes audio) or other multimedia. This includes all spoken language as well as music and sounds pertinent to the content of the video.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the video.\n2. Notice that there are no captions.",
       keepElement: true,
       keepAttribute: true,
       bps: [2049],
@@ -3802,6 +4012,8 @@ function dataPreferred() {
       recommendation:
         "Provide synchronized captions for video (which includes audio) or other multimedia. Captions must accurately represent the audio content in the video.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the video.\n2. Review the captions.\n3. Notice that the captions are inaccurate or incomplete.",
       keepElement: true,
       keepAttribute: true,
       bps: [2049],
@@ -3844,6 +4056,8 @@ function dataPreferred() {
       recommendation:
         "Avoid use of placeholder values to label or explain input.\n\nLabels must meet the following requirements:\n- The label must be visible.\n- The label must be persistent. That is, a label must not disappear when text is entered into the field or an option is selected.\n- The label must be programmatically associated with the form field. The most common way to do this is with a <label> element with a for attribute set to the ID of the field.\n- The label must provide the accessible name of the field, or the label's exact text must be included in the accessible name.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the form field.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Notice that the accessible name is computed from the placeholder attribute.",
       keepElement: true,
       keepAttribute: true,
       bps: [2440],
@@ -3872,6 +4086,8 @@ function dataPreferred() {
       recommendation:
         "Ensure ARIA regions, landmarks and HTML sections are identifiable. When multiple <nav> elements appear on the same page, ensure that they each have an accessible name. This can be set with aria-labelledby (if there is visible text naming the region) or aria-label (if no visual label is present).",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the navigation section.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".\n5. Review the name for other <nav> elements on the page.',
       keepElement: true,
       keepAttribute: true,
       bps: [2519],
@@ -3886,6 +4102,8 @@ function dataPreferred() {
       recommendation:
         "Ensure ARIA regions, landmarks and HTML sections are identifiable. When multiple <aside> elements appear on the same page, ensure that they each have an accessible name. This can be set with aria-labelledby (if there is visible text naming the region) or aria-label (if no visual label is present).",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the aside.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".\n5. Review the name for other <aside> elements on the page.',
       keepElement: true,
       keepAttribute: true,
       bps: [2519],
@@ -3900,6 +4118,8 @@ function dataPreferred() {
       recommendation:
         'Ensure ARIA regions, landmarks and HTML sections are identifiable. Elements with role="region" must have an accessible name set with aria-label or aria-labelledby.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the region.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       keepElement: true,
       keepAttribute: true,
       bps: [2519],
@@ -3926,6 +4146,8 @@ function dataPreferred() {
         "Screen reader users will not know the purpose of these progress bars.",
       recommendation:
         "Provide accessible names for progress bars and meters. Use an aria-label, aria-labelledby, or title attribute on the element to provide the accessible name.",
+      stepsToReproduce:
+        '1. Locate the progress bar.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
@@ -3969,6 +4191,8 @@ function dataPreferred() {
       recommendation:
         'Provide text equivalents for icon fonts. Font icon pseudo-elements must be set apart in their own real element, such as a <span>. To add a textual equivalent, add role="img" to the element and an aria-label attribute set to an appropriate textual description.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the icon.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name" and "Role".',
       keepElement: true,
       keepAttribute: true,
       bps: [2607],
@@ -3983,6 +4207,8 @@ function dataPreferred() {
       recommendation:
         'Provide text equivalents for icon fonts. Font icon pseudo-elements must be set apart in their own real element, such as a <span>. To mark the icon as decorative, set aria-hidden="true" on this element.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the icon.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
       keepElement: true,
       keepAttribute: true,
       bps: [2607],
@@ -4037,6 +4263,8 @@ function dataPreferred() {
       recommendation:
         "Ensure that common input fields allow autocomplete and use standard autocomplete values.\n\nCommon inputs include names, emails, passwords, and addresses, among others. For a full list of values, see the WCAG 2.1 standard: https://www.w3.org/TR/WCAG21/#input-purposes. ",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the field.\n2. Inspect it with Chrome DevTools.\n3. Review the value for its autocomplete attribute, if any.",
       keepElement: true,
       keepAttribute: true,
       bps: [2891],
@@ -4051,20 +4279,8 @@ function dataPreferred() {
       recommendation:
         "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality. When the page has a viewport width of 320 CSS pixels, all content and functionality must still be available without requiring horizontal scrolling.\n\nMoving content to an accessible show/hide control, such as a hamburger menu, is acceptable.\n\nContent that requires two dimensions to be understood, such as a map or data table, is exempt from this requirement.",
       compliantExample: "",
-      keepElement: true,
-      keepAttribute: true,
-      bps: [2892],
-    },
-    {
-      id: "response-reflow-tiny",
-      text: "Text unreadably small",
-      issue:
-        "Content is unreadably small when the viewport width is set to 320 pixels.",
-      impact:
-        "Users with low vision who need to resize text will be prevented from accessing this content.",
-      recommendation:
-        "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality. When the page has a viewport width of 320 CSS pixels, all content and functionality must still be available without requiring horizontal scrolling.\n\nMoving content to an accessible show/hide control, such as a hamburger menu, is acceptable.\n\nContent that requires two dimensions to be understood, such as a map or data table, is exempt from this requirement.",
-      compliantExample: "",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. Activate "Toggle device toolbar" (laptop and cell phone icon).\n3. In "Dimensions", select "Responsive".\n4. In "Width", enter "320".\n5. Refresh the page.\n6. Notice that content disappears, is cut off, or overlaps.',
       keepElement: true,
       keepAttribute: true,
       bps: [2892],
@@ -4079,6 +4295,8 @@ function dataPreferred() {
       recommendation:
         "Ensure that functionality can be operated through a single pointer except when a multi-point or path-based gesture is essential. Multipoint gestures include any action conducted with multiple fingers, such as multi-finger taps and pinching to zoom. Path-based gestures include specifically drawn shapes or patterns. Essential applications for path-based gestures include signatures and artistic drawing. Instead of relying on multipoint or path-based gestures, use single-point activation instead. Single-point activation includes tapping, double-tapping, and long-presses.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the functionality.\n2. Notice that there is no way to activate the functionality without using multipoint touch or swipe gestures.",
       keepElement: true,
       keepAttribute: true,
       bps: [2893],
@@ -4093,6 +4311,8 @@ function dataPreferred() {
       recommendation:
         "Ensure events triggered by single-point activation can be cancelled. Use the up event is used to reverse the down event effects if the user has moved off of the target area of the control, or do not rely on the down event for activation unless other up event functionality is essential. When completion of the event is on the up event, such as a drag, make sure users can abort or undo the action.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the control.\n2. Click and hold on the control or longpress the control.\n3. Notice that the control is activated immediately when the click or longpress is initiated, not when it is released.",
       keepElement: true,
       keepAttribute: true,
       bps: [2894],
@@ -4107,6 +4327,8 @@ function dataPreferred() {
       recommendation:
         "Provide synchronized audio description for video (which includes audio) or other multimedia. Audio description must accurately convey all important visual information, such as actions or unspoken text.",
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the video.\n2. Notice that an audio description track is not provided.",
       keepElement: true,
       keepAttribute: true,
       bps: [2895],
@@ -4121,6 +4343,8 @@ function dataPreferred() {
       recommendation:
         "Ensure that content and functionality is available when the user overrides text spacing properties.\n\nContent must adapt up to the following specific spacing requirements identified in WCAG 2.1:\n- Line height must be able to adapt to 1.5 times the font size.\n- Letter spacing must be able to adapt to 0.12 times the font size.\n- Word spacing must be able to adapt to 0.16 times the font size.\n- Spacing underneath paragraphs must be able to adapt to 2 times the font size.\n\nFor assistance testing content against this standard, use a text spacing bookmarklet: https://labs.levelaccess.com/index.php/Text_Spacing_Favlet",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Install a user style management extension, such as Stylus.\n2. Create a user style with the following CSS: *{line-height:1.5 !important;letter-spacing:0.12em !important;word-spacing:0.16em !important}p{margin-bottom:2em !important}\n3. Activate the user style on the page.\n4. Notice that content disappears, overlaps, or is cut off when custom text spacing is active.",
       keepElement: true,
       keepAttribute: true,
       bps: [2896],
@@ -4135,6 +4359,8 @@ function dataPreferred() {
       recommendation:
         "Ensure that motion is not the only method to activate user interface components. Provide a means to activate the functionality by other means, like a user interface control. If motion is essential, then it is exempt. For example, functions that require sensor input, such as pedometer or geolocation sensors, are exempt. Additionally, allow users to turn off motion actuation to prevent accidental activation.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Locate the functionality.\n2. Notice that there is no way to activate the functionality without device motion sensing.",
       keepElement: true,
       keepAttribute: true,
       bps: [2899],
@@ -4149,6 +4375,8 @@ function dataPreferred() {
       recommendation:
         "Avoid restricting the operation or viewing of content in different display orientations.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. Activate "Toggle device toolbar" (laptop and cell phone icon).\n3. In "Dimensions", select "Responsive".\n4. Activate "Rotate" (rotating rectangle icon).\n5. Refresh the page.\n6. Notice that content is unavailable in either the portrait or landscape orientations.',
       keepElement: true,
       keepAttribute: true,
       bps: [2900],
@@ -4163,6 +4391,8 @@ function dataPreferred() {
       recommendation:
         'Ensure that status messages can be determined programmatically without receiving focus. This can be done with ARIA live regions. Live regions can be created by adding a role attribute set to "log", "status", "alert", "progressbar", "marquee", or "timer" as appropriate. Alternatively, custom behavior can be created by using the aria-live, aria-atomic, and aria-relevant attributes. Text injected into this live region element will be announced by screen readers.\n\nImportantly, the element with the ARIA live attributes must be available when the page loads. Otherwise, many screen readers will be unable to detect updates to the element. Additionally, the element must be empty on page load unless an immediate screen reader announcement is desired.',
       compliantExample: "",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. Activate "Toggle device toolbar" (laptop and cell phone icon).\n3. In "Dimensions", select "Responsive".\n4. Activate "Rotate" (rotating rectangle icon).\n5. Refresh the page.\n6. Notice that content is unavailable in either the portrait or landscape orientations.',
       keepElement: true,
       keepAttribute: true,
       bps: [2901],
@@ -4177,6 +4407,8 @@ function dataPreferred() {
       recommendation:
         'Ensure that status messages can be determined programmatically without receiving focus.\n\nFor a loading indicator, the best way to do this is to use a "status" ARIA live region. To create such a region:\n- Ensure that a visually hidden container <div> is present when the page loads. The <div> must be empty unless a visual loading indicator is visible.\n- Add a role="status" attribute to this <div>.\n- When the page is in a loading state, use JavaScript to inject text into this <div role="status"> that describes the loading behavior (e.g. "Loading more posts", "Processing email", etc.). If properly configured, this text will be announced to screen readers.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Turn on the JAWS screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by JAWS in response to the dynamic content update.",
       keepElement: true,
       keepAttribute: true,
       bps: [2901],
@@ -4191,6 +4423,8 @@ function dataPreferred() {
       recommendation:
         'Ensure that status messages can be determined programmatically without receiving focus.\n\nFor dynamically updated search results, the best way to do this is to use a "status" ARIA live region. To create such a region:\n- Ensure that a visually hidden container <div> is present when the page loads. The <div> must be empty until results are returned.\n- Add a role="status" attribute to this <div>.\n- When the page is in a loading state, use JavaScript to inject text into this <div role="status"> that describes the results available (e.g., "83 results available" or "Results available"). If properly configured, this text will be announced to screen readers.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Turn on the JAWS screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by JAWS in response to the dynamic content update.",
       keepElement: true,
       keepAttribute: true,
       bps: [2901],
@@ -4205,6 +4439,8 @@ function dataPreferred() {
       recommendation:
         "Ensure that character key shortcuts without modifiers can be reconfigured or deactivated. Unmodified character key shortcuts are shortcuts that use only letter, punctuation, number, or symbol characters. They do not include shortcuts that use Ctrl, Alt, and other non-printable characters. They also do not include shortcuts that are only available when a control has keyboard focus.\n\nTo resolve the issue, provide users a way to turn off or change the shortcut.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Ensure that no controls have keyboard focus.\n2. Activate all character keys on the keyboard.\n3. Note that single-character keyboard shortcuts exist and cannot be disabled or changed.",
       keepElement: true,
       keepAttribute: true,
       bps: [2902],
@@ -4219,6 +4455,8 @@ function dataPreferred() {
       recommendation:
         "Ensure the visible text label for a control is included in the control's accessible name.",
       compliantExample: "",
+      stepsToReproduce:
+        '1. Locate the control.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".\n5. Notice that this value does not include the visible text of the control as a substring.',
       keepElement: true,
       keepAttribute: true,
       bps: [2903],
@@ -4233,6 +4471,8 @@ function dataPreferred() {
       recommendation:
         "Ensure that content that appears on hover or focus may be dismissed by the user. The best way to do this is to allow the hover/focus content to be hidden with the Esc key.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Trigger the appearance of the content.\n2. Attempt to dismiss the content without moving keyboard focus or the cursor, such as by pressing Esc.\n3. Notice that there is no way to dismiss the content.",
       keepElement: true,
       keepAttribute: true,
       bps: [2904],
@@ -4247,6 +4487,8 @@ function dataPreferred() {
       recommendation:
         "Ensure that content that appears on hover may be moved over with a pointer without disappearing. For example, users must be able to hover over tooltips without the tooltip disappearing.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Trigger the appearance of the content.\n2. Attempt to hover over the revealed content with the mouse.\n3. Notice that the content disappears when it is hovered over.",
       keepElement: true,
       keepAttribute: true,
       bps: [2905],
@@ -4261,6 +4503,8 @@ function dataPreferred() {
       recommendation:
         'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/',
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the user interface component.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
       keepElement: true,
       keepAttribute: true,
       bps: [2909],
@@ -4317,6 +4561,8 @@ function dataPreferred() {
       recommendation:
         "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo evaluate color contrast, see the Accessible Color Picker extension: https://www.accessibility.dev/",
       compliantExample: "N/A",
+      stepsToReproduce:
+        "1. Locate the graphical object.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
       keepElement: true,
       keepAttribute: true,
       bps: [2910],
@@ -4367,12 +4613,14 @@ function dataPreferred() {
       id: "response-hover-or-focus-content-disappears-without-user-action",
       text: "Hover or focus content disappears without user action",
       issue:
-        "There is content that appears on hover and/or focus that disappears without user initiation (e.g. focusing away, moving pointer away or hitting the ESC key). Examples include:",
+        "There is content that appears on hover and/or focus that disappears without user initiation. Examples include:",
       impact:
-        "When content that is triggered by focus or hover and is not persistent with one of the conditions listed above, users with low vision may not have sufficient time to read the content before it disappears.",
+        "Users with low vision or cognitive disabilities will have difficulty reading the content before it disappears.",
       recommendation:
-        "Ensure that the new content that appears on hover and/or focus remains visible until the pointer or keyboard focus is moved away from the triggering control, the new content is dismissed, or the new content is no longer relevant.",
+        "Ensure content that appears on hover or focus is persistent until dismissed, not valid, or the trigger is removed. New content that appears on hover and/or focus must remain visible until the pointer or keyboard focus is moved away from the triggering control, the new content is dismissed, or the new content is no longer relevant.",
       compliantExample: "",
+      stepsToReproduce:
+        "1. Trigger the appearance of the content.\n2. Notice that the revealed content eventually disappears without user action.",
       keepElement: true,
       keepAttribute: true,
       bps: [2912],
@@ -4455,6 +4703,8 @@ function dataPreferred() {
       recommendation:
         'Ensure all interactive functionality is operable with the keyboard. The best way to accomplish this is by using appropriate native controls, which come with keyboard functionality built in.\n\nIf using a native control is not possible, the control must have tabindex="0" and have JavaScript event listeners that allow the control to be activated when Enter is pressed.',
       compliantExample: "",
+      stepsToReproduce:
+        "1. Press Tab repeatedly to navigate through the elements in the page.\n2. If the control can be focused, attempt to interact with the control using Enter, Space, Up/Down Arrow, and any other applicable keystrokes.\n3. Notice that the control cannot be focused or that the control cannot be interacted with using the keyboard alone.",
       keepElement: true,
       keepAttribute: true,
       bps: [3159],
@@ -4495,7 +4745,7 @@ function dataPreferred() {
       impact:
         "Users with dexterity disabilities may be unable to activate these controls.",
       recommendation:
-        "Provide a sufficient minimum area for pointer targets. Pointer targets must have an area with a width and height of at least 24 CSS pixels. Exemptions include targets whose farthest point is at least 24 pixels away from the nearest point of all other adjacent targets, targets that are in line with text, targets that are controlled by the user agent and not modified by the author, targets whose presentation is essential to convey accurate information, or targets whose presentation is legally required.",
+        "Provide a sufficient area for pointer targets. Pointer targets must have an area with a width and height of at least 24 CSS pixels. Exceptions include undersized targets for which one can place a 24 CSS pixel diameter circle on the center of the target's bounding box without intersecting with any other targets or circles of undersized targets. Additional exceptions include targets within a sentence or with a line height that is otherwise constrained by non-target text, targets that are controlled by the user agent and not modified by the author, targets with a presentation that is essential to convey accurate information, and targets with a presentation that is legally required.",
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
@@ -4504,7 +4754,7 @@ function dataPreferred() {
     {
       id: "response-web-consistent-help",
       text: "Inconsistently located help",
-      issue: "Help is not consistently located across pages.",
+      issue: "Help is not consistently located across a set of related pages.",
       impact:
         "Users with cognitive disabilities may be unable to find help with tasks on the website.",
       recommendation:
@@ -4516,12 +4766,12 @@ function dataPreferred() {
     },
     {
       id: "response-web-cognitive-authentication",
-      text: "Sign-in requires cognitive test",
-      issue: "The sign-in process requires a cognitive function test.",
+      text: "Authentication requires cognitive test",
+      issue: "The authentication process requires a cognitive function test.",
       impact:
-        "Users with cognitive disabilities may be unable to successfully complete a cognitive function test to sign in.",
+        "Users with cognitive disabilities may be unable to successfully complete a cognitive function test to authenticate.",
       recommendation:
-        "Ensure that each step of an authentication process has one method that does not require a cognitive function test. If authentication involves a cognitive function test, authors must offer at least one alternative method that does not rely on a cognitive function test. This applies to all steps in an authentication process, including multi-factor authentication (MFA). It also applies to email and password recovery processes.\n\nCommon examples of cognitive function tests include memorization, text transcription, use of correct spelling, calculations, puzzles, and username and password fields that disable copy-pasting. Additionally, many CAPTCHAs fall into this category, even if the site only requires them in certain situations. However, tests that require object recognition are exempt from this requirement.\n\nCommon ways to meet this requirement include enabling copy-paste or autofill on username/password fields; authentication via emailed links; WebAuthn or other methods that allow users to authenticate with a device instead of a username and password; third-party logins such as OAuth; connected hardware token MFA; and push notification MFA.",
+        "Ensure that each step in an authentication process does not rely on a cognitive function test or provides assistance. This applies to all steps in an authentication process, including multi-factor authentication (MFA). It also applies to email and password recovery processes.\n\nCommon examples of cognitive function tests include memorization, text transcription, use of correct spelling, calculations, puzzles, and username and password fields that disable pasting. Additionally, many CAPTCHAs fall into this category, even if the site only requires them in certain situations. However, tests that require object recognition or identification of user supplied non-text content are exempt from this requirement.\n\nCommon ways to meet this requirement include enabling paste or autofill on username/password fields; authentication via emailed links; WebAuthn or other methods that allow users to authenticate with a device instead of a username and password; third-party logins such as OAuth; connected hardware token MFA; and push notification MFA.",
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
@@ -4549,25 +4799,11 @@ function dataPreferred() {
       impact:
         "Keyboard users will have difficulty finding their position on the page.",
       recommendation:
-        "Ensure keyboard-operable elements which have focus are not fully obscured. Examples include focusable content behind sticky headers/footers and non-modal dialogs. This requirement applies to each page variation, such as responsive breakpoints.\n\nIf the interface allows the user to move elements, only the first positions of the movable content must meet this requirement. However, authors must ensure that the first positions do not fully obscure focused elements even if users can move or resize the obscuring element.",
+        "Ensure keyboard-operable elements which receive focus are not fully obscured. Examples include focusable content behind sticky headers/footers and non-modal dialogs. This requirement applies to each page variation, such as responsive breakpoints.\n\nIf the interface allows the user to move elements, only the first positions of the movable content must meet this requirement. However, authors must ensure that the first positions do not fully obscure focused elements even if users can move or resize the obscuring element.\n\nWhen elements can receive focus behind non-modal content that can be opened/expanded over top of it, a method to dismiss that content without moving the keyboard focus needs to be provided.",
       compliantExample: "",
       keepElement: true,
       keepAttribute: true,
       bps: [3224],
-    },
-    {
-      id: "response-web-focus-appearance",
-      text: "Focus appearance",
-      issue:
-        "There are keyboard focus indicators that are too small or have insufficient contrast. Examples include:\n- ",
-      impact:
-        "Keyboard users, especially those with low vision, will have difficulty finding their position on the page.",
-      recommendation:
-        "Ensure keyboard focus indicators have sufficient size and contrast with focused and unfocused states and with adjacent component colors. The indicator must meet one or both of the following requirements:\n\n- The indicator must enclose the component. That is, the indicator must be a solid outline around the component with no dashes or dots. It must have a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states. It must also have a contrast ratio of at least 3:1 against adjacent non-focus-indicator colors.\n\n- Alternatively, an area of the focus indicator must be of a certain size. It must either be at least as large as the area of a 1 CSS-pixel-thick perimeter of the unfocused component, or at least as large as a 4-CSS-pixel-thick line along the shortest side of the minimum bounding box of the unfocused component. It must also have a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states. Finally, it must have a contrast ratio of at least 3:1 against adjacent non-focus-indicator colors, or it must have a width or height of at least 2 CSS pixels.\n\nFocus indicators do not have to meet these requirements if the author has not changed the focus indicator styles and the color behind the indicator.",
-      compliantExample: "",
-      keepElement: true,
-      keepAttribute: true,
-      bps: [3225],
     },
   ];
   return preferred;
@@ -5185,159 +5421,665 @@ function dataBadSites() {
   return sites;
 }
 function dataSchemas() {
-  const adobeSchema = {
-    description: {
-      requiredToExist: [
-        "SUMMARY - Bug title for Jira.",
-        "CONTEXT - Keep one or customize. Enter your actual versions numbers.",
-        "STEPS TO REPRODUCE - Keep one or customize. Enter your actual versions numbers.",
-        "ACTUAL BEHAVIOR - Required. Examples or non-compliant code is optional.",
-        "AFFECTED POPULATIONS - Optional. Only if different from default FPC.",
-        "WCAG PRIMARY SC - Required. Use the SC the issue should be identified under in an ACR.",
-        "SCREENSHOT(S) - Optional. Use when it's the easiest way to explain.",
-      ],
-      requiredToHaveContent: [
-        "SUMMARY - Bug title for Jira",
-        "CONTEXT - Keep one or customize. Enter your actual versions numbers.",
-        "STEPS TO REPRODUCE - Keep one or customize. Enter your actual versions numbers.",
-        "ACTUAL BEHAVIOR - Required. Examples or non-compliant code is optional.",
-        "WCAG PRIMARY SC - Required. Use the SC the issue should be identified under in an ACR.",
-      ],
-      requiredToHaveCode: [],
-    },
-    note: {
-      requiredToExist: [
-        "EXPECTED BEHAVIOR - Description is required. Compliant code is optional.",
-        "ADDITIONAL INFORMATION - Optional link to a resource. Use sparingly.",
-      ],
-      requiredToHaveContent: [
-        "EXPECTED BEHAVIOR - Description is required. Compliant code is optional.",
-      ],
-      requiredToHaveCode: [],
-    },
-  };
-
-  const wellsFargoSchema = {
-    description: {
-      requiredToExist: ["Summary", "Issue Description", "Devices"],
-      requiredToHaveContent: ["Summary", "Issue Description", "Devices"],
-      requiredToHaveCode: ["Non-Compliant Example"],
-    },
-    note: {
-      requiredToExist: ["Recommendation"],
-      requiredToHaveContent: ["Recommendation"],
-      requiredToHaveCode: ["Compliant Example"],
-    },
-  };
-
-  const progressiveAPQSchema = {
-    description: {
-      requiredToExist: ["Issue", "User Impact", "Steps to Reproduce", "Type"],
-      requiredToHaveContent: [
-        "Issue",
-        "User Impact",
-        "Occurrences",
-        "Steps to Reproduce",
-        "Type",
-        "Code Reference",
-      ],
-      requiredToHaveCode: ["Code Reference"],
-    },
-    note: {
-      requiredToExist: ["Recommendation"],
-      requiredToHaveContent: [
-        "Recommendation",
-        "Compliant Code Example",
-        "Recommended Reading",
-      ],
-      requiredToHaveCode: ["Compliant Code Example"],
-    },
-  };
-
-  const progressiveDQSchema = {
-    description: {
-      requiredToExist: ["Issue", "User Impact", "Steps to Reproduce", "Type"],
-      requiredToHaveContent: [
-        "Issue",
-        "User Impact",
-        "Steps to Reproduce",
-        "Type",
-        "Platform",
-        "Code Reference",
-      ],
-      requiredToHaveCode: ["Code Reference"],
-    },
-    note: {
-      requiredToExist: ["Recommendation"],
-      requiredToHaveContent: [
-        "Recommendation",
-        "Compliant Code Example",
-        "Recommended Reading",
-      ],
-      requiredToHaveCode: ["Compliant Code Example"],
-    },
-  };
-
-  const salesforceSchema = {
-    description: {
-      requiredToExist: [
-        "Issue",
-        "User Impact",
-        "Salesforce Prioritization",
-        "Screen Reader",
-        "Include in ACR",
-        "Image File - Optional. Use when it's the easiest way to explain.",
-      ],
-      requiredToHaveContent: [
-        "Issue",
-        "User Impact",
-        "Salesforce Prioritization",
-        "Code Reference",
-      ],
-      requiredToHaveCode: ["Code Reference"],
-    },
-    note: {
-      requiredToExist: ["Recommendation"],
-      requiredToHaveContent: [
-        "Recommendation",
-        "Compliant Code Example",
-        "Recommended Reading",
-      ],
-      requiredToHaveCode: ["Compliant Code Example"],
-    },
-  };
-
-  const defaultSchema = {
-    description: {
-      requiredToExist: ["Issue", "User Impact"],
-      requiredToHaveContent: [
-        "Issue",
-        "User Impact",
-        "Occurrences",
-        "Code Reference",
-      ],
-      requiredToHaveCode: ["Code Reference"],
-    },
-    note: {
-      requiredToExist: ["Recommendation"],
-      requiredToHaveContent: [
-        "Recommendation",
-        "Compliant Code Example",
-        "Recommended Reading",
-      ],
-      requiredToHaveCode: ["Compliant Code Example"],
-    },
-  };
-
-  const schemaMap = new Map();
-  schemaMap.set("adobe", adobeSchema);
-  schemaMap.set("wellsFargo", wellsFargoSchema);
-  schemaMap.set("progressiveAPQ", progressiveAPQSchema);
-  schemaMap.set("progressiveDQ", progressiveDQSchema);
-  schemaMap.set("salesforce", salesforceSchema);
-  schemaMap.set("default", defaultSchema);
-
-  return schemaMap;
+  return new Map([
+    [
+      "adobe",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "SUMMARY - Bug title for Jira.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "CONTEXT - Keep one or customize. Enter your actual versions numbers.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["stepsToReproduce"],
+            name: "STEPS TO REPRODUCE - Keep one or customize. Enter your actual versions numbers.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue", "impact"],
+            name: "ACTUAL BEHAVIOR - Required. Examples or non-compliant code is optional.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "AFFECTED POPULATIONS - Optional. Only if different from default FPC.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "WCAG PRIMARY SC - Required. Use the SC the issue should be identified under in an ACR.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "WCAG RELATED - Optional. Use sparingly.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "SCREENSHOT(S) - Optional. Use when it's the easiest way to explain.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "EXPECTED BEHAVIOR - Description is required. Compliant code is optional.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "ADDITIONAL INFORMATION - Optional link to a resource. Use sparingly.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+        ],
+      },
+    ],
+    [
+      "wellsFargo",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "**ADA_ One line, reasonably specific**",
+            mapsTo: [],
+            name: "Summary",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "**Describe the problem or symptom, the User Impact, and sufficient info about how to reproduce.**",
+            mapsTo: ["issue", "impact", "stepsToReproduce"],
+            name: "Issue Description",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "****",
+            mapsTo: [],
+            name: "Devices",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              '**Optional or type "None". Avoid lengthy blocks. Newlines and indentation spaces will be stripped.**',
+            mapsTo: [],
+            name: "Non-Compliant Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              '**Agile Only: If BP is in Web Grade Checklist (any level), enter "Grade 1" or "Grade 2" or "Grade 3". If testing Mobile First and BP is in Native Checklist, enter "ADA_Grade_Native". Else remove tag or make this line blank.**',
+            mapsTo: [],
+            name: "Defect Grade",
+            requiredToExist: false,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "**Agile Only: If BP is in Grade Checklist (any level), keep the designated value(s) from: FED,XD,QA (no spaces between values). Else remove tag or make this line blank.**",
+            mapsTo: [],
+            name: "Defect Impact Role",
+            requiredToExist: false,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              '**Optional or type "None". Avoid lengthy blocks. Newlines and indentation spaces will be stripped.**',
+            mapsTo: ["compliantExample"],
+            name: "Compliant Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions: '**Optional or type "None"**',
+            mapsTo: [],
+            name: "Recommended Reading",
+            requiredToExist: false,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+        ],
+      },
+    ],
+    [
+      "progressiveAPQ",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions:
+              "** When using AMPScript template text, be sure to make the issue description specific, and include ALL instances that you observe on the page **",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Describe how a developer can reproduce the issue, including whether to use ANDI, JAWS, or some other tool. **",
+            mapsTo: ["stepsToReproduce"],
+            name: "Steps to Reproduce",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Pick only one:\nManually detected violation\nGuided Automatic (with Manual Review) violation\nAutomatically detected violation\n**",
+            mapsTo: [],
+            name: "Type",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Code Reference",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions:
+              "** When using AMPScript template text here, be sure that the recommendation is specific, usually by editing the following line: **\n\nIn this case, {designers OR developers} must ...",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["compliantExample"],
+            name: "Compliant Code Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+      },
+    ],
+    [
+      "progressiveDQ",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions:
+              "** When using AMPScript template text, be sure to make the issue description specific, and include ALL instances that you observe on the page **",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Describe how a developer can reproduce the issue, including whether to use ANDI, JAWS, or some other tool. **",
+            mapsTo: ["stepsToReproduce"],
+            name: "Steps to Reproduce",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Pick only one:\nManually detected violation\nGuided Automatic (with Manual Review) violation\nAutomatically detected violation\n**",
+            mapsTo: [],
+            name: "Type",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Pick one or more (but this whole section can be omitted for desktop-only issues):\niOS with Safari browser\nAndroid with Chrome browser\nWindows with Chrome browser\n**",
+            mapsTo: [],
+            name: "Platform",
+            requiredToExist: false,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Code Reference",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions:
+              "** When using AMPScript template text here, be sure that the recommendation is specific, usually by editing the following line: **\n\nIn this case, {designers OR developers} must ...",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["compliantExample"],
+            name: "Compliant Code Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+      },
+    ],
+    [
+      "salesforce",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Salesforce Prioritization",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Provide 'X' if issue affects screen reader. Otherwise, leave empty. **",
+            mapsTo: [],
+            name: "Screen Reader",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Provide 'X' if issue is not Advisory. Otherwise, leave empty. **",
+            mapsTo: [],
+            name: "Include in ACR",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Image File - Optional. Use when it's the easiest way to explain.",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Code Reference",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["compliantExample"],
+            name: "Compliant Code Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+      },
+    ],
+    [
+      "pod",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["stepsToReproduce"],
+            name: "Steps to Reproduce",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Code Reference",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["compliantExample"],
+            name: "Compliant Code Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+      },
+    ],
+    [
+      "disney",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Type: *** DEV DESIGN DEV/DESIGN ***",
+            requiredToExist: false,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Insert WCAG Success Criterion **\n** Example: **\n*** 1.3.1 Info & Relationships ***\n",
+            mapsTo: [],
+            name: "WCAG Requirement",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              '1. *** Step 1 ***\n2. *** Step 2 ***\nActual result: *** Describe behavior (Example: TalkBack announces "Unlabelled, Image") ***\nExpected result: *** Describe behavior (Example: TalkBack should announce "Disney, Image") ***',
+            mapsTo: ["stepsToReproduce"],
+            name: "Steps to Reproduce",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Code Reference",
+            requiredToExist: true,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["compliantExample"],
+            name: "Compliant Code Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+      },
+    ],
+    [
+      "default",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Code Reference",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["compliantExample"],
+            name: "Compliant Code Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: false,
+            instructions: "",
+            mapsTo: [],
+            name: "Recommended Reading",
+            requiredToExist: false,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+        ],
+      },
+    ],
+  ]);
 }
 function dataNonBaselineBPs() {
   const nonBaselineBPs = [
@@ -6002,6 +6744,10 @@ function getSchema() {
     currentSchema = schemaMap.get("progressiveDQ");
   } else if (getCookieValue("kpmCustom-custom-salesforce")) {
     currentSchema = schemaMap.get("salesforce");
+  } else if (getCookieValue("kpmCustom-custom-pod")) {
+    currentSchema = schemaMap.get("pod");
+  } else if (getCookieValue("kpmCustom-custom-disney")) {
+    currentSchema = schemaMap.get("disney");
   } else {
     currentSchema = schemaMap.get("default");
   }
@@ -6013,24 +6759,35 @@ function determineErrors(sectionType, sectionMap) {
   const badCodeStrings = dataErrors();
   const badSiteStrings = dataBadSites();
   const errorArray = [];
-  let sections = {};
+  let schemaSections = {};
   if (sectionType === "description") {
-    sections = currentSchema.description;
+    schemaSections = currentSchema.description;
   } else if (sectionType === "note") {
-    sections = currentSchema.note;
+    schemaSections = currentSchema.note;
   }
+  const sectionsRequiredToExist =
+    schemaSections.filter((section) => section.requiredToExist) ?? [];
+  const sectionsRequiredToHaveContent =
+    schemaSections.filter((section) => section.requiredToHaveContent) ?? [];
+  const sectionsRequiredToHaveCode =
+    schemaSections.filter((section) => section.requiredToHaveCode) ?? [];
 
-  // Check for existence of all required sections
-  sections.requiredToExist.forEach((section) => {
-    if (!sectionMap.has(section)) {
+  // Detect any missing required sections
+  sectionsRequiredToExist.forEach((section) => {
+    if (!sectionMap.has(section.name)) {
       errorArray.push(
-        `Error: Required section [${section}] was not found. Please add this section or double-check its spelling.`
+        `Error: Required section [${section.name}] was not found. Please add this section or double-check its spelling.`
       );
     }
   });
 
   sectionMap.forEach((sectionContents, sectionName) => {
-    if (sections.requiredToHaveContent.includes(sectionName)) {
+    // Detect any empty sections that are required to have content
+    if (
+      sectionsRequiredToHaveContent.find(
+        (section) => section.name === sectionName
+      )
+    ) {
       if (sectionContents === "") {
         errorArray.push(
           `Error: [${sectionName}] appears to be empty. Please add content in this section.`
@@ -6038,13 +6795,17 @@ function determineErrors(sectionType, sectionMap) {
       }
     }
 
-    if (sections.requiredToHaveCode.includes(sectionName)) {
+    // Detect any code sections that don't contain code
+    if (
+      sectionsRequiredToHaveCode.find((section) => section.name === sectionName)
+    ) {
       if (!sectionContents.match(/[<>{}]|(\/\*)|(\*\/)|^N\/A|^None|^$/gmu)) {
         errorArray.push(
           `Error: [${sectionName}] does not appear to contain code. Please ensure HTML or CSS code is present.`
         );
       }
 
+      // Detect code sections that contain disallowed code strings
       badCodeStrings.forEach((badString) => {
         if (sectionContents.includes(badString.css)) {
           errorArray.push(
@@ -6054,6 +6815,7 @@ function determineErrors(sectionType, sectionMap) {
       });
     }
 
+    // Detect any content that contains links to disallowed resources
     badSiteStrings.forEach((badString) => {
       if (sectionContents.includes(badString.url)) {
         errorArray.push(
@@ -6061,6 +6823,13 @@ function determineErrors(sectionType, sectionMap) {
         );
       }
     });
+
+    // Detect remnant instructions from client-specific templates
+    if (sectionContents.includes("**")) {
+      errorArray.push(
+        `Error: [${sectionName}] contains two asterisks in a row (**). This is usually from instructions in client-specific custom issue formats. Please make sure these instructions are removed if present.`
+      );
+    }
 
     if (sectionContents.at(-1) === ":" || sectionContents.match(/^-\s*$/gmu)) {
       errorArray.push(
@@ -7234,244 +8003,78 @@ function viewInstance() {
      must have "**" at the start of a line (i.e. "\n**"), and then finish
      with "**" (the "**" at the end can either be on the same line as the start,
      or on a different line). */
-function formatElement(issue, impact, codeReference) {
+function formatElement(boilerplate) {
   let output = "";
+  let currentSchema = getSchema();
+  let descriptionSchema = currentSchema.description;
 
-  if (getCookieValue("kpmCustom-custom-wf")) {
-    output += "[Summary]\n**ADA_ One line, reasonably specific**";
-    output += "\n\n[Issue Description]\n";
-    if ((issue && issue.length > 0) || (impact && impact.length > 0)) {
-      if (issue && issue.length > 0) {
-        output += issue.trim();
+  descriptionSchema.forEach((schemaSection) => {
+    if (schemaSection.appearsByDefault) {
+      output += `[${schemaSection.name}]\n`;
+      if (schemaSection.instructions) {
+        output += `${schemaSection.instructions}\n\n`;
       }
-      if (issue && issue.length > 0 && impact && impact.length > 0) {
-        output += "\n\n";
-      }
-      if (impact && impact.length > 0) {
-        output += impact.trim();
-      }
-    } else {
-      output +=
-        "**Describe the problem or symptom, the User Impact, and sufficient info about how to reproduce.**";
-    }
-    output += "\n\n[Devices]\n****";
-    output +=
-      '\n\n[Non-Compliant Example]\n**Optional or type "None". Avoid lengthy blocks. Newlines and indentation spaces will be stripped.**';
-    output +=
-      '\n\n[Defect Grade]\n**Agile Only: If BP is in Web Grade Checklist (any level), enter "Grade 1" or "Grade 2" or "Grade 3". If testing Mobile First and BP is in Native Checklist, enter "ADA_Grade_Native". Else remove tag or make this line blank.**';
-    output +=
-      "\n\n[Defect Impact Role]\n**Agile Only: If BP is in Grade Checklist (any level), keep the designated value(s) from: FED,XD,QA (no spaces between values). Else remove tag or make this line blank.**";
-  } else if (getCookieValue("kpmCustom-custom-adobe")) {
-    output += "[SUMMARY - Bug title for Jira.]";
-    output +=
-      "\n\n[CONTEXT - Keep one or customize. Enter your actual versions numbers.]";
-    output +=
-      "\n\n[STEPS TO REPRODUCE - Keep one or customize. Enter your actual versions numbers.]\n1. Run an automated accessibility checker, such as Access Assistant.\n1. Use a color contrast checker to compare foreground and background colors.\n1. Press Tab to move through the content.\n2. When keyboard focus is on {}, press Enter or Space to activate it.";
-    output +=
-      "\n\n[ACTUAL BEHAVIOR - Required. Examples or non-compliant code is optional.]\n";
-    if ((issue && issue.length > 0) || (impact && impact.length > 0)) {
-      if (issue && issue.length > 0) {
-        output += issue.trim();
-      }
-      if (issue && issue.length > 0 && impact && impact.length > 0) {
-        output += "\n\n";
-      }
-      if (impact && impact.length > 0) {
-        output += impact.trim();
+
+      if (schemaSection.mapsTo.length > 0) {
+        let concatenatedBoilerplate = "";
+        schemaSection.mapsTo.forEach((mappedBoilerplateSection) => {
+          const boilerplateSectionContents =
+            boilerplate[mappedBoilerplateSection];
+          if (boilerplateSectionContents) {
+            concatenatedBoilerplate += boilerplate[mappedBoilerplateSection];
+          }
+          concatenatedBoilerplate += "\n\n";
+        });
+        output += concatenatedBoilerplate;
       }
     }
-    // Else { output += "**Required. Examples or non-compliant code is optional.**"}
-    output +=
-      "\n\n[AFFECTED POPULATIONS - Optional. Only if different from default FPC.]\n";
-    output +=
-      "\n\n[WCAG PRIMARY SC - Required. Use the SC the issue should be identified under in an ACR.]\n";
-    output += "\n\n[WCAG RELATED - Optional. Use sparingly.]\n";
-    output +=
-      "\n\n[SCREENSHOT(S) - Optional. Use when it's the easiest way to explain.]\n";
-  } else if (
+  });
+
+  /* Boilerplate modifications for specific clients. Please use sparingly.
+   * Creating a schema should be sufficient for most clients. */
+  if (
     getCookieValue("kpmCustom-custom-progressive-apq") ||
     getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
   ) {
-    output += "[Issue]\n";
-    if (issue && issue.length > 0) {
-      output +=
-        "** When using AMPScript template text, be sure to make the issue description specific, and include ALL instances that you observe on the page **\n\n";
-      output += issue
-        .trim()
-        .replaceAll("Examples include:", "Specific instances are:");
-    }
-
-    output += "\n\n[User Impact]\n";
-    if (impact && impact.length > 0) {
-      output += impact.trim();
-    }
-
-    output +=
-      "\n\n[Steps to Reproduce]\n** Describe how a developer can reproduce the issue, including whether to use ANDI, JAWS, or some other tool. **";
-
-    output +=
-      "\n\n[Type]\n** Pick only one:\nManually detected violation\nGuided Automatic (with Manual Review) violation\nAutomatically detected violation\n**";
-
-    if (getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")) {
-      output +=
-        "\n\n[Platform]\n** Pick one or more (but this whole section can be omitted for desktop-only issues):\niOS with Safari browser\nAndroid with Chrome browser\nWindows with Chrome browser\n**";
-    }
-
-    output += "\n\n[Code Reference]\n";
-    if (codeReference && codeReference.length > 0) {
-      output += codeReference.trim();
-    }
-  } else if (getCookieValue("kpmCustom-custom-salesforce")) {
-    output += "[Issue]\n";
-    if (issue && issue.length > 0) {
-      output += issue.trim();
-    }
-
-    output += "\n\n[User Impact]\n";
-    if (impact && impact.length > 0) {
-      output += impact.trim();
-    }
-
-    output += "\n\n[Salesforce Prioritization]\n";
-    output +=
-      "\n\n[Screen Reader]\n** Provide 'X' if issue affects screen reader. Otherwise, leave empty. **";
-    output +=
-      "\n\n[Include in ACR]\n** Provide 'X' if issue is not Advisory. Otherwise, leave empty. **";
-    output +=
-      "\n\n[Image File - Optional. Use when it's the easiest way to explain.]\n";
-    output += "\n\n[Code Reference]\n";
-    if (codeReference && codeReference.length > 0) {
-      output += codeReference.trim();
-    }
-  } else if (getCookieValue("kpmCustom-custom-disney")) {
-    // Start of "custom-disney" template for the "Description" field.
-    output += "** Remove all lines that start and end with \"**\" (including these lines). **\n";
-    output += "** Edit all text between \"***\" marks (and remove the \"***\" marks!). **\n\n";
-
-    output += "[Type: *** DEV DESIGN DEV/DESIGN ***]\n\n";
-
-    output += "[WCAG Requirement]\n";
-    output += "** Insert WCAG Success Criterion **\n";
-    output += "** Example: **\n";
-    output += "*** 1.3.1 Info & Relationships ***\n";
-
-    output += "\n[Issue]\n";
-    if (issue && issue.length > 0) {
-      output += issue.trim();
-    }
-
-    output += "\n[Steps to Reproduce]\n";
-    output += "1. *** Step 1 ***\n";
-    output += "2. *** Step 2 ***\n";
-    output += "Actual result: *** Describe behavior (Example: TalkBack announces \"Unlabelled, Image\") ***\n";
-    output += "Expected result: *** Describe behavior (Example: TalkBack should announce \"Disney, Image\") ***";
-
-    output += "\n\n[User Impact]\n";
-    if (impact && impact.length > 0) {
-      output += impact.trim();
-    }
-
-    output += "\n\n[Code Reference]\n";
-    if (codeReference && codeReference.length > 0) {
-      output += codeReference.trim();
-    }
-    // End of "custom-disney" template for the "Description" field.
-  } else {
-    output += "[Issue]\n";
-    if (issue && issue.length > 0) {
-      output += issue.trim();
-    }
-
-    output += "\n\n[User Impact]\n";
-    if (impact && impact.length > 0) {
-      output += impact.trim();
-    }
-
-    if (!getCookieValue("kpmCustom-custom-pdf")) {
-      output += "\n\n[Code Reference]\n";
-      if (codeReference && codeReference.length > 0) {
-        output += codeReference.trim();
-      }
-    }
+    output = output.replaceAll("Examples include:", "Specific instances are:");
   }
+
+  output = output.trim();
+  output += "\n";
 
   return output;
 }
 
 // Format the attribute
-function formatAttribute(recommendation, reading, codeExample) {
+function formatAttribute(boilerplate) {
   let output = "";
+  let currentSchema = getSchema();
+  let noteSchema = currentSchema.note;
 
-  if (getCookieValue("kpmCustom-custom-wf")) {
-    output += "[Recommendation]\n";
-    if (recommendation && recommendation.length > 0) {
-      output += recommendation.trim();
-    }
-
-    if ($("#1_page").length <= 0) {
-      output += "\n\n[Compliant Example]\n";
-      if (codeExample && codeExample.length > 0) {
-        output += codeExample.trim();
-      } else {
-        output +=
-          '**Optional or type "None". Avoid lengthy blocks. Newlines and indentation spaces will be stripped.**';
+  noteSchema.forEach((schemaSection) => {
+    if (schemaSection.appearsByDefault) {
+      output += `[${schemaSection.name}]\n`;
+      if (schemaSection.instructions) {
+        output += `${schemaSection.instructions}\n\n`;
       }
-      output += "\n\n[Recommended Reading]\n";
-      if (reading && reading.length > 0) {
-        output += reading.trim();
-      } else {
-        output += '**Optional or type "None"**';
-      }
-    }
-  } else if (getCookieValue("kpmCustom-custom-adobe")) {
-    output +=
-      "[EXPECTED BEHAVIOR - Description is required. Compliant code is optional.]\n";
-    if (recommendation && recommendation.length > 0) {
-      output += recommendation.trim();
-    }
-    output +=
-      "\n\n[ADDITIONAL INFORMATION - Optional link to a resource. Use sparingly.]\n";
-    if (reading && reading.length > 0) {
-      output += reading.trim();
-    }
-  } else if (
-    getCookieValue("kpmCustom-custom-progressive-apq") ||
-    getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
-  ) {
-    output += "[Recommendation]\n";
-    if (recommendation && recommendation.length > 0) {
-      output += recommendation.trim();
-      output +=
-        "\n\n** When using AMPScript template text here, be sure that the recommendation is specific, usually by editing the following line: **\n\nIn this case, {designers OR developers} must ...";
-    }
 
-    if (reading && reading.length > 0) {
-      output += "\n\n[Recommended Reading]\n";
-      output += reading.trim();
-    }
-
-    output += "\n\n[Compliant Code Example]\n";
-    if (codeExample && codeExample.length > 0) {
-      output += codeExample.trim();
-    }
-  } else {
-    output += "[Recommendation]\n";
-    if (recommendation && recommendation.length > 0) {
-      output += recommendation.trim();
-    }
-
-    if (reading && reading.length > 0) {
-      output += "\n\n[Recommended Reading]\n";
-      output += reading.trim();
-    }
-
-    if (!getCookieValue("kpmCustom-custom-pdf")) {
-      output += "\n\n[Compliant Code Example]\n";
-      if (codeExample && codeExample.length > 0) {
-        output += codeExample.trim();
+      if (schemaSection.mapsTo.length > 0) {
+        let concatenatedBoilerplate = "";
+        schemaSection.mapsTo.forEach((mappedBoilerplateSection) => {
+          const boilerplateSectionContents =
+            boilerplate[mappedBoilerplateSection];
+          if (boilerplateSectionContents) {
+            concatenatedBoilerplate += boilerplate[mappedBoilerplateSection];
+          }
+          concatenatedBoilerplate += "\n\n";
+        });
+        output += concatenatedBoilerplate;
       }
     }
-  }
+  });
+
+  output = output.trim();
+  output += "\n";
 
   return output;
 }
@@ -7496,16 +8099,8 @@ function listAllResponses(array) {
 
   let i;
   for (i = 0; i < array.length; i++) {
-    const tempElement = escapeHtml(
-      formatElement(array[i].issue, array[i].impact, array[i].codeReference)
-    );
-    const tempAttribute = escapeHtml(
-      formatAttribute(
-        array[i].recommendation,
-        array[i].reading,
-        array[i].compliantExample
-      )
-    );
+    const tempElement = escapeHtml(formatElement(array[i]));
+    const tempAttribute = escapeHtml(formatAttribute(array[i]));
 
     output += `<h2>${array[i].text}: `;
     var j;
@@ -7728,7 +8323,7 @@ function addEditor(reportID) {
     // Two single use statuses - Blank and clear everything
     $("#addLangBlank").on("click", () => {
       let origVal = $("textarea[id*='element']:first").val();
-      let newText = formatElement();
+      let newText = formatElement({});
       if (
         getCookieValue("kpmCustom-custom-progressive-apq") ||
         getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
@@ -7740,7 +8335,7 @@ function addEditor(reportID) {
       const origVal2 = $("textarea[id*='attribute']:first")
         .add("textarea[id*='note']:first")
         .val();
-      let newText2 = formatAttribute();
+      let newText2 = formatAttribute({});
       newText2 += origVal2;
 
       $("textarea[id*='element']:first").val(newText);
@@ -7782,11 +8377,8 @@ function addEditor(reportID) {
         }
       }
 
-      const newVar1 = formatElement(entry.issue, entry.impact);
-      const newVar2 = formatAttribute(
-        entry.recommendation,
-        entry.codeReference
-      );
+      const newVar1 = formatElement(entry);
+      const newVar2 = formatAttribute(entry);
 
       if (newVar1) {
         let oldVar1 = $("textarea[id*='element']:first").val();
