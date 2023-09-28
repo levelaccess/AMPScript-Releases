@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.4.0
+// @version      6.4.1
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -2759,7 +2759,7 @@ function dataPreferred() {
         "Ensure that the reading order of content is logical. The best way to set the reading order is to reorder the elements in the DOM.",
       compliantExample: "",
       stepsToReproduce:
-        "1. Enable the JAWS screen reader.\n2. Navigate through the content using the Down Arrow key to move element by element.\n3. Review the order in which the screen reader announces content.",
+        "1. Enable a screen reader.\n2. Navigate through the content using the Down Arrow key to move element by element.\n3. Review the order in which the screen reader announces content.",
       keepElement: true,
       keepAttribute: true,
       bps: [809],
@@ -2889,7 +2889,7 @@ function dataPreferred() {
         "Ensure custom controls are keyboard accessible. Users must be able to navigate to and operate controls while a screen reader is running.",
       compliantExample: "",
       stepsToReproduce:
-        "1. Enable the JAWS screen reader.\n2. Navigate to the control using the Down Arrow key or the Tab key\n3. Attempt to interact with Enter, Space, and arrow keys.\n4. Notice that the control cannot be interacted with using the keyboard while the screen reader is running.",
+        "1. Enable a screen reader.\n2. Navigate to the control using the Down Arrow key or the Tab key\n3. Attempt to interact with Enter, Space, and arrow keys.\n4. Notice that the control cannot be interacted with using the keyboard while the screen reader is running.",
       keepElement: true,
       keepAttribute: true,
       bps: [954],
@@ -2950,7 +2950,7 @@ function dataPreferred() {
         'Indicate live regions for dynamically changing content. Live regions can be created by adding a role attribute set to "log", "status", "alert", "progressbar", "marquee", or "timer" as appropriate. Alternatively, custom behavior can be created by using the aria-live, aria-atomic, and aria-relevant attributes. Text injected into this live region element will be announced by screen readers.\n\nImportantly, the element with the ARIA live attributes must be available when the page loads. Otherwise, many screen readers will not detect updates to the element. Additionally, the element must be empty on page load unless an immediate screen reader announcement is desired.',
       compliantExample: "",
       stepsToReproduce:
-        "1. Turn on the JAWS screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by JAWS in response to the dynamic content update.",
+        "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
       keepElement: true,
       keepAttribute: true,
       bps: [971],
@@ -4408,7 +4408,7 @@ function dataPreferred() {
         'Ensure that status messages can be determined programmatically without receiving focus.\n\nFor a loading indicator, the best way to do this is to use a "status" ARIA live region. To create such a region:\n- Ensure that a visually hidden container <div> is present when the page loads. The <div> must be empty unless a visual loading indicator is visible.\n- Add a role="status" attribute to this <div>.\n- When the page is in a loading state, use JavaScript to inject text into this <div role="status"> that describes the loading behavior (e.g. "Loading more posts", "Processing email", etc.). If properly configured, this text will be announced to screen readers.',
       compliantExample: "",
       stepsToReproduce:
-        "1. Turn on the JAWS screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by JAWS in response to the dynamic content update.",
+        "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
       keepElement: true,
       keepAttribute: true,
       bps: [2901],
@@ -4424,7 +4424,7 @@ function dataPreferred() {
         'Ensure that status messages can be determined programmatically without receiving focus.\n\nFor dynamically updated search results, the best way to do this is to use a "status" ARIA live region. To create such a region:\n- Ensure that a visually hidden container <div> is present when the page loads. The <div> must be empty until results are returned.\n- Add a role="status" attribute to this <div>.\n- When the page is in a loading state, use JavaScript to inject text into this <div role="status"> that describes the results available (e.g., "83 results available" or "Results available"). If properly configured, this text will be announced to screen readers.',
       compliantExample: "",
       stepsToReproduce:
-        "1. Turn on the JAWS screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by JAWS in response to the dynamic content update.",
+        "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
       keepElement: true,
       keepAttribute: true,
       bps: [2901],
@@ -5522,66 +5522,64 @@ function dataSchemas() {
       },
     ],
     [
-      "wellsFargo",
+      "disney",
       {
         description: [
           {
             appearsByDefault: true,
-            instructions: "**ADA_ One line, reasonably specific**",
+            instructions: "",
             mapsTo: [],
-            name: "Summary",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions:
-              "**Describe the problem or symptom, the User Impact, and sufficient info about how to reproduce.**",
-            mapsTo: ["issue", "impact", "stepsToReproduce"],
-            name: "Issue Description",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions: "****",
-            mapsTo: [],
-            name: "Devices",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions:
-              '**Optional or type "None". Avoid lengthy blocks. Newlines and indentation spaces will be stripped.**',
-            mapsTo: [],
-            name: "Non-Compliant Example",
+            name: "Type: *** DEV DESIGN DEV/DESIGN ***",
             requiredToExist: false,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Insert WCAG Success Criterion **\n** Example: **\n*** 1.3.1 Info & Relationships ***\n",
+            mapsTo: [],
+            name: "WCAG Requirement",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              '1. *** Step 1 ***\n2. *** Step 2 ***\nActual result: *** Describe behavior (Example: TalkBack announces "Unlabelled, Image") ***\nExpected result: *** Describe behavior (Example: TalkBack should announce "Disney, Image") ***',
+            mapsTo: ["stepsToReproduce"],
+            name: "Steps to Reproduce",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Code Reference",
+            requiredToExist: true,
             requiredToHaveCode: true,
-            requiredToHaveContent: false,
-          },
-          {
-            appearsByDefault: true,
-            instructions:
-              '**Agile Only: If BP is in Web Grade Checklist (any level), enter "Grade 1" or "Grade 2" or "Grade 3". If testing Mobile First and BP is in Native Checklist, enter "ADA_Grade_Native". Else remove tag or make this line blank.**',
-            mapsTo: [],
-            name: "Defect Grade",
-            requiredToExist: false,
-            requiredToHaveCode: false,
-            requiredToHaveContent: false,
-          },
-          {
-            appearsByDefault: true,
-            instructions:
-              "**Agile Only: If BP is in Grade Checklist (any level), keep the designated value(s) from: FED,XD,QA (no spaces between values). Else remove tag or make this line blank.**",
-            mapsTo: [],
-            name: "Defect Impact Role",
-            requiredToExist: false,
-            requiredToHaveCode: false,
-            requiredToHaveContent: false,
+            requiredToHaveContent: true,
           },
         ],
         note: [
@@ -5596,21 +5594,110 @@ function dataSchemas() {
           },
           {
             appearsByDefault: true,
-            instructions:
-              '**Optional or type "None". Avoid lengthy blocks. Newlines and indentation spaces will be stripped.**',
+            instructions: "",
             mapsTo: ["compliantExample"],
-            name: "Compliant Example",
+            name: "Compliant Code Example",
             requiredToExist: false,
             requiredToHaveCode: true,
-            requiredToHaveContent: false,
+            requiredToHaveContent: true,
+          },
+        ],
+      },
+    ],
+    [
+      "pdf-software",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
           },
           {
             appearsByDefault: true,
-            instructions: '**Optional or type "None"**',
-            mapsTo: [],
-            name: "Recommended Reading",
-            requiredToExist: false,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
             requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+        ],
+      },
+    ],
+    [
+      "pod",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Code Reference",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["stepsToReproduce"],
+            name: "Steps to Reproduce",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["compliantExample"],
+            name: "Compliant Code Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
             requiredToHaveContent: true,
           },
         ],
@@ -5672,8 +5759,7 @@ function dataSchemas() {
         note: [
           {
             appearsByDefault: true,
-            instructions:
-              "** When using AMPScript template text here, be sure that the recommendation is specific, usually by editing the following line: **\n\nIn this case, {designers OR developers} must ...",
+            instructions: "",
             mapsTo: ["recommendation"],
             name: "Recommendation",
             requiredToExist: true,
@@ -5758,8 +5844,7 @@ function dataSchemas() {
         note: [
           {
             appearsByDefault: true,
-            instructions:
-              "** When using AMPScript template text here, be sure that the recommendation is specific, usually by editing the following line: **\n\nIn this case, {designers OR developers} must ...",
+            instructions: "",
             mapsTo: ["recommendation"],
             name: "Recommendation",
             requiredToExist: true,
@@ -5871,77 +5956,53 @@ function dataSchemas() {
       },
     ],
     [
-      "pod",
+      "wellsFargo",
       {
         description: [
           {
             appearsByDefault: true,
-            instructions: "",
-            mapsTo: ["issue"],
-            name: "Issue",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions: "",
-            mapsTo: ["impact"],
-            name: "User Impact",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions: "",
-            mapsTo: ["stepsToReproduce"],
-            name: "Steps to Reproduce",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions: "",
+            instructions: "**ADA_ One line, reasonably specific**",
             mapsTo: [],
-            name: "Code Reference",
+            name: "Summary",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              "**Describe the problem or symptom, the User Impact, and sufficient info about how to reproduce.**",
+            mapsTo: ["issue", "impact", "stepsToReproduce"],
+            name: "Issue Description",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "****",
+            mapsTo: [],
+            name: "Devices",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions:
+              '**Optional or type "None". Avoid lengthy blocks. Newlines and indentation spaces will be stripped.**',
+            mapsTo: [],
+            name: "Non-Compliant Example",
             requiredToExist: false,
             requiredToHaveCode: true,
-            requiredToHaveContent: true,
-          },
-        ],
-        note: [
-          {
-            appearsByDefault: true,
-            instructions: "",
-            mapsTo: ["recommendation"],
-            name: "Recommendation",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
+            requiredToHaveContent: false,
           },
           {
             appearsByDefault: true,
-            instructions: "",
-            mapsTo: ["compliantExample"],
-            name: "Compliant Code Example",
-            requiredToExist: false,
-            requiredToHaveCode: true,
-            requiredToHaveContent: true,
-          },
-        ],
-      },
-    ],
-    [
-      "disney",
-      {
-        description: [
-          {
-            appearsByDefault: true,
-            instructions: "",
+            instructions:
+              '**Agile Only: If BP is in Web Grade Checklist (any level), enter "Grade 1" or "Grade 2" or "Grade 3". If testing Mobile First and BP is in Native Checklist, enter "ADA_Grade_Native". Else remove tag or make this line blank.**',
             mapsTo: [],
-            name: "Type: *** DEV DESIGN DEV/DESIGN ***",
+            name: "Defect Grade",
             requiredToExist: false,
             requiredToHaveCode: false,
             requiredToHaveContent: false,
@@ -5949,49 +6010,12 @@ function dataSchemas() {
           {
             appearsByDefault: true,
             instructions:
-              "** Insert WCAG Success Criterion **\n** Example: **\n*** 1.3.1 Info & Relationships ***\n",
+              "**Agile Only: If BP is in Grade Checklist (any level), keep the designated value(s) from: FED,XD,QA (no spaces between values). Else remove tag or make this line blank.**",
             mapsTo: [],
-            name: "WCAG Requirement",
-            requiredToExist: true,
+            name: "Defect Impact Role",
+            requiredToExist: false,
             requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions: "",
-            mapsTo: ["issue"],
-            name: "Issue",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions:
-              '1. *** Step 1 ***\n2. *** Step 2 ***\nActual result: *** Describe behavior (Example: TalkBack announces "Unlabelled, Image") ***\nExpected result: *** Describe behavior (Example: TalkBack should announce "Disney, Image") ***',
-            mapsTo: ["stepsToReproduce"],
-            name: "Steps to Reproduce",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions: "",
-            mapsTo: ["impact"],
-            name: "User Impact",
-            requiredToExist: true,
-            requiredToHaveCode: false,
-            requiredToHaveContent: true,
-          },
-          {
-            appearsByDefault: true,
-            instructions: "",
-            mapsTo: [],
-            name: "Code Reference",
-            requiredToExist: true,
-            requiredToHaveCode: true,
-            requiredToHaveContent: true,
+            requiredToHaveContent: false,
           },
         ],
         note: [
@@ -6006,11 +6030,21 @@ function dataSchemas() {
           },
           {
             appearsByDefault: true,
-            instructions: "",
+            instructions:
+              '**Optional or type "None". Avoid lengthy blocks. Newlines and indentation spaces will be stripped.**',
             mapsTo: ["compliantExample"],
-            name: "Compliant Code Example",
+            name: "Compliant Example",
             requiredToExist: false,
             requiredToHaveCode: true,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions: '**Optional or type "None"**',
+            mapsTo: [],
+            name: "Recommended Reading",
+            requiredToExist: false,
+            requiredToHaveCode: false,
             requiredToHaveContent: true,
           },
         ],
@@ -6736,18 +6770,20 @@ function getSchema() {
   let currentSchema = {};
   if (getCookieValue("kpmCustom-custom-adobe")) {
     currentSchema = schemaMap.get("adobe");
-  } else if (getCookieValue("kpmCustom-custom-wf")) {
-    currentSchema = schemaMap.get("wellsFargo");
+  } else if (getCookieValue("kpmCustom-custom-disney")) {
+    currentSchema = schemaMap.get("disney");
+  } else if (getCookieValue("kpmCustom-custom-pdf")) {
+    currentSchema = schemaMap.get("pdf-software");
+  } else if (getCookieValue("kpmCustom-custom-pod")) {
+    currentSchema = schemaMap.get("pod");
   } else if (getCookieValue("kpmCustom-custom-progressive-apq")) {
     currentSchema = schemaMap.get("progressiveAPQ");
   } else if (getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")) {
     currentSchema = schemaMap.get("progressiveDQ");
   } else if (getCookieValue("kpmCustom-custom-salesforce")) {
     currentSchema = schemaMap.get("salesforce");
-  } else if (getCookieValue("kpmCustom-custom-pod")) {
-    currentSchema = schemaMap.get("pod");
-  } else if (getCookieValue("kpmCustom-custom-disney")) {
-    currentSchema = schemaMap.get("disney");
+  } else if (getCookieValue("kpmCustom-custom-wf")) {
+    currentSchema = schemaMap.get("wellsFargo");
   } else {
     currentSchema = schemaMap.get("default");
   }
@@ -8027,6 +8063,8 @@ function formatElement(boilerplate) {
         });
         output += concatenatedBoilerplate;
       }
+      output = output.trim();
+      output += "\n\n";
     }
   });
 
@@ -8040,8 +8078,6 @@ function formatElement(boilerplate) {
   }
 
   output = output.trim();
-  output += "\n";
-
   return output;
 }
 
@@ -8070,12 +8106,25 @@ function formatAttribute(boilerplate) {
         });
         output += concatenatedBoilerplate;
       }
+
+      output = output.trim();
+      output += "\n\n";
     }
   });
 
-  output = output.trim();
-  output += "\n";
+  /* Boilerplate modifications for specific clients. Please use sparingly.
+   * Creating a schema should be sufficient for most clients. */
+  if (
+    getCookieValue("kpmCustom-custom-progressive-apq") ||
+    getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
+  ) {
+    output = output.replace(
+      "\n\n[Compliant Code Example]",
+      "\n\n** When using AMPScript template text here, be sure that the recommendation is specific, usually by editing the following line: **\n\nIn this case, {designers OR developers} must ...\n\n[Compliant Code Example]"
+    );
+  }
 
+  output = output.trim();
   return output;
 }
 
