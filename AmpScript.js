@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.4.1
+// @version      6.5.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -294,6 +294,12 @@ function dataReading() {
         "For more information about video captions, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/media/av/captions/",
     },
     {
+      id: "reading-cards",
+      text: "Cards",
+      value:
+        "For more information about creating accessible cards, please see the Inclusive Components website: https://inclusive-components.design/cards/",
+    },
+    {
       id: "reading-carousels",
       text: "Carousels",
       value:
@@ -336,12 +342,6 @@ function dataReading() {
         "For more information on creating accessible error messages, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/tutorials/forms/notifications/",
     },
     {
-      id: "reading-expandable-navigation",
-      text: "Expandable navigation",
-      value:
-        "For more information on creating accessible expandable navigation controls, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/tutorials/menus/flyout/",
-    },
-    {
       id: "reading-fieldsets",
       text: "Fieldsets",
       value:
@@ -354,6 +354,12 @@ function dataReading() {
         "For more information about creating accessible heading structures, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/tutorials/page-structure/headings/",
     },
     {
+      id: "reading-images-of-text",
+      text: "Images of text",
+      value:
+        "For more information about addressing images of text, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/tutorials/images/textual/",
+    },
+    {
       id: "reading-invalid-aria",
       text: "Invalid ARIA",
       value:
@@ -361,7 +367,7 @@ function dataReading() {
     },
     {
       id: "reading-labeling-form-fields",
-      text: "Labeling form fields",
+      text: "Labeling fields",
       value:
         "For more information about labeling form fields, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/tutorials/forms/labels/",
     },
@@ -370,6 +376,18 @@ function dataReading() {
       text: "Labeling regions",
       value:
         "For more information about labeling page regions, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/tutorials/page-structure/labels/",
+    },
+    {
+      id: "reading-live-regions",
+      text: "Live regions",
+      value:
+        "For more information about labeling page regions, please see the MDN Web Docs website: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions",
+    },
+    {
+      id: "reading-menu-buttons",
+      text: "Menu buttons",
+      value:
+        "For more information about creating accessible menu buttons, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/",
     },
     {
       id: "reading-multi-thumb-sliders",
@@ -402,16 +420,64 @@ function dataReading() {
         "For more information about creating accessible show/hide controls, please see the W3C Web Accessibility Initiative's ARIA Authoring Practices Guide: https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
     },
     {
-      id: "reading-tables",
-      text: "Tables",
+      id: "reading-spinbuttons",
+      text: "Spinbuttons",
+      value:
+        "For more information about creating accessible spinbuttons, please see the W3C Web Accessibility Initiative's ARIA Authoring Practices Guide: https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/",
+    },
+    {
+      id: "reading-star-ratings",
+      text: "Star ratings",
+      value:
+        "For more information about creating accessible star rating controls, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/tutorials/forms/custom-controls/#a-star-rating",
+    },
+    {
+      id: "reading-step-indicators",
+      text: "Step indicators",
+      value:
+        "For more information about creating accessible step indicators, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/tutorials/forms/multi-page/#using-step-by-step-indicator",
+    },
+    {
+      id: "reading-tables-general",
+      text: "Tables - General",
       value:
         "For more information about creating accessible data tables, please see the W3C Web Accessibility Initiative website: https://www.w3.org/WAI/tutorials/tables/",
+    },
+    {
+      id: "reading-tables-sortable",
+      text: "Tables - Sortable",
+      value:
+        "For more information about creating accessible sortable tables, please see the W3C Web Accessibility Initiative's ARIA Authoring Practices Guide: https://www.w3.org/WAI/ARIA/apg/patterns/table/examples/sortable-table/",
     },
     {
       id: "reading-tabs",
       text: "Tabs",
       value:
         "For more information about creating accessible tab controls, please see the W3C Web Accessibility Initiative's ARIA Authoring Practices Guide: https://www.w3.org/WAI/ARIA/apg/patterns/tabpanel/",
+    },
+    {
+      id: "reading-toggles-switches",
+      text: "Toggles/switches",
+      value:
+        "For more information about creating accessible toggles, please see the Inclusive Components website: https://inclusive-components.design/toggle-button/",
+    },
+    {
+      id: "reading-toggletips",
+      text: "Toggletips",
+      value:
+        "For more information about creating accessible toggletips, please see the Inclusive Components website: https://inclusive-components.design/tooltips-toggletips/#inclusivetoggletips",
+    },
+    {
+      id: "reading-toolbars",
+      text: "Toolbars",
+      value:
+        "For more information about creating accessible toolbars, please see the W3C Web Accessibility Initiative's ARIA Authoring Practices Guide: https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/",
+    },
+    {
+      id: "reading-tooltips",
+      text: "Tooltips",
+      value:
+        "For more information about creating accessible tooltips, please see the Inclusive Components website: https://inclusive-components.design/tooltips-toggletips/#inclusivetooltips",
     },
     {
       id: "reading-tree-views",
@@ -747,334 +813,6 @@ function dataCode() {
     },
   ];
   return code;
-}
-function dataResponse2() {
-  const response = [
-    {
-      name: "ARIA",
-      children: [
-        {
-          id: "response-aria",
-          text: "General",
-          impact:
-            "When ARIA attributes (state, roles, and properties) are inappropriately used or not used correctly, assistive technology may not correctly function as expected. Role and properties are covenants between assistive technology and the application and must be accurate for the intended purpose. Valid markup should always be used.",
-          recommendation:
-            "Developers must use valid markup and follow the rules of the ARIA specification as well as correctly setting ARIA properties, including roles based on the intended purpose.",
-          reading:
-            "More information about using ARIA roles can be found on the Level Access Website:\n\nhttps://www.levelaccess.com/how-not-to-misuse-aria-states-properties-and-roles/",
-          keepElement: true,
-          keepAttribute: true,
-        },
-        {
-          id: "response-ariaimplicit",
-          text: "Implicit Role",
-          issue:
-            "There are elements on the page that have assigned roles but already have implicit ARIA roles. These are redundant and should be removed. Structural implicit roles include (but are not limited to[ELEMENT/role]):\n- MAIN = main\n- HEADER = banner \n- FOOTER = contentinfo\n- ASIDE = complementary\n- FORM = form\n- NAV = navigation\n\nInline implicit roles include A = link, BUTTON = button, and many others.",
-          impact:
-            "When ARIA attributes (state, roles, and properties) are inappropriately used, assistive technology may not correctly function as expected. Role and properties are covenants between assistive technology and the application and must be accurate for the intended purpose.",
-          recommendation:
-            "Remove the redundant role from all of the elements.\n\nMore information can be found about implicit ARIA roles here:\nhttps://a11yproject.com/posts/aria-landmark-roles/",
-          reading:
-            "More information can be found about implicit ARIA roles here:\nhttps://a11yproject.com/posts/aria-landmark-roles/",
-          keepElement: true,
-          keepAttribute: true,
-        },
-        {
-          id: "response-ariaregion",
-          text: "Region",
-          impact:
-            "When ARIA regions, landmarks or HTML5 section elements are provided, users must be able to distinguish them from other regions, landmarks or sections in the page, particularly when two or more instances of the same type are used. When such an element does not provide a descriptive label to clearly identify itself, users of screen readers may have trouble locating the correct section or understanding its purpose.",
-          recommendation:
-            "Common methods of providing accessible labels are the aria-labelledby attribute (best used when a visual label already exists in the page) and the aria-label attribute (when no visual label exists).",
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-    {
-      name: "Color",
-      children: [
-        {
-          id: "response-color",
-          text: "Color Contrast",
-          impact:
-            "Ensure there is sufficient contrast between foreground and background colors. This requirement applies to text over solid and image backgrounds as well as images that contain text. Proper foreground and background contrast is necessary for users with low vision and some users with color blindness to accurately read content.",
-          recommendation:
-            "Developers must ensure that the color contrast for all text (and images of text) meets the WCAG 2.0 Level AA requirements unless specifically excluded.\n\nDesigners or developers should modify the foreground color, background color, and/or font size so that sufficient contrast is attained.\n\nStandard text less than 18 point (or less than 14 point if bold) must have a luminosity contrast ratio of 4.5:1 or more.\n\nText 18 point or larger (14 point or larger if bold) must have a luminosity contrast ratio of 3:1 or more.\n\nUse the Level Access contrast checking tool or plugin (https://accessibility.dev/) to determine if the contrast is sufficient.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-    {
-      name: "Custom",
-      children: [
-        {
-          id: "response-customControl",
-          text: "Role/State",
-          impact:
-            "At a basic level, all custom controls within a web application should provide identifying information about the component. This includes a name, type (role) and may contain state, value, and description information. When custom elements do not expose identifying information, users of assistive technology may not be able to identify and interact with the element. For example, without knowing the role or state of an element, the user of a screen reader may not know what actions can be performed on an element even if the element exposes a textual name. Without a proper role, assistive technology interactions that rely on roles being identified may not become available to the user.",
-          recommendation:
-            "Ensure that proper identifying information is provided for custom components. Generally, Accessible Rich Internet Application (ARIA) specification roles, properties, and states should be used to indicate the control's name and role and may be needed for state, value, description, or other properties. Appropriate states need to be provided when applicable -- e.g. aria-expanded on buttons to indicate the expanded or collapsed state of an accordion.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-    {
-      name: "Forms",
-      children: [
-        {
-          id: "response-fieldset",
-          text: "Fieldset",
-          div: "Forms",
-          impact:
-            'Forms should utilize the fieldset and legend elements to group related form controls. For example, on an order form, authors should separate categories such as "Billing Information", "Shipping Address", and "Order Summary" using fieldset elements. By grouping all of the elements in one category users of assistive technologies can understand the relationship of the elements. For example, without proper grouping a person using a screen reader might not be able to differentiate the address field for shipping from the address field for billing. Another example is when radio buttons are used as answers and a question appears above or to the left of the radio buttons. When the question text and radio buttons are not properly constructed in a fieldset users of screen readers may only be aware of the answers and not the question.',
-          recommendation:
-            "Utilize the fieldset element to group together related groups. For each fieldset element, ensure that a legend has been defined and contains an appropriate value. All of the radio buttons and checkboxes in a group should be included within a fieldset with the group name as its legend.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-        {
-          id: "response-formlabel",
-          text: "Label",
-          impact:
-            "When form fields do not explicitly include a label, assistive technologies may incorrectly render the label or provide no label at all to users. When labels are not present or are incorrect, users of assistive technologies may not be able to complete a form.",
-          recommendation:
-            "While there are several techniques for making an accessible label for the form fields, the easiest and most reliable is to have a valid HTML LABEL element that is explicitly associated with the input using the FOR/ID attributes.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-    {
-      name: "Headings",
-      children: [
-        {
-          id: "response-headingsimplicit",
-          text: "Implicit",
-          impact:
-            "Explicit heading markup must be used for page headings. Since some users skim through a document by navigating its headings, it is important to use headings appropriately to convey document structure. This best practice does not require adding structural headings to content that does not appear as an implicit heading. Its intent is to ensure that implicit headings are structured as explicit headings. Implicit headings are those that use font size, boldface, color, background color, extra spacing (not blank lines) or any of a wide variety of purely visual methods to imply meaning. When heading content is not created with proper markup the meaning conveyed by presentation will be lost when style sheets are turned off.",
-          recommendation:
-            "Developers must ensure that headers with proper markup are employed for any elements that solely use a visual effect to convey a content/section heading. HTML heading elements such as h1,h2,h3,h4,h5, and h6 must be used to specifically mark up page content that visually appears as a heading.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-        {
-          id: "response-headings",
-          text: "Order",
-          impact:
-            'Developers should order heading elements properly. The heading element level must match the level communicated visually by the headings on the page. Headings can be used to communicate structure as well as important content although their purpose should generally be to communicate the structure of content. For example, in HTML, h2 elements should generally follow h1 elements, h3 elements should follow h2 elements, etc. Content developers should generally not "skip" levels (e.g., h1 directly to h3). When levels are skipped, users of assistive technology may not understand the relationship of the content.',
-          recommendation:
-            'Ensure that all heading elements are used in the proper order. Headings should be used to create a structured "Table of Contents" for the user that follows a logical order. Skipping heading ranks can be confusing and should be avoided where possible: Make sure that an h2 is not followed directly by an h4, for example. It is OK to skip ranks when closing subsections, for instance, a <h2> beginning a new section, can follow an <h4> as it closes the previous section.',
-          keepElement: true,
-          keepAttribute: true,
-        },
-        {
-          id: "response-headingsunnessary",
-          text: "Unnessary",
-          impact:
-            "Heading elements should be utilized only when necessary and primarily to mark the beginning of related sections of content. Making an effective use of headings can provide an excellent benefit to users of assistive technology, which may provide the user with a way to navigate section-by-section through content. By applying headings incorrectly, or for passages of text which do not delineate a section, users of assistive technology may be stripped of this useful navigation technique.",
-          recommendation:
-            "Remove the heading structure from heading elements that do not contain any sub-information. If headings are meant to mark up sub-information ensure that information properly follows the headings.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-    {
-      name: "HTML",
-      children: [
-        {
-          id: "response-html",
-          text: "Bad",
-          impact:
-            'Documents that use markup languages must be well-formed. When documents are not well-formed user agents and/or assistive technology may not correctly parse and render the content to users. Many major user-agents are able to cope well with "bad" markup, however, to be consistent across all platforms and browsers well-formed markup must be used. This is especially important for assistive technology which may or may not be programmed to perform the same level of "coping" that can be found in browsers.',
-          recommendation:
-            "Ensure that all page elements have complete start and end tags, elements are nested according to specification, elements do not contain duplicate attributes, and any IDs are unique (except where allowed by the document specification). Mismatched opening and closing quotes, malformed attributes, attributes not space separated, mismatched opening and closing tags, and in some cases, unquoted attributes are also violations.\n\nThe best way to know that a document meets these requirements is to run the document through the W3C's HTML validator and then review the errors/warnings.\n\nhttps://validator.w3.org/",
-          keepElement: true,
-        },
-        {
-          id: "response-duplicateid",
-          text: "Duplicate ID",
-          issue:
-            "There are duplicate values for ID attributes on the page. Each ID value must be unique per page. This is especially important since assistive technology will use the ID attribute to correctly identify different sections of the page.",
-          impact:
-            'Documents that use markup languages must be well-formed. When documents are not well-formed user agents and/or assistive technology may not correctly parse and render the content to users. Many major user-agents are able to cope well with "bad" markup, however, to be consistent across all platforms and browsers well-formed markup must be used. This is especially important for assistive technology which may or may not be programmed to perform the same level of "coping" that can be found in browsers.',
-          recommendation:
-            "Ensure that all page elements have complete start and end tags, elements are nested according to specification, elements do not contain duplicate attributes, and any IDs are unique (except where allowed by the document specification). Mismatched opening and closing quotes, malformed attributes, attributes not space separated, mismatched opening and closing tags, and in some cases, unquoted attributes are also violations.\n\nThe best way to know that a document meets these requirements is to run the document through the W3C's HTML validator and then review the errors/warnings.",
-          keepElement: true,
-        },
-        {
-          id: "response-obsolete",
-          text: "Obsolete",
-          issue:
-            "Throughout the pages, there are depreciated HTML elements and attributes. Elements such as CENTER and FONT, and attributes such as NAME, ALIGN, VALIGN, CELLPADDING, CELLSPACING, WIDTH, HEIGHT, and BORDER should be removed from the pages.",
-          impact:
-            "Screen readers and other assistive technology may not support deprecated HTML. Also, many of the deprecated attributes are related to styling the content on the page, which to increase compatibility with the most significant number of devices, should be moved to CSS.",
-          recommendation:
-            "Replace all depreciated/obsolete HTML elements with elements in the current standard. The best way to know that a document does not have any depreciated elements is to run the document through the W3C's HTML validator and then review the errors/warnings.\n\nhttps://validator.w3.org/",
-          reading:
-            "For more information on depreciated items, please refer to the W3C specification for HTML5:\n\nDepreciated Elements\nhttps://www.w3.org/TR/html5-diff/#obsolete-elements\n\nDepreciated Attributes\nhttps://www.w3.org/TR/html5-diff/#obsolete-attributes",
-          keepElement: true,
-        },
-      ],
-    },
-    {
-      name: "Images",
-      children: [
-        {
-          id: "response-meaingfulalt",
-          text: "Meaningful ALT",
-          impact:
-            "Images that convey meaning must provide informative alternative text. Alternative text that is default, non-meaningful, or otherwise incorrect, can negatively impact the accessibility of a page. The goal of alt text should be to present text which will provide the same level of understanding to those who cannot see the image as it does to those who can. Whenever possible, page developers should ensure alternative text for images is as terse, yet informative, as possible.",
-          recommendation:
-            "Alternative text should be replaced with a more informative or correct alternative text. Page developers should ensure that alt text is a concise and meaningful replacement for the image.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-        {
-          id: "response-missingalt",
-          text: "Missing ALT",
-          impact:
-            "All images within a page must be given an alternate text equivalent. Text equivalents for non-text elements communicate the meaning of images to users who cannot perceive the image such as users of screen readers. Proper equivalents provide text which contributes the same level of understanding to the content of the page as the image itself. In instances where the image does not contribute to the understanding of the content and is purely decorative, it needs to be marked in a way to indicate its purely decorative purpose.",
-          recommendation:
-            'Add an appropriate alt attribute for images that do not contain alt attributes. An alt attribute should be a concise and meaningful replacement for the image. For example, when describing a picture of a red balloon, entering alt="red balloon" will be more helpful than alt="This is a picture of a red balloon". The alt text of the image should be in the language of the page or if the page contains multiple languages the language of the surrounding or any referring content.\n\nIf the image does not convey any meaning (such as a spacer image, separation line, border, etc.), or if the image is redundant to adjacent text, enter a null alt attribute (alt=""). Alternatively, the image could be turned into a CSS background image.',
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-    {
-      name: "Keyboard",
-      children: [
-        {
-          id: "response-dismiss",
-          text: "Dismiss Dialogue",
-          impact:
-            "Dialogs must provide a mechanism for users to close the dialog using the keyboard. This includes the ability to navigate to the close link via the keyboard such as by tabbing or shift+tabbing. The user must also be able to activate the link or button via the keyboard.",
-          recommendation:
-            'Developers should ensure that the element used to close the dialog is reachable via the keyboard. Typically this would be through use of the tab or shift+tab key. Additionally, access keys such as the letter "c" with a modifier can be used to close the link. In general the access key should be in addition to ensuring the close method is in the tab order. Developers should ensure that the close link/button can be activated via the keyboard via the ENTER key. It is recommended but not required to provide an additional close link at the bottom of the dialog to allow users of assistive technology to more effectively close the dialog. This additional redundant close link can be on or off-screen and should be in the tab order.',
-          keepElement: true,
-          keepAttribute: true,
-        },
-        {
-          id: "response-keyboardfunction",
-          text: "Function",
-          impact:
-            "All functionality must be actionable regardless of the input method used. Navigation and functionality that is dependent on specific devices such as a mouse may not be available to users with dexterity impairments as well as people without vision or low vision. These users may not be able to use a mouse so content providers should ensure that all functionality can be used from the keyboard.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-        {
-          id: "response-visiblefocus",
-          text: "Visible Focus",
-          impact:
-            'Elements on the page do not have a visual indication focus.\n\n[User Impact]\nKeyboard only users will have difficulties understanding which interactive element is currently selected. A well-defined (highly visible) visual indication of keyboard focus needs to be provided for each active element. This position on a screen where an action or keyboard input will take place is referred to as the "focus". Providing a visual indication of the focus allows someone who is viewing the screen to determine what action to take based on what element has focus. This is particularly necessary for keyboard-only users who do not use the mouse and cannot simply click to place focus where they think it should be. The user must rely on the visual indication of focus to determine where an action will occur or determine what keystrokes to perform to move focus to the desired field. If this focus is not indicated the user will be unclear as to where the current execution focus is located and may enter incorrect information, accidentally submit a form without knowledge of what occurred, or spend extra time trying to determine where the keyboard input focus is.',
-          recommendation:
-            "Developers should ensure that visible keyboard focus is provided to all elements. Typically the browser will provide keyboard focus using a dotted rectangle for all standard HTML elements such as input, select, textarea, anchor, and area. When scripting is used to set focus to other elements coupled with the tabindex attribute or when the CSS outline property is set to none developers must ensure that visual focus is added by using color with border or other visual attributes.",
-          compliantExample:
-            "<style>\na:hover, a:active, a:focus, button:hover, button:active, button:focus { \n    outline: 1px dotted #ff0000; \n}</style>",
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-    {
-      name: "Links",
-      children: [
-        {
-          id: "response-linkcolor",
-          text: "Color Only",
-          impact:
-            "Color must not be the sole method of indicating a link within non-linked text.",
-          recommendation:
-            "The link must possess other visual attributes upon keyboard focus such as becoming underlined. Additionally, the color of the link text and non-linked text must meet color contrast requirements for the WCAG conformance level sought.",
-          compliantExample:
-            "a:visited, a:hover, a:active { color: #ff0000 text-decoration: underline; }",
-          keepElement: true,
-          keepAttribute: true,
-        },
-        {
-          id: "response-linkmean",
-          text: "Meaning/Dup",
-          impact:
-            'It is important for users to be able to discern the purpose of all links. Meaningful link text should not be overly general and should clearly describe the content to be found or action to be performed by the link. For example, do not use generic text such as "click here", "read more", etc. unless the purpose of the link can be determined by meaning in the surrounding content. When a link\'s purpose can not be determined users may be required to follow the link to determine its purpose. Returning to a previous location can often be more difficult for users with disabilities using assistive technology.\n\nLink text should also be unique to the target of a given link. When links with different destinations are given identical link text, this can produce confusion for users of assistive technologies, some of which provide users the ability to view a list of all links on the document.',
-          recommendation:
-            "Ensure the accessible name of each link accurately reflects the target and purpose of the link. Ideally, this can be done by changing text that is used to calculate a link's accessible name. Other methods of changing the link text include using the aria-labelledby/aria-label attributes, or by using hidden text within the link.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-    {
-      name: "Page",
-      children: [
-        {
-          id: "response-pagelang",
-          text: "Language",
-          issue:
-            "The language of the page is not set. Developers should define the natural language of a document to ensure that screen readers and other user agents understand the language the document is to be interpreted in.",
-          impact:
-            "Specifically, when a document contains multiple inline language choices, screen readers and other assistive technology types must know what the default language type is to ensure they can appropriately switch between languages. Per the HTML 4.01 recommendation, language declarations should be made in accordance with IETF RFC 1766.",
-          example: "<!doctype html>\n<html>\n<head>",
-          recommendation:
-            "Ensure that the lang attribute is set within the HTML element. Always use a language attribute on the HTML element. This is inherited by all other elements, and so will set a default language for the text in the document head element.\n\nIf you have any content on the page that is in a different language from that declared in the HTML element, use language attributes on elements surrounding that content. This allows you to style or process it differently.",
-          compliantExample: '<!doctype html>\n<html lang="en">\n<head>',
-        },
-        {
-          id: "response-viewport",
-          text: "META Viewport",
-          issue: "There is a fixed size viewport.",
-          impact:
-            "Users, especially those with limited vision or using mobile devices, need to be able to increase the size of the textual elements on the pages. By disabling this with the viewport, users will not be able to zoom in.",
-          recommendation:
-            "Remove the maximum scale and user-scalable attributes from the viewport META element.",
-          compliantExample:
-            "<meta content='width=device-width; initial-scale=1.0;' name='viewport' />",
-          keepElement: true,
-        },
-        {
-          id: "response-skipnav",
-          text: "Skip Nav",
-          issue: "There is no way to skip past the navigation elements.",
-          impact:
-            "Repetitive content found on a set of pages requires a method to allow a user to skip past it, so the user can get to the page's main/unique content as efficiently as possible. For example, consider a user who is blind using a screen reader or a keyboard-only user. Each time the user accesses a new page in a site with a top navigation bar, the user would be forced to navigate past e.g. tab through all of these navigation links (and other content) before getting to the main content area of the page. This makes it difficult to access the page's main/unique information efficiently.",
-          recommendation:
-            "Provide a valid skip link that directs users to the unique content of each page. This can be hidden, but needs to become visual when focused upon.",
-          compliantExample:
-            '<style>\n\n   #skip a { position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden; }\n\n   #skip a:focus { position:static; width:auto; height:auto; }\n\n</style>\n\n<div id="skip">\n   <a href="#main">Skip to Main Content</a>\n</div>',
-        },
-        {
-          id: "response-pagetitle",
-          text: "Title",
-          impact:
-            "The title of a page must provide information specific to the currently viewed page. Assistive technologies utilize the page title to indicate the current page location to users without the user having to navigate within the page. Because assistive technology often reads the page title first, this content should inform the user of the content to be found (topic) or action to be performed on (purpose of) that page.",
-          recommendation:
-            "Ensure that the value for the title element is updated as the page content changes. The title element should be terse yet informative and contain information which discloses the content to be found or action to be performed on that page and should avoid containing extra information that does not aid in this understanding. The title of the page should be in the primary language of the page.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-    {
-      name: "Tables",
-      children: [
-        {
-          id: "response-tablerow",
-          text: "Row TH",
-          impact:
-            "Table row cells that act as header cells for a row of data need to communicate this programmatically. Row header cells are often identified visually by boldface or other differences in color/font compared to data cells (though this is less common than for column header cells). When table row headers do not communicate their status as headers, assistive technology such as screen readers may not announce the correct row header cells when users navigate up/down columns of data.",
-          recommendation:
-            "Make sure th elements are used for cells that represent row headers. In addition, add the scope attribute with a value of row. This requirement is particularly critical if the row header cells are not in the first column.",
-          keepElement: true,
-          keepAttribute: true,
-        },
-      ],
-    },
-  ];
-
-  return response;
 }
 function dataPreferred() {
   const preferred = [
@@ -1419,7 +1157,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty reading this content.",
       recommendation:
-        "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
+        "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       stepsToReproduce:
         "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color and background color.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below the required value for this size of text.",
@@ -1436,7 +1174,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty reading this content.",
       recommendation:
-        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
+        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       stepsToReproduce:
         "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color.\n4. Using a color picker, such as https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld to select a color from the background that touches the text.\n5.Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n6. Notice that the contrast ratio is below the required value for this size of text.",
@@ -2506,7 +2244,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty reading this content.",
       recommendation:
-        "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
+        "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -2520,7 +2258,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty reading this content.",
       recommendation:
-        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
+        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -3107,7 +2845,7 @@ function dataPreferred() {
       impact:
         "Keyboard users will have difficulty determining their position on the page.",
       recommendation:
-        "Ensure keyboard focus is indicated visually. When interactive controls receive focus, the control must appear on screen and a visible focus indicator must be present.\n\nFocus can be indicated in a variety of ways. Most commonly, the browser default outline is used. To use the browser default, remove any outline: none or outline: 0 CSS declarations. Alternatives to the browser default outline include underlines, a change of background, and borders. As of WCAG 2.1, a custom focus indicator must have a minimum contrast ratio of 3.00:1 against the background.",
+        "Ensure keyboard focus is indicated visually. When interactive controls receive focus, the control must appear on screen and a visible focus indicator must be present.\n\nFocus can be indicated in a variety of ways. Most commonly, the browser default outline is used. To use the browser default, remove any outline: none or outline: 0 CSS declarations. Alternatives to the browser default outline include underlines, a change of background, and borders. A custom focus indicator must have a minimum contrast ratio of 3.00:1 against the background.",
       compliantExample: "",
       stepsToReproduce:
         "1. Press Tab repeatedly until the control is focused.\n2. Notice that there is no visual indicator that the control is focused, such as an outline.",
@@ -3445,7 +3183,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty reading this content.",
       recommendation:
-        "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
+        "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -3459,7 +3197,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty reading this content.",
       recommendation:
-        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
+        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -3716,7 +3454,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty reading this content.",
       recommendation:
-        "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
+        "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -3730,7 +3468,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty reading this content.",
       recommendation:
-        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/",
+        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -4261,7 +3999,7 @@ function dataPreferred() {
       impact:
         "Users with cognitive and motor disabilities will be unable to use autofill form features to quickly prefill common form fields. Additionally, some users with cognitive disabilities use assistive technologies that add icons next to common form fields. This allows them to identify the field's purpose more easily. When the input purpose is not programmatically indicated, these icons will not be displayed, so these users will have difficulty determining the fields' purpose.",
       recommendation:
-        "Ensure that common input fields allow autocomplete and use standard autocomplete values.\n\nCommon inputs include names, emails, passwords, and addresses, among others. For a full list of values, see the WCAG 2.1 standard: https://www.w3.org/TR/WCAG21/#input-purposes. ",
+        "Ensure that common input fields allow autocomplete and use standard autocomplete values.\n\nCommon inputs include names, emails, passwords, and addresses, among others. For a full list of values, see the WCAG standard: https://www.w3.org/TR/WCAG22/#input-purposes",
       compliantExample: "",
       stepsToReproduce:
         "1. Locate the field.\n2. Inspect it with Chrome DevTools.\n3. Review the value for its autocomplete attribute, if any.",
@@ -4341,7 +4079,7 @@ function dataPreferred() {
       impact:
         "Users with low vision and users with dyslexia will have difficulty reading this content.",
       recommendation:
-        "Ensure that content and functionality is available when the user overrides text spacing properties.\n\nContent must adapt up to the following specific spacing requirements identified in WCAG 2.1:\n- Line height must be able to adapt to 1.5 times the font size.\n- Letter spacing must be able to adapt to 0.12 times the font size.\n- Word spacing must be able to adapt to 0.16 times the font size.\n- Spacing underneath paragraphs must be able to adapt to 2 times the font size.\n\nFor assistance testing content against this standard, use a text spacing bookmarklet: https://labs.levelaccess.com/index.php/Text_Spacing_Favlet",
+        "Ensure that content and functionality is available when the user overrides text spacing properties.\n\nContent must adapt up to the following specific spacing requirements identified in WCAG:\n- Line height must be able to adapt to 1.5 times the font size.\n- Letter spacing must be able to adapt to 0.12 times the font size.\n- Word spacing must be able to adapt to 0.16 times the font size.\n- Spacing underneath paragraphs must be able to adapt to 2 times the font size.\n\nFor assistance testing content against this standard, use a text spacing bookmarklet: https://labs.levelaccess.com/index.php/Text_Spacing_Favlet",
       compliantExample: "",
       stepsToReproduce:
         "1. Install a user style management extension, such as Stylus.\n2. Create a user style with the following CSS: *{line-height:1.5 !important;letter-spacing:0.12em !important;word-spacing:0.16em !important}p{margin-bottom:2em !important}\n3. Activate the user style on the page.\n4. Notice that content disappears, overlaps, or is cut off when custom text spacing is active.",
@@ -4501,7 +4239,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty identifying this content.",
       recommendation:
-        'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/',
+        'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
       compliantExample: "N/A",
       stepsToReproduce:
         "1. Locate the user interface component.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
@@ -4517,7 +4255,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty identifying this content.",
       recommendation:
-        'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/',
+        'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -4531,7 +4269,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty identifying this content.",
       recommendation:
-        'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/',
+        'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -4545,7 +4283,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty identifying this content.",
       recommendation:
-        'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nRefer to the Accessible Color Picker extension or Color Contrast Checker site for assistance: https://www.accessibility.dev/',
+        'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -4559,7 +4297,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty identifying this content.",
       recommendation:
-        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo evaluate color contrast, see the Accessible Color Picker extension: https://www.accessibility.dev/",
+        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       stepsToReproduce:
         "1. Locate the graphical object.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
@@ -4575,7 +4313,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty identifying this content.",
       recommendation:
-        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo evaluate color contrast, see the Accessible Color Picker extension: https://www.accessibility.dev/",
+        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -4589,7 +4327,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty identifying this content.",
       recommendation:
-        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo evaluate color contrast, see the Accessible Color Picker extension: https://www.accessibility.dev/",
+        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -4603,7 +4341,7 @@ function dataPreferred() {
       impact:
         "Users with low vision will have difficulty identifying this content.",
       recommendation:
-        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo evaluate color contrast, see the Accessible Color Picker extension: https://www.accessibility.dev/",
+        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       keepElement: true,
       keepAttribute: true,
@@ -4912,14 +4650,14 @@ function dataCSS() {
     "button:focus, a:focus, input:focus, select:focus, select > option:focus":
       "text-decoration: underline; outline: 3px solid #000;",
     ".kpmFirstButton": "margin: 0 !important; padding: 0.25em !important;",
-
     // Dropdown Navigation on add modal
     "#kpmNav, #kpmNav nav, #kpmNav ul, #kpmNav li": "z-index: 1000 !important;",
     "#kpmNav": "margin-top: 1em; margin-bottom: 1em;",
     "#kpmNav a": "text-decoration:none;",
-    "#kpmNav ul": "background:#d7d7d7;list-style:none;margin:0;padding:0;",
+    "#kpmNav ul":
+      "background:#d7d7d7;display:flex;flex-wrap:wrap;list-style:none;margin:0;padding:0;",
     "#kpmNav li":
-      "font-weight:bold; color:#000; background:#d7d7d7; display:block; float:left; padding:0.2rem 0.5rem; position:relative; text-decoration:none; transition-duration:0.5s; border:1px solid #000; border-right:none; text-align:center;",
+      "flex-basis:20%;font-weight:bold; color:#000; background:#d7d7d7; display:block; float:left; padding:0.2rem 0.5rem; position:relative; text-decoration:none; transition-duration:0.5s; border:1px solid #000; border-right:none; text-align:center;",
     "#kpmNav li:last-child": "border-right: 1px solid #000;",
     "#kpmNav li a": "color:#000;",
     "#kpmNav li:hover, #kpmNav li:focus-within":
@@ -4928,12 +4666,12 @@ function dataCSS() {
     "#kpmNav ul li ul":
       "background:#3359ec; visibility:hidden; opacity:0; position:absolute; transition:all 0.5s ease; margin-top:0.1rem; left:0; display:none;",
     "#kpmNav ul li:hover > ul, #kpmNav ul li:focus-within > ul, #kpmNav ul li ul:hover, #kpmNav ul li ul:focus":
-      "visibility:visible; opacity:1; display:block;",
+      "visibility:visible; opacity:1; display:block;width:100%;",
     "#kpmNav ul li ul li":
       "border:1px solid #000; border-bottom: none; line-height:1em; clear:both; width:100%; padding:0.3em; margin:0; text-align:left; font-weight:normal;",
     "#kpmNav ul li ul li:last-child": "border-bottom: 1px solid #000;",
     "#kpmNav ul li ul li.divider":
-      "color:#fff; font-weight:bold; margin:0; padding:0.2em; background:#552c9f; text-align:center;",
+      "color:#fff; font-weight:bold; margin:0; padding:0.2em;background:#552c9f; text-align:center;",
     "#ampOptsInpt": "margin-bottom: 0.3em; width: 100%;",
 
     // Show Instances by BP Name
@@ -5331,10 +5069,6 @@ function dataBadSites() {
     },
     {
       reason: "unofficial",
-      url: "inclusive-components.design",
-    },
-    {
-      reason: "unofficial",
       url: "jsfiddle.net",
     },
     {
@@ -5403,7 +5137,19 @@ function dataBadSites() {
     },
     {
       reason: "outdated",
+      url: "www.w3.org/TR/WCAG21",
+    },
+    {
+      reason: "outdated",
       url: "w3.org/WAI/GL/",
+    },
+    {
+      reason: "outdated",
+      url: "w3.org/WAI/WCAG20",
+    },
+    {
+      reason: "outdated",
+      url: "w3.org/WAI/WCAG21",
     },
     {
       reason: "unpublished draft",
@@ -7763,21 +7509,6 @@ function createList2(array, name, id) {
   return output;
 }
 
-function createListResponse(array, name, id) {
-  let output = `<li><a href="#" aria-haspopup="true">${name} <span class="fas fa-angle-down"></span></a><ul class="dropdown">`;
-  let i = 0;
-
-  for (i = 0; i < array.length; i++) {
-    output += `<li class='divider'>${array[i].name}</li>`;
-    var c;
-    for (c = 0; c < array[i].children.length; c++) {
-      output += `<li><a href='#' id='${array[i].children[c].id}'>${array[i].children[c].text}</a></li>`;
-    }
-  }
-  output += "</ul></li>";
-  return output;
-}
-
 // ADD INSTANCE: Function for building the rename fields
 function renameFields(value) {
   const desc = document.createElement("p");
@@ -7894,14 +7625,7 @@ function hideAdditionalInstances() {
 }
 
 // Add Instance - Creates the dropdown buttons
-function createAddInstanceButtons(
-  preferred,
-  response,
-  status,
-  reading,
-  code,
-  reviews
-) {
+function createAddInstanceButtons(preferred, status, reading, code, reviews) {
   const currentID = $("[id*='violation_']")
     .children("option:selected")
     .attr("value");
@@ -7910,7 +7634,6 @@ function createAddInstanceButtons(
   createButtons += "<br>";
   createButtons +=
     "<input type='button' id='ChgBPNow' value='Change Best Practice' class='kpmFirstButton'>&nbsp;";
-
   createButtons +=
     "<input type='button' id='GoToBP' value='Open BP (New Window)' class='kpmFirstButton'>&nbsp;";
   createButtons +=
@@ -7923,14 +7646,11 @@ function createAddInstanceButtons(
   } else {
     createButtons += '<li id="kpmPreferred">Preferred (none)</li>';
   }
-  createButtons +=
-    '<li><a href="#" id="kpmPrefSearch"><span class="fas fa-search"></span></a>';
-  createButtons += createListResponse(response, "Responses");
   createButtons += createList2(reading, "Reading", "kpmReading");
   createButtons += createList2(code, "Code", "kpmCode");
   createButtons += createList2(status, "Specials", "kpmSpecials");
   createButtons += createList2(reviews, "Reviews", "kpmReviews");
-  createButtons += "</ul></nav><br />";
+  createButtons += "</ul></nav>";
 
   let i;
   for (i = 0; i < customFormat.length; i++) {
@@ -8322,7 +8042,6 @@ function addEditor(reportID) {
     $("#AmpOpts").after(
       createAddInstanceButtons(
         dataPreferredFiltered(currentID),
-        dataResponse2(),
         dataStatus(),
         dataReading(),
         dataCode(),
@@ -8403,12 +8122,8 @@ function addEditor(reportID) {
     // When a response is given, this fills in the fields.
     $("body").delegate("[id*='response-']", "click", function () {
       const clickID = $(this).attr("id");
-      const response = dataResponse2();
-      const newArray = multiArrayFlatten(response);
-
-      const combinedArray = $.merge(dataPreferred(), newArray);
-
-      const entry = combinedArray.find((e) => e.id === clickID);
+      const responses = dataPreferred();
+      const entry = responses.find((e) => e.id === clickID);
 
       // Inject color contrast data
       if (entry.convertColorContrastText) {
