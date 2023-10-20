@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.5.0
+// @version      6.6.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -1177,7 +1177,7 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       compliantExample: "N/A",
       stepsToReproduce:
-        "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color.\n4. Using a color picker, such as https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld to select a color from the background that touches the text.\n5.Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n6. Notice that the contrast ratio is below the required value for this size of text.",
+        "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color.\n4. Using a color picker, such as https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld to select a color from the background that touches the text.\n5. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n6. Notice that the contrast ratio is below the required value for this size of text.",
       keepElement: true,
       keepAttribute: true,
       bps: [368],
@@ -5265,6 +5265,9 @@ function dataSchemas() {
             requiredToHaveContent: false,
           },
         ],
+        thumbnail: {
+          required: false,
+        },
       },
     ],
     [
@@ -5348,6 +5351,9 @@ function dataSchemas() {
             requiredToHaveContent: true,
           },
         ],
+        thumbnail: {
+          required: false,
+        },
       },
     ],
     [
@@ -5384,6 +5390,9 @@ function dataSchemas() {
             requiredToHaveContent: true,
           },
         ],
+        thumbnail: {
+          required: false,
+        },
       },
     ],
     [
@@ -5447,6 +5456,9 @@ function dataSchemas() {
             requiredToHaveContent: true,
           },
         ],
+        thumbnail: {
+          required: true,
+        },
       },
     ],
     [
@@ -5522,6 +5534,9 @@ function dataSchemas() {
             requiredToHaveContent: true,
           },
         ],
+        thumbnail: {
+          required: false,
+        },
       },
     ],
     [
@@ -5607,6 +5622,9 @@ function dataSchemas() {
             requiredToHaveContent: true,
           },
         ],
+        thumbnail: {
+          required: false,
+        },
       },
     ],
     [
@@ -5699,6 +5717,9 @@ function dataSchemas() {
             requiredToHaveContent: true,
           },
         ],
+        thumbnail: {
+          required: false,
+        },
       },
     ],
     [
@@ -5794,6 +5815,9 @@ function dataSchemas() {
             requiredToHaveContent: true,
           },
         ],
+        thumbnail: {
+          required: false,
+        },
       },
     ],
     [
@@ -5857,6 +5881,9 @@ function dataSchemas() {
             requiredToHaveContent: true,
           },
         ],
+        thumbnail: {
+          required: false,
+        },
       },
     ],
   ]);
@@ -6492,25 +6519,6 @@ function mainNav(reportID, moduleID) {
 
 /* Multi Page: Things that are used in multiple places */
 
-// Error generation
-function getIssueColumn(element) {
-  const rawString = element.innerText;
-  const tokens = rawString.split(/(^\[[ -Z\\^-~]*\]\s*$)(?!\{)/gmu);
-  const sectionMap = new Map();
-  const sectionHeaderRegex = /^\[[ -Z\\^-~]*\]\s*$/mu;
-  tokens.forEach((token, index) => {
-    const nextToken = tokens[index + 1] ?? "";
-    if (token.match(sectionHeaderRegex)) {
-      const cleanedSectionHeader = token.replace(/[[\]]/gmu, "").trim();
-      if (!nextToken.match(sectionHeaderRegex)) {
-        const cleanedSectionContents = nextToken.trim();
-        sectionMap.set(cleanedSectionHeader, cleanedSectionContents);
-      }
-    }
-  });
-  return sectionMap;
-}
-
 function getSchema() {
   const schemaMap = dataSchemas();
   let currentSchema = {};
@@ -6536,133 +6544,167 @@ function getSchema() {
   return currentSchema;
 }
 
-function determineErrors(sectionType, sectionMap) {
+function injectProblems(element, type) {
   const currentSchema = getSchema();
-  const badCodeStrings = dataErrors();
-  const badSiteStrings = dataBadSites();
-  const errorArray = [];
-  let schemaSections = {};
-  if (sectionType === "description") {
-    schemaSections = currentSchema.description;
-  } else if (sectionType === "note") {
-    schemaSections = currentSchema.note;
-  }
-  const sectionsRequiredToExist =
-    schemaSections.filter((section) => section.requiredToExist) ?? [];
-  const sectionsRequiredToHaveContent =
-    schemaSections.filter((section) => section.requiredToHaveContent) ?? [];
-  const sectionsRequiredToHaveCode =
-    schemaSections.filter((section) => section.requiredToHaveCode) ?? [];
+  const problemContainer = document.createElement("div");
 
-  // Detect any missing required sections
-  sectionsRequiredToExist.forEach((section) => {
-    if (!sectionMap.has(section.name)) {
-      errorArray.push(
-        `Error: Required section [${section.name}] was not found. Please add this section or double-check its spelling.`
-      );
-    }
-  });
-
-  sectionMap.forEach((sectionContents, sectionName) => {
-    // Detect any empty sections that are required to have content
-    if (
-      sectionsRequiredToHaveContent.find(
-        (section) => section.name === sectionName
-      )
-    ) {
-      if (sectionContents === "") {
-        errorArray.push(
-          `Error: [${sectionName}] appears to be empty. Please add content in this section.`
-        );
+  if (type === "best practice") {
+    /* BEST PRACTICE ERROR HANDLING
+    /* Check if there are any warnings associated with this BP */
+    const nonBaselineBPs = dataNonBaselineBPs();
+    const bpId = element.getAttribute("id").replace("bp_", "");
+    let warning = "";
+    nonBaselineBPs.forEach((nonBaselineBP) => {
+      if (bpId === nonBaselineBP.id) {
+        warning = nonBaselineBP.note;
       }
+    });
+
+    // If there are, then inject a warning below the BP's table header
+    if (warning) {
+      const problemContents = `<p class="kpmWarning">Warning: This is not a <a href='https://academy.levelaccess.com/learn/learning-path/baseline-testing-methodology'>Baseline best practice</a>. ${warning}`;
+      problemContainer.innerHTML = problemContents;
+      element.append(problemContainer);
     }
-
-    // Detect any code sections that don't contain code
-    if (
-      sectionsRequiredToHaveCode.find((section) => section.name === sectionName)
-    ) {
-      if (!sectionContents.match(/[<>{}]|(\/\*)|(\*\/)|^N\/A|^None|^$/gmu)) {
-        errorArray.push(
-          `Error: [${sectionName}] does not appear to contain code. Please ensure HTML or CSS code is present.`
-        );
-      }
-
-      // Detect code sections that contain disallowed code strings
-      badCodeStrings.forEach((badString) => {
-        if (sectionContents.includes(badString.css)) {
-          errorArray.push(
-            `Error: [${sectionName}] contains ${badString.css} attribute injected by ${badString.cause}. Please remove this attribute.`
-          );
+  } else if (type === "description" || type === "note") {
+    /* DESCRIPTION/NOTE ERROR HANDLING
+    /* Generate a Map of the sections */
+    const rawString = element.innerText;
+    const tokens = rawString.split(/(^\[[ -Z\\^-~]*\]\s*$)(?!\{)/gmu);
+    const sectionMap = new Map();
+    const sectionHeaderRegex = /^\[[ -Z\\^-~]*\]\s*$/mu;
+    tokens.forEach((token, index) => {
+      const nextToken = tokens[index + 1] ?? "";
+      if (token.match(sectionHeaderRegex)) {
+        const cleanedSectionHeader = token.replace(/[[\]]/gmu, "").trim();
+        if (!nextToken.match(sectionHeaderRegex)) {
+          const cleanedSectionContents = nextToken.trim();
+          sectionMap.set(cleanedSectionHeader, cleanedSectionContents);
         }
-      });
-    }
+      }
+    });
 
-    // Detect any content that contains links to disallowed resources
-    badSiteStrings.forEach((badString) => {
-      if (sectionContents.includes(badString.url)) {
+    // Detect errors, using the Map to simplify things
+    const badCodeStrings = dataErrors();
+    const badSiteStrings = dataBadSites();
+    const errorArray = [];
+    let schemaSections = {};
+    if (type === "description") {
+      schemaSections = currentSchema.description;
+    } else if (type === "note") {
+      schemaSections = currentSchema.note;
+    }
+    const sectionsRequiredToExist =
+      schemaSections.filter((section) => section.requiredToExist) ?? [];
+    const sectionsRequiredToHaveContent =
+      schemaSections.filter((section) => section.requiredToHaveContent) ?? [];
+    const sectionsRequiredToHaveCode =
+      schemaSections.filter((section) => section.requiredToHaveCode) ?? [];
+
+    // Detect any missing required sections
+    sectionsRequiredToExist.forEach((section) => {
+      if (!sectionMap.has(section.name)) {
         errorArray.push(
-          `Error: [${sectionName}] contains ${badString.reason} site ${badString.url}. Please change or remove this link.`
+          `Error: Required section [${section.name}] was not found. Please add this section or double-check its spelling.`
         );
       }
     });
 
-    // Detect remnant instructions from client-specific templates
-    if (sectionContents.includes("**")) {
-      errorArray.push(
-        `Error: [${sectionName}] contains two asterisks in a row (**). This is usually from instructions in client-specific custom issue formats. Please make sure these instructions are removed if present.`
-      );
+    sectionMap.forEach((sectionContents, sectionName) => {
+      // Detect any empty sections that are required to have content
+      if (
+        sectionsRequiredToHaveContent.find(
+          (section) => section.name === sectionName
+        )
+      ) {
+        if (sectionContents === "") {
+          errorArray.push(
+            `Error: [${sectionName}] appears to be empty. Please add content in this section.`
+          );
+        }
+      }
+
+      // Detect any code sections that don't contain code
+      if (
+        sectionsRequiredToHaveCode.find(
+          (section) => section.name === sectionName
+        )
+      ) {
+        if (!sectionContents.match(/[<>{}]|(\/\*)|(\*\/)|^N\/A|^None|^$/gmu)) {
+          errorArray.push(
+            `Error: [${sectionName}] does not appear to contain code. Please ensure HTML or CSS code is present.`
+          );
+        }
+
+        // Detect code sections that contain disallowed code strings
+        badCodeStrings.forEach((badString) => {
+          if (sectionContents.includes(badString.css)) {
+            errorArray.push(
+              `Error: [${sectionName}] contains ${badString.css} attribute injected by ${badString.cause}. Please remove this attribute.`
+            );
+          }
+        });
+      }
+
+      // Detect any content that contains links to disallowed resources
+      badSiteStrings.forEach((badString) => {
+        if (sectionContents.includes(badString.url)) {
+          errorArray.push(
+            `Error: [${sectionName}] contains ${badString.reason} site ${badString.url}. Please change or remove this link.`
+          );
+        }
+      });
+
+      // Detect remnant instructions from client-specific templates
+      if (sectionContents.includes("**")) {
+        errorArray.push(
+          `Error: [${sectionName}] contains two asterisks in a row (**). This is usually from instructions in client-specific custom issue formats. Please make sure these instructions are removed if present.`
+        );
+      }
+
+      if (
+        sectionContents.at(-1) === ":" ||
+        sectionContents.match(/^-\s*$/gmu)
+      ) {
+        errorArray.push(
+          `Error: Content appears to be missing in [${sectionName}].`
+        );
+      }
+    });
+
+    // Inject the error array into the problem container
+    let concatenatedErrors = "";
+    errorArray.forEach((error) => {
+      const errorString = `<p class="kpmAlert">${error}</p>`;
+      concatenatedErrors += errorString;
+    });
+    problemContainer.innerHTML = concatenatedErrors;
+    element.prepend(problemContainer);
+  } else if (type === "thumbnail" && currentSchema.thumbnail.required) {
+    // Check if it contains an image; if so, add error
+    if (element.getElementsByTagName("img").length === 0) {
+      const errorContents =
+        "<p class='kpmAlert'>Error: This issue appears to be missing a screenshot. Please add one.</p>";
+      problemContainer.innerHTML = errorContents;
+      element.prepend(problemContainer);
     }
+  } else if (type === "module name") {
+    // Check if it contains special characters
+    const specialCharacters = dataSpecialCharacters();
+    let hasSpecialCharacters = false;
+    specialCharacters.forEach((specialCharacter) => {
+      if (element.innerText.includes(specialCharacter.id)) {
+        hasSpecialCharacters = true;
+      }
+    });
 
-    if (sectionContents.at(-1) === ":" || sectionContents.match(/^-\s*$/gmu)) {
-      errorArray.push(
-        `Error: Content appears to be missing in [${sectionName}].`
-      );
+    // If so, inject an error
+    if (hasSpecialCharacters) {
+      const errorContents =
+        "<p class='kpmAlert'>Error: This text appears to contain special or escaped characters. Please edit the module and remove them.</p>";
+      problemContainer.innerHTML = errorContents;
+      element.appendChild(problemContainer);
     }
-  });
-  return errorArray;
-}
-
-function displayErrors(element, errorObject) {
-  const errorContainer = document.createElement("div");
-  errorObject.forEach((error) => {
-    const errorElement = document.createElement("p");
-    errorElement.className = "kpmAlert";
-    const errorContent = document.createTextNode(error);
-    errorElement.appendChild(errorContent);
-    errorContainer.appendChild(errorElement);
-  });
-  element.prepend(errorContainer);
-}
-
-function generateIssueErrors(issueRow, descEl, noteEl) {
-  // Description section
-  const descriptionMap = getIssueColumn(descEl);
-  const descriptionErrorObject = determineErrors("description", descriptionMap);
-  displayErrors(descEl, descriptionErrorObject);
-
-  // Note section
-  const noteObject = getIssueColumn(noteEl);
-  const noteErrorObject = determineErrors("note", noteObject);
-  displayErrors(noteEl, noteErrorObject);
-}
-
-function generateBPErrors(bpRow, bpID) {
-  const nonBaselineBPs = dataNonBaselineBPs();
-  let warning = "";
-  nonBaselineBPs.forEach((nonBaselineBP) => {
-    if (bpID === nonBaselineBP.id) {
-      warning = nonBaselineBP.note;
-    }
-  });
-  if (warning) {
-    const warningContainer = document.createElement("div");
-    const warningElement = document.createElement("p");
-    warningElement.className = "kpmWarning";
-    const initialContent =
-      "Warning: This is not a <a href='https://academy.levelaccess.com/learn/learning-path/baseline-testing-methodology'>Baseline best practice</a>. ";
-    warningElement.innerHTML = initialContent + warning;
-    warningContainer.appendChild(warningElement);
-    bpRow.append(warningContainer);
   }
 }
 
@@ -6742,7 +6784,6 @@ function preferencesBox() {
   const prefTD1 = document.createElement("td");
   const prefTD3 = document.createElement("td");
   const prefTD4 = document.createElement("td");
-  prefTD4.setAttribute("rowspan", "2");
   prefTD4.innerHTML = selectCustom;
 
   // PrefTD4.innerHTML = '<p>The following are also injected but have no on/off preference (* or the preference is set on the element):</p><ul><li>Add Responses (Instance and Pattern Modal)</li><li>Test Module Page opens to Review by default (instead of blank)</li><li>CSS Fixes (vertical align on tables, etc.)</li><li>Additional choices in "Show XXX Entries" (5,10,500,1000)</li><li>Access Keys (View Module/View Pattern)</li><li>Links<ul><li>Main header (5 +1 on test module)</li><li>Mark Complete (View Module/Test Module)</li><li>Edit Module (2x on Test Module)</li><li>Add Instance (View Module/View Pattern)</li><li>Add Pattern (View Module)</li></ul></li><li>Client View *</li><li>Baseline Checklist *</li><li>Colorize row based on status *</li><li>Expand Description Box on Dashboard *</li></ul>';
@@ -7661,18 +7702,6 @@ function createAddInstanceButtons(preferred, status, reading, code, reviews) {
   return createButtons;
 }
 
-function generateModuleError(moduleDetail) {
-  const errorText =
-    "Error: This text appears to contain special or escaped characters. Please edit the module and remove them.";
-  const errorContainer = document.createElement("div");
-  const errorElement = document.createElement("p");
-  errorElement.className = "kpmAlert";
-  const errorContent = document.createTextNode(errorText);
-  errorElement.appendChild(errorContent);
-  errorContainer.appendChild(errorElement);
-  moduleDetail.appendChild(errorContainer);
-}
-
 /* Adds a button to the View Modules page that copies a plain text list of the modules to the clipboard.
    This list can be pasted into the delivery deck instead of having to copying and pasting the modules one by one. */
 function copyModuleListToClipboard() {
@@ -7732,15 +7761,7 @@ function viewModules() {
 
   const specialCharacters = dataSpecialCharacters();
   moduleDetails.forEach((moduleDetail) => {
-    let hasSpecialCharacters = false;
-    specialCharacters.forEach((specialCharacter) => {
-      if (moduleDetail.innerText.includes(specialCharacter.id)) {
-        hasSpecialCharacters = true;
-      }
-    });
-    if (hasSpecialCharacters) {
-      generateModuleError(moduleDetail);
-    }
+    injectProblems(moduleDetail, "module name");
   });
 }
 
@@ -8700,15 +8721,17 @@ function addGenerateSummaryButton() {
 
       // INJECT WARNINGS FOR EACH BEST PRACTICE
       if (!getCookieValue("kpmPref-bpWarnings")) {
-        const bpRows = document.querySelectorAll("[id^='bp_']");
-        bpRows.forEach((bpRow) => {
-          const bpID = bpRow.getAttribute("id").replace("bp_", "");
-          generateBPErrors(bpRow, bpID);
+        const bpTableHeaders = document.querySelectorAll("[id^='bp_']");
+        bpTableHeaders.forEach((bpRow) => {
+          injectProblems(bpRow, "best practice");
         });
       }
 
       // INJECT WARNINGS FOR EACH ISSUE
       if (!getCookieValue("kpmPref-tableWarning")) {
+        const headerRow = document.querySelector(
+          "[id^='view_module_table'] thead"
+        );
         const issueRows = document.querySelectorAll(
           "[id^='view_module_table'] tr:has(td.wrap.topvalign)"
         );
@@ -8716,7 +8739,14 @@ function addGenerateSummaryButton() {
           const descriptionElement =
             issueRow.querySelector("td:nth-of-type(2)");
           const noteElement = issueRow.querySelector("td:nth-of-type(3)");
-          generateIssueErrors(issueRow, descriptionElement, noteElement);
+          injectProblems(descriptionElement, "description");
+          injectProblems(noteElement, "note");
+
+          if (headerRow.innerText.includes("Thumbnail")) {
+            const thumbnailElement =
+              issueRow.querySelector("td:nth-of-type(5)");
+            injectProblems(thumbnailElement, "thumbnail");
+          }
         });
       }
     }
