@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.6.1
+// @version      6.6.2
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -5945,6 +5945,10 @@ function dataNonBaselineBPs() {
     {
       id: "660",
       note: 'Consider using "Ensure all interactive functionality is operable with the keyboard" instead.',
+    },
+    {
+      id: "1040",
+      note: 'Consider using "Ensure layout tables indicate their use for presentation purposes" instead.',
     },
     {
       id: "1052",
