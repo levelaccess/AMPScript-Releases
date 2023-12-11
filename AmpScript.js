@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.7.0
+// @version      6.7.1
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -8454,8 +8454,6 @@ function addEditor(reportID) {
         let codeReferenceSections = currentSchema.description.filter(
           (section) => section.mapsTo.includes("codeReference")
         );
-        console.log("codeReferenceSections is:")
-        console.log(codeReferenceSections);
 
         // If any code reference sections exist...
         if (codeReferenceSections.length > 0) {
