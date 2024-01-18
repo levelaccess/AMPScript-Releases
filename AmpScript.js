@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.7.2
+// @version      6.8.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -5529,6 +5529,15 @@ function dataSchemas() {
           {
             appearsByDefault: true,
             instructions: "",
+            mapsTo: [],
+            name: "Test URL",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
             mapsTo: ["issue"],
             name: "Issue",
             requiredToExist: true,
@@ -6047,20 +6056,9 @@ function dataSchemas() {
           },
           {
             appearsByDefault: true,
-            instructions:
-              '**Agile Only: If BP is in Web Grade Checklist, enter "ADA_Grade_Web". If testing Mobile First and BP is in Native Checklist, enter "ADA_Grade_Native". Else remove tag or make this line blank.**',
+            instructions: "",
             mapsTo: [],
             name: "Defect Grade",
-            requiredToExist: false,
-            requiredToHaveCode: false,
-            requiredToHaveContent: false,
-          },
-          {
-            appearsByDefault: true,
-            instructions:
-              "**Agile Only: If BP is in Grade Checklist (any level), keep the designated value(s) from: FED,XD,QA (no spaces between values). Else remove tag or make this line blank.**",
-            mapsTo: [],
-            name: "Defect Impact Role",
             requiredToExist: false,
             requiredToHaveCode: false,
             requiredToHaveContent: false,
@@ -7541,12 +7539,27 @@ function formatDescription(boilerplate, engineElement) {
   });
 
   /* Boilerplate modifications for specific clients. Please use sparingly.
-   * Creating a schema should be sufficient for most clients. */
+   * Creating a schema should be sufficient for most clients.
+   * If you just need to create a new section for a client -- create a schema.
+   * If you need to customize content within a section -- put code here. */
   if (
     getCookieValue("kpmCustom-custom-progressive-apq") ||
     getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
   ) {
     output = output.replaceAll("Examples include:", "Specific instances are:");
+  }
+
+  if (getCookieValue("kpmCustom-custom-wf")) {
+    let defectGrade = "";
+    if (boilerplate.type === "web") {
+      defectGrade = "ADA_Grade_Web";
+    } else if (boilerplate.type === "ios" || boilerplate.type === "android") {
+      defectGrade = "ADA_Grade_Native";
+    }
+    output = output.replaceAll(
+      "[Defect Grade]",
+      `[Defect Grade]\n${defectGrade}`,
+    );
   }
 
   output = output.trim();
