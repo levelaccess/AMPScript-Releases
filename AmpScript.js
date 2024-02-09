@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.8.0
+// @version      6.9.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -38,6 +38,10 @@ function dataBadSites() {
     {
       reason: "unofficial",
       url: "accessibility-developer-guide.com",
+    },
+    {
+      reason: "outdated",
+      url: "accessibility.dev",
     },
     {
       reason: "unofficial",
@@ -1612,7 +1616,7 @@ function dataPreferred() {
       recommendation:
         'Ensure layout tables do not contain structural markup. This can be done by adding role="presentation" to <table> elements used for a layout purpose. Additionally, convert any <th> cells to <td> cells. It is strongly recommended to use CSS instead of HTML table elements for layout purposes.',
       stepsToReproduce:
-        "1. Locate the layout table.\n2. Inspect it with Chrome DevTools.\n3. Select the <table> element.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Verify that the accessibility node is not exposed.",
+        '1. Locate the layout table.\n2. Inspect it with Chrome DevTools.\n3. Select the <table> element.\n4. Verify that role="presentation" or role="none" is present. Alternatively, verify that the table and its descendants do not have any relationship elements and attributes, such as <th>, summary, scope, headers, role="columnheader", and role="rowheader".',
       title: "Layout table marked for presentation",
       type: "web",
     },
@@ -8284,8 +8288,7 @@ function addEditor(reportID) {
             htmlWhitespaceSensitivity: "ignore",
           });
         } catch (error) {
-          const formatDialog = createDialog("Error", error.message);
-          formatDialog.openModal();
+          // Do nothing
         }
       }
 
