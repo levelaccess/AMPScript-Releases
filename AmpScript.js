@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.9.0
+// @version      6.10.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -655,6 +655,10 @@ function dataErrors() {
       css: "HeadingsMap",
     },
     {
+      cause: "HeadingsMap",
+      css: "headingsMap",
+    },
+    {
       cause: "JAWS Inspect",
       css: "wiid",
     },
@@ -1143,6 +1147,9 @@ function dataPreferred() {
         'Ensure fieldsets are labelled appropriately. If role="radiogroup" is used, the element with this role must have an accessible name. This can be set with an aria-label or aria-labelledby attribute.',
       stepsToReproduce:
         '1. Locate the radio buttons.\n2. Inspect them with Chrome DevTools.\n3. Select the role="radiogroup" element.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the value for "Name".',
+      jawsFunctionalSteps: 
+        '1. Enable JAWS.\n2. Press TAB key to move focus to the first radio button in the group (not checked).\nExpected result: JAWS announces, "[Group name], group. [Radio name], radio button, not checked.\nActual result: JAWS announces, "[Radio name], radio button, not checked" and omits any group information.',
+      successCriteria: ["1.3.1", "3.3.2"],
       title: 'role="radiogroup" with no accessible name',
       type: "web",
     },
@@ -1157,6 +1164,9 @@ function dataPreferred() {
         "Provide a valid label for form fields.\n\nLabels must meet the following requirements:\n- The label must be visible.\n- The label must be persistent. That is, a label must remain visible when text is entered into the field or an option is selected.\n- The label must be programmatically associated with the form field. The most common way to do this is with a <label> element with a for attribute set to the ID of the field.\n- The label must provide the accessible name of the field, or the label's exact text must be included in the accessible name.",
       stepsToReproduce:
         '1. Locate the form field.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press TAB key to move focus to the form control.\nExpected result: JAWS announces, "[Name], [Role], [State/Value]".\nActual result: JAWS announces, "[Role], [State/Value]" and omits the name of the control.',
+      successCriteria: ["1.3.1", "2.5.3", "4.1.2"],
       title: "Missing label",
       type: "web",
     },
@@ -1171,6 +1181,9 @@ function dataPreferred() {
         "Provide a valid label for form fields. The best way to do this is to use a <label> element with a for attribute set to the ID of the field it labels. For custom controls, use aria-labelledby on the control set to the ID of the labelling text.",
       stepsToReproduce:
         '1. Locate the form field.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press TAB key to move focus to the form control.\nExpected result: JAWS announces, "[Name], [Role], [State/Value]".\nActual result: JAWS announces, "[Role], [State/Value]" and omits the name of the control.',
+      successCriteria: ["1.3.1", "2.5.3", "4.1.2"],
       title: "Field with unassociated label",
       type: "web",
     },
@@ -1185,6 +1198,9 @@ function dataPreferred() {
         "Provide fieldsets for groups of form controls. Common groups of form controls include related radio buttons, checkboxes, and shipping/billing address groupings. The <fieldset> element must have a descriptive <legend> element as its first child. The form controls must appear as descendants of the fieldset.",
       stepsToReproduce:
         '1. Locate the form field grouping.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
+      jawsFunctionalSteps: 
+        '1. Enable JAWS.\n2. Press TAB key to move focus to the first control in the group (not checked).\nExpected result: JAWS announces, "[Group name], group. [Name], [Role], not checked.\nActual result: JAWS announces, "[Name], [Role], not checked" and omits any group information.',
+      successCriteria: ["1.3.1", "3.3.2"],
       title: "Form groups lack fieldset",
       type: "web",
     },
@@ -1199,6 +1215,7 @@ function dataPreferred() {
         "Ensure area alternative text is meaningful and concise. Add an alt attribute to the <area>, then set its value to a proper textual equivalent.",
       stepsToReproduce:
         '1. Locate the area.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      successCriteria: ["1.1.1", "2.4.4"],
       title: "area element with no alt text",
       type: "web",
     },
@@ -1213,6 +1230,7 @@ function dataPreferred() {
         "Provide a mechanism for skipping past repetitive content. There must be a keyboard-only means of skipping past repeated blocks of content that occur on multiple pages, such as a link. This control must be the first focusable element before the repeated content and must visually appear on keyboard focus. When the control is activated, keyboard focus must be moved beyond the repeated content.",
       stepsToReproduce:
         "1. Press Tab repeatedly to navigate to the repeated content area.\n2. Notice that no mechanism to skip the content appears.",
+      successCriteria: ["2.4.1"],
       title: "Skip link - General",
       type: "web",
     },
@@ -1226,6 +1244,7 @@ function dataPreferred() {
         "Provide a mechanism for skipping past repetitive content. There must be a keyboard-only means of skipping past repeated blocks of content that occur on multiple pages, such as a link. This control must be the first focusable element before the repeated content and must visually appear on keyboard focus. When the control is activated, keyboard focus must be moved beyond the repeated content.",
       stepsToReproduce:
         "1. Press Tab repeatedly until the skip link is focused.\n2. Press Enter on the skip link.\n3. Notice that the skip link does not shift focus past the repeated content.",
+      successCriteria: ["2.4.1"],
       title: "Skip link broken",
       type: "web",
     },
@@ -1240,6 +1259,7 @@ function dataPreferred() {
         "Provide a mechanism for skipping past repetitive content. There must be a keyboard-only means of skipping past repeated blocks of content that occur on multiple pages, such as a link. This control must be the first focusable element before the repeated content and must visually appear on keyboard focus. When the control is activated, keyboard focus must be moved beyond the repeated content.",
       stepsToReproduce:
         "1. Press Tab repeatedly until the skip link is focused.\n2. Press Enter on the skip link.\n3. Notice that the skip link does not shift focus past all of the repeated content.",
+      successCriteria: ["2.4.1"],
       title: "Skip link does not skip all repetitive content",
       type: "web",
     },
@@ -1254,6 +1274,7 @@ function dataPreferred() {
         "Ensure pages do not automatically refresh. Users must be able to turn off, adjust, or extend the refresh, unless it happens after 20 hours, involves a real-time data transaction, or if it is essential to the purpose of the page.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. Locate the <meta http-equiv="refresh"> element and notice that the content attribute is set to a value greater than zero.',
+      successCriteria: ["2.2.1", "2.2.4", "3.2.5"],
       title: "Page refreshes automatically",
       type: "web",
     },
@@ -1268,6 +1289,7 @@ function dataPreferred() {
         "Provide alternatives for server-side image maps. Convert server-side image maps to client-side image maps or remove them altogether. If conversion or removal of the image maps is not possible, alternative links must be provided for each server-side image map.",
       stepsToReproduce:
         "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. Notice the presence of an ismap attribute.",
+      successCriteria: ["1.1.1", "2.1.1", "2.1.3"],
       title: "Server-side image map",
       type: "web",
     },
@@ -1282,6 +1304,7 @@ function dataPreferred() {
         'Avoid the sole use of device-dependent event handlers. The best way to accomplish this is by using appropriate native controls, which come with keyboard functionality built in.\n\nIf using a native control is not possible, the control must have tabindex="0" and appropriate key-based JavaScript event handlers.',
       stepsToReproduce:
         "1. Press the Tab button repeatedly until the control is focused.\n2. Attempt to interact with the control using Enter or Space.\n3. Notice that the control cannot be activated with these keys.",
+      successCriteria: ["2.1.1", "2.1.3"],
       title: "Device-dependent event handlers",
       type: "web",
     },
@@ -1296,6 +1319,7 @@ function dataPreferred() {
         "Ensure headers and cells are properly associated. All headers attributes must refer to existing IDs of elements that are descendants of the parent <table> element.",
       stepsToReproduce:
         "1. Locate the table data cell.\n2. Inspect it with Chrome DevTools.\n3. Note that the values for the headers attribute do not refer to valid, existing IDs on the page.",
+      successCriteria: ["1.3.1"],
       title: "Headers attribute with invalid id",
       type: "web",
     },
@@ -1310,6 +1334,7 @@ function dataPreferred() {
         'Ensure headers and cells are properly associated. If a table header has a colspan or rowspan attribute set to a value other than "1", that header\'s scope attribute must be set to "colgroup" or "rowgroup" respectively.',
       stepsToReproduce:
         '1. Locate the table header.\n2. Inspect it with Chrome DevTools.\n3. Note that no scope="rowgroup" or scope="colgroup" attribute is present.',
+      successCriteria: ["1.3.1"],
       title: "Missing rowgroup or colgroup",
       type: "web",
     },
@@ -1324,6 +1349,7 @@ function dataPreferred() {
         'Ensure headers and cells are properly associated. All <th> elements must have a scope attribute set to "row" or "col" depending on whether the cell is a row header or a column header.',
       stepsToReproduce:
         "1. Locate the table header.\n2. Inspect it with Chrome DevTools.\n3. Note that no scope attribute is present.",
+      successCriteria: ["1.3.1"],
       title: "Missing scope",
       type: "web",
     },
@@ -1338,6 +1364,7 @@ function dataPreferred() {
         "Ensure headers and cells are properly associated. When the headers attribute is used on data cells to associate headers, every <th> element must have an id attribute.",
       stepsToReproduce:
         "1. Locate the table header.\n2. Inspect it with Chrome DevTools.\n3. Note that no id attribute is present.",
+      successCriteria: ["1.3.1"],
       title: "Header missing ID",
       type: "web",
     },
@@ -1352,6 +1379,7 @@ function dataPreferred() {
         "Ensure headers and cells are properly associated. If the headers attribute is used to associate headers with a data cell, every data cell in the table must have the headers attribute.",
       stepsToReproduce:
         "1. Locate the table data cell.\n2. Inspect it with Chrome DevTools.\n3. Note that no headers attribute is present.",
+      successCriteria: ["1.3.1"],
       title: "Cell missing headers attribute",
       type: "web",
     },
@@ -1366,6 +1394,9 @@ function dataPreferred() {
         "Provide alternative text for images. Meaningful images must have a concise but descriptive textual equivalent.\n\nTo add a textual equivalent to an <img> element, set its alt attribute to a descriptive value.\n\nTo add a textual equivalent to an <svg> element, add a <title> child to the SVG. Place the textual equivalent in the <title>, then add an ID to the <title>. Finally, on the <svg>, add an aria-labelledby attribute and set its value to the ID of the <title>.",
       stepsToReproduce:
         '1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps: 
+        '1. Enable JAWS.\nPress Down Arrow key to read content line by line.\n3. Alternatively, press the "G" key to move to the next graphic.\nExpected result: JAWS cursor moves to the graphic and announces a brief, meaningful description.\nActual result: JAWS cursor moves to this graphic, and is silent.',
+      successCriteria: ["1.1.1"],
       title: "Meaningful image with no textual equivalent",
       type: "web",
     },
@@ -1380,6 +1411,9 @@ function dataPreferred() {
         'Provide alternative text for images. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an <img> element as decorative, set its alt attribute to "" (that is, alt="" exactly as written, with no space between the quotation marks). To mark an <svg> element as decorative, add aria-hidden="true" to the element.',
       stepsToReproduce:
         "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
+      jawsFunctionalSteps: 
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read content line by line.\n3. Alternatively, press the "G" key to move to the next graphic.\nExpected result: JAWS cursor skips over this decorative content and does not announce it.\nActual result: JAWS cursor moves to the graphic and is silent.',
+      successCriteria: ["1.1.1"],
       title: "Decorative image not marked decorative",
       type: "web",
     },
@@ -1393,6 +1427,7 @@ function dataPreferred() {
         "Provide text equivalents for object, audio, and video elements. Add an aria-labelledby, aria-label, or title attribute set to an appropriate accessible name.",
       stepsToReproduce:
         '1. Locate the object.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      successCriteria: ["1.1.1"],
       title: "Object with no accessible name",
       type: "web",
     },
@@ -1406,7 +1441,8 @@ function dataPreferred() {
       recommendation:
         'Provide text equivalents for object, audio, and video elements. If a video serves a purely decorative purpose, such as a background, hide it from assistive technologies by setting aria-hidden="true" on the element.',
       stepsToReproduce:
-        "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
+        "1. Locate the video.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
+      successCriteria: ["1.1.1"],
       title: "Decorative video",
       type: "web",
     },
@@ -1420,6 +1456,8 @@ function dataPreferred() {
         "Ensure pages use the title element. The title must contain both the name of the page and the name of the site.",
       stepsToReproduce:
         "1. Open Chrome DevTools.\n2. Locate the <head> element, if any.\n3. Notice that no <title> element is present.",
+      jawsFunctionalSteps: '1. Enable JAWS.\n2. Press the "T" key to read the document title.\nExpected result: JAWS announces a brief description of the current page, followed by the website name.\nActual result: The title is not announced.',
+      successCriteria: ["2.4.2"],
       title: "Title element missing",
       type: "web",
     },
@@ -1435,6 +1473,7 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color and background color.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below the required value for this size of text.",
+      successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
       type: "web",
     },
@@ -1449,6 +1488,7 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color.\n4. Using a color picker, such as https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld to select a color from the background that touches the text.\n5. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n6. Notice that the contrast ratio is below the required value for this size of text.",
+      successCriteria: ["1.4.3"],
       title: "Text on image contrast",
       type: "web",
     },
@@ -1463,6 +1503,7 @@ function dataPreferred() {
         "Ensure color is not the sole means of communicating information. Color can be used as long as other visual indicators of the information are also present. Common additional visual indicators include underlining, bolding, additional on-screen text conveying the information, or change in shape or size.",
       stepsToReproduce:
         "1. Locate the content.\n2. Notice that the content conveys its meaning through color alone.",
+      successCriteria: ["1.4.1"],
       title: "Color only - General",
       type: "web",
     },
@@ -1477,6 +1518,7 @@ function dataPreferred() {
         "Ensure color is not the sole means of communicating information. Color can be used as long as other visual indicators of the information are also present. Common additional visual indicators for links include underlining or bolding.",
       stepsToReproduce:
         "1. Locate the link.\n2. Notice that the link's presence is conveyed through the use of color alone.",
+      successCriteria: ["1.4.1"],
       title: "Color only - Links",
       type: "web",
     },
@@ -1491,6 +1533,9 @@ function dataPreferred() {
         "Ensure images provide informative alternative text. Textual equivalents must be both concise and descriptive.",
       stepsToReproduce:
         '1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read content line by line.\n3. Alternatively, press the "G" key to move to the next graphic.\nExpected result: JAWS cursor moves to this image and announces, "[Expected Name], graphic".\nActual result: JAWS cursor moves to this image and announces, "[Actual Name], graphic", which is [Inappropriate/Insufficient]',
+      successCriteria: ["1.1.1"],
       title: "Meaningful image with improper text equivalent",
       type: "web",
     },
@@ -1505,6 +1550,9 @@ function dataPreferred() {
         'Ensure images provide informative alternative text. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an <img> element as decorative, set its alt attribute to "" (that is, alt="" exactly as written, with no space between the quotation marks). To mark an <svg> element as decorative, add aria-hidden="true" to the element.',
       stepsToReproduce:
         "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
+      jawsFunctionalSteps: 
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read content line by line.\n3. Alternatively, press the "G" key to move to the next graphic.\nExpected result: JAWS cursor skips over this decorative content and does not announce it.\nActual result: JAWS announces, "[Actual Name], graphic".',
+      successCriteria: ["1.1.1"],
       title: "Decorative image with textual equivalent",
       type: "web",
     },
@@ -1519,6 +1567,7 @@ function dataPreferred() {
         'Ensure headings and labels are descriptive and unique. This includes the accessible names of buttons. The accessible name of a button can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive. Avoid including the word "button" in the accessible name, as this information is already supplied by the button\'s role.',
       stepsToReproduce:
         '1. Locate the button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Button with non-descriptive name",
       type: "web",
     },
@@ -1533,6 +1582,7 @@ function dataPreferred() {
         'Ensure data table headers are properly identified. Ensure all cells that function as row or column headers use <th> elements. Additionally, ensure all <th> elements have a scope attribute set to "row" or "col" depending on whether the particular cell is a row header or a column header. Finally, if a header cell spans multiple rows or columns, set its rowspan or colspan attributes to the number of rows or cells it spans.\n\nIf a table is sufficiently complex that these methods cannot associate a header with its cell, each cell must have a headers attribute set to a space-separated list of the IDs of the headers associated with the cell. This is often time-consuming and prone to error. Splitting complex tables into separate, simpler tables is strongly recommended.',
       stepsToReproduce:
         "1. Locate the table header.\n2. Inspect it with Chrome DevTools.\n3. Notice that it is missing scope, rowspan, and/or colspan attributes that reflect its visual structure.",
+      successCriteria: ["1.3.1"],
       title: "Unassociated table headers",
       type: "web",
     },
@@ -1549,6 +1599,7 @@ function dataPreferred() {
         'Ensure data tables are formatted using table elements. Table elements include <table>, <tr>, <th>, and <td>. <th> elements must have a scope attribute set to "col" or "row" according to whether it functions as a column header or a row header.',
       stepsToReproduce:
         '1. Locate the table.\n2. Inspect it with Chrome DevTools.\n3. Notice that it does not use <table> and related elements or role="table" and related roles.',
+      successCriteria: ["1.3.1"],
       title: "Implicit table",
       type: "web",
     },
@@ -1563,6 +1614,7 @@ function dataPreferred() {
         "Ensure accessible usage of time based sessions and timed responses. Users must be able to extend, set, or remove any timeout unless the timeout is longer than 20 hours or the timeout is essential to the page's purpose (such as an auction).",
       stepsToReproduce:
         "1. Trigger the time-based session or response.\n2. Notice that the time limit is not essential, not longer than 20 hours, and that there is no way to extend, set, or remove the timeout.",
+      successCriteria: ["2.2.1", "2.2.3"],
       title: "Timing - General",
       type: "web",
     },
@@ -1577,6 +1629,9 @@ function dataPreferred() {
         "Ensure heading level matches the heading's visual importance/level. The level of heading element used (<h1>, <h2>, etc.) must reflect its visual appearance in the hierarchy of the page.",
       stepsToReproduce:
         '1. Locate the heading.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Level".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read line by line.\n3. Alternatively, press the "H" key repeatedly to Go to Next Heading.\n4. Note the purpose and level of each heading.\nExpected result: JAWS announces, "[Text], heading level [Level]"\nActual Result: JAWS announces, "[Text], heading level [Level]" which is not appropriate for its purpose.',
+      successCriteria: ["1.3.1", "2.4.10"],
       title: "Heading levels don't match visual heading hierarchy.",
       type: "web",
     },
@@ -1591,6 +1646,7 @@ function dataPreferred() {
         "Ensure changes in natural language are identified inline. Elements containing text in a different language from the overall document must have a lang attribute set to a valid BCP 47 primary language subtag: https://r12a.github.io/app-subtags/",
       stepsToReproduce:
         "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. Notice that the lang attribute is missing or its value is incorrect.",
+      successCriteria: ["3.1.2"],
       title: "Inline language missing or incorrect",
       type: "web",
     },
@@ -1603,6 +1659,7 @@ function dataPreferred() {
         'Ensure sub-lists are marked up properly. <ul> and <ol> elements must only contain <li>, <script>, and <template> elements (without role attributes), and elements with role="listitem", as direct children. <li> elements must be direct children of an <ul> or an <ol> element.',
       stepsToReproduce:
         "1. Locate the list items.\n2. Inspect them with Chrome DevTools.\n3. Notice that the <li> elements are not direct children of an <ul> or <ol> element.",
+      successCriteria: ["1.3.1"],
       title: "List items without list parent",
       type: "web",
     },
@@ -1617,6 +1674,7 @@ function dataPreferred() {
         'Ensure layout tables do not contain structural markup. This can be done by adding role="presentation" to <table> elements used for a layout purpose. Additionally, convert any <th> cells to <td> cells. It is strongly recommended to use CSS instead of HTML table elements for layout purposes.',
       stepsToReproduce:
         '1. Locate the layout table.\n2. Inspect it with Chrome DevTools.\n3. Select the <table> element.\n4. Verify that role="presentation" or role="none" is present. Alternatively, verify that the table and its descendants do not have any relationship elements and attributes, such as <th>, summary, scope, headers, role="columnheader", and role="rowheader".',
+      successCriteria: ["1.3.1"],
       title: "Layout table marked for presentation",
       type: "web",
     },
@@ -1631,6 +1689,7 @@ function dataPreferred() {
         "Ensure links do not directly target images. Instead, include the image inside a page. Add a proper textual equivalent or mark the image as decorative.",
       stepsToReproduce:
         "1. Locate the link to the image.\n2. Inspect it with Chrome DevTools.\n3. Notice that the href attribute references an image file directly.",
+      successCriteria: ["1.1.1"],
       title: "Directly linked image",
       type: "web",
     },
@@ -1645,6 +1704,7 @@ function dataPreferred() {
         "Ensure text can be resized. Users must be able to resize text up to 200% zoom at a 1280-pixel viewport width without loss of content or functionality.\n\nMoving content to an accessible show/hide control, such as a hamburger menu, is acceptable.",
       stepsToReproduce:
         "1. Set the viewport width to 1280 pixels using Chrome DevTools.\n2. Increase the browser zoom level to 200% using Ctrl+Plus or by going to Customize and control Google Chrome > Zoom > Make Text Smaller.\n3. Refresh the page.\n4. Notice that content disappears, is cut off, or overlaps.",
+      successCriteria: ["1.4.4"],
       title: "Text cannot be resized to 200%",
       type: "web",
     },
@@ -1659,6 +1719,7 @@ function dataPreferred() {
         "Ensure containing elements allow text resize without loss of functionality. Users must be able to resize text up to 200% zoom at a 1280-pixel viewport width without loss of content or functionality.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. Locate the <meta name="viewport"> element.\n3. Notice that the maximum-scale attribute is set to a value less than 2 or the user-scalable attribute is set to "no".',
+      successCriteria: ["1.4.4", "1.4.8"],
       title: "Meta viewport maximum-scale/user-scalable",
       type: "web",
     },
@@ -1673,6 +1734,7 @@ function dataPreferred() {
         'Ensure implicit row header cells use th elements with row scope. Only one descendant of a table row may be a row header. Ensure that only one element in the row is a <th scope="row"> element.',
       stepsToReproduce:
         '1. Locate the table row.\n2. Inspect it with Chrome DevTools.\n3. Notice that it contains multiple headers with scope="row".',
+      successCriteria: ["1.3.1"],
       title: "Multiple row headers",
       type: "web",
     },
@@ -1686,6 +1748,7 @@ function dataPreferred() {
         "Ensure applets provide valid text equivalents. This includes <object> elements. Alter the accessible name to a more descriptive value with an aria-label, aria-labelledby, or title attribute.",
       stepsToReproduce:
         '1. Locate the object.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      successCriteria: ["1.1.1"],
       title: "Insufficiently descriptive object name",
       type: "web",
     },
@@ -1699,6 +1762,7 @@ function dataPreferred() {
         "Ensure the language of a document is set. <html> elements must have a lang attribute set to a valid BCP 47 primary language subtag: https://r12a.github.io/app-subtags/\n\nFor pages in multiple languages, choose whichever language is used most frequently on the page. If two languages are used equally, choose the language which occurs first on the page.",
       stepsToReproduce:
         "1. Open Chrome DevTools.\n2. Inspect the <html> element.\n3. Notice that the lang attribute is missing or set to an incorrect value.",
+      successCriteria: ["3.1.1"],
       title: "Page language missing or incorrect",
       type: "web",
     },
@@ -1712,6 +1776,7 @@ function dataPreferred() {
         "Ensure the marquee element is avoided. Replace this element with another element. If movement is required, provide an accessible mechanism to pause, stop, or hide the movement, such as a pause button.",
       stepsToReproduce:
         "1. Locate the marquee.\n2. Inspect it with Chrome DevTools.\n3. Notice that the <marquee> element is used.",
+      successCriteria: ["2.2.2"],
       title: "Marquee present in page",
       type: "web",
     },
@@ -1726,6 +1791,7 @@ function dataPreferred() {
         "Ensure embedded objects are directly accessible. The best way to do this is to set an aria-labelledby attribute on the video element to the ID of any visually present label for the video. Alternatively, add an aria-label attribute to the video with the video's name.",
       stepsToReproduce:
         '1. Locate the video.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Video accessible name missing",
       type: "web",
     },
@@ -1739,6 +1805,7 @@ function dataPreferred() {
         "Ensure frames utilize markup files as their source. Place the image into the main document or change the iframe to target an HTML document or other accessible document type.",
       stepsToReproduce:
         "1. Locate the iframe.\n2. Inspect it with Chrome DevTools.\n3. Notice that the src attribute refers to an image file directly.",
+      successCriteria: ["1.1.1"],
       title: "Iframe with image source",
       type: "web",
     },
@@ -1753,6 +1820,9 @@ function dataPreferred() {
         "Avoid the use of implicit headings. Text that visually appears as a heading for a section of content must use <h1>, <h2>, etc. elements. Additionally, ensure the level of the heading accurately reflects the element's position in the visual hierarchy.",
       stepsToReproduce:
         '1. Locate the heading.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read line by line.\n3. Alternatively, press the "H" key repeatedly to Go to Next Heading.\n4. Note the purpose and level of each heading.\nExpected result: JAWS announces, "[Text], heading level [Level]"\nActual Result: JAWS announces, "[Text]" without the heading role or level.',
+      successCriteria: ["1.3.1"],
       title: "Headings are implicit",
       type: "web",
     },
@@ -1765,6 +1835,7 @@ function dataPreferred() {
         'Ensure list items are found in a list container. <ul> and <ol> elements must only contain <li>, <script>, and <template> elements (without role attributes), and elements with role="listitem", as direct children. <li> elements must be direct children of an <ul> or an <ol> element.',
       stepsToReproduce:
         "1. Locate the list items.\n2. Inspect them with Chrome DevTools.\n3. Notice that the <li> elements are not direct children of an <ul> or <ol> element.",
+      successCriteria: ["1.3.1"],
       title: "List items not children of list",
       type: "web",
     },
@@ -1778,6 +1849,7 @@ function dataPreferred() {
         "Ensure list items are found in a list container. For description lists, ensure that any <dt> and <dd> elements are children of the <dl> element or that they are children of a <div> element that is a child of the <dl>.",
       stepsToReproduce:
         "1. Locate the description terms or details.\n2. Inspect them with Chrome DevTools.\n3. Notice that the <dd>/<dt> elements are not descendants of a <dl> element.",
+      successCriteria: ["1.3.1"],
       title: "Terms or details not children of description list",
       type: "web",
     },
@@ -1792,6 +1864,7 @@ function dataPreferred() {
         "Ensure pages use a consistent navigation structure. Navigational mechanisms that are repeated on multiple pages must occur in the same relative order each time they are used.",
       stepsToReproduce:
         "1. Locate the navigation regions on the page.\n2. Notice that the order of items differs on different pages.",
+      successCriteria: ["3.2.3"],
       title: "Navigation inconsistent",
       type: "web",
     },
@@ -1806,6 +1879,7 @@ function dataPreferred() {
         "Ensure embedded elements and canvas elements provide a meaningful text equivalent.\nFor <canvas> elements, the best way to provide a textual equivalent is to add child HTML elements to the <canvas> element. Assistive technologies will access this content instead of the <canvas>.",
       stepsToReproduce:
         '1. Locate the canvas.\n2. Inspect it with Chrome DevTools.\n3. Review its contents.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the value for "Name".',
+      successCriteria: ["1.1.1"],
       title: "Canvas text equivalent missing",
       type: "web",
     },
@@ -1820,6 +1894,7 @@ function dataPreferred() {
         "Ensure hr elements utilize relative sizing. Specify the width of the <hr> element using relative units.",
       stepsToReproduce:
         "1. Locate the horizontal rule.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, locate the value for the width property.\n4. Notice that the value is set in absolute units.",
+      successCriteria: ["1.4.4", "1.4.8"],
       title: "hr element with width",
       type: "web",
     },
@@ -1834,6 +1909,7 @@ function dataPreferred() {
         'Ensure all active elements receive keyboard focus or can be activated with the keyboard. In order for an <a> element to be focusable with the keyboard, it must have an href attribute set to a non-null value, or it must have tabindex="0".',
       stepsToReproduce:
         "1. Press Tab repeatedly to navigate through the focusable elements on the page.\n2. Notice that the links are never focused.",
+      successCriteria: ["2.1.1", "2.1.3"],
       title: "Links that cannot be focused",
       type: "web",
     },
@@ -1848,6 +1924,7 @@ function dataPreferred() {
         "Ensure frame titles are meaningful. All meaningful iframes must have a title attribute set to a short description of the iframe.",
       stepsToReproduce:
         '1. Locate the frame.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      successCriteria: ["4.1.2"],
       title: "Frame with no title",
       type: "web",
     },
@@ -1862,6 +1939,7 @@ function dataPreferred() {
         'Ensure frame titles are meaningful. If an <iframe> is decorative or meant to be hidden, hide it with display: none. Alternatively, set aria-hidden="true", tabindex="-1", and title="empty" on the iframe.',
       stepsToReproduce:
         "1. Locate the iframe.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
+      successCriteria: ["4.1.2"],
       title: "Decorative iframe",
       type: "web",
     },
@@ -1876,6 +1954,7 @@ function dataPreferred() {
         "Avoid placing inactive elements in the focus order. If content is meant to be hidden from all users, hide it with display: none or visibility: hidden. If content is meant to be accessed by all users, remove any aria-hidden attributes.",
       stepsToReproduce:
         '1. Locate the control.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Notice that both "hidden" and "Focusable" are set to true.',
+      successCriteria: ["2.1.1"],
       title: 'Focusable aria-hidden="true" element',
       type: "web",
     },
@@ -1889,6 +1968,9 @@ function dataPreferred() {
         "Provide an informative, context-sensitive page title. The title must contain both the name of the page and the name of the site.",
       stepsToReproduce:
         "1. Inspect the page with Chrome DevTools.\n2. Locate the <title> element within the <head>.\n3. Review its text.",
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the "T" key to read the document title.\nExpected result: JAWS announces, "[Recommended Title]".\nActual result: JAWS announces, "[Actual Title]".',
+      successCriteria: ["2.4.2"],
       title: "Page title repetitive",
       type: "web",
     },
@@ -1903,6 +1985,7 @@ function dataPreferred() {
         "Ensure elements with multiple labels are rendered appropriately. Only one <label> element can be associated with a control at a time.",
       stepsToReproduce:
         "1. Locate the form control.\n2. Inspect it with Chrome DevTools.\n3. Note the value of its id attribute.\n3. Search the source code for the id.\n4. Notice that multiple <label> elements reference this id in their for attributes.",
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Fields with multiple labels",
       type: "web",
     },
@@ -1917,6 +2000,7 @@ function dataPreferred() {
         "Ensure implicit list markup is avoided. Lists must use <ul>, <ol>, <li>, <dl>, <dt>, and <dd> elements as appropriate.",
       stepsToReproduce:
         "1. Locate the list.\n2. Inspect it with Chrome DevTools.\n3. Note that it does not use <ul>, <ol>, <dl> and related elements.",
+      successCriteria: ["1.3.1"],
       title: "Implicit lists",
       type: "web",
     },
@@ -1928,9 +2012,12 @@ function dataPreferred() {
       issue:
         "There is content that uses heading markup but does not function as a heading. Examples include:\n- ",
       recommendation:
-        "Avoid unnecessary use of heading elements. Only text that functions as a heading can use heading markup. Convert this content to a <div> or <span> element.",
+        "Avoid unnecessary use of heading elements. Only text that functions as a heading can use heading markup. Convert this content to a <p>, <div>, or <span> element.",
       stepsToReproduce:
         '1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. Notice that the text uses <h1>-<h6> elements or role="heading".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read line by line.\n3. Alternatively, press the "H" key repeatedly to Go to Next Heading.\n4. Note the purpose and level of each heading.\nExpected result: JAWS announces, "[Expected Output]"\nActual Result: JAWS announces, "[Text], heading level [Level]" which is not appropriate for its purpose.',
+      successCriteria: ["1.3.1"],
       title: "Unnecessary headings are used",
       type: "web",
     },
@@ -1945,6 +2032,7 @@ function dataPreferred() {
         "Avoid using sub-tables in header elements. Do not nest <table> elements within <th> or <td> elements. Instead, use CSS to lay out content inside table cells.",
       stepsToReproduce:
         "1. Locate the table.\n2. Inspect it with Chrome DevTools.\n3. Notice that there is a <table> element nested within another <table> element.",
+      successCriteria: ["1.3.1"],
       title: "Nested tables",
       type: "web",
     },
@@ -1959,6 +2047,9 @@ function dataPreferred() {
         'Ensure page tabs provide state and role.\n\nFor tabs, the following information is expected:\n- The container for the set of tabs must have role="tablist".\n- Each tab must have role="tab" and must be a descendant of the tablist element.\n- Each panel container must have role="tabpanel".\n- If the tablist has a visible label, the tablist element must have aria-labelledby set to the ID of the labelling element. Otherwise, the tablist element must have aria-label set to the accessible name.\n- Each tab must have aria-controls set to the ID of its corresponding tabpanel.\n- The selected tab must have aria-selected="true". All other tabs must have aria-selected="false".\n- Tabpanel elements must have aria-labelledby set to the ID of their corresponding tab.\n- If the tablist is vertically oriented, it must have aria-orientation="vertical".',
       stepsToReproduce:
         '1. Locate the tabs.\n2. Inspect them with Chrome DevTools.\n3. Review their nesting structure.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the values for "Role" and "Selected".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Tab key to move focus to the first tab control.\nExpected result: JAWS announces, "[@TODO]".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.4.1", "4.1.2"],
       title: "Page tabs lack state or role",
       type: "web",
     },
@@ -1973,6 +2064,9 @@ function dataPreferred() {
         "Ensure custom controls provide proper textual name, role, and state information. Properly structured native controls provide this information automatically. For custom controls, developers must explicitly add this information by using ARIA attributes.\n\nMost modern browsers have an Accessibility section in the developer tools panel that will display an element's calculated name, role, and state information.\n\nA control's name must represent the general purpose of the control and include any visible labeling text. It can be set through a variety of methods. Custom controls typically use the aria-label attribute or the aria-labelledby attribute to supply the name.\n\nA control's role indicates the type of control, such as \"checkbox\" or \"button\". For custom controls, the role must be set with the role attribute. The ARIA specification only permits certain values for this attribute. Additionally, the ARIA in HTML specification prevents the use of certain roles on some elements. For a list of HTML elements and their permitted roles, see the ARIA in HTML specification: https://www.w3.org/TR/html-aria/#docconformance\n\nA control's state indicates several possible pieces of information. Common states include expanded, current, selected, checked, and disabled. Most are indicated with similarly named ARIA attributes. Certain states can only be used with certain roles. For a list of roles and their allowed states, see the ARIA specification: https://www.w3.org/TR/wai-aria/#role_definitions\n\nThe Web Accessibility Initiative (WAI) of the W3C publishes suggested patterns for custom controls in the WAI-ARIA Authoring Practices: https://www.w3.org/WAI/ARIA/apg/ These patterns are not tested or endorsed by the W3C, but they often serve as good starting points for developing custom controls.",
       stepsToReproduce:
         "1. Locate the control.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values in this section.",
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the control.\nExpected result: JAWS announces, "[Expected Output]".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - General",
       type: "web",
     },
@@ -1987,6 +2081,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nFor accordions, the following information is expected:\n- Each accordion header must be enclosed in a <button> element.\n- Each of these buttons must be enclosed in a heading element of an appropriate level. The <button> element must be the only child of this heading element.\n- When the panel is visible, the header button must have aria-expanded="true". When it is hidden, the header button must have aria-expanded="false".\n- The button must have aria-controls set to the ID of the panel container.\n- If a panel is visible and locked in the expanded state, its header button must have aria-disabled="true".',
       stepsToReproduce:
         '1. Locate the accordion header.\n2. Inspect its element with Chrome DevTools.\n3. Review its nesting structure.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the values for "Role", "Disabled", and "Expanded".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the accordion header.\nExpected result: JAWS announces, "[@TODO]".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Accordion",
       type: "web",
     },
@@ -2001,6 +2098,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nFor breadcrumbs, the following information is expected:\n- The breadcrumb links must be contained in a <nav> element.\n- The <nav> element must have an accessible name provided by an aria-label or aria-labelledby attribute.\n- The link to the current page, if any, must have aria-current="true".',
       stepsToReproduce:
         '1. Locate the breadcrumbs.\n2. Inspect them with Chrome DevTools.\n3. Review their structure and attributes.\n4. If a <nav> element is present, select it. Then, in the Accessibility tab, expand the Computed Properties section. Review the value for "Name". ',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the first Breadcrumb link.\nExpected result: JAWS announces, "@TODO".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Breadcrumbs",
       type: "web",
     },
@@ -2015,6 +2115,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, <button> elements would be most appropriate.\n\nIf conversion to native buttons is not possible, developers must add role="button" to these controls. If the buttons have insufficient internal text, developers must add an aria-label attribute or an aria-labelledby attribute to provide a name.',
       stepsToReproduce:
         '1. Locate the button.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the button.\nExpected result: JAWS announces, "[Name], button".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Buttons",
       type: "web",
     },
@@ -2029,6 +2132,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, <input type="checkbox"> elements would be most appropriate.\n\nDevelopers can often achieve the same visual appearance using progressively enhanced CSS. Alternatively, they can visually hide the checkboxes with opacity: 0 and use SVGs to fake their appearance.\n\nIf conversion to native checkboxes is not possible, the following information is expected:\n- The element functioning as the checkbox must have role="checkbox".\n- This checkbox element must have a label provided by internal text, aria-label, or aria-labelledby.\n- When checked, the checkbox element must have aria-checked="true", and when not checked, it must have aria-checked="false". If partially checked, it must have aria-checked="mixed".\n- Checkboxes in a logical group must be children of an element with role="group". That element must have aria-labelledby set to the ID of text labelling the group.',
       stepsToReproduce:
         '1. Locate the checkbox.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", and "Checked".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the checkbox (not checked).\n3. Press the Space key to activate the checkbox.\nExpected result: JAWS announces, "[Group Name], group. [Name], checkbox, not checked." Once activated, JAWS announces, "checked".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Checkboxes",
       type: "web",
     },
@@ -2043,6 +2149,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nFor comboboxes, the following information is expected:\n- The element that receives input and displays the value must have role="combobox".\n- The combobox must have aria-controls set to the ID of its suggestion popup.\n- The popup container must have role="listbox", "tree", "grid", or "dialog" depending on its function and include all other necessary ARIA properties for its role.\n- For tree, grid, and dialog popups, the combobox element must have aria-haspopup="grid", "tree", or "dialog" as appropriate.\n- When the popup is shown, the combobox element must have aria-expanded="true". Otherwise, it must be set to "false".\n- For listbox, grid, or tree popups, when a descendant element is visually focused, the actual keyboard focus must remain on the combobox and the combobox must have aria-activedescendant set to the ID of the visually focused element.\n- For listbox, grid, or tree popups, when a suggested value is visually selected, that value\'s element must have aria-selected="true".\n- The combobox element must have a label provided by a <label> with its for attribute set to the combobox ID, aria-label, or aria-labelledby.\n- The combobox must have aria-autocomplete set to an appropriate value. Use "none" if the suggestions are always the same, regardless of text entered. Use "list" if the suggestions change based on what is typed. Use "both" if the suggestions change based on what is typed and a suggested completion string is shown after the input text.',
       stepsToReproduce:
         '1. Locate the combobox.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", "Has autocomplete", "hasPopup", "Expanded", "Active descendant", and "Controls".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the combobox.\nExpected result: JAWS announces, "@TODO".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Comboboxes",
       type: "web",
     },
@@ -2057,6 +2166,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, an <a> element with a non-null href would be most appropriate for these controls. An href is required because <a> elements without href attributes are not always considered links by assistive technology. If necessary, developers can set the href to "#" or "javascript:void(0);".\n\nIf using <a> elements is not possible, the links must be given role="link". If the links have insufficient internal text, developers must add an aria-label attribute or an aria-labelledby attribute to provide a name.',
       stepsToReproduce:
         '1. Locate the link.\n2. Inspect its <a> or role="link" element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the link.\nExpected result: JAWS announces, "[Name], link" or "[Name], visited link".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Links",
       type: "web",
     },
@@ -2071,6 +2183,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, <input type="radio"> elements would be most appropriate.\n\nDevelopers can often achieve the same visual appearance using progressively enhanced CSS. Alternatively, they can visually hide the radio buttons with opacity: 0 and use SVGs to fake their appearance.\n\nIf conversion to native radio buttons is not possible, the following information is expected:\n- Radio buttons in the same logical group are children of an element with role="radiogroup".\n- Each radio button element has role="radio".\n- When a radio button is checked, it must have aria-checked="true". Otherwise, it must have aria-checked="false".\n- The radio button must have an accessible name provided by internal text, aria-label, or aria-labelledby.\n- The radiogroup element must have an accessible name set with aria-labelledby or aria-label.',
       stepsToReproduce:
         '1. Locate the radio button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", and "Checked".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the first radio button in the group (not checked).\n3. Press the Space key to activate the radio button.\nExpected result: JAWS announces, "[Group Name], group. [Name], radio button, not checked". Once checked, JAWS announces, "checked".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Radio buttons",
       type: "web",
     },
@@ -2085,6 +2200,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nThe best way to do this is to use native controls, as they come with this information built in. In this case, <select> elements would be most appropriate for these controls.\n\nIf conversion to native selects is not possible, the following information is expected:\n- The element that receives input and displays the value must have role="combobox".\n- The combobox element must have aria-controls set to the ID of its listbox.\n- The listbox container must have role="listbox". This element and its descendants must include all other ARIA attributes necessary for its role.\n- When the popup is shown, the combobox element must have aria-expanded="true". Otherwise, it must be set to "false".\n- When a descendant element is visually focused, the actual keyboard focus must remain on the combobox element, and it must have aria-activedescendant set to the ID of the visually focused element.\n- When an option is visually selected, that option element must have aria-selected="true".\n- The combobox element must have a label provided by a <label> with its for attribute set to the combobox ID, aria-label, or aria-labelledby.',
       stepsToReproduce:
         '1. Locate the select.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", "hasPopup", and "Expanded".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the select.\nExpected result: JAWS announces, "@TODO".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Selects",
       type: "web",
     },
@@ -2099,6 +2217,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nFor show/hide controls, the following information is expected:\n- The element that shows and hides a content area must be a <button>.\n- When the content area is visible, the button must have aria-expanded="true". Otherwise, the button must have aria-expanded="false".\n- The button must have an accessible name set with internal text, aria-label, or aria-labelledby.',
       stepsToReproduce:
         '1. Locate the show/hide control.\n2. Inspect its element with Chrome DevTools.\n3. Review its nesting structure.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the values for "Role" and "Expanded".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the show/hide button (collapsed).\n3. Press the Space key or Enter key to expand the button.\nExpected result: JAWS announces, "[Name], button, collapsed". Once activated, JAWS announces, "expanded".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Show/hide controls",
       type: "web",
     },
@@ -2113,6 +2234,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nIn this case, these elements function as "toggletips". A toggletip is any button that only exists to show a tooltip. Common examples include question mark buttons and information buttons. Although toggletips are similar to tooltips, they require different accessibility information.\n\nThe expected structure is as follows:\n- The control that opens the tooltip must be a <button>.\n- The button must have an accessible name set through internal text, aria-label, or aria-labelledby.\n- The tooltip container element must be available on page load, but it can be visually hidden with a .visually-hidden or .sr-only CSS class.\n- This tooltip container must have role="status".\n- To display the tooltip visually, inject text into this <div role="status"> element. If properly implemented, this will cause screen readers to announce the contents of the tooltip after the next pause in speech.',
       stepsToReproduce:
         '1. Locate the control that opens the toggletip.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name" and "Role".\n5. Inspect the toggletip container with DevTools.\n6. In the Accessibility tab, review the values for "Name" and "Live region".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the toggletip.\nExpected result: JAWS announces, "@TODO".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Toggletips",
       type: "web",
     },
@@ -2127,6 +2251,9 @@ function dataPreferred() {
         'Ensure custom controls provide proper textual name, role, and state information.\n\nFor tooltips, the following information is expected:\n- The control that opens the tooltip must have aria-describedby set to the ID of the tooltip element.\n- The tooltip element must have role="tooltip".',
       stepsToReproduce:
         '1. Locate the control that opens the tooltip.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name", "Role", and "Description".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the tooltip.\nExpected result: JAWS announces, "[Expected Output]".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Tooltips",
       type: "web",
     },
@@ -2141,6 +2268,9 @@ function dataPreferred() {
         "Ensure custom controls provide proper textual name, role, and state information. The accessible name of a button can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive.",
       stepsToReproduce:
         '1. Locate the button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the button.\nExpected result: JAWS announces, "[Name], button".\nActual result: JAWS announces an empty button, or tries to guess the button name using nearby text.',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Buttons - No accessible names",
       type: "web",
     },
@@ -2155,6 +2285,9 @@ function dataPreferred() {
         "Ensure content updates define focus updates appropriately. When modal dialogs appear, focus must move to the first focusable element in the dialog. Use the JavaScript focus() method to move keyboard focus to this element.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the dialog trigger is focused.\n5. Press Enter on the dialog trigger.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the first focusable element or the role="dialog" element.',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the dialog trigger.\n3. Press the Enter key to activate the dialog.\nExpected result: JAWS announces, "[Dialog Name], dialog".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not moved to dialog",
       type: "web",
     },
@@ -2169,6 +2302,9 @@ function dataPreferred() {
         'Ensure content updates define focus updates appropriately. When top-of-form errors appear, focus must move to the container of the error. Set tabindex="-1" on the element, then use the JavaScript focus() method to move keyboard focus to this element.\n\nAlternatively, a properly structured ARIA live region may be used to announce the error when it appears.',
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the form submission control is focused.\n5. Press Enter on the submission control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the top-of-form error container.',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the top-of-form error. JAWS announces error message.\nActual result: [Actual result].',
+      successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not moved to top-of-form error",
       type: "web",
     },
@@ -2183,6 +2319,9 @@ function dataPreferred() {
         "Ensure content updates define focus updates appropriately. When inline errors appear, focus must move to the first field in error and the form field must have aria-describedby set to the ID of the error so that the error is announced when the field is focused.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the form submission control is focused.\n5. Press Enter on the submission control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the first form field with an error.',
+      jawsFunctionalSteps: 
+        '1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the first invalid field. JAWS announces the field information, invalid state, and error message.\nActual result: [Actual result].',
+      successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not moved to first field in error",
       type: "web",
     },
@@ -2197,6 +2336,7 @@ function dataPreferred() {
         "Ensure content updates define focus updates appropriately. When a dialog is closed, return focus to the control that opened the dialog. Use the JavaScript focus() method to move keyboard focus to this element.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the dialog close control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the control that opened the dialog.',
+      successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not returned to triggering element",
       type: "web",
     },
@@ -2211,6 +2351,7 @@ function dataPreferred() {
         "Ensure content updates define focus updates appropriately. When new content appears after activating a load more control, keyboard focus must move to the newly revealed content. Use the JavaScript focus() method to move keyboard focus to the first focusable element in the newly revealed content.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the load more control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the first focusable element in the newly revealed content.',
+      successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not updated with load more controls",
       type: "web",
     },
@@ -2225,6 +2366,9 @@ function dataPreferred() {
         "Ensure form field constraints and errors are associated with their corresponding field.\n\nFor most form controls, the best way to associate the error is to use an aria-describedby attribute on the field set to the ID of the corresponding error.\n\nFor groups of form controls like radio buttons and checkboxes, it is best to include the error text inside the element that labels the group (such as a <legend>).",
       stepsToReproduce:
         '1. Locate the form field with an inline error.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Description".',
+      jawsFunctionalSteps: 
+        '1. Enable JAWS.\n2. Reproduce the inline form errors.\n3. Press Tab key to move focus to the [Example Name] field.\n4. Repeat for each field with an inline error.\nExpected result: JAWS announces the field information, followed by the error message. For example, "[Name], [Role], [State/Value], [Error Message].".\nActual result: [Actual result].',
+      successCriteria: ["1.3.1", "3.3.2", "4.1.2"],
       title: "Unassociated inline errors",
       type: "web",
     },
@@ -2236,9 +2380,12 @@ function dataPreferred() {
       issue:
         "There are constraints that are not programmatically associated with their corresponding fields. Examples include:\n- ",
       recommendation:
-        "Ensure form field constraints and errors are associated with their corresponding field.\n\nFor most form controls, the best way to associate the constraint is to use an aria-describedby attribute on the field set to the ID of the corresponding constraint.\n\nFor groups of form controls like radio buttons and checkboxes, it is best to include the constraint text inside the element that labels the group (such as a <legend>).",
+        "Ensure form field constraints and errors are associated with their corresponding field.\n\nFor most form controls, the best way to associate the constraint is to add an aria-describedby attribute to the field. Set the value of aria-describedby to the ID of the corresponding constraint.\n\nFor groups of form controls like radio buttons and checkboxes, it is best to include the constraint text inside the element that labels the group (such as a <legend>).",
       stepsToReproduce:
         '1. Locate the form field with inline constraints or instructions.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Description".',
+      jawsFunctionalSteps: 
+        '1. Enable JAWS.\n2. Press the Tab key to move focus to the [Name] field.\n3. Repeat for each field with a constraint or help text.\nExpected result: JAWS announces the field information, followed by the constraint/help text. For example, "[Name], [Role], [State/Value], [Constraint/Help Text].".\nActual result: [Actual result].',
+      successCriteria: ["1.3.1", "3.3.2", "4.1.2"],
       title: "Unassociated constraints",
       type: "web",
     },
@@ -2251,6 +2398,7 @@ function dataPreferred() {
         "There are table headers that do not use TH tags. Examples include:\n- ",
       recommendation:
         'Ensure table headers are properly tagged. Table headers must use a TH tag with a Scope attribute set to Row or Column as appropriate.\n\nTo set table headers and scope in Acrobat Pro:\n1. Go to the Accessibility tools pane.\n2. Go to Reading Order.\n3. Open the context menu (right-click) on the table with the header and select Table Editor.\n4. Open the context menu on the header and select Table Cell Properties. (You can set this information for multiple cells at once by holding down Shift while selecting a table cell, then selecting Table Cell Properties.)\n5. Check the Header Cell radio button.\n6. Select an appropriate value in the Scope field. Use "Column" if this cell names a column or "Row" if this cell names a row.\n7. Select OK and save the document.',
+      successCriteria: ["1.3.1"],
       title: "Implicit table header",
       type: "pdf",
     },
@@ -2263,6 +2411,7 @@ function dataPreferred() {
         "There are table headers that span multiple rows/columns do not have values set for the Row Span/Column Span attributes",
       recommendation:
         'Ensure merged row and column header cells define ColSpan or RowSpan attributes. These attributes should be set to the number of columns or rows the cell covers, respectively.\n\nTo set row span and column span in Acrobat Pro:\n1. Open the Order panel from the left-hand navigation pane.\n2. Open the Options menu and select "Show reading order panel".\n3. Open the context menu (right-click) on the target table tag and select "Table Editor".\n4. Open the context menu on the target cell and select "Table Cell Properties".\n5. Enter the correct numbers in the Row Span and Column Span fields.\n6. Press OK and save the document.\n7. Repeat for all headers that span multiple rows/columns.\n',
+      successCriteria: ["1.3.1"],
       title: "Merged row and column headers",
       type: "pdf",
     },
@@ -2275,6 +2424,7 @@ function dataPreferred() {
         "There are tags structured in an invalid manner. Examples include:\n- ",
       recommendation:
         'Ensure tags are used to structure content in a valid manner.\n\nTo open the Tags panel in Acrobat Pro, activate "Add, delete or edit accessibility tags" (tag icon) in the right toolbar.',
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Invalid tag structure",
       type: "pdf",
     },
@@ -2286,6 +2436,7 @@ function dataPreferred() {
       issue: "The language of the document is unspecified or incorrect.",
       recommendation:
         "Ensure the document specifies a language. \nAll documents must have a language set to a valid BCP 47 language subtag: https://r12a.github.io/app-subtags/\n\nTo alter the language of a document in Acrobat Pro:\n1. Navigate to the File menu.\n2. Choose Properties.\n3. Navigate to the Advanced tab.\n4. In the Language field, enter the appropriate code in the Language field. Some languages may be selected from the field without needing to enter a code.",
+      successCriteria: ["3.1.1"],
       title: "Missing or incorrect document language",
       type: "pdf",
     },
@@ -2298,6 +2449,7 @@ function dataPreferred() {
         "There are headings with levels that do not match their visual level on the document. Examples include:\n- ",
       recommendation:
         'Ensure heading elements are properly ordered. The level of heading tag used (H1, H2, etc.) must reflect its visual appearance in the hierarchy of the document.\n\nTo change the level of a heading tag in Acrobat Pro:\n1. Open the Tags panel.\n2. Select the tag of the text.\n3. Open the context menu (right-click) on the tag and choose "Properties…"\n4. In the "Type" field, choose an option from "Heading Level 1" through "Heading Level 6" as appropriate. (Do not choose just "Heading".)',
+      successCriteria: ["1.3.1", "2.4.10"],
       title: "Headings with improper levels",
       type: "pdf",
     },
@@ -2310,6 +2462,7 @@ function dataPreferred() {
         "There is content that functions as a heading but does not use heading tags. Examples include:\n- ",
       recommendation:
         'Ensure headings are denoted through structure and not implicitly. Text that visually appears as a heading for a section of content must use H1, H2, etc. tags. Additionally, ensure the level of the heading accurately reflects the tag\'s position in the visual hierarchy.\n\nTo change a tag to a heading tag in Acrobat Pro:\n1. Open the Tags panel.\n2. Select the tag of the text.\n3. Open the context menu (right-click) on the tag and choose "Properties…"\n4. In the "Type" field, choose an option from "Heading Level 1" through "Heading Level 6" as appropriate. (Do not choose just "Heading".)',
+      successCriteria: ["1.3.1"],
       title: "Implicit headings",
       type: "pdf",
     },
@@ -2322,6 +2475,7 @@ function dataPreferred() {
         "There are mathematical formulas with no textual equivalents. Examples include:\n- ",
       recommendation:
         'Provide mathematical formulas through appropriate markup or as text. The best way to do so is to wrap the formula in a <Formula> tag. Then, set a descriptive value for the alternate text attribute of the formula.\n\nTo provide a textual equivalent for a formula in Acrobat Pro:\n1. Activate "Add, delete or edit accessibility tags" (tag icon) in the right toolbar.\n2. Locate the tag for the formula.\n3. Open the context menu (right-click) for the tag, then select "Properties..."\n4. In "Type", select "Formula".\n5. In "Alternate Text for Images", enter the desired description.',
+      successCriteria: ["1.1.1", "1.3.1", "1.4.5"],
       title: "Math formulas",
       type: "pdf",
     },
@@ -2334,6 +2488,7 @@ function dataPreferred() {
         "There are decorative images with textual equivalents. Examples include:\n- ",
       recommendation:
         'Ensure alternative text for images is meaningful. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them.\n\nTo mark an image as decorative in Acrobat Pro:\n1. Open the Tags panel.\n2. Navigate to the Figure tag that contains the Image container of the image you want to mark as decorative.\n3. Open the context menu on the image container (not the Figure tag) and choose "Change Tag to Artifact...".\n4. In the dialog that appears, press OK.\n5. Delete the now-empty Figure tag with the Delete key or by opening the context menu and choosing Delete Tag.',
+      successCriteria: ["1.1.1"],
       title: "Decorative image with text equivalent",
       type: "pdf",
     },
@@ -2346,6 +2501,7 @@ function dataPreferred() {
         "There are images with insufficiently descriptive textual equivalents. Examples include:\n- ",
       recommendation:
         'Ensure alternative text for images is meaningful. Textual equivalents must be both concise and descriptive.\n\nTo alter alternative text in Acrobat Pro:\n1. Open the Tags panel.\n2. Open the context menu (right-click) on the tag containing the image and select Properties.\n3. If the tag is not already a Figure tag, choose "Figure" from the Type field.\n4. Enter a value in the Alternate Text field.\n5. Activate Close and save the document.',
+      successCriteria: ["1.1.1"],
       title: "Meaningful image with non-descriptive text equivalent",
       type: "pdf",
     },
@@ -2358,6 +2514,7 @@ function dataPreferred() {
         "There is scanned text content that has not been processed with optical character recognition (OCR). Examples include:\n- ",
       recommendation:
         'Provide text equivalents for scanned pages. \n\nTo perform optical character recognition in Acrobat Pro:\n1. Select "All tools".\n2. Activate "Scan & OCR".\n3. In the RECOGNIZE TEXT section, activate "In this file".\n4. In "Language", ensure the language of the document is selected, then activate "Recognize text".\n5. Save the document.',
+      successCriteria: ["1.1.1", "1.4.8"],
       title: "Missing OCR",
       type: "pdf",
     },
@@ -2370,6 +2527,7 @@ function dataPreferred() {
         "There is content that appears as a list but does not use list tags. Examples include:\n- ",
       recommendation:
         "Ensure list items are structured properly. Lists must use L, LI, Lbl, and LBody tags as appropriate. The L tag must enclose all elements in the visual list, even if they are on different pages. Each separate list item should be an LI child of this L tag. All text of the list item must be included in an LBody child of the LI tag. Optionally, bullets and numbers can be separated into an Lbl tag as a sibling of the LBody. Nested child lists should be a child of the parent LI tag.",
+      successCriteria: ["1.3.1"],
       title: "List structure",
       type: "pdf",
     },
@@ -2382,6 +2540,7 @@ function dataPreferred() {
         "The document is 20 pages or longer but does not provide bookmarks.",
       recommendation:
         'Ensure that lengthy documents provide bookmarks. A document is considered lengthy if it is greater than 20 pages. Each bookmark should be named after a heading and should closely mirror the structure of the table of contents.\n\nTo add bookmarks automatically based on heading structure in Acrobat Pro:\n1. Open the Bookmarks panel.\n2. From the Options menu, select "New Bookmarks from Structure."\n3. Select the tags you would like to create bookmarks from. In most cases, H1-H3 tags are appropriate.\n4. In the Bookmarks panel, edit the bookmarks as desired.',
+      successCriteria: ["2.4.5", "2.4.8"],
       title: "Missing bookmarks",
       type: "pdf",
     },
@@ -2392,6 +2551,7 @@ function dataPreferred() {
       issue: "The following reading order is illogical:\n1.",
       recommendation:
         "Ensure that document content is rendered in the proper order. Rearrange the tags of the document to reflect the visual reading order.",
+      successCriteria: ["1.3.2"],
       title: "Reading order",
       type: "pdf",
     },
@@ -2404,6 +2564,7 @@ function dataPreferred() {
         "There is text that does not meet the required minimum color contrast ratio with its background.\n\nForeground color: \nBackground color: \nContrast ratio: \nRequired contrast ratio for this content: \n\nExamples of text with this contrast ratio include:\n- ",
       recommendation:
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
+      successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
       type: "pdf",
     },
@@ -2416,6 +2577,7 @@ function dataPreferred() {
         "There is text on an image background that does not meet the required minimum color contrast ratio.\n\nForeground color: \nBackground color: \nContrast ratio: \nRequired contrast ratio for this content: \n\nExamples of insufficiently contrasting text in front of images include:\n- ",
       recommendation:
         "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
+      successCriteria: ["1.4.3"],
       title: "Text on image contrast",
       type: "pdf",
     },
@@ -2428,6 +2590,7 @@ function dataPreferred() {
         "There is repeated header/footer content that is not marked as an artifact. Examples include:\n- ",
       recommendation:
         "Ensure non-distinct header and footer content are labeled as artifacts. Header content should be marked as an artifact on all but the first page it appears, and footer content should be marked as an artifact on all but the last page it appears.\n\nTo mark content as an artifact in Acrobat Pro:\n1. Open the Order Panel.\n2. Open the Options menu and select Show reading order panel.\n3. Select the tag to be marked as an artifact.\n4. Activate Background/Artifact.\n5. Activate Close and save the document.",
+      successCriteria: ["1.3.2"],
       title: "Header/footer content",
       type: "pdf",
     },
@@ -2440,6 +2603,7 @@ function dataPreferred() {
         "There is content that uses heading tags but does not function as a heading. Examples include:\n- ",
       recommendation:
         'Avoid unnecessary use of heading elements. Only text that functions as a heading can use heading tags. Convert this content to a Div or Span tag.\n\nTo change the tag in Acrobat Pro:\n1. Open the Tags panel.\n2. Select the tag of the text.\n3. Open the context menu (right-click) on the tag and choose "Properties…"\n4. In the "Type" field, choose "Division" or "Span."\n',
+      successCriteria: ["4.1.2"],
       title: "Unnecessary headings",
       type: "pdf",
     },
@@ -2451,6 +2615,7 @@ function dataPreferred() {
       issue: "The document has no tags.",
       recommendation:
         'Ensure all content is tagged. The best way to provide tags is to enable settings in the source document that export the PDF with tags. If this is not possible, the document must be autotagged. In both cases, tags must be reviewed and edited to ensure they are in the right order and are semantically accurate.\n\nTo autotag a document in Acrobat Pro:\n1. Go to View > Tools > Accessibility.\n2. Activate "Autotag Document."',
+      successCriteria: ["1.1.1", "1.3.2", "4.1.2", "1.4.8"],
       title: "Untagged PDF",
       type: "pdf",
     },
@@ -2461,6 +2626,7 @@ function dataPreferred() {
       issue: "There are annotations that are not tagged. Examples include:\n- ",
       recommendation:
         'Ensure all content is tagged, including annotations like forms and links.\n\nTo tag Annotations in Acrobat Pro:\n1. Open the Tags panel and select "Tags".\n2. In the Options menu, select "Find...".\n3. In the dialog that appears, choose "Unmarked Annotations".\n4. Ensure that "Search Document" is checked.\n5. Press "Find".\n6. Press "Tag Element".\n7. In the Type field, choose "Form" if the target item is a form field, "Annotation" if it is a comment, and "Link" if it is a link. Then press OK.\n8. Repeat for all unmarked annotations.',
+      successCriteria: ["1.1.1", "1.3.2", "4.1.2", "1.4.8"],
       title: "Untagged PDF annotations",
       type: "pdf",
     },
@@ -2472,6 +2638,7 @@ function dataPreferred() {
         "There are characters that do not map to Unicode values. Examples include:\n- ",
       recommendation:
         "Ensure characters map to Unicode values. The best way to resolve this issue is to alter the original document to use only Unicode fonts. If this is not possible, consider using a third-party tool such as axesPDF to edit the Unicode mapping.",
+      successCriteria: ["1.1.1"],
       title: "Non-Unicode characters",
       type: "pdf",
     },
@@ -2484,6 +2651,7 @@ function dataPreferred() {
         "There are table headers that are not associated with their corresponding data cells. Examples include:\n- ",
       recommendation:
         'Ensure data table headers are associated with data cells. All TH tags must have a Scope attribute set to Row or Column depending on whether the particular cell is a row header or a column header.\n\nIf a table is sufficiently complex that this method cannot associate a header with its cell, each cell must have a Headers attribute set to a list of the IDs of the headers associated with the cell. This is often time-consuming and prone to error. Splitting complex tables into separate, simpler tables is strongly recommended.\n\nTo set header scope Acrobat Pro:\n1. Go to the Accessibility tools pane.\n2. Go to Reading Order.\n3. Open the context menu (right-click) on the table with the header and select Table Editor.\n4. Open the context menu on the header and select Table Cell Properties. (You can set this information for multiple cells at once by holding down Shift while selecting a table cell, then selecting Table Cell Properties.)\n5. Check the Header Cell radio button.\n6. Select an appropriate value in the Scope field. Use "Column" if this cell names a column or "Row" if this cell names a row.\n7. Select OK and save the document.',
+      successCriteria: ["1.3.1"],
       title: "Unassociated table header",
       type: "pdf",
     },
@@ -2498,6 +2666,9 @@ function dataPreferred() {
         'Ensure content that is intended to be hidden from all users is not rendered by assistive technology. The best way to do this is by setting the display CSS property of the element to "none".',
       stepsToReproduce:
         "1. Open Chrome DevTools.\n2. Locate the cited HTML within the source code.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read content line by line.\nExpected result: JAWS only announces visible content.\nActual result: JAWS cursor moves to visually hidden content. JAWS announces, "[Actual Output]", when it should be hidden.',
+      successCriteria: ["1.1.1"],
       title: "Visually hidden content exposed to AT",
       type: "web",
     },
@@ -2512,6 +2683,7 @@ function dataPreferred() {
         'Ensure content that is intended to be hidden from all users is not rendered by assistive technology. This includes content behind modal dialogs.\n\nThe best way to prevent access to content behind dialogs is with the "inert" attribute and associated polyfill.\n- Move the dialog element to be a sibling of the element containing the rest of the page content. This makes it easier to control keyboard access to underlying content.\n- Add the following polyfill script to the page: https://github.com/WICG/inert\n- When the dialog is present, add the "inert" attribute to the container of the rest of the site content. When the dialog is absent, remove the inert attribute.',
       stepsToReproduce:
         "1. Press Tab repeatedly to focus controls on the page.\n2. Notice that focus can access controls behind the dialog.",
+      successCriteria: ["1.1.1"],
       title: "Dialogs that allow focus behind them",
       type: "web",
     },
@@ -2526,6 +2698,7 @@ function dataPreferred() {
         "Avoid using event handlers that trigger focus or context changes on user input. Instead of moving focus or changing context when a radio button is selected, add a submission button for the change. Other alternatives include applying the change when the entire group of radio buttons loses focus or warning the user of this behavior in visible text before the controls.",
       stepsToReproduce:
         "1. Press Tab repeatedly until the radio button is focused.\n2. Notice that the keyboard focus changes immediately when the radio button is focused.",
+      successCriteria: ["3.2.2", "3.2.5"],
       title: "Focus change on radio button input",
       type: "web",
     },
@@ -2540,6 +2713,7 @@ function dataPreferred() {
         "Avoid using event handlers that trigger focus or context changes on user input. Instead of moving focus or changing context when a select's option is selected, add a submission button for the change. Other alternatives include applying the change when the select loses focus or warning the user of this behavior in visible text before the control.",
       stepsToReproduce:
         "1. Press Tab repeatedly until the select is focused.\n2. Press the Down Arrow key to change the selected option.\n3. Notice that the keyboard focus changes immediately when a new option is selected.",
+      successCriteria: ["3.2.2", "3.2.5"],
       title: "Focus change on select input",
       type: "web",
     },
@@ -2554,6 +2728,7 @@ function dataPreferred() {
         "Avoid using event handlers that trigger focus or context changes on user input. Instead of moving focus or changing context when text is entered, add a submission button for the change. Other alternatives include applying the change when the field loses focus or warning the user of this behavior in visible text before the field.",
       stepsToReproduce:
         "1. Press Tab repeatedly until the text field is focused.\n2. Enter text into the field.\n3. Notice that the keyboard focus changes immediately when text is entered.",
+      successCriteria: ["3.2.2", "3.2.5"],
       title: "Focus change on text field input",
       type: "web",
     },
@@ -2567,6 +2742,7 @@ function dataPreferred() {
         "Ensure the focus order of interactive elements on the page is logical. The best way to set the focus order is to reorder the elements in the DOM.",
       stepsToReproduce:
         "1. Press Tab repeatedly to focus controls on the page.\n2. Notice the controls are focused in an illogical order.",
+      successCriteria: ["2.4.3"],
       title: "Focus order not meaningful",
       type: "web",
     },
@@ -2581,6 +2757,7 @@ function dataPreferred() {
         "Avoid forced focus changes that are not user-initiated. Do not shift focus after a control receives focus except when immediate user interaction is needed (such as time-based alerts).",
       stepsToReproduce:
         "1. Press Tab repeatedly until the control is focused.\n2. Notice the keyboard focus is immediately moved elsewhere when the control is focused.",
+      successCriteria: ["3.2.1", "3.2.5"],
       title: "Focus is shifted on focus",
       type: "web",
     },
@@ -2595,6 +2772,7 @@ function dataPreferred() {
         "Ensure radio button groups are properly formed. Radio buttons in a logical group must all have their name attribute set to the same value.",
       stepsToReproduce:
         "1. Locate the radio buttons.\n2. Inspect them with Chrome DevTools.\n3. Review the values for their name attributes.\n4. Notice that radio buttons in the same group have different values for their name attribute.",
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Radio buttons with different name attributes",
       type: "web",
     },
@@ -2607,6 +2785,7 @@ function dataPreferred() {
         "There are links that are not structured as <Link> tags with a Link - OBJR child. Examples include:\n- ",
       recommendation:
         'Ensure links are tagged structurally as links with a Link OBJR tag. The Link - OBJR tag should open the link URL.\n\nTo add a link in Acrobat Pro:\n1. Open the Order panel and select Show reading order panel from the Options menu. \n2. Draw a rectangle around the text you intend to turn into a link and select Text/Paragraph.\n3. Locate the newly created object with the text of the URL in the Tags panel. \n4. Create a new Link tag as a sibling to this text and relocate the text inside of the Link tag. \n5.  Finally, go to Tools > Edit PDF > Link > Add/Edit Web or Document Link.\n6. Draw a rectangle that encompasses all lines of content that contain the target link, even if those lines contain content unrelated to the link. \n7. Choose "Invisible Rectangle" in the Link Type field, select Open a web page from the Link Action radio button list, then select Next. \n8. In the Enter a URL for this link field, enter the URL of the link as it is written. \n9. Next, open the Tags panel and select Find... from the Options menu. \n10. Choose Unmarked Links from the Find field, and select the Search Document radio button, then press Find until the newly created link is highlighted. \n11. Choose "Tag Element". Open the Tags panel and locate the Link tag that contains the text of the link and ensure that the Link - OBJR tag has been moved there; if not, relocate the newly created Link - OBJR tag into that Link tag.',
+      successCriteria: ["2.1.1", "4.1.2"],
       title: "Link structure",
       type: "pdf",
     },
@@ -2621,6 +2800,7 @@ function dataPreferred() {
         "Ensure CSS background images that convey meaning have textual and visible equivalents.\n\nThe best way to do this is to use a real <img> or SVG element. To add a textual equivalent to an <img> element, set its alt attribute to a descriptive value.\n\nTo add a textual equivalent to an <svg> element, add a <title> child to the SVG. Place the textual equivalent in the <title>, then add an ID to the <title>. Finally, on the <svg>, add an aria-labelledby attribute and set its value to the ID of the <title>.",
       stepsToReproduce:
         '1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. Notice that the image is not created with an <img>, <svg>, or role="img" element.',
+      successCriteria: ["1.1.1"],
       title: "CSS images missing text equivalent",
       type: "web",
     },
@@ -2633,6 +2813,9 @@ function dataPreferred() {
         "Ensure that the reading order of content is logical. The best way to set the reading order is to reorder the elements in the DOM.",
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Navigate through the content using the Down Arrow key to move element by element.\n3. Review the order in which the screen reader announces content.",
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read the content line by line.\n3. Compare the order of the JAWS announcement to the visual order of content.\nExpected result: JAWS announces the content in a logical order which follows the visual order.\nActual Result: JAWS announces, "[Text]" first, followed by "[Text]".',
+      successCriteria: ["1.3.2"],
       title: "Reading order not meaningful",
       type: "web",
     },
@@ -2647,6 +2830,9 @@ function dataPreferred() {
         'Ensure dialogs use proper structure. Dialog containers must have role="dialog". If the dialog has a visible title, set aria-labelledby on the dialog container to the ID of the visible title. For dialogs without a visible title, set a descriptive aria-label on the dialog element.',
       stepsToReproduce:
         '1. Locate the dialog.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name" and "Role".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the dialog trigger.\n3. Press the Enter key to activate the dialog.\nExpected result: JAWS announces, "[Dialog Name], dialog".\nActual result: JAWS announces, "[Actual Output]".',
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Dialog without proper role and state",
       type: "web",
     },
@@ -2659,6 +2845,7 @@ function dataPreferred() {
         "There are meaningful images without a textual equivalent. Examples include:\n- ",
       recommendation:
         'Provide alternative text for images. Meaningful images must have a concise but descriptive textual equivalent.\n\nTo add alternative text in Acrobat Pro:\n1. Open the Tags panel.\n2. Open the context menu (right-click) on the tag containing the image and select Properties.\n3. If the tag is not already a Figure tag, choose "Figure" from the Type field.\n4. Enter a value in the Alternate Text field.\n5. Activate Close and save the document.',
+      successCriteria: ["1.1.1"],
       title: "Meaningful image without textual equivalent",
       type: "pdf",
     },
@@ -2671,6 +2858,7 @@ function dataPreferred() {
         "There are data tables that do not use table tags. Examples include:\n- ",
       recommendation:
         "Ensure data tables are formatted using table elements. Table tags include Table, TR, TH, and TD. The tag structure should match the semantic structure that is conveyed visually.\n- The entire table should be wrapped in a Table tag. The only children that a Table tag may have are TR tags and one Caption tag.\n- Each row of the table should be contained in a TR tag. This tag should be a child of the Table tag. The only children that a TR tag can have are TH and/or TD cells.\n- Each header of the table should be contained in a TH tag with a Scope attribute set to Row or Column as appropriate. These tags should be children of the appropriate TR tag.\n- Each data cell of the table should be contained in a TD tag. These tags should be children of the appropriate <TR> Tag.",
+      successCriteria: ["1.3.1"],
       title: "Implicit data table",
       type: "pdf",
     },
@@ -2683,6 +2871,7 @@ function dataPreferred() {
         "There are tags with incorrect role mappings. Examples include:\n- ",
       recommendation:
         'Ensure correct role mappings within the tags structure.\n\nTo edit the role map in Acrobat Pro:\n1. Activate "Add, delete or edit accessibility tags" (tag icon) in the right toolbar.\n2. Activate "Options" (three-dot icon).\n3. Select "Edit Role Map..."\n4. Expand "Document Roles".\n5. Locate and select the role with an invalid mapping.\n6. Activate "Change Item".\n7. In "Value", change the value to an appropriate standard PDF tag name.\n8. Activate "OK", then save the document.',
+      successCriteria: ["1.3.1"],
       title: "Incorrect role mapping",
       type: "pdf",
     },
@@ -2695,6 +2884,7 @@ function dataPreferred() {
         "There is text in a different language from the rest of the document, but the language of this text is unspecified. Examples include:\n- ",
       recommendation:
         "Ensure changes in natural language are identified in-line. Tags containing text in a different language from the overall document must have a Lang attribute set to a valid BCP 47 primary language subtag: https://r12a.github.io/app-subtags/\n\nTo alter a tag's language in Acrobat Pro:\n1. Open the Tags panel.\n2. Open the context menu on the tag that contains the content and select Properties.\n3. In the Language field, enter the appropriate code in the Language field. Some languages may be selected from the field without needing to enter a code.",
+      successCriteria: ["3.1.2"],
       title: "Missing or incorrect inline language",
       type: "pdf",
     },
@@ -2707,6 +2897,7 @@ function dataPreferred() {
         "There is content that uses color alone to visually indicate information. Examples include:\n- ",
       recommendation:
         "Ensure color is not the sole means of communicating information. Color can be used as long as other visual indicators of the information are also present. Common additional visual indicators include underlining, bolding, additional on-screen text conveying the information, or change in shape or size.",
+      successCriteria: ["1.4.1"],
       title: "Color only",
       type: "pdf",
     },
@@ -2719,6 +2910,7 @@ function dataPreferred() {
         "There are form controls with visible constraints or instructions that are not reflected programmatically. Examples include:\n- ",
       recommendation:
         'Ensure form field constraints are clearly indicated. Add the instructional text to the end of any existing text in the Tooltip property to match the text of the visible instruction.\n\nTo alter the Tooltip property in Acrobat Pro:\n\n1. Select "All tools".\n2. Activate "Prepare a form".\n3. In the "Fields" pane, select a form field and open the context menu (right-click), then select "Properties..."\n4. Select "General".\n5. Add the instructional text after the existing value in the "Tooltip" field, separated by a hyphen, comma, or space.\n6. Activate "Close" and save the document.',
+      successCriteria: ["1.3.1", "3.3.2", "4.1.2"],
       title: "Constraint not indicated",
       type: "pdf",
     },
@@ -2731,6 +2923,7 @@ function dataPreferred() {
         "There are form controls with a visible group label that is not reflected programmatically. Examples include:\n- ",
       recommendation:
         'Ensure elements identify a group name when a group name is present on-screen. For radio buttons, set the Tooltip property to match the text of the visible group label. For other grouped controls, add the group label to the end of the existing Tooltip property.\n\nTo set form group names in Acrobat Pro:\n\n1. Select "All tools".\n2. Activate "Prepare a form".\n3. In the "Fields" pane, select a form field and open the context menu (right-click), then select "Properties..."\n4. Select "General".\n5. For radio buttons, enter the group name into the "Tooltip" field.\n6. For other form fields, add the form group name after the existing value in the "Tooltip" field, separated by a hyphen, comma, or space.\n7. Activate "Close" and save the document.',
+      successCriteria: ["1.3.1"],
       title: "Missing group",
       type: "pdf",
     },
@@ -2742,6 +2935,7 @@ function dataPreferred() {
       issue: "The following focus order is illogical:\n1. ",
       recommendation:
         'Ensure the focus order of form fields is logical. In the Fields pane, ensure the order of fields reflects the logical navigation order of the fields.\n\nTo access the Fields pane in Acrobat Pro:\n1. Select "All tools".\n2. Activate "Prepare a form".\n3. In the Fields pane, activate the order control (AZ icon).\n4. Select "Tab order".\n5. In the Fields pane, rearrange the form fields so that the top to bottom order reflects the logical tabbing order of the form.',
+      successCriteria: ["2.4.3"],
       title: "Focus order not meaningful",
       type: "pdf",
     },
@@ -2754,6 +2948,7 @@ function dataPreferred() {
         "There are radio buttons that are not programmatically grouped. Examples include:\n- ",
       recommendation:
         'Ensure radio button groups are properly formed. Radio buttons in the same group must have the same value for their Name properties.\n\nTo group radio buttons in Acrobat Pro:\n\n1. Select "All tools".\n2. Activate "Prepare a form".\n3. In the "Fields" pane, select a form field and open the context menu (right-click), then select "Properties..."\n4. Select "General" and enter a value in the "Name" field.\n5. Activate "Close".\n6. Repeat for all radio buttons in the same group, making sure to set the same value in the "Name" field for each.\n7. Save the document.',
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Ungrouped radio buttons",
       type: "pdf",
     },
@@ -2766,6 +2961,7 @@ function dataPreferred() {
         "There are form controls without an accessible name. Examples include:\n- ",
       recommendation:
         'Provide explicit labels for form fields. For text fields, checkboxes, drop-down lists, and list boxes, set the Tooltip property to the desired accessible name. For radio buttons, set the Radio Button Choice property to the desired accessible name.\n\nTo set form field accessible names in Acrobat Pro:\n\n1. Select "All tools".\n2. Activate "Prepare a form".\n3. In the "Fields" pane, select a form field and open the context menu (right-click), then select "Properties..."\n4. For text fields, checkboxes, drop-down lists, and list boxes, select "General" and enter the accessible name into the "Tooltip" field.\n5. For radio buttons, select "Options" and enter the accessible name into the "Radio Button Choice" field.\n6. Activate "Close" and save the document.',
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Missing label",
       type: "pdf",
     },
@@ -2777,6 +2973,7 @@ function dataPreferred() {
       issue: "The table of contents is not appropriately tagged.",
       recommendation:
         "Ensure table of contents lists are structured properly. Tables of contents must be enclosed in one <TOC> tag. Each line of the TOC is must enclosed in a <TOCI> tag within the parent <TOC> tag.",
+      successCriteria: ["1.3.1"],
       title: "Improper TOC structure",
       type: "pdf",
     },
@@ -2789,6 +2986,7 @@ function dataPreferred() {
         "There is underlined, overlined, or stricken text content that does not have an appropriate value for the TextDecorationType attribute. Examples include:\n- ",
       recommendation:
         'Ensure font attributes are properly indicated through attributes objects. When text decoration lines are used to convey meaning, ensure that the tag enclosing the content has a TextDecorationType attribute set to "Underline," "Overline," or "LineThrough" as appropriate.\n\nTo add a font attribute in Acrobat Pro:\n1. Open the Tags panel.\n2. Open the context menu on tag containing the target text and select "Properties."\n3. Activate "Edit Attribute Objects…"\n4. Activate "New Item."\n5. Focus the /Attribute Object that was created and activate "New Item" again.\n6. In the Key field, enter "TextDecorationType."\n7. In the Value field, enter the appropriate value mentioned above.\n8. Select "String" from the "Value Type" field.\n9. Activate "OK," close all dialogs, and save the document.',
+      successCriteria: ["1.1.1"],
       title: "Font attributes",
       type: "pdf",
     },
@@ -2802,6 +3000,7 @@ function dataPreferred() {
         "Ensure data table headers cells are not blank. The best way to resolve this issue is to add visual text to the table header. Alternatively, this text can be hidden with a .visually-hidden or .sr-only CSS class.",
       stepsToReproduce:
         "1. Locate the table.\n2. Inspect it with Chrome DevTools.\n3. Notice that a <th> element does not contain content.",
+      successCriteria: ["1.3.1"],
       title: "Table headers empty",
       type: "web",
     },
@@ -2816,6 +3015,7 @@ function dataPreferred() {
         "Ensure custom controls are keyboard accessible. Users must be able to navigate to and operate controls while a screen reader is running.",
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Navigate to the control using the Down Arrow key or the Tab key\n3. Attempt to interact with Enter, Space, and arrow keys.\n4. Notice that the control cannot be interacted with using the keyboard while the screen reader is running.",
+      successCriteria: ["2.1.1", "2.1.3"],
       title:
         "Controls cannot be used with keyboard while screen reader running",
       type: "web",
@@ -2830,6 +3030,7 @@ function dataPreferred() {
         "Ensure CAPTCHAs are accessible both visually and audibly. Add an alternative visual challenge to the CAPTCHA.",
       stepsToReproduce:
         "1. Locate the CAPTCHA.\n2. Notice that there is no way to complete the CAPTCHA that does not require hearing.",
+      successCriteria: ["1.1.1"],
       title: "CAPTCHA with no visual challenge",
       type: "web",
     },
@@ -2843,6 +3044,7 @@ function dataPreferred() {
         "Ensure CAPTCHAs are accessible both visually and audibly. Add an alternative audio challenge to the CAPTCHA.",
       stepsToReproduce:
         "1. Locate the CAPTCHA.\n2. Notice that there is no way to complete the CAPTCHA that does not require vision.",
+      successCriteria: ["1.1.1"],
       title: "CAPTCHA with no audio challenge",
       type: "web",
     },
@@ -2856,6 +3058,7 @@ function dataPreferred() {
         "Avoid improper nesting of form elements and links. For example, <button> elements must not be nested in <a> elements. To detect many of these errors automatically, use the Nu Html Checker: https://validator.w3.org/nu/",
       stepsToReproduce:
         "1. Locate the controls.\n2. Open Chrome DevTools.\n3. Review the nesting structure of the controls.",
+      successCriteria: ["4.1.2"],
       title: "Form and link improperly nested",
       type: "web",
     },
@@ -2870,6 +3073,9 @@ function dataPreferred() {
         'Indicate live regions for dynamically changing content. Live regions can be created by adding a role attribute set to "log", "status", "alert", "progressbar", "marquee", or "timer" as appropriate. Alternatively, custom behavior can be created by using the aria-live, aria-atomic, and aria-relevant attributes. Text injected into this live region element will be announced by screen readers.\n\nImportantly, the element with the ARIA live attributes must be available when the page loads. Otherwise, many screen readers will not detect updates to the element. Additionally, the element must be empty on page load unless an immediate screen reader announcement is desired.',
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\nExpected result: JAWS announces, "" (or equivalent) when the [Dynamic Content] appears.\nActual result: JAWS does not indicate any changes to content.',
+      successCriteria: ["1.3.1"],
       title: "Live region needed",
       type: "web",
     },
@@ -2881,6 +3087,7 @@ function dataPreferred() {
       issue:
         "There is content that disappears, overlaps, is cut off, or requires horizontal scrolling to view when the page is zoomed to 400%. Examples include:\n- ",
       recommendation: "Ensure documents reflow properly.",
+      successCriteria: ["1.4.8"],
       title: "Reflow",
       type: "pdf",
     },
@@ -2895,6 +3102,7 @@ function dataPreferred() {
         'Provide a text transcript for audio only presentations. This transcript should be present on the same page as the audio. It should be in the same language as the spoken language. If the audio is provided by a <video> element, developers may provide a caption track instead using <track kind="captions">.',
       stepsToReproduce:
         "1. Locate the audio.\n2. Notice that there is no transcript available for the content.",
+      successCriteria: ["1.2.1"],
       title: "Transcript missing for audio",
       type: "web",
     },
@@ -2909,6 +3117,7 @@ function dataPreferred() {
         "Provide text transcript or audio track of video only presentations.",
       stepsToReproduce:
         "1. Locate the video.\n2. Notice that there is no transcript or audio equivalent available for the content.",
+      successCriteria: ["1.2.1"],
       title: "Alternative missing for video only",
       type: "web",
     },
@@ -2923,6 +3132,7 @@ function dataPreferred() {
         "Ensure text is used instead of images of text when technology allows unless it is essential. Common exceptions include logotypes or images of single letters.",
       stepsToReproduce:
         "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. Notice that the text is created without text nodes.",
+      successCriteria: ["1.4.5"],
       title: "Images of text",
       type: "web",
     },
@@ -2937,6 +3147,7 @@ function dataPreferred() {
         "Ensure instructions do not rely solely on sensory characteristics. Examples include instructions that refer solely to shape, location, size, orientation, or sound, like 'Click the red button'. Rewrite the instructions to avoid using sensory descriptions.",
       stepsToReproduce:
         "1. Locate the instructions.\n2. Notice that the instructions rely on sensory language to convey their meaning.",
+      successCriteria: ["1.3.3"],
       title: "Sensory dependent instructions",
       type: "web",
     },
@@ -2951,6 +3162,7 @@ function dataPreferred() {
         'Ensure proper markup is used to mark emphasized or special text formatting. For strikethrough text, such as old prices replaced with a sale price, use the <s> element to wrap the strikethrough text. Additionally, add visually hidden text before and after the strikethrough text that describes the meaning of the strikethrough, such as "Old price" and "New price."',
       stepsToReproduce:
         "1. Locate the stricken text.\n2. Inspect it with Chrome DevTools.\n3. Notice that the text does not use the <s> element and visually hidden text describing the meaning of the stricken text.",
+      successCriteria: ["1.3.1"],
       title: "Strikethrough text",
       type: "web",
     },
@@ -2965,6 +3177,7 @@ function dataPreferred() {
         "Ensure keyboard focus is not trapped. Users must be able to use the keyboard alone to move away from controls. When moving away from the component requires more than arrow keys, Tab, Shift+Tab, or Esc, the user must be advised of the method for moving focus away.",
       stepsToReproduce:
         "1. Press Tab repeatedly until the control is focused.\n2. Notice that there is no way to pass the control by pressing the Tab key or move before the control using Shift+Tab.",
+      successCriteria: ["2.1.2"],
       title: "Keyboard trap",
       type: "web",
     },
@@ -2979,6 +3192,7 @@ function dataPreferred() {
         "Ensure auto-updating dynamic content can be paused, stopped, or hidden. Common examples include autoplaying videos (with or without audio) and GIFs. The best way to do this is to add an accessible pause <button> element near to the element that allows the movement to be stopped.",
       stepsToReproduce:
         "1. Locate the content.\n2. Notice that there is no way to pause, stop, or hide the content.",
+      successCriteria: ["2.2.2", "3.2.5"],
       title: "Auto-updating content that cannot be paused",
       type: "web",
     },
@@ -2993,6 +3207,7 @@ function dataPreferred() {
         "Ensure there is more than one way to locate a web page in a set of pages. Common methods include:\n- A site map\n- Links to other pages on the page, such as a navigation bar or menu\n- Site search\n- Table of contents\n\nPages that represent steps in a process (such as shipping and payment pages in a checkout flow) are exempt from this requirement.",
       stepsToReproduce:
         "1. Review the navigational structures and features of the page.\n2. Notice that there is only one method to locate the page.",
+      successCriteria: ["2.4.5"],
       title: "One way page location",
       type: "web",
     },
@@ -3007,6 +3222,9 @@ function dataPreferred() {
         'Ensure headings and labels are descriptive and unique. This includes the accessible names of buttons. The accessible name of a button can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive. Avoid including the word "button" in the accessible name, as this information is already supplied by the button\'s role.',
       stepsToReproduce:
         '1. Locate the button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Tab key to move focus to the button.\nExpected result: JAWS announces, "[Name], button".\nActual result: "JAWS announces, "[Name], button" with no indication of [Missing Context].',
+      successCriteria: ["2.4.6"],
       title: "Button with non-descriptive name",
       type: "web",
     },
@@ -3021,6 +3239,7 @@ function dataPreferred() {
         "Ensure keyboard focus is indicated visually. When interactive controls receive focus, the control must appear on screen and a visible focus indicator must be present.\n\nFocus can be indicated in a variety of ways. Most commonly, the browser default outline is used. To use the browser default, remove any outline: none or outline: 0 CSS declarations. Alternatives to the browser default outline include underlines, a change of background, and borders. A custom focus indicator must have a minimum contrast ratio of 3.00:1 against the background.",
       stepsToReproduce:
         "1. Press Tab repeatedly until the control is focused.\n2. Notice that there is no visual indicator that the control is focused, such as an outline.",
+      successCriteria: ["2.4.7"],
       title: "Visual keyboard focus missing",
       type: "web",
     },
@@ -3035,6 +3254,7 @@ function dataPreferred() {
         "Ensure that elements with the same functionality are consistently identified across pages. Use labels, names, and text alternatives to consistently identify elements with the same functionality across multiple pages.",
       stepsToReproduce:
         "1. Locate the element.\n2. Compare its name and appearance to the same element on different pages.\n3. Notice that the element's name or appearance are different on different pages.",
+      successCriteria: ["3.2.4"],
       title: "Inconsistent identification for same functionality",
       type: "web",
     },
@@ -3049,6 +3269,7 @@ function dataPreferred() {
         "Provide visual labels or instructions for user input. Labels for form controls must remain visible when content is entered or options are selected. Additionally, individual form controls in a group must each have their own labels.",
       stepsToReproduce:
         "1. Locate the field.\n2. Enter text or select a value for the field.\n3. Notice that no visual label is available to indicate the purpose of the field after setting a value.",
+      successCriteria: ["3.3.2"],
       title: "Fields without visual labels or instructions",
       type: "web",
     },
@@ -3063,6 +3284,7 @@ function dataPreferred() {
         'Provide visual labels or instructions for user input. When asterisks are used to denote required fields, add text to the top of the form that explains their purpose, such as "Asterisks (*) indicate required fields."',
       stepsToReproduce:
         "1. Locate the asterisk.\n2. Notice that there is no visible text that explains the meaning of the asterisk.",
+      successCriteria: ["3.3.2"],
       title: "Asterisks without instructions",
       type: "web",
     },
@@ -3077,6 +3299,7 @@ function dataPreferred() {
         "Provide suggestions for error messages when known. This can include specific examples of valid input or format examples.\n\nIf providing a suggestion would jeopardize the security of a page, the error message is exempt from this requirement. For example, a password field error is not required to suggest the correct password to the user.",
       stepsToReproduce:
         "1. Locate the error.\n2. Notice that it does not provide suggestions on how to resolve the issue.",
+      successCriteria: ["3.3.3"],
       title: "Form errors without suggestions",
       type: "web",
     },
@@ -3091,6 +3314,7 @@ function dataPreferred() {
         "Provide error prevention for legal commitments, financial transactions, test responses, and data changes. Examples of unprevented errors for financial transactions include credit card fields with no validation. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
       stepsToReproduce:
         "1. Submit a form that results in a financial transaction.\n2. Notice that there is no error checking for the transaction.",
+      successCriteria: ["3.3.4"],
       title: "Form errors without prevention (financial)",
       type: "web",
     },
@@ -3105,6 +3329,7 @@ function dataPreferred() {
         "Provide error prevention for legal commitments, financial transactions, test responses, and data changes. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
       stepsToReproduce:
         "1. Submit a form resulting in legal commitment.\n2. Notice that there is no error checking for the submission.",
+      successCriteria: ["3.3.4"],
       title: "Form errors without prevention (legal)",
       type: "web",
     },
@@ -3119,6 +3344,7 @@ function dataPreferred() {
         "Provide error prevention for legal commitments, financial transactions, test responses, and data changes. Examples of unprevented errors for data changes include editing a personal profile, posting to social media, or deleting an incoming email message. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
       stepsToReproduce:
         "1. Submit a form that results in the change or deletion of user data.\n2. Notice that there is no error checking for the submission.",
+      successCriteria: ["3.3.4"],
       title: "Form errors without prevention (user data)",
       type: "web",
     },
@@ -3133,6 +3359,7 @@ function dataPreferred() {
         "Provide error prevention for legal commitments, financial transactions, test responses, and data changes. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
       stepsToReproduce:
         "1. Submit a form with an empty or incomplete response.\n2. Notice that there is no error checking for the submission.",
+      successCriteria: ["3.3.4"],
       title: "Form errors without prevention (test responses)",
       type: "web",
     },
@@ -3145,6 +3372,7 @@ function dataPreferred() {
         "There is audio-only content without a transcript. Examples include:\n- ",
       recommendation:
         "Provide a text transcript for audio only presentations. This transcript should be present on the same page as the audio. It should be in the same language as the spoken language.",
+      successCriteria: ["1.2.1"],
       title: "Transcript missing for audio",
       type: "pdf",
     },
@@ -3157,6 +3385,7 @@ function dataPreferred() {
         "There is video-only content without a transcript, audio file, or non-animated textual representation. Examples include:\n- ",
       recommendation:
         "Provide a text transcript or audio track of video only presentations.",
+      successCriteria: ["1.2.1"],
       title: "Alternative missing for video only",
       type: "pdf",
     },
@@ -3169,6 +3398,7 @@ function dataPreferred() {
         "There are instructions that rely solely on sensory characteristics. Examples include:\n- ",
       recommendation:
         "Ensure instructions do not rely solely on sensory characteristics. Examples include instructions that refer solely to shape, location, size, orientation, or sound, like 'Click the red button'. Rewrite the instructions to avoid using sensory descriptions.",
+      successCriteria: ["1.3.3"],
       title: "Sensory dependent instructions",
       type: "pdf",
     },
@@ -3181,6 +3411,7 @@ function dataPreferred() {
         "There is audio that is played automatically when the page loads. Examples include:\n- ",
       recommendation:
         "Ensure audio that plays automatically can be controlled within the containing page. If audio content must load automatically, ensure the audio output plays for a maximum of three seconds or that there is a mechanism near the top of the page to stop or pause the audio.",
+      successCriteria: ["1.4.2"],
       title: "Audio plays automatically",
       type: "pdf",
     },
@@ -3193,6 +3424,7 @@ function dataPreferred() {
         "There are controls that trap keyboard focus. Examples include:\n- ",
       recommendation:
         "Ensure keyboard focus can be moved away from keyboard accessible components. Users must be able to use the keyboard alone to move away from controls. When moving away from the component requires more than arrow keys, Tab, Shift+Tab, or Esc, the user must be advised of the method for moving focus away.",
+      successCriteria: ["2.1.2"],
       title: "Keyboard trap",
       type: "pdf",
     },
@@ -3205,6 +3437,7 @@ function dataPreferred() {
         "There are elements that blink or flash more than three times per second. Examples include:\n- ",
       recommendation:
         "Ensure blinking or flashing elements are avoided. Avoid flashing more than three times per second unless the content falls within the safe threshold for dimness and size.\n\nFor size, the safe threshold can be calculated as 25% of 10 degrees. When calculated at a typical viewing distance of 11 to 26 inches for a 15-17 inch screen at a resolution of 1024x768, the area of flashing must be less than 21,824 pixels.\n\nIf a flashing element is larger than the threshold and flashes more than three times per second and cannot be changed, the flash must then be evaluated by a tool. The Trace Center Photosensitive Epilepsy Analysis Tool (PEAT) can be used for this purpose: http://trace.wisc.edu/peat/",
+      successCriteria: ["2.3.2"],
       title: "Blinking or flashing",
       type: "pdf",
     },
@@ -3216,6 +3449,7 @@ function dataPreferred() {
       issue: "The document has no title.",
       recommendation:
         "Provide a clear identifying title property for the document. This title should be concise, descriptive, and customer-facing.\n\nTo alter the document title in Acrobat Pro:\n1. Navigate to the File > Properties.\n2. Navigate to the Description tab.\n3. Enter a title in the Title field.",
+      successCriteria: ["2.4.2"],
       title: "Missing or incorrect title",
       type: "pdf",
     },
@@ -3228,6 +3462,7 @@ function dataPreferred() {
         "Acrobat does not display the title of the document in its tabs. Instead, it displays the filename.",
       recommendation:
         "Provide a clear identifying title property for the document. This title must be displayed in the window and tab when the file is open in Acrobat.\n\nTo display the title in Acrobat Pro:\n1. Go to File > Properties.\n2. Go to the Initial View tab.\n3. In the Show field under Window Options, ensure that Document Title is selected.",
+      successCriteria: ["2.4.2"],
       title: "Title not shown",
       type: "pdf",
     },
@@ -3240,6 +3475,7 @@ function dataPreferred() {
         "There are controls that trigger focus or context changes upon selection or text entry. Examples include:\n- ",
       recommendation:
         "Ensure event handlers that trigger context changes on input are avoided. Instead of moving focus or changing context when an option is selected or text is entered, add a submission button for the change. Other alternatives include applying the change when the control loses focus or warning the user of this behavior in visible text before the control.",
+      successCriteria: ["3.2.2", "3.2.5"],
       title: "Focus change on input",
       type: "pdf",
     },
@@ -3252,6 +3488,7 @@ function dataPreferred() {
         "There are form fields without visual labels. Examples include:\n- ",
       recommendation:
         "Provide labels or instructions for user input. Each individual form field must have a visible label. Alter the original document to ensure each field has a label.",
+      successCriteria: ["3.3.2"],
       title: "Fields without visual labels or instructions",
       type: "pdf",
     },
@@ -3264,6 +3501,7 @@ function dataPreferred() {
         "There is text created with images of text rather than actual text. Examples include:\n- ",
       recommendation:
         "Ensure text is used instead of images of text when technology allows unless it is essential. Common exceptions include logotypes or images of single letters.",
+      successCriteria: ["1.4.5", "1.4.8"],
       title: "Images of text",
       type: "pdf",
     },
@@ -3276,6 +3514,7 @@ function dataPreferred() {
         "There are headings that do not accurately describe the contents of their sections. Examples include:\n- ",
       recommendation:
         "Ensure headings and labels are descriptive and unique. In the source document, alter the heading text to accurately describe the purpose of the section.",
+      successCriteria: ["2.4.6"],
       title: "Insufficiently descriptive heading",
       type: "pdf",
     },
@@ -3288,6 +3527,7 @@ function dataPreferred() {
         "There are error messages that provide no suggestions on how to fix the issue. Examples include:\n- ",
       recommendation:
         "Provide suggestions for error messages when known. This can include specific examples of valid input or format examples.\n\nIf providing a suggestion would jeopardize the security of a document, the error message is exempt from this requirement. For example, a password field error is not required to suggest the correct password to the user.",
+      successCriteria: ["3.3.3"],
       title: "Form errors without suggestions",
       type: "pdf",
     },
@@ -3300,6 +3540,7 @@ function dataPreferred() {
         "There are forms that do not provide error prevention for user actions that result in a financial transaction.",
       recommendation:
         "Provide error prevention for legal commitments and financial data. Examples of unprevented errors for financial transactions include credit card fields with no validation. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
+      successCriteria: ["3.3.4"],
       title: "Form errors without prevention (financial)",
       type: "pdf",
     },
@@ -3312,6 +3553,7 @@ function dataPreferred() {
         "There are forms that do not provide error prevention for user actions that result in a legal commitment.",
       recommendation:
         "Provide error prevention for legal commitments and financial data. Provide one or more of the following methods to prevent errors:\n\n- If the user has entered data, automatically check the user's data entry for input errors and give the user an opportunity to correct them before committing.\n- Provide a review step and allow the user to make corrections before committing.\n- Allow the user to reverse the commitment.",
+      successCriteria: ["3.3.4"],
       title: "Form errors without prevention (legal)",
       type: "pdf",
     },
@@ -3324,6 +3566,7 @@ function dataPreferred() {
         "There are timed responses that cannot be turned off, extended, or accessibly adjusted. Examples include:\n- ",
       recommendation:
         "Ensure timed responses are not required. Users must be able to extend, set, or remove any timeout unless the timeout is longer than 20 hours or the timeout is essential to the page's purpose (such as an auction).",
+      successCriteria: ["2.2.1", "2.2.3"],
       title: "Timing",
       type: "pdf",
     },
@@ -3336,6 +3579,7 @@ function dataPreferred() {
         "There is content that plays or moves automatically without a clear mechanism to pause, stop, or hide it. Examples include:\n- ",
       recommendation:
         "Ensure auto-updating dynamic content can be paused, stopped, or hidden. Common examples include autoplaying videos (with or without audio) and GIFs. The best way to do this is to add an accessible pause button near to the element that allows the movement to be stopped.",
+      successCriteria: ["2.2.2", "3.2.5"],
       title: "Auto-updating content that cannot be paused",
       type: "pdf",
     },
@@ -3349,6 +3593,9 @@ function dataPreferred() {
         "Ensure link text is meaningful within context. The accessible name of a link can be set with internal text, an aria-label attribute, or an aria-labelledby attribute. Good accessible names are both concise and descriptive.",
       stepsToReproduce:
         '1. Locate the link.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Tab key to move focus to the link.\nExpected result: JAWS announces, "[Recommended Name], link".\nActual result: JAWS announces, "[Actual Name], link" which is not sufficiently meaningful.',
+      successCriteria: ["2.4.4"],
       title: "Links without meaningful text",
       type: "web",
     },
@@ -3363,6 +3610,9 @@ function dataPreferred() {
         "Ensure link text is meaningful within context. A link's purpose must be determinable from the link's accessible name alone or in combination with the immediately surrounding paragraph, table cell, or associated table header. Good accessible names are both concise and descriptive.",
       stepsToReproduce:
         '1. Locate the link.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Tab key to move focus to the link.\nExpected result: JAWS announces, "[Recommended Name], link". The link name includes [Missing Context].\nActual result: JAWS announces, "[Actual Name], link". There is no indication of [Missing Context].',
+      successCriteria: ["2.4.4"],
       title: "Links with non-descriptive accessible names",
       type: "web",
     },
@@ -3377,6 +3627,9 @@ function dataPreferred() {
         'Ensure link text is meaningful within context. Links that go to different locations must have different accessible names.\n\nTo resolve the issue, add information to the links\' accessible names. For example, two "Learn more" links might become "Learn more about products" and "Learn more about services." When altering the accessible name, be sure to include all of the link\'s visual text in the accessible name.',
       stepsToReproduce:
         '1. Locate the link.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the Tab key to move focus to the link.\nExpected result: JAWS announces, "[Recommended Name], link". The link name includes [Missing Context].\nActual result: JAWS announces, "[Actual Name], link". There is no indication of [Missing Context].',
+      successCriteria: ["2.4.4"],
       title: "Links with identical names",
       type: "web",
     },
@@ -3389,6 +3642,7 @@ function dataPreferred() {
         "There are links with insufficiently descriptive accessible names. Examples include:\n- ",
       recommendation:
         "Ensure link text is meaningful within context. A link's purpose must be determinable from the link's accessible name alone or in combination with the immediately surrounding paragraph, table cell, or associated table header. Good accessible names are both concise and descriptive.",
+      successCriteria: ["2.4.4"],
       title: "Links with non-descriptive accessible names",
       type: "pdf",
     },
@@ -3403,6 +3657,7 @@ function dataPreferred() {
         "Ensure elements blink or flash in a safe threshold. Avoid flashing more than three times per second unless the content falls within the safe threshold for dimness and size.\n\nFor size, the safe threshold can be calculated as 25% of 10 degrees. When calculated at a typical viewing distance of 11 to 26 inches for a 15-17 inch screen at a resolution of 1024x768, the area of flashing must be less than 21,824 pixels.\n\nIf a flashing element is larger than the threshold and flashes more than three times per second and cannot be changed, the flash must then be evaluated by a tool. The Trace Center Photosensitive Epilepsy Analysis Tool (PEAT) can be used for this purpose: http://trace.wisc.edu/peat/",
       stepsToReproduce:
         "1. Locate the content.\n2. Determine that the content flashes more than three times per second using manual means or by recording a video using the Photosensitive Epilepsy Analysis Tool (PEAT): http://trace.wisc.edu/peat/ to automatically analyze the content.\n3. Notice that the thresholds for flashing content are exceeded.",
+      successCriteria: ["2.3.1", "2.3.2"],
       title: "Blinking or flashing",
       type: "web",
     },
@@ -3416,6 +3671,7 @@ function dataPreferred() {
         "Ensure markup documents contain well-formed elements. Elements must have only one instance of an attribute assigned to them. This can be tested by running the document through an HTML validator such as W3C's Nu Html Checker: https://validator.w3.org/nu/\n\nNote that, under WCAG 2.1, all HTML documents are considered to meet this requirement. Under WCAG 2.2, the requirement has been removed entirely.",
       stepsToReproduce:
         '1. Use https://validator.w3.org/nu/ to review the source code of the page.\n2. Notice that there are "Duplicate attribute" errors.',
+      successCriteria: ["4.1.1"],
       title: "Duplicated attribute",
       type: "web",
     },
@@ -3429,6 +3685,7 @@ function dataPreferred() {
         "Ensure markup documents contain well-formed elements. Each ID in the page must be unique. This can be tested by running the document through an HTML validator such as W3C's Nu Html Checker: https://validator.w3.org/nu/\n\nNote that, under WCAG 2.1, all HTML documents are considered to meet this requirement. Under WCAG 2.2, the requirement has been removed entirely.",
       stepsToReproduce:
         '1. Use https://validator.w3.org/nu/ to review the source code of the page.\n2. Notice that there are "Duplicate ID" errors.',
+      successCriteria: ["4.1.1"],
       title: "Duplicated ID",
       type: "web",
     },
@@ -3442,6 +3699,7 @@ function dataPreferred() {
         "Ensure markup documents contain well-formed elements. Elements must be nested according to specification. This can be tested by running the document through an HTML validator such as W3C's Nu Html Checker: https://validator.w3.org/nu/\n\nNote that, under WCAG 2.1, all HTML documents are considered to meet this requirement. Under WCAG 2.2, the requirement has been removed entirely.",
       stepsToReproduce:
         '1. Use https://validator.w3.org/nu/ to review the source code of the page.\n2. Notice that there are "Element X not allowed as child of element Y in this context" errors.',
+      successCriteria: ["4.1.1"],
       title: "Improper element nesting",
       type: "web",
     },
@@ -3455,6 +3713,7 @@ function dataPreferred() {
         "Ensure markup documents contain well-formed elements. All elements must have complete start and end tags where required by the HTML specification. This can be tested by running the document through an HTML validator such as W3C's Nu Html Checker: https://validator.w3.org/nu/\n\nNote that, under WCAG 2.1, all HTML documents are considered to meet this requirement. Under WCAG 2.2, the requirement has been removed entirely.",
       stepsToReproduce:
         '1. Use https://validator.w3.org/nu/ to review the source code of the page.\n2. Notice that there are "End tag for X seen, but there were unclosed elements" and/or "Unclosed element X" errors.',
+      successCriteria: ["4.1.1"],
       title: "Incomplete starting/ending tags",
       type: "web",
     },
@@ -3469,6 +3728,7 @@ function dataPreferred() {
         "Provide a clear indication of fields in error for information that is submitted. Include the name of the field in the error message.",
       stepsToReproduce:
         "1. Locate the error.\n2. Notice that the error text does not include the name of the field(s) in error.",
+      successCriteria: ["3.3.1"],
       title: "Form errors without clear indication",
       type: "web",
     },
@@ -3483,6 +3743,7 @@ function dataPreferred() {
         "Ensure focus is logically set when a module opens and when pop-up alerts close. When modal dialogs appear, focus must move to the first focusable element in the dialog. Post a UIAccessibilityScreenChangedNotification to move focus to this element.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Go to Settings > Accessibility > Keyboards > Full Keyboard Access and ensure that it is toggled on.\n3. Using the Tab and arrow keys, navigate until the dialog trigger is focused.\n4. Press Space to activate the dialog trigger.\n5. Notice that the focused element is not the first interactive element within the dialog.",
+      successCriteria: ["2.4.3"],
       title: "Focus not moving to dialogs",
       type: "ios",
     },
@@ -3497,6 +3758,7 @@ function dataPreferred() {
         "Ensure navigation and input focus is indicated visually and programmatically. When interactive controls receive focus, the control must appear on screen and a visible focus indicator must be present. Focus can be indicated in a variety of ways, but the most reliable method is to use system-provided focus effects.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Go to Settings > Accessibility > Keyboards > Full Keyboard Access and ensure that it is toggled on.\n3. Using the Tab and arrow keys, navigate until the control is focused.\n4. Notice that there is no visual indicator that the control is focused, such as an outline.",
+      successCriteria: ["2.4.7"],
       title: "Visual keyboard focus missing",
       type: "ios",
     },
@@ -3511,6 +3773,7 @@ function dataPreferred() {
         "Ensure color and text formatting are not the sole means of communicating information. Color can be used as long as other visual indicators of the information are also present. Common additional visual indicators include underlining, bolding, additional on-screen text conveying the information, or change in shape or size.",
       stepsToReproduce:
         "1. Locate the content.\n2. Notice that the content conveys its meaning through color alone.",
+      successCriteria: ["1.4.1"],
       title: "Color only - General",
       type: "ios",
     },
@@ -3525,6 +3788,7 @@ function dataPreferred() {
         "Ensure color and text formatting are not the sole means of communicating information. Color can be used as long as other visual indicators of the information are also present. Common additional visual indicators for links include underlining or bolding.",
       stepsToReproduce:
         "1. Locate the link.\n2. Notice that the link's presence is conveyed through the use of color alone.",
+      successCriteria: ["1.4.1"],
       title: "Color only - Links",
       type: "ios",
     },
@@ -3539,6 +3803,7 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
+      successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
       type: "ios",
     },
@@ -3553,6 +3818,7 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
+      successCriteria: ["1.4.3"],
       title: "Text on image contrast",
       type: "ios",
     },
@@ -3567,6 +3833,7 @@ function dataPreferred() {
         "Ensure elements are sufficiently described. Add an accessibilityLabel property to the control with an appropriate description.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the control is focused.\n4. Notice that VoiceOver does not announce any name for the control.",
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Elements without accessible names",
       type: "ios",
     },
@@ -3581,6 +3848,7 @@ function dataPreferred() {
         "Ensure error messages are in a platform specific alert or focus is moved to the error message after submit. When top-of-form errors appear, focus must move to the container of the error by posting a UIAccessibilityScreenChangedNotification.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Go to Settings > Accessibility > Keyboards > Full Keyboard Access and ensure that it is toggled on.\n3. Using the Tab and arrow keys, navigate until the error trigger is focused.\n4. Press Space to activate the trigger.\n5. Notice that the top-of-form error does not receive focus.",
+      successCriteria: ["3.3.1"],
       title: "Focus not moving to top-of-form errors",
       type: "ios",
     },
@@ -3595,6 +3863,7 @@ function dataPreferred() {
         "Ensure error messages are in a platform specific alert or focus is moved to the error message after submit. When inline errors appear, move focus to the first field in error by posting a UIAccessibilityScreenChangedNotification. Additionally, the form field's accessibilityLabel property must have the text of the error appended to the end.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Go to Settings > Accessibility > Keyboards > Full Keyboard Access and ensure that it is toggled on.\n3. Using the Tab and arrow keys, navigate until the error trigger is focused.\n4. Press Space to activate the trigger.\n5. Notice that keyboard focus does not move to the first field with an inline error.",
+      successCriteria: ["3.3.1"],
       title: "Focus not moving to first field in error",
       type: "ios",
     },
@@ -3609,6 +3878,7 @@ function dataPreferred() {
         "Provide valid labels for all form elements. Set the accessibilityLabel property of the field to the exact visual text.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the form control is focused.\n4. Notice that VoiceOver does not announce the visual label for the control.",
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Unassociated label",
       type: "ios",
     },
@@ -3622,6 +3892,7 @@ function dataPreferred() {
         "Ensure ARIA roles, states, and properties are valid. Many ARIA attributes can only be used on certain elements. Some can only be used in combination with other attributes. Additionally, if an attribute references an ID, that ID must be present in the page.\n\nTo detect many of these errors automatically, use the Nu Html Checker: https://validator.w3.org/nu/",
       stepsToReproduce:
         "1. Open Chrome DevTools.\n2. Locate the element identified in the code reference.\n3. Notice that the element's ARIA attributes and/or nesting do not conform to the ARIA specification: https://www.w3.org/TR/wai-aria/ and/or the ARIA in HTML specification: https://www.w3.org/TR/html-aria/",
+      successCriteria: ["4.1.2"],
       title: "ARIA invalid",
       type: "web",
     },
@@ -3636,6 +3907,7 @@ function dataPreferred() {
         "Ensure all controls and non-decorative content enable accessibility. Set the isAccessibilityElement property of these elements to YES.",
       stepsToReproduce:
         "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right through the contents of the screen.\n4. Notice that VoiceOver never focuses the mentioned content.",
+      successCriteria: ["4.1.2"],
       title: "Content that cannot receive VoiceOver focus",
       type: "ios",
     },
@@ -3650,6 +3922,7 @@ function dataPreferred() {
         'Ensure layout tables indicate their use for presentation purposes. This can be done by adding role="presentation" to <table> elements used for a layout purpose. Additionally, convert any <th> cells to <td> cells. It is strongly recommended to use CSS instead of HTML table elements for layout purposes.',
       stepsToReproduce:
         "1. Locate the layout table.\n2. Inspect it with Chrome DevTools.\n3. Select the <table> element.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Verify that the accessibility node is not exposed.",
+      successCriteria: ["1.3.1"],
       title: "Layout table marked for presentation",
       type: "web",
     },
@@ -3662,6 +3935,7 @@ function dataPreferred() {
         "The document security settings prevent screen readers from accessing the document.",
       recommendation:
         'Ensure document security is compatible with assistive technologies.\n\nTo ensure screen readers have access to documents in Acrobat Pro:\n1. Activate "Menu".\n2. Select "Document Properties..."\n3. Select "Security".\n4. Activate "Change Settings..."\n5. In "Permissions", uncheck "Enable text access for screen reader devices for the visually impaired".\n6. Activate "OK" and save the document.',
+      successCriteria: ["4.1.2"],
       title: "Document security",
       type: "pdf",
     },
@@ -3676,6 +3950,7 @@ function dataPreferred() {
         "Avoid inappropriate use of ARIA roles, states, and properties. If content is meant to be hidden from all users, hide it with display: none or visibility: hidden. If content is meant to be accessed by all users, remove any aria-hidden attributes.",
       stepsToReproduce:
         '1. Locate the control.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Notice that both "hidden" and "Focusable" are set to true.',
+      successCriteria: ["4.1.2"],
       title: 'Focusable aria-hidden="true" element',
       type: "web",
     },
@@ -3690,6 +3965,7 @@ function dataPreferred() {
         "Provide a descriptive dialog title. If the dialog has a visible title, set aria-labelledby on the dialog container to the ID of the visible title. For dialogs without a visible title, set a descriptive aria-label on the dialog element.",
       stepsToReproduce:
         '1. Locate the dialog.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      successCriteria: ["1.3.1", "2.4.2"],
       title: "No dialog title",
       type: "web",
     },
@@ -3704,6 +3980,7 @@ function dataPreferred() {
         "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an image as decorative, remove any accessibilityLabel property and set its isAccessibilityElement property to YES.",
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces the presence and contents of the image unnecessarily.",
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Decorative images with textual equivalents",
       type: "ios",
     },
@@ -3718,6 +3995,7 @@ function dataPreferred() {
         "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. Set the isAccessibilityElement properties of these elements to NO.",
       stepsToReproduce:
         "1. Turn on VoiceOver.\n2. Swipe right until the content is focused.\n3. Notice that VoiceOver announces the presence of the content even though it is not present visually on-screen and is not meant to be conveyed to users.",
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Hidden content exposed to ATs",
       type: "ios",
     },
@@ -3732,6 +4010,7 @@ function dataPreferred() {
         "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. This includes content behind modal dialogs.\n\nThe best way to prevent access to content behind dialogs is to:\n- Ensure that the dialog container is separate from the container that holds the rest of the screen's content.\n- For the container that holds the rest of the screen's content, set the accessibilityElementsHidden property to YES.\n- When the dialog is closed, remove the accessibilityElementsHidden property.",
       stepsToReproduce:
         "1. Turn on VoiceOver.\n2. Swipe right until content is focused.\n3. Notice that VoiceOver announces the content behind the dialog.",
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Content focusable behind dialog",
       type: "ios",
     },
@@ -3746,6 +4025,7 @@ function dataPreferred() {
         "Ensure non-decorative images provide informative alternative text. Textual equivalents must be both concise and descriptive. Alter the accessibilityLabel property of the image.",
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces an improper name for the image.",
+      successCriteria: ["1.1.1"],
       title: "Meaningful images with improper equivalents",
       type: "ios",
     },
@@ -3760,6 +4040,7 @@ function dataPreferred() {
         "Provide textual equivalents for all non-text elements including sounds and images. Meaningful images must have a concise but descriptive textual equivalent. To add a textual equivalent to an image, set its accessibilityLabel property to a meaningful equivalent.",
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces no name for the image.",
+      successCriteria: ["1.1.1"],
       title: "Meaningful images without textual equivalents",
       type: "ios",
     },
@@ -3774,6 +4055,7 @@ function dataPreferred() {
         "Ensure element traits (role and state) are correct. The best way to do this is to use native views and states, which come with this information built in.\n\nIf using native views is not possible, this information must be set manually through the use of UIAccessibilityTraits. A list of these traits can be found on the Apple website: https://developer.apple.com/documentation/uikit/uiaccessibility/uiaccessibilitytraits",
       stepsToReproduce:
         "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right until the content is focused.\n4. Notice that VoiceOver does not announce the appropriate role or state for the content.",
+      successCriteria: ["4.1.2"],
       title: "Elements with improper roles and states",
       type: "ios",
     },
@@ -3788,6 +4070,7 @@ function dataPreferred() {
         "Ensure access to alternative input methods. The best way to accomplish this is by using appropriate native controls, which come with keyboard functionality built in.\n\nIf using a native control is not possible, the control must have their canBecomeFocused property set to true. Pressing Enter or Space must perform the same functionality as tapping the element. The up and down arrows must be able to select the value of the control, if applicable.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Go to Settings > Accessibility > Keyboards > Full Keyboard Access and ensure that it is toggled on.\n3. Using the Tab and arrow keys, navigate to the control.\n4. Notice that the control cannot be focused with the keyboard, or that Enter, Space, or the arrow keys cannot be used to activate it or change its value.",
+      successCriteria: ["2.1.1", "2.1.3"],
       title: "Keyboard interactive functionality",
       type: "ios",
     },
@@ -3800,6 +4083,7 @@ function dataPreferred() {
         "Ensure that the reading order of content is logical. Ensure the elements follow the screen layout order. Alternatively, use the accessibilityElementAtIndex, accessibilityElementCount and indexOfAccessibilityElement properties to set the order.",
       stepsToReproduce:
         "1. Turn on VoiceOver.\n2. Swipe right until the content is focused.\n3. Notice that the order in which VoiceOver focuses content does not follow the natural reading order of the screen.",
+      successCriteria: ["1.3.2"],
       title: "Reading order",
       type: "ios",
     },
@@ -3814,6 +4098,7 @@ function dataPreferred() {
         'Provide for user control of font size. Users must be able to resize text up to 200%. \n\nThe best way to do this is to allow the app to respond to changes in the OS font size through the use of Dynamic Type. When using Dynamic Type, apps should allow their text to be resized up to the AX2 font size, which is twice the default. This font size can be activated by going to Accessibility > Display & Text Size > Larger Text and toggling on Larger Accessibility Sizes. Then, select the fourth notch from the right (announced as "73%" by VoiceOver).\n',
       stepsToReproduce:
         "1. Go to Settings > Accessibility > Display & Text Size > Larger Text.\n2. Toggle on Larger Accessibility Sizes.\n3. In the slider, select the fourth notch from the right.\n4. Return to the app.\n5. Notice that content disappears, is cut off, or overlaps.",
+      successCriteria: ["1.4.4"],
       title: "Content cut off at 200%",
       type: "ios",
     },
@@ -3828,6 +4113,7 @@ function dataPreferred() {
         'Provide for user control of font size. Users must be able to resize text up to 200%. \n\nThe best way to do this is to allow the app to respond to changes in the OS font size through the use of Dynamic Type. When using Dynamic Type, apps should allow their text to be resized up to the AX2 font size, which is twice the default. This font size can be activated by going to Accessibility > Display & Text Size > Larger Text and toggling on Larger Accessibility Sizes. Then, select the fourth notch from the right (announced as "73%" by VoiceOver).\n',
       stepsToReproduce:
         "1. Go to Settings > Accessibility > Display & Text Size > Larger Text.\n2. Toggle on Larger Accessibility Sizes.\n3. In the slider, select the fourth notch from the right.\n4. Return to the app.\n5. Notice that the app text size has not increased.",
+      successCriteria: ["1.4.4"],
       title: "App text does not increase when OS font size increases",
       type: "ios",
     },
@@ -3842,6 +4128,7 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
+      successCriteria: ["1943"],
       title: "Text contrast insufficient",
       type: "android",
     },
@@ -3856,6 +4143,7 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
+      successCriteria: ["1943"],
       title: "Text on image contrast",
       type: "android",
     },
@@ -3870,6 +4158,7 @@ function dataPreferred() {
         'Ensure error messages are in a platform specific alert or focus is moved to the error message after submit. When top-of-form errors appear, focus must move to the container of the error through the use of sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED).\n\nAlternatively, the error may be placed in an element with an accessibilityLiveRegion attribute set to "polite" or moved to an AlertDialog.',
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Using the Tab and arrow keys, navigate until the error trigger is focused.\n3. Press Enter or Space to activate the trigger.\n4. Notice that the top-of-form error does not receive focus.",
+      successCriteria: ["3.3.1"],
       title: "Focus not moved to top-of-form error",
       type: "android",
     },
@@ -3884,6 +4173,7 @@ function dataPreferred() {
         "Ensure error messages are in a platform specific alert or focus is moved to the error message after submit. When inline errors appear, move focus to the first field in error through the use of sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED). Additionally, the form field's contentDescription attribute must have the text of the error appended to the end.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Using the Tab and arrow keys, navigate until the error trigger is focused.\n3. Press Enter or Space to activate the trigger.\n4. Notice that the first field in error does not receive focus.",
+      successCriteria: ["3.3.1"],
       title: "Focus not moved to first field in error",
       type: "android",
     },
@@ -3898,6 +4188,7 @@ function dataPreferred() {
         "Ensure focus is logically set when a module opens and when pop-up alerts close. When modal dialogs appear, focus must move to the first focusable element in the dialog. Use the sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED) method to move keyboard focus to this element.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Using the Tab and arrow keys, navigate until the dialog trigger is focused.\n3. Press Enter or Space to activate the trigger.\n4. Notice that the first focusable element in the dialog does not receive focus.",
+      successCriteria: ["2.4.3"],
       title: "Focus not moved to dialog",
       type: "android",
     },
@@ -3911,6 +4202,7 @@ function dataPreferred() {
         'Ensure all elements and controls can receive focus. Set the android:focusable attribute of interactive elements to "true".',
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Using the Tab and arrow keys, navigate through the controls on the screen.\n3. Notice that the control never receives keyboard focus.",
+      successCriteria: ["2.1.1"],
       title: "Controls not keyboard focusable",
       type: "android",
     },
@@ -3925,6 +4217,7 @@ function dataPreferred() {
         "Ensure elements are sufficiently described. Add an android:contentDescription attribute to the control with an appropriate description.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the control is focused.\n4. Notice that TalkBack does not announce any name for the control.",
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Controls with no name",
       type: "android",
     },
@@ -3939,6 +4232,7 @@ function dataPreferred() {
         "Provide valid labels for all form elements. Add an android:labelFor attribute to the label, then set it to the ID of the corresponding form field.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the form control is focused.\n4. Notice that TalkBack does not announce the visual label for the control.",
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Unassociated label",
       type: "android",
     },
@@ -3953,6 +4247,7 @@ function dataPreferred() {
         'Ensure all controls and non-decorative content support accessibility. Set the android:importantForAccessibility attribute of meaningful content to "yes". If it is non-text content, also set the element\'s android:contentDescription attribute to a meaningful equivalent.',
       stepsToReproduce:
         "1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right through the content on the screen.\n4. Notice that TalkBack does not focus the content.",
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Content that cannot be focused with TalkBack",
       type: "android",
     },
@@ -3967,6 +4262,7 @@ function dataPreferred() {
         "Ensure element role and state are correct. The best way to do this is to use native views and states, which come with this information built in.\n\nIf using native views is not possible, this information must be set manually. To set an element's role manually, use the setClassName() method with an argument to the getter of the desired Android native control class name, such as Button.class.getName().",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the control.\n4. Notice that TalkBack does not announce the appropriate role or state for the control.",
+      successCriteria: ["4.1.2"],
       title: "Controls with improper role and state",
       type: "android",
     },
@@ -3981,6 +4277,7 @@ function dataPreferred() {
         "Ensure non-decorative images provide informative alternative text. Textual equivalents must be both concise and descriptive. Alter the contentDescription attribute of the image.",
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce an appropriate name for the image.",
+      successCriteria: ["1.1.1"],
       title: "Meaningful images with improper textual equivalents",
       type: "android",
     },
@@ -3995,6 +4292,7 @@ function dataPreferred() {
         "Provide textual equivalents for all non-text elements including sounds and images. Meaningful images must have a concise but descriptive textual equivalent. To add a textual equivalent to an image, set its android:contentDescription attribute to a meaningful equivalent.",
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce any name for the image.",
+      successCriteria: ["1.1.1"],
       title: "Meaningful images without textual equivalents",
       type: "android",
     },
@@ -4009,6 +4307,7 @@ function dataPreferred() {
         'Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an image as decorative, remove any contentDescription attribute and set its importantForAccessibility attribute to "no".',
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack announces the presence of the image unnecessarily.",
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Decorative image with textual equivalent",
       type: "android",
     },
@@ -4023,6 +4322,7 @@ function dataPreferred() {
         'Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies.  Mark non-meaningful, duplicated content as decorative by setting its android:importantForAccessibility attribute to "no".',
       stepsToReproduce:
         "1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right through the contents of the screen.\n4. Notice that TalkBack focuses on the content twice.",
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Duplicated elements",
       type: "android",
     },
@@ -4037,6 +4337,7 @@ function dataPreferred() {
         'Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. Set the android:importantForAccessibility attribute of this content to "no".',
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right through the contents of the screen.\n3. Notice that TalkBack focuses on hidden content that is not meant to be exposed to users.",
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Hidden content exposed to ATs",
       type: "android",
     },
@@ -4051,6 +4352,7 @@ function dataPreferred() {
         "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. This includes content behind modal dialogs.\n\nThe best way to prevent access to content behind dialogs is to:\n- Ensure that the dialog container is separate from the container that holds the rest of the screen's content.\n- For the container that holds the rest of the screen's content, set the android:importantForAccessibility attribute to \"noHideDescendants\".\n- When the dialog is closed, remove the importantForAccessibility attribute from the container holding the rest of the screen's contents.",
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right through the contents of the screen.\n3. Notice that TalkBack focuses on content behind the dialog.",
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Dialogs allow focus behind them",
       type: "android",
     },
@@ -4064,6 +4366,7 @@ function dataPreferred() {
         "Ensure access to alternative input methods. This includes external keyboards, which may be used directly by people with dexterity disabilities or as an interface for switch controls and Braille displays. Generally, controls should be activatable with the Enter key or allow selection with the arrow keys. To respond to keyboard events, implement methods from the KeyEvent.Callback interface,such as onKeyUp().",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Using the Tab and arrow keys, navigate to the control.\n3. Notice that Enter, Space, or the arrow keys cannot be used to activate it or change its value.",
+      successCriteria: ["2.1.1", "2.1.3"],
       title: "Controls not keyboard operable",
       type: "android",
     },
@@ -4076,6 +4379,7 @@ function dataPreferred() {
         "Ensure that the reading order of content is logical. Ensure the elements follow the screen layout order. Alternatively, use the accessibilityTraversalBefore or accessibilityTraversalAfter attributes to manually set the focus order.",
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right through the contents of the screen.\n3. Notice that the order in which TalkBack focuses content does not reflect the natural reading order of the content.",
+      successCriteria: ["1.3.2"],
       title: "Reading order",
       type: "android",
     },
@@ -4090,6 +4394,7 @@ function dataPreferred() {
         "Provide for user control of font size. Users must be able to resize text up to 200%. Allow the app's text to resize according to the font size set in the OS settings.",
       stepsToReproduce:
         '1. Go to Settings > Accessibility > Display size and text.\n2. In "Font size", select the maximum value.\n3. In "Display", select the second notch from the left.\n4. Return to the app.\n5. Note that the text in the application has not resized to match the OS font size settings.',
+      successCriteria: ["1.4.4"],
       title: "Text cannot be resized to 200%",
       type: "android",
     },
@@ -4104,6 +4409,7 @@ function dataPreferred() {
         "Ensure audio is not played automatically on load. If audio content must load automatically, ensure the audio output plays for a maximum of three seconds or that there is a mechanism near the top of the page to stop or pause the audio.",
       stepsToReproduce:
         "1. Open the page.\n2. Notice that audio plays automatically.",
+      successCriteria: ["1.4.2"],
       title: "Audio plays automatically",
       type: "web",
     },
@@ -4118,6 +4424,7 @@ function dataPreferred() {
         "Provide synchronized captions for video (which includes audio) or other multimedia. This includes all spoken language as well as music and sounds pertinent to the content of the video.",
       stepsToReproduce:
         "1. Locate the video.\n2. Notice that there are no captions.",
+      successCriteria: ["1.2.2"],
       title: "Captions missing",
       type: "web",
     },
@@ -4132,6 +4439,7 @@ function dataPreferred() {
         "Provide synchronized captions for video (which includes audio) or other multimedia. Captions must accurately represent the audio content in the video.",
       stepsToReproduce:
         "1. Locate the video.\n2. Review the captions.\n3. Notice that the captions are inaccurate or incomplete.",
+      successCriteria: ["1.2.2"],
       title: "Inaccurate captions",
       type: "web",
     },
@@ -4146,6 +4454,7 @@ function dataPreferred() {
         "Ensure text is used instead of images of text when technology allows. Common exceptions include logotypes or images of single letters.",
       stepsToReproduce:
         "1. Locate the text.\n2. Turn on TalkBack.\n3. Swipe right until the text is focused.\n4. Note that TalkBack announces that the content is an image.",
+      successCriteria: ["1.4.5"],
       title: "Images of text",
       type: "android",
     },
@@ -4160,6 +4469,7 @@ function dataPreferred() {
         "Ensure text is used instead of images of text when technology allows. Common exceptions include logotypes or images of single letters.",
       stepsToReproduce:
         "1. Locate the text.\n2. Turn on VoiceOver.\n3. Swipe right until the text is focused.\n4. Note that VoiceOver announces that the content is an image.",
+      successCriteria: ["1.4.5"],
       title: "Images of text",
       type: "ios",
     },
@@ -4173,6 +4483,7 @@ function dataPreferred() {
         "Ensure the focus order of interactive elements on the page is logical. Generally, the focus order follows the reading order. For English text, this goes from left to right, then from top to bottom. When multiple elements in the vertical plane should be read before some on the horizontal plane, such as a column, set their focusGroupIdentifier property to the same value. To set the order of focused elements within a focus group, set the focusGroupPriority property.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Go to Settings > Accessibility > Keyboards > Full Keyboard Access and ensure that it is toggled on.\n3. Using the Tab and arrow keys, navigate through the controls on the screen.\n4. Notice that the order in which controls are focused does not match the logical reading order of the screen.",
+      successCriteria: ["2.4.3"],
       title: "Focus order not meaningful",
       type: "ios",
     },
@@ -4187,6 +4498,7 @@ function dataPreferred() {
         "Avoid use of placeholder values to label or explain input.\n\nLabels must meet the following requirements:\n- The label must be visible.\n- The label must be persistent. That is, a label must not disappear when text is entered into the field or an option is selected.\n- The label must be programmatically associated with the form field. The most common way to do this is with a <label> element with a for attribute set to the ID of the field.\n- The label must provide the accessible name of the field, or the label's exact text must be included in the accessible name.",
       stepsToReproduce:
         "1. Locate the form field.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Notice that the accessible name is computed from the placeholder attribute.",
+      successCriteria: ["1.3.1", "4.1.2"],
       title: "Placeholder text is used to label or explain input",
       type: "web",
     },
@@ -4201,6 +4513,7 @@ function dataPreferred() {
         "Ensure headings are denoted through structure and not implicitly. Set a UIAccessibilityTraitHeader trait on elements that function as headings.",
       stepsToReproduce:
         "1. Locate the text.\n2. Turn on VoiceOver.\n3. Swipe right until the text is focused.\n4. Note that VoiceOver does not announce the content as a heading.",
+      successCriteria: ["1.3.1"],
       title: "Implicit headings",
       type: "ios",
     },
@@ -4215,6 +4528,7 @@ function dataPreferred() {
         "Ensure ARIA regions, landmarks and HTML sections are identifiable. When multiple <nav> elements appear on the same page, ensure that they each have an accessible name. This can be set with aria-labelledby (if there is visible text naming the region) or aria-label (if no visual label is present).",
       stepsToReproduce:
         '1. Locate the navigation section.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".\n5. Review the name for other <nav> elements on the page.',
+      successCriteria: ["1.3.1"],
       title: "Navigation without unique name",
       type: "web",
     },
@@ -4229,6 +4543,7 @@ function dataPreferred() {
         "Ensure ARIA regions, landmarks and HTML sections are identifiable. When multiple <aside> elements appear on the same page, ensure that they each have an accessible name. This can be set with aria-labelledby (if there is visible text naming the region) or aria-label (if no visual label is present).",
       stepsToReproduce:
         '1. Locate the aside.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".\n5. Review the name for other <aside> elements on the page.',
+      successCriteria: ["1.3.1"],
       title: "Aside without unique name",
       type: "web",
     },
@@ -4243,6 +4558,7 @@ function dataPreferred() {
         'Ensure ARIA regions, landmarks and HTML sections are identifiable. Elements with role="region" must have an accessible name set with aria-label or aria-labelledby.',
       stepsToReproduce:
         '1. Locate the region.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      successCriteria: ["1.3.1"],
       title: "Region without name",
       type: "web",
     },
@@ -4256,6 +4572,7 @@ function dataPreferred() {
         "Ensure all input elements and controls can receive focus. This can generally be accomplished by using standard input controls or supporting becoming a first responder on custom input fields.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Go to Settings > Accessibility > Keyboards > Full Keyboard Access and ensure that it is toggled on.\n3. Using the Tab and arrow keys, navigate through the controls on the screen.\n4. Notice that the control cannot be focused with the keyboard.",
+      successCriteria: ["2.1.1"],
       title: "Content that cannot receive keyboard focus",
       type: "ios",
     },
@@ -4270,6 +4587,7 @@ function dataPreferred() {
         "Provide accessible names for progress bars and meters. Use an aria-label, aria-labelledby, or title attribute on the element to provide the accessible name.",
       stepsToReproduce:
         '1. Locate the progress bar.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
+      successCriteria: ["1.1.1", "4.1.2"],
       title: "Progress accessible name missing",
       type: "web",
     },
@@ -4284,6 +4602,7 @@ function dataPreferred() {
         "Provide an accessible alert method for content changes that occur without explicit user knowledge. Post a UIAccessibilityLayoutChangedNotification when this indicator appears.",
       stepsToReproduce:
         "1. Turn on VoiceOver.\n2. Swipe right repeatedly until the trigger for the loading indicator is focused.\n3. Double tap the trigger.\n4. Notice that VoiceOver does not announce anything to suggest that content is loading.",
+      successCriteria: ["4.1.2"],
       title: "Loading indicator",
       type: "ios",
     },
@@ -4298,6 +4617,7 @@ function dataPreferred() {
         'Provide an accessible alert method for content changes that occur without explicit user knowledge.\n\nSet an accessibilityLiveRegion attribute on the loading element to "polite" or use the announceForAccessibility() method.',
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right repeatedly until the trigger for the loading indicator is focused.\n3. Double tap the trigger.\n4. Notice that TalkBack does not announce anything to suggest that content is loading.",
+      successCriteria: ["4.1.2"],
       title: "Loading indicator",
       type: "android",
     },
@@ -4309,6 +4629,7 @@ function dataPreferred() {
         "There is visually hidden content meant to be hidden from all users, but it can still be accessed by screen reader users. Examples include:\n- ",
       recommendation:
         'Ensure hidden content is not accessible by assistive technologies. Mark all non-meaningful hidden content as an artifact.\n\nTo mark content as an artifact in Acrobat Pro:\n1. Activate "Add, delete or edit accessibility tags" (tag icon) in the right toolbar.\n2. Locate the container of the hidden content.\n3. Open the context menu (right-click) for the container, then select "Change Tag to Artifact..."\n4. Activate "OK", then save the document.',
+      successCriteria: [],
       title: "Hidden content exposed to screen readers",
       type: "pdf",
     },
@@ -4321,6 +4642,7 @@ function dataPreferred() {
         "There are videos with audio that have no captions. Examples include:\n- ",
       recommendation:
         "Provide synchronized equivalent for multimedia (audio and video). This includes all spoken language as well as music and sounds pertinent to the content of the video.",
+      successCriteria: ["1.2.2", "1.2.3", "1.2.4", "1.2.5"],
       title: "Captions missing",
       type: "pdf",
     },
@@ -4333,6 +4655,7 @@ function dataPreferred() {
         "There are prerecorded videos with audio that do not have audio descriptions. Examples include:\n- ",
       recommendation:
         "Provide synchronized equivalent for multimedia (audio and video). Audio description must accurately convey all important visual information, such as actions or unspoken text.",
+      successCriteria: ["1.2.2", "1.2.3", "1.2.4", "1.2.5"],
       title: "Audio descriptions missing",
       type: "pdf",
     },
@@ -4345,6 +4668,7 @@ function dataPreferred() {
         "There are live videos with audio that have no captions. Examples include:\n- ",
       recommendation:
         "Provide synchronized equivalent for multimedia (audio and video). This includes all spoken language as well as music and sounds pertinent to the content of the video.",
+      successCriteria: ["1.2.2", "1.2.3", "1.2.4", "1.2.5"],
       title: "Live captions missing",
       type: "pdf",
     },
@@ -4359,6 +4683,7 @@ function dataPreferred() {
         'Provide text equivalents for icon fonts. Font icon pseudo-elements must be set apart in their own real element, such as a <span>. To add a textual equivalent, add role="img" to the element and an aria-label attribute set to an appropriate textual description.',
       stepsToReproduce:
         '1. Locate the icon.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the values for "Name" and "Role".',
+      successCriteria: ["1.1.1"],
       title: "Font icons without textual equivalents",
       type: "web",
     },
@@ -4373,6 +4698,7 @@ function dataPreferred() {
         'Provide text equivalents for icon fonts. Font icon pseudo-elements must be set apart in their own real element, such as a <span>. To mark the icon as decorative, set aria-hidden="true" on this element.',
       stepsToReproduce:
         "1. Locate the icon.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
+      successCriteria: ["1.1.1"],
       title: "Decorative font icons",
       type: "web",
     },
@@ -4386,6 +4712,7 @@ function dataPreferred() {
         "Avoid making containers focusable. This can usually be achieved by removing any android:focusable or android:contentDescription properties that are set on the container.",
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right repeatedly until the container is focused.\n3. Continue swiping right and note that content within the container cannot be focused.",
+      successCriteria: ["2.1.1"],
       title: "Focusable containers",
       type: "android",
     },
@@ -4399,6 +4726,7 @@ function dataPreferred() {
         "Ensure container views themselves are not accessible. Set isAccessibilityElement to NO on the container.",
       stepsToReproduce:
         "1. Turn on VoiceOver.\n2. Swipe right repeatedly until the container is focused.\n3. Continue swiping right and note that content within the container cannot be focused.",
+      successCriteria: ["2.1.1"],
       title: "Focusable containers",
       type: "ios",
     },
@@ -4411,6 +4739,7 @@ function dataPreferred() {
         "There are Table tags used for layout purposes. Examples include:\n- ",
       recommendation:
         "Avoid using tables for non-tabular data. Convert this content into other semantically appropriate tags.",
+      successCriteria: ["1.3.1"],
       title: "Layout tables",
       type: "pdf",
     },
@@ -4425,6 +4754,7 @@ function dataPreferred() {
         "Ensure multi part controls that act as a single unit appear as a single accessible control. Consolidate these controls into a single accessible element with appropriate accessibility traits and a label. Once this is done, hide any controls with duplicate functionality from assistive technologies by using the isAccessibilityEnabled() function.",
       stepsToReproduce:
         "1. Turn on VoiceOver.\n2. Swipe right repeatedly until you reach the multi-part control.\n3. Notice that VoiceOver focuses each part of the control independently rather than as one single element.",
+      successCriteria: ["4.1.2"],
       title: "Multi-part controls",
       type: "ios",
     },
@@ -4437,6 +4767,7 @@ function dataPreferred() {
         "There are images that serve a decorative purpose but are exposed to screen readers. Examples include:\n- ",
       recommendation:
         'Ensure decorative images are tagged as artifacts. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them.\n\nTo mark an image as decorative in Acrobat Pro:\n1. Activate "Add, delete or edit accessibility tags" (tag icon) in the right toolbar.\n2. Navigate to the Figure tag that contains the Image container of the image you want to mark as decorative.\n3. Open the context menu (right-click) for the image container (not the Figure tag) and choose "Change Tag to Artifact...".\n4. In the dialog that appears, press OK.\n5. Delete the now-empty Figure tag with the Delete key or by opening the context menu and choosing Delete Tag.',
+      successCriteria: [],
       title: "Decorative image not hidden from screen readers",
       type: "pdf",
     },
@@ -4451,6 +4782,7 @@ function dataPreferred() {
         "Ensure that common input fields allow autocomplete and use standard autocomplete values.\n\nCommon inputs include names, emails, passwords, and addresses, among others. For a full list of values, see the WCAG standard: https://www.w3.org/TR/WCAG22/#input-purposes",
       stepsToReproduce:
         "1. Locate the field.\n2. Inspect it with Chrome DevTools.\n3. Review the value for its autocomplete attribute, if any.",
+      successCriteria: ["1.3.5"],
       title: "Form fields missing autocomplete",
       type: "web",
     },
@@ -4465,6 +4797,7 @@ function dataPreferred() {
         "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality. When the page has a viewport width of 320 CSS pixels, all content and functionality must still be available without requiring horizontal scrolling.\n\nMoving content to an accessible show/hide control, such as a hamburger menu, is acceptable.\n\nContent that requires two dimensions to be understood, such as a map or data table, is exempt from this requirement.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. Activate "Toggle device toolbar" (laptop and cell phone icon).\n3. In "Dimensions", select "Responsive".\n4. In "Width", enter "320".\n5. Refresh the page.\n6. Notice that content disappears, is cut off, or overlaps.',
+      successCriteria: ["1.4.10"],
       title: "Reflow content loss",
       type: "web",
     },
@@ -4479,6 +4812,7 @@ function dataPreferred() {
         "Ensure that functionality can be operated through a single pointer except when a multi-point or path-based gesture is essential. Multipoint gestures include any action conducted with multiple fingers, such as multi-finger taps and pinching to zoom. Path-based gestures include specifically drawn shapes or patterns. Essential applications for path-based gestures include signatures and artistic drawing. Instead of relying on multipoint or path-based gestures, use single-point activation instead. Single-point activation includes tapping, double-tapping, and long-presses.",
       stepsToReproduce:
         "1. Locate the functionality.\n2. Notice that there is no way to activate the functionality without using multipoint touch or swipe gestures.",
+      successCriteria: ["2.5.1"],
       title: "Multipoint path-based gestures required",
       type: "web",
     },
@@ -4493,6 +4827,7 @@ function dataPreferred() {
         "Ensure events triggered by single-point activation can be cancelled. Use the up event to reverse the down event effects if the user has moved off of the target area of the control, or do not rely on the down event for activation unless other up event functionality is essential. When completion of the event is on the up event, such as a drag, make sure users can abort or undo the action.",
       stepsToReproduce:
         "1. Locate the control.\n2. Click and hold on the control or long press the control.\n3. Notice that the control is activated immediately when the click or long press is initiated, not when it is released.",
+      successCriteria: ["2.5.2"],
       title: "Single-point activation cannot be cancelled",
       type: "web",
     },
@@ -4507,6 +4842,7 @@ function dataPreferred() {
         "Provide synchronized audio description for video (which includes audio) or other multimedia. Audio description must accurately convey all important visual information, such as actions or unspoken text.",
       stepsToReproduce:
         "1. Locate the video.\n2. Notice that an audio description track is not provided.",
+      successCriteria: ["1.2.3", "1.2.5", "1.2.7"],
       title: "Audio descriptions missing",
       type: "web",
     },
@@ -4521,6 +4857,7 @@ function dataPreferred() {
         "Ensure that content and functionality is available when the user overrides text spacing properties.\n\nContent must adapt up to the following specific spacing requirements identified in WCAG:\n- Line height must be able to adapt to 1.5 times the font size.\n- Letter spacing must be able to adapt to 0.12 times the font size.\n- Word spacing must be able to adapt to 0.16 times the font size.\n- Spacing underneath paragraphs must be able to adapt to 2 times the font size.\n\nFor assistance testing content against this standard, install a user style management extension, such as Stylus. Then, create a user style with the following CSS:\n* {\n  line-height: 1.5 !important;\n  letter-spacing: 0.12em !important;\n  word-spacing: 0.16em !important;\n}\n\np {\n  margin-bottom: 2em !important;\n}",
       stepsToReproduce:
         "1. Install a user style management extension, such as Stylus.\n2. Create a user style with the following CSS: *{line-height:1.5 !important;letter-spacing:0.12em !important;word-spacing:0.16em !important}p{margin-bottom:2em !important}\n3. Activate the user style on the page.\n4. Notice that content disappears, overlaps, or is cut off when custom text spacing is active.",
+      successCriteria: ["1.4.12"],
       title: "Text spacing content loss",
       type: "web",
     },
@@ -4535,6 +4872,7 @@ function dataPreferred() {
         "Ensure that motion is not the only method to activate user interface components. Provide a means to activate the functionality by other means, like a user interface control. If motion is essential, then it is exempt. For example, functions that require sensor input, such as pedometer or geolocation sensors, are exempt. Additionally, allow users to turn off motion actuation to prevent accidental activation.",
       stepsToReproduce:
         "1. Locate the functionality.\n2. Notice that there is no way to activate the functionality without device motion sensing.",
+      successCriteria: ["2.5.4"],
       title: "Motion required to use function",
       type: "web",
     },
@@ -4549,6 +4887,7 @@ function dataPreferred() {
         "Avoid restricting the operation or viewing of content in different display orientations.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. Activate "Toggle device toolbar" (laptop and cell phone icon).\n3. In "Dimensions", select "Responsive".\n4. Activate "Rotate" (rotating rectangle icon).\n5. Refresh the page.\n6. Notice that content is unavailable in either the portrait or landscape orientations.',
+      successCriteria: ["1.3.4"],
       title: "Orientation locked",
       type: "web",
     },
@@ -4563,6 +4902,7 @@ function dataPreferred() {
         'Ensure that status messages can be determined programmatically without receiving focus. This can be done with ARIA live regions. Live regions can be created by adding a role attribute set to "log", "status", "alert", "progressbar", "marquee", or "timer" as appropriate. Alternatively, custom behavior can be created by using the aria-live, aria-atomic, and aria-relevant attributes. Text injected into this live region element will be announced by screen readers.\n\nImportantly, the element with the ARIA live attributes must be available when the page loads. Otherwise, many screen readers will be unable to detect updates to the element. Additionally, the element must be empty on page load unless an immediate screen reader announcement is desired.',
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
+      successCriteria: ["4.1.3"],
       title: "Status message not communicated",
       type: "web",
     },
@@ -4577,6 +4917,7 @@ function dataPreferred() {
         'Ensure that status messages can be determined programmatically without receiving focus.\n\nFor a loading indicator, the best way to do this is to use a "status" ARIA live region. To create such a region:\n- Ensure that a visually hidden container <div> is present when the page loads. The <div> must be empty unless a visual loading indicator is visible.\n- Add a role="status" attribute to this <div>.\n- When the page is in a loading state, use JavaScript to inject text into this <div role="status"> that describes the loading behavior (e.g. "Loading more posts", "Processing email", etc.). If properly configured, this text will be announced to screen readers.',
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
+      successCriteria: ["4.1.3"],
       title: "Loading status message",
       type: "web",
     },
@@ -4591,6 +4932,7 @@ function dataPreferred() {
         'Ensure that status messages can be determined programmatically without receiving focus.\n\nFor dynamically updated search results, the best way to do this is to use a "status" ARIA live region. To create such a region:\n- Ensure that a visually hidden container <div> is present when the page loads. The <div> must be empty until results are returned.\n- Add a role="status" attribute to this <div>.\n- When the page is in a loading state, use JavaScript to inject text into this <div role="status"> that describes the results available (e.g., "83 results available" or "Results available"). If properly configured, this text will be announced to screen readers.',
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
+      successCriteria: ["4.1.3"],
       title: "Search results status message",
       type: "web",
     },
@@ -4605,6 +4947,7 @@ function dataPreferred() {
         "Ensure that character key shortcuts without modifiers can be reconfigured or deactivated. Unmodified character key shortcuts are shortcuts that use only letter, punctuation, number, or symbol characters. They do not include shortcuts that use Ctrl, Alt, and other non-printable characters. They also do not include shortcuts that are only available when a control has keyboard focus.\n\nTo resolve the issue, provide users a way to turn off or change the shortcut.",
       stepsToReproduce:
         "1. Ensure that no controls have keyboard focus.\n2. Activate all character keys on the keyboard.\n3. Note that single-character keyboard shortcuts exist and cannot be disabled or changed.",
+      successCriteria: ["2.1.4"],
       title: "Character key shortcuts",
       type: "web",
     },
@@ -4619,6 +4962,7 @@ function dataPreferred() {
         "Ensure the visible text label for a control is included in the control's accessible name.",
       stepsToReproduce:
         '1. Locate the control.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".\n5. Notice that this value does not include the visible text of the control as a substring.',
+      successCriteria: ["2.5.3"],
       title: "Form label in name missing",
       type: "web",
     },
@@ -4633,6 +4977,7 @@ function dataPreferred() {
         "Ensure that content that appears on hover or focus may be dismissed by the user. The best way to do this is to allow the hover/focus content to be hidden with the Esc key.",
       stepsToReproduce:
         "1. Trigger the appearance of the content.\n2. Attempt to dismiss the content without moving keyboard focus or the cursor, such as by pressing Esc.\n3. Notice that there is no way to dismiss the content.",
+      successCriteria: ["1.4.13"],
       title: "Hover or focus content cannot be dismissed",
       type: "web",
     },
@@ -4647,6 +4992,7 @@ function dataPreferred() {
         "Ensure that content that appears on hover may be moved over with a pointer without disappearing. For example, users must be able to hover over tooltips without the tooltip disappearing.",
       stepsToReproduce:
         "1. Trigger the appearance of the content.\n2. Attempt to hover over the revealed content with the mouse.\n3. Notice that the content disappears when it is hovered over.",
+      successCriteria: ["1.4.13"],
       title: "Hover or focus content disappears when pointer moves over",
       type: "web",
     },
@@ -4661,7 +5007,23 @@ function dataPreferred() {
         'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
       stepsToReproduce:
         "1. Locate the user interface component.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
+      successCriteria: ["1.4.11"],
       title: "Active interface contrast insufficient",
+      type: "web",
+    },
+    {
+      bp: 2910,
+      id: "response-graphical-object-contrast-insufficient",
+      impact:
+        "Users with low vision will have difficulty identifying this content.",
+      issue:
+        "There are graphical objects with a color contrast ratio below 3.00:1.\n\nForeground color: \nBackground color: \nContrast ratio: \n\nExamples include:\n- ",
+      recommendation:
+        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
+      stepsToReproduce:
+        "1. Locate the graphical object.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
+      successCriteria: ["1.4.11"],
+      title: "Graphical object contrast insufficient",
       type: "web",
     },
     {
@@ -4673,6 +5035,7 @@ function dataPreferred() {
         "There are user interface components with a contrast ratio below 3.00:1.\n\nForeground color: \nBackground color: \nContrast ratio: \n\nExamples of this user interface component include:\n- ",
       recommendation:
         'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
+      successCriteria: ["1.4.11"],
       title: "Active interface contrast insufficient",
       type: "pdf",
     },
@@ -4687,6 +5050,7 @@ function dataPreferred() {
         'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
       stepsToReproduce:
         "1. Locate the component.\n2. Determine the component color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.",
+      successCriteria: ["1.4.11"],
       title: "Active interface contrast insufficient",
       type: "android",
     },
@@ -4701,22 +5065,9 @@ function dataPreferred() {
         'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
       stepsToReproduce:
         "1. Locate the component.\n2. Determine the component color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.",
+      successCriteria: ["1.4.11"],
       title: "Active interface contrast insufficient",
       type: "ios",
-    },
-    {
-      bp: 2910,
-      id: "response-graphical-object-contrast-insufficient",
-      impact:
-        "Users with low vision will have difficulty identifying this content.",
-      issue:
-        "There are graphical objects with a color contrast ratio below 3.00:1.\n\nForeground color: \nBackground color: \nContrast ratio: \n\nExamples include:\n- ",
-      recommendation:
-        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
-      stepsToReproduce:
-        "1. Locate the graphical object.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
-      title: "Graphical object contrast insufficient",
-      type: "web",
     },
     {
       bp: 2912,
@@ -4729,6 +5080,7 @@ function dataPreferred() {
         "Ensure content that appears on hover or focus is persistent until dismissed, not valid, or the trigger is removed. New content that appears on hover and/or focus must remain visible until the pointer or keyboard focus is moved away from the triggering control, the new content is dismissed, or the new content is no longer relevant.",
       stepsToReproduce:
         "1. Trigger the appearance of the content.\n2. Notice that the revealed content eventually disappears without user action.",
+      successCriteria: ["1.4.13"],
       title: "Hover or focus content disappears without user action",
       type: "web",
     },
@@ -4741,6 +5093,7 @@ function dataPreferred() {
         "There are graphical objects with a color contrast ratio below 3.00:1.\n\nForeground color: \nBackground color: \nContrast ratio: \n\nExamples include:\n- ",
       recommendation:
         "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
+      successCriteria: ["1.4.11"],
       title: "Graphical object contrast insufficient",
       type: "pdf",
     },
@@ -4755,6 +5108,7 @@ function dataPreferred() {
         "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the graphic.\n2. Determine the graphic color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.",
+      successCriteria: ["1.4.11"],
       title: "Graphical object contrast insufficient",
       type: "android",
     },
@@ -4769,6 +5123,7 @@ function dataPreferred() {
         "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the graphic.\n2. Determine the graphic color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.",
+      successCriteria: ["1.4.11"],
       title: "Graphical object contrast insufficient",
       type: "ios",
     },
@@ -4781,6 +5136,7 @@ function dataPreferred() {
         "There are controls with accessible names that do not include the text of their visual labels. Examples include:\n- ",
       recommendation:
         'Ensure the visible text label for a control is included in the control\'s accessible name.\n\nTo check the accessible name of form controls:\n1. Open the "Prepare Form" tools pane.\n2. Locate the field you want to add an accessible name to in the "FIELDS" section of the right-hand pane.\n3. Open the context menu (right-click) on the form field and choose "Properties."\n4. In the dialog that appears, review the "Tooltip" field. For text, dropdown, signature, and date fields, this field must contain the exact visible text of the field and any instructional text for that specific field, as well as any additional text needed to distinguish the field from other fields with the same name. For radio buttons, this field must contain the exact text of the grouping question for the radio buttons and not the text of the radio buttons themselves. For checkboxes, this must contain both the grouping question AND the visible text for the individual checkbox.\n5. If the form field is a radio button, go to the "Options" tab in the dialog. Review the contents of the "Radio Button Choice" field.\n\nTo check the accessible names of links:\n1. Locate the Link tag in the Tags panel.\n2. Open the context menu for the Link tag and select "Properties".\n3. Review the "Actual Text" and "Alternate Text" fields.',
+      successCriteria: ["2.5.3"],
       title: "Accessible name does not include visible text",
       type: "pdf",
     },
@@ -4795,6 +5151,7 @@ function dataPreferred() {
         "Ensure the visible text label for a control is included in the control's accessible name. Alter the android:contentDescription attribute to include all of the visual text of the control.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the control is focused.\n4. Notice that TalkBack announces a name that does not include the visual label for the control.",
+      successCriteria: ["2.5.3"],
       title: "Accessible name does not include visible text",
       type: "android",
     },
@@ -4809,6 +5166,7 @@ function dataPreferred() {
         "Ensure the visible text label for a control is included in the control's accessible name. Alter the accessibilityLabel property to include all of the visual text of the control.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the control is focused.\n4. Notice that VoiceOver announces a name that does not include the visual label for the control.",
+      successCriteria: ["2.5.3"],
       title: "Accessible name does not include visible text",
       type: "ios",
     },
@@ -4821,6 +5179,7 @@ function dataPreferred() {
         "There are controls that are triggered by the mousedown event. Examples include:\n- ",
       recommendation:
         "Ensure events triggered by single-point activation can be cancelled. Use the up event to reverse the down event effects if the user has moved off of the target area of the control, or do not rely on the down event for activation unless other up event functionality is essential. When completion of the event is on the up event, such as a drag, make sure users can abort or undo the action.",
+      successCriteria: ["2.5.2"],
       title: "Single-point activation cannot be cancelled",
       type: "pdf",
     },
@@ -4834,6 +5193,7 @@ function dataPreferred() {
         "Avoid restricting the operation or viewing of content in different display orientations. Reflow the content of the screen according to the orientation communicated by the OS.",
       stepsToReproduce:
         '1. Go to Settings > Display and ensure that "Auto-rotate screen" is toggled on.\n2. Rotate the device into landscape orientation.\n3. Return to the app.\n4. Notice that the app content does not rotate into landscape orientation.',
+      successCriteria: ["1.3.4"],
       title: "Content restricted to one orientation",
       type: "android",
     },
@@ -4847,6 +5207,7 @@ function dataPreferred() {
         "Avoid restricting the operation or viewing of content in different display orientations. Reflow the content of the screen according to the orientation communicated by the OS.",
       stepsToReproduce:
         "1. Open Control Center by swiping down from the top-right corner.\n2. Ensure the Portrait Orientation Lock control is off.\n3. Rotate the device into landscape orientation.\n4. Open the app.\n5. Note that the app's content does not rotate into landscape orientation.",
+      successCriteria: ["1.3.4"],
       title: "Content restricted to one orientation",
       type: "ios",
     },
@@ -4861,6 +5222,7 @@ function dataPreferred() {
         'Ensure all interactive functionality is operable with the keyboard. The best way to accomplish this is by using appropriate native controls, which come with keyboard functionality built in.\n\nIf using a native control is not possible, the control must have tabindex="0" and have JavaScript event listeners that allow the control to be activated when Enter is pressed.',
       stepsToReproduce:
         "1. Press Tab repeatedly to navigate through the elements in the page.\n2. If the control can be focused, attempt to interact with the control using Enter, Space, Up/Down Arrow, and any other applicable keystrokes.\n3. Notice that the control cannot be focused or that the control cannot be interacted with using the keyboard alone.",
+      successCriteria: ["2.1.1", "2.1.3"],
       title: "Keyboard interactive functionality",
       type: "web",
     },
@@ -4872,6 +5234,7 @@ function dataPreferred() {
       issue:
         "There is content that disappears, overlaps, or is cut off when viewing the page at 200% browser zoom. Examples include:\n- ",
       recommendation: "Ensure text can be resized to 200% of the default.",
+      successCriteria: ["1.4.4"],
       title: "Text resizing",
       type: "pdf",
     },
@@ -4886,6 +5249,7 @@ function dataPreferred() {
         "Provide synchronized captions for live video (which includes audio) or other multimedia. This includes all spoken language as well as music and sounds pertinent to the content of the video.",
       stepsToReproduce:
         "1. Locate the video.\n2. Notice that there are no captions.",
+      successCriteria: ["1.2.4"],
       title: "Live captions missing",
       type: "web",
     },
@@ -4900,6 +5264,7 @@ function dataPreferred() {
         'Ensure headings are denoted through structure and not implicitly. Set the android:accessibilityHeading attribute to "true" on elements meant to serve as headings.',
       stepsToReproduce:
         "1. Locate the text.\n2. Turn on TalkBack.\n3. Swipe right until the text is focused.\n4. Note that TalkBack does not announce the content as a heading.",
+      successCriteria: ["1.3.1"],
       title: "Implicit headings",
       type: "android",
     },
@@ -4912,6 +5277,7 @@ function dataPreferred() {
         "There are elements that trigger a focus or context change as soon as they receive focus. Examples include:\n- ",
       recommendation:
         "Ensure event handlers that trigger context changes on focus are avoided. Do not shift focus after a control receives focus except when immediate user interaction is needed (such as time-based alerts).",
+      successCriteria: ["3.2.1", "3.2.5"],
       title: "Focus is shifted on focus",
       type: "pdf",
     },
@@ -4926,6 +5292,7 @@ function dataPreferred() {
         "Ensure all functionality that uses a dragging movement can be operated by a single pointer without dragging. One way to meet this requirement is to require users to perform a series of single-pointer, non-path-based interactions instead of dragging. Keyboard alternatives are not sufficient to meet this requirement. Exceptions include freeform drawing or games that require dragging.",
       stepsToReproduce:
         "1. Locate the functionality.\n2. Note that it can only be performed by dragging.",
+      successCriteria: ["2.5.7"],
       title: "Dragging movements",
       type: "web",
     },
@@ -4940,6 +5307,7 @@ function dataPreferred() {
         'Provide a sufficient area for pointer targets. Pointer targets must have an area with a width and height of at least 24 CSS pixels. Exceptions include undersized targets for which one can place a 24 CSS pixel diameter circle on the center of the target\'s bounding box without intersecting with any other targets or circles of undersized targets. Additional exceptions include targets within a sentence or with a line height that is otherwise constrained by non-target text, targets that are controlled by the user agent and not modified by the author, targets with a presentation that is essential to convey accurate information, and targets with a presentation that is legally required.\n\nTo quickly determine whether a target is large enough or qualifies for exceptions, use the "Display a 24x24 rectangle cursor" bookmarklet: https://mraccess77.github.io/favlets/cursor.html',
       stepsToReproduce:
         "1. Turn on a bookmarklet to draw 24x24 circles on interactive controls, such as https://mraccess77.github.io/favlets/cursor.html\n2. Notice that the 24x24px circle for the control overlaps with the interactive area or 24x24px circle of another control.",
+      successCriteria: ["2.5.8"],
       title: "Minimum target size",
       type: "web",
     },
@@ -4953,6 +5321,7 @@ function dataPreferred() {
         "Ensure that access to help is provided in the same relative order within a set of web pages. This applies to human contact details, such as an email, phone number, or hours of operation; human contact mechanisms, such as chat, contact forms, or social media; self-help options, such as FAQs or support pages; and fully automated contact mechanisms, such as chatbots. Common ways to meet this requirement include consistently putting links to help mechanisms in a footer, header, or navigation menu. Exceptions to this requirement include websites with no help, archival content, academic or certification testing applications, and non-web documents such as PDFs.",
       stepsToReproduce:
         "1. Locate where access to help is provided on the page.\n2. Notice that the location of this content differs on different pages.",
+      successCriteria: ["3.2.6"],
       title: "Inconsistently located help",
       type: "web",
     },
@@ -4967,6 +5336,7 @@ function dataPreferred() {
         "Ensure that each step in an authentication process does not rely on a cognitive function test or provides assistance. This applies to all steps in an authentication process, including multi-factor authentication (MFA). It also applies to email and password recovery processes.\n\nA common form of cognitive function test is transcription. This includes disabling pasting or autofill on username, password, and MFA fields, as it forces users to transcribe the values of these fields.\n\nTo resolve this issue, developers must enable the ability to paste or autofill into username, password, and MFA fields.",
       stepsToReproduce:
         "1. Locate the authentication process.\n2. Notice that the username, password, and/or MFA fields disable pasting or autofill.",
+      successCriteria: ["3.3.8"],
       title: "Pasting disabled on username, password, or MFA fields",
       type: "web",
     },
@@ -4981,6 +5351,7 @@ function dataPreferred() {
         "Ensure that each step in an authentication process does not rely on a cognitive function test or provides assistance. This applies to all steps in an authentication process, including multi-factor authentication (MFA). It also applies to email and password recovery processes.\n\nCommon examples of cognitive function tests include memorization, transcription, use of correct spelling, calculations, and puzzles. However, tests that require visual/audio object recognition and tests that require identification of user-supplied non-text content are exempt from this requirement.\n\nCommon examples of CAPTCHAs that do not meet these requirements include transcribing text from an image, transcribing text from spoken-word audio, rotating or moving an object until it is in its correct position, and solving math problems.\n\nEven if the site does not always present a CAPTCHA to the user during authentication, the CAPTCHA must conform to these requirements.\n\nCommon solutions include changing the CAPTCHA to use an exempt test or providing an alternative login method that never requires a CAPTCHA.Alternative, non-CAPTCHA login methods include authentication via emailed links, APIs such as WebAuthn that allow users to authenticate with a device instead of a username and password, or third-party logins such as OAuth.",
       stepsToReproduce:
         "1. Locate the authentication process.\n2. Notice that the process relies on a CAPTCHA that uses a non-exempt cognitive function test.",
+      successCriteria: ["3.3.8"],
       title: "Authentication requires non-exempt CAPTCHA",
       type: "web",
     },
@@ -4995,6 +5366,7 @@ function dataPreferred() {
         "Provide support for redundant entry of information within a process unless re-entry is essential. Common ways to meet this requirement include automatically populating information based on earlier answers or presenting information from an earlier step so that users can copy-paste it. Browser autofill functionality is not sufficient to meet this requirement.\n\nExceptions include information entered in an earlier user session, password re-entry when creating a new password or for security purposes, and memory games. It is also acceptable to require redundant entry if the redundant information is in a different format, such as an uploaded document.",
       stepsToReproduce:
         "1. Locate the process.\n2. Notice that the process requires users to re-enter information they have already supplied.",
+      successCriteria: ["3.3.7"],
       title: "Redundant entry required",
       type: "web",
     },
@@ -5009,6 +5381,7 @@ function dataPreferred() {
         "Ensure keyboard-operable elements which receive focus are not fully obscured. Examples include focusable content behind sticky headers/footers and non-modal dialogs. This requirement applies to each page variation, such as responsive breakpoints.\n\nIf the interface allows the user to move elements, only the first positions of the movable content must meet this requirement. However, authors must ensure that the first positions do not fully obscure focused elements even if users can move or resize the obscuring element.\n\nWhen elements can receive focus behind non-modal content that can be opened/expanded over top of it, a method to dismiss that content without moving the keyboard focus needs to be provided.",
       stepsToReproduce:
         "1. Navigate through the controls on the page using the Tab and arrow keys.\n.2. Notice that some controls are fully obscured when they are focused with the keyboard.",
+      successCriteria: ["2.4.11"],
       title: "Obscured focused element",
       type: "web",
     },
@@ -5023,6 +5396,7 @@ function dataPreferred() {
         "Ensure keyboard-operable elements which receive focus are not fully obscured. Examples include focusable content behind sticky headers/footers and non-modal dialogs.\n\nIf the interface allows the user to move elements, only the first positions of the movable content must meet this requirement. However, authors must ensure that the first positions do not fully obscure focused elements even if users can move or resize the obscuring element.\n\nWhen elements can receive focus behind non-modal content that can be opened/expanded over top of it, a method to dismiss that content without moving the keyboard focus needs to be provided.",
       stepsToReproduce:
         "1. Attach a keyboard to the device.\n2. Go to Settings > Accessibility > Keyboards > Full Keyboard Access and ensure that it is toggled on.\n3. Using the Tab and arrow keys, navigate through the controls on the screen.\n4. Notice that some elements are fully obscured when they are focused with the keyboard.",
+      successCriteria: ["2.4.11"],
       title: "Obscured focused element",
       type: "ios",
     },
@@ -5037,6 +5411,7 @@ function dataPreferred() {
         "Provide a sufficient area for pointer targets. Pointer targets must have an area with a width and height of at least 24 pixels. Exceptions include undersized targets for which one can place a 24 pixel diameter circle on the center of the target's bounding box without intersecting with any other targets or circles of undersized targets. Additional exceptions include targets within a sentence or with a line height that is otherwise constrained by non-target text, targets that are controlled by the user agent and not modified by the author, targets with a presentation that is essential to convey accurate information, and targets with a presentation that is legally required.",
       stepsToReproduce:
         "1. Place an imaginary 24x24px circle on the center of all controls.\n2. Note that some of these circles overlap.",
+      successCriteria: ["2.5.8"],
       title: "Minimum target size",
       type: "ios",
     },
@@ -5049,6 +5424,7 @@ function dataPreferred() {
         "There are pointer targets that are too small. Examples include:\n- ",
       recommendation:
         "Provide a sufficient area for pointer targets. Pointer targets must have an area with a width and height of at least 24 pixels. Exceptions include undersized targets for which one can place a 24 pixel diameter circle on the center of the target's bounding box without intersecting with any other targets or circles of undersized targets. Additional exceptions include targets within a sentence or with a line height that is otherwise constrained by non-target text, targets that are controlled by the user agent and not modified by the author, targets with a presentation that is essential to convey accurate information, and targets with a presentation that is legally required.",
+      successCriteria: ["2.5.8"],
       title: "Minimum target size",
       type: "pdf",
     },
@@ -5457,7 +5833,7 @@ function dataSchemas() {
           {
             appearsByDefault: true,
             instructions: "",
-            mapsTo: [],
+            mapsTo: ["successCriteria"],
             name: "WCAG PRIMARY SC - Required. Use the SC the issue should be identified under in an ACR.",
             requiredToExist: true,
             requiredToHaveCode: false,
@@ -5515,16 +5891,15 @@ function dataSchemas() {
             appearsByDefault: true,
             instructions: "",
             mapsTo: [],
-            name: "Type: *** DEV DESIGN DEV/DESIGN ***",
+            name: "Type: *** DEV/DESIGN ***",
             requiredToExist: false,
             requiredToHaveCode: false,
             requiredToHaveContent: false,
           },
           {
             appearsByDefault: true,
-            instructions:
-              "** Insert WCAG Success Criterion **\n** Example: **\n*** 1.3.1 Info & Relationships ***\n",
-            mapsTo: [],
+            instructions: "",
+            mapsTo: ["successCriteria"],
             name: "WCAG Requirement",
             requiredToExist: true,
             requiredToHaveCode: false,
@@ -5550,8 +5925,7 @@ function dataSchemas() {
           },
           {
             appearsByDefault: true,
-            instructions:
-              '1. *** Step 1 ***\n2. *** Step 2 ***\nActual result: *** Describe behavior (Example: TalkBack announces "Unlabelled, Image") ***\nExpected result: *** Describe behavior (Example: TalkBack should announce "Disney, Image") ***',
+            instructions: "",
             mapsTo: ["stepsToReproduce"],
             name: "Steps to Reproduce",
             requiredToExist: true,
@@ -5990,6 +6364,24 @@ function dataSchemas() {
             requiredToHaveCode: true,
             requiredToHaveContent: true,
           },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["successCriteria"],
+            name: "WCAG Success Criteria",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          }, 
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["salesforceStandard"],
+            name: "WCAG Standard",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
         ],
         note: [
           {
@@ -6061,7 +6453,7 @@ function dataSchemas() {
           {
             appearsByDefault: true,
             instructions: "",
-            mapsTo: [],
+            mapsTo: ["type"],
             name: "Defect Grade",
             requiredToExist: false,
             requiredToHaveCode: false,
@@ -6320,476 +6712,525 @@ function dataStatus() {
 function dataSuccessCriteria() {
   const sc = [
     {
-      div: "Success Criteria",
-      id: "select-sc",
-      text: "Success Criteria",
-    },
-    {
-      id: "sc_1-1-1",
       level: "A",
-      text: "SC 1.1.1 Non-text Content",
+      name: "Non-text Content",
+      number: "1.1.1",
       version: "2.0",
     },
     {
-      id: "sc_1-2-1",
       level: "A",
-      text: "SC 1.2.1 Audio-only and Video-only (Pre-recorded)",
+      name: "Audio-only and Video-only (Prerecorded)",
+      number: "1.2.1",
       version: "2.0",
     },
     {
-      id: "sc_1-2-2",
       level: "A",
-      text: "SC 1.2.2 Captions (Pre-recorded)",
+      name: "Captions (Prerecorded)",
+      number: "1.2.2",
       version: "2.0",
     },
     {
-      id: "sc_1-2-3",
       level: "A",
-      text: "SC 1.2.3 Audio Description or Media Alternative (Pre-recorded)",
+      name: "Audio Description or Media Alternative (Prerecorded)",
+      number: "1.2.3",
       version: "2.0",
     },
     {
-      id: "sc_1-2-4",
       level: "AA",
-      text: "SC 1.2.4 Captions (Live)",
+      name: "Captions (Live)",
+      number: "1.2.4",
       version: "2.0",
     },
     {
-      id: "sc_1-2-5",
       level: "AA",
-      text: "SC 1.2.5 Audio Description (Pre-recorded)",
+      name: "Audio Description (Prerecorded)",
+      number: "1.2.5",
       version: "2.0",
     },
-    /* {
-      "id": "sc_1-2-6",
-      "level": "AAA",
-      "text": "SC 1.2.6 Sign Language (Pre-recorded)",
-      "version": "2.0"
+    {
+      level: "AAA",
+      name: "Sign Language (Prerecorded)",
+      number: "1.2.6",
+      version: "2.0",
     },
     {
-      "id": "sc_1-2-7",
-      "level": "AAA",
-      "text": "SC 1.2.7 Extended Audio description (Pre-recorded)",
-      "version": "2.0"
+      level: "AAA",
+      name: "Extended Audio Description (Prerecorded)",
+      number: "1.2.7",
+      version: "2.0",
     },
     {
-      "id": "sc_1-2-8",
-      "level": "AAA",
-      "text": "SC 1.2.8 Media Alternative (Pre-recorded)",
-      "version": "2.0"
+      level: "AAA",
+      name: "Media Alternative (Prerecorded)",
+      number: "1.2.8",
+      version: "2.0",
     },
     {
-      "id": "sc_1-2-9",
-      "level": "AAA",
-      "text": "SC 1.2.9 Audio Only (Live)",
-      "version": "2.0"
-    }, */
+      level: "AAA",
+      name: "Audio-only (Live)",
+      number: "1.2.9",
+      version: "2.0",
+    },
     {
-      id: "sc_1-3-1",
       level: "A",
-      text: "SC 1.3.1 Info and Relationships",
+      name: "Info and Relationships",
+      number: "1.3.1",
       version: "2.0",
     },
     {
-      id: "sc_1-3-2",
       level: "A",
-      text: "SC 1.3.2 Meaningful Sequence",
+      name: "Meaningful Sequence",
+      number: "1.3.2",
       version: "2.0",
     },
     {
-      id: "sc_1-3-3",
       level: "A",
-      text: "SC 1.3.3 Sensory Characteristics",
+      name: "Sensory Characteristics",
+      number: "1.3.3",
       version: "2.0",
     },
     {
-      id: "sc_1-3-4",
       level: "AA",
-      text: "SC 1.3.4 Orientation",
+      name: "Orientation",
+      number: "1.3.4",
       version: "2.1",
     },
     {
-      id: "sc_1-3-5",
       level: "AA",
-      text: "SC 1.3.5 Identify Input Purpose",
-      version: "2.1",
-    },
-    /* {
-      "id": "sc_1-3-6",
-      "level": "AAA",
-      "text": "SC 1.3.6 Identify Purpose",
-      "version": "2.1"
-    }, */
-    {
-      id: "sc_1-4-1",
-      level: "A",
-      text: "SC 1.4.1 Use of Color",
-      version: "2.0",
-    },
-    {
-      id: "sc_1-4-2",
-      level: "A",
-      text: "SC 1.4.2 Audio Control",
-      version: "2.0",
-    },
-    {
-      id: "sc_1-4-3",
-      level: "AA",
-      text: "SC 1.4.3 Contrast (Minimum)",
-      version: "2.0",
-    },
-    {
-      id: "sc_1-4-4",
-      level: "AA",
-      text: "SC 1.4.4 Resize Text",
-      version: "2.0",
-    },
-    {
-      id: "sc_1-4-5",
-      level: "AA",
-      text: "SC 1.4.5 Images of Text",
-      version: "2.0",
-    },
-    /* {
-      "id": "sc_1-4-6",
-      "level": "AAA",
-      "text": "SC 1.4.6 Contrast (Enhanced)",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_1-4-7",
-      "level": "AAA",
-      "text": "SC 1.4.7 Low or No Background Audio",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_1-4-8",
-      "level": "AAA",
-      "text": "SC 1.4.8 Visual Presentation",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_1-4-9",
-      "level": "AAA",
-      "text": "SC 1.4.9 Images of Text (No Exception)",
-      "version": "2.0"
-    }, */
-    {
-      id: "sc_1-4-10",
-      level: "AA",
-      text: "SC 1.4.10 Reflow",
+      name: "Identify Input Purpose",
+      number: "1.3.5",
       version: "2.1",
     },
     {
-      id: "sc_1-4-11",
-      level: "AA",
-      text: "SC 1.4.11 Non-Text Contrast",
+      level: "AAA",
+      name: "Identify Purpose",
+      number: "1.3.6",
       version: "2.1",
     },
     {
-      id: "sc_1-4-12",
+      level: "A",
+      name: "Use of Color",
+      number: "1.4.1",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "Audio Control",
+      number: "1.4.2",
+      version: "2.0",
+    },
+    {
       level: "AA",
-      text: "SC 1.4.12 Text Spacing",
+      name: "Contrast (Minimum)",
+      number: "1.4.3",
+      version: "2.0",
+    },
+    {
+      level: "AA",
+      name: "Resize Text",
+      number: "1.4.4",
+      version: "2.0",
+    },
+    {
+      level: "AA",
+      name: "Images of Text",
+      number: "1.4.5",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Contrast (Enhanced)",
+      number: "1.4.6",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Low or No Background Audio",
+      number: "1.4.7",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Visual Presentation",
+      number: "1.4.8",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Images of Text (No Exception)",
+      number: "1.4.9",
+      version: "2.0",
+    },
+    {
+      level: "AA",
+      name: "Reflow",
+      number: "1.4.10",
       version: "2.1",
     },
     {
-      id: "sc_1-4-13",
       level: "AA",
-      text: "SC 1.4.13 Content on Hover or Focus",
+      name: "Non-text Contrast",
+      number: "1.4.11",
       version: "2.1",
     },
     {
-      id: "sc_2-1-1",
-      level: "A",
-      text: "SC 2.1.1 Keyboard",
-      version: "2.0",
-    },
-    {
-      id: "sc_2-1-2",
-      level: "A",
-      text: "SC 2.1.2 No Keyboard Trap",
-      version: "2.0",
-    },
-    /* {
-      "id": "sc_2-1-3",
-      "level": "AAA",
-      "text": "SC 2.1.3 Keyboard (No Exception)",
-      "version": "2.0"
-    }, */
-    {
-      id: "sc_2-1-4",
-      level: "A",
-      text: "SC 2.1.4 Character Key Shortcuts",
+      level: "AA",
+      name: "Text Spacing",
+      number: "1.4.12",
       version: "2.1",
     },
     {
-      id: "sc_2-2-1",
-      level: "A",
-      text: "SC 2.2.1 Timing Adjustable",
-      version: "2.0",
-    },
-    {
-      id: "sc_2-2-2",
-      level: "A",
-      text: "SC 2.2.2 Pause, Stop, Hide",
-      version: "2.0",
-    },
-    /* {
-      "id": "sc_2-2-3",
-      "level": "AAA",
-      "text": "SC 2.2.3 No Timing",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_2-2-4",
-      "level": "AAA",
-      "text": "SC 2.2.4 Interruptions",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_2-2-5",
-      "level": "AAA",
-      "text": "SC 2.2.5 Re-authenticating",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_2-2-6",
-      "level": "AAA",
-      "text": "SC 2.2.6 Timeouts ",
-      "version": "2.1"
-    }, */
-    {
-      id: "sc_2-3-1",
-      level: "A",
-      text: "SC 2.3.1 Three Flashes or Below",
-      version: "2.0",
-    },
-    /* {
-      "id": "sc_2-3-2",
-      "level": "AAA",
-      "text": "SC 2.3.2 Three Flashes",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_2-3-3",
-      "level": "AAA",
-      "text": "SC 2.3.3 Animation from Interactions ",
-      "version": "2.1"
-    }, */
-    {
-      id: "sc_2-4-1",
-      level: "A",
-      text: "SC 2.4.1 Bypass Blocks",
-      version: "2.0",
-    },
-    /* {
-      "id": "sc_2-4-10",
-      "level": "AAA",
-      "text": "SC 2.4.10 Section Headings",
-      "version": "2.0"
-    }, */
-    {
-      id: "sc_2-4-2",
-      level: "A",
-      text: "SC 2.4.2 Page Titled",
-      version: "2.0",
-    },
-    {
-      id: "sc_2-4-3",
-      level: "A",
-      text: "SC 2.4.3 Focus Order",
-      version: "2.0",
-    },
-    {
-      id: "sc_2-4-4",
-      level: "A",
-      text: "SC 2.4.4 Link Purpose (In Context)",
-      version: "2.0",
-    },
-    {
-      id: "sc_2-4-5",
       level: "AA",
-      text: "SC 2.4.5 Multiple Ways",
-      version: "2.0",
-    },
-    {
-      id: "sc_2-4-6",
-      level: "AA",
-      text: "SC 2.4.6 Headings and Labels",
-      version: "2.0",
-    },
-    {
-      id: "sc_2-4-7",
-      level: "AA",
-      text: "SC 2.4.7 Focus Visible",
-      version: "2.0",
-    },
-    /* {
-      "id": "sc_2-4-8",
-      "level": "AAA",
-      "text": "SC 2.4.8 Location",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_2-4-9",
-      "level": "AAA",
-      "text": "SC 2.4.9 Link Purpose (Link Only)",
-      "version": "2.0"
-    }, */
-    {
-      id: "sc_2-5-1",
-      level: "A",
-      text: "SC 2.5.1 Pointer Gestures",
+      name: "Content on Hover or Focus",
+      number: "1.4.13",
       version: "2.1",
     },
     {
-      id: "sc_2-5-2",
       level: "A",
-      text: "SC 2.5.2 Pointer Cancellation",
+      name: "Keyboard",
+      number: "2.1.1",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "No Keyboard Trap",
+      number: "2.1.2",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Keyboard (No Exception)",
+      number: "2.1.3",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "Character Key Shortcuts",
+      number: "2.1.4",
       version: "2.1",
     },
     {
-      id: "sc_2-5-3",
       level: "A",
-      text: "SC 2.5.3 Label in Name",
+      name: "Timing Adjustable",
+      number: "2.2.1",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "Pause, Stop, Hide",
+      number: "2.2.2",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "No Timing",
+      number: "2.2.3",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Interruptions",
+      number: "2.2.4",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Re-authenticating",
+      number: "2.2.5",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Timeouts",
+      number: "2.2.6",
       version: "2.1",
     },
     {
-      id: "sc_2-5-4",
       level: "A",
-      text: "SC 2.5.4 Motion Actuation",
+      name: "Three Flashes or Below Threshold",
+      number: "2.3.1",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Three Flashes",
+      number: "2.3.2",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Animation from Interactions",
+      number: "2.3.3",
       version: "2.1",
     },
-    /* {
-      "id": "sc_2-5-5",
-      "level": "AAA",
-      "text": "SC 2.5.5 Target Size",
-      "version": "2.1"
-    },
     {
-      "id": "sc_2-5-6",
-      "level": "AAA",
-      "text": "SC 2.5.6 Concurrent Input Mechanisms",
-      "version": "2.1"
-    }, */
-    {
-      id: "sc_3-1-1",
       level: "A",
-      text: "SC 3.1.1 Language of Page",
+      name: "Bypass Blocks",
+      number: "2.4.1",
       version: "2.0",
     },
     {
-      id: "sc_3-1-2",
+      level: "A",
+      name: "Page Titled",
+      number: "2.4.2",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "Focus Order",
+      number: "2.4.3",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "Link Purpose (In Context)",
+      number: "2.4.4",
+      version: "2.0",
+    },
+    {
       level: "AA",
-      text: "SC 3.1.2 Language of Parts",
-      version: "2.0",
-    },
-    /* {
-      "id": "sc_3-1-3",
-      "level": "AAA",
-      "text": "SC 3.1.3 Unusual words",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_3-1-4",
-      "level": "AAA",
-      "text": "SC 3.1.4 Abbreviations",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_3-1-5",
-      "level": "AAA",
-      "text": "SC 3.1.5 Reading Level",
-      "version": "2.0"
-    },
-    {
-      "id": "sc_3-1-6",
-      "level": "AAA",
-      "text": "SC 3.1.6 Pronunciation",
-      "version": "2.0"
-    }, */
-    {
-      id: "sc_3-2-1",
-      level: "A",
-      text: "SC 3.2.1 On Focus",
+      name: "Multiple Ways",
+      number: "2.4.5",
       version: "2.0",
     },
     {
-      id: "sc_3-2-2",
-      level: "A",
-      text: "SC 3.2.2 On Input",
-      version: "2.0",
-    },
-    {
-      id: "sc_3-2-3",
       level: "AA",
-      text: "SC 3.2.3 Consistent Navigation",
+      name: "Headings and Labels",
+      number: "2.4.6",
       version: "2.0",
     },
     {
-      id: "sc_3-2-4",
       level: "AA",
-      text: "SC 3.2.4 Consistent Identification",
-      version: "2.0",
-    },
-    /* {
-      "id": "sc_3-2-5",
-      "level": "AAA",
-      "text": "SC 3.2.5 Change on Request",
-      "version": "2.0"
-    }, */
-    {
-      id: "sc_3-3-1",
-      level: "A",
-      text: "SC 3.3.1 Error Identification",
+      name: "Focus Visible",
+      number: "2.4.7",
       version: "2.0",
     },
     {
-      id: "sc_3-3-2",
-      level: "A",
-      text: "SC 3.3.2 Labels or Instructions",
+      level: "AAA",
+      name: "Location",
+      number: "2.4.8",
       version: "2.0",
     },
     {
-      id: "sc_3-3-3",
+      level: "AAA",
+      name: "Link Purpose (Link Only)",
+      number: "2.4.9",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Section Headings",
+      number: "2.4.10",
+      version: "2.0",
+    },
+    {
       level: "AA",
-      text: "SC 3.3.3 Error Suggestion",
-      version: "2.0",
+      name: "Focus Not Obscured (Minimum)",
+      number: "2.4.11",
+      version: "2.2",
     },
     {
-      id: "sc_3-3-4",
-      level: "AA",
-      text: "SC 3.3.4 Error Prevention (Legal, Financial, Data)",
-      version: "2.0",
-    },
-    /* {
-      "id": "sc_3-3-5",
-      "level": "AAA",
-      "text": "SC 3.3.5 Help",
-      "version": "2.0"
+      level: "AAA",
+      name: "Focus Not Obscured (Enhanced)",
+      number: "2.4.12",
+      version: "2.2",
     },
     {
-      "id": "sc_3-3-6",
-      "level": "AAA",
-      "text": "SC 3.3.6 Error Prevention (All)",
-      "version": "2.0"
-    }, */
+      level: "AAA",
+      name: "Focus Appearance",
+      number: "2.4.13",
+      version: "2.2",
+    },
     {
-      id: "sc_4-1-1",
       level: "A",
-      text: "SC 4.1.1 Parsing",
-      version: "2.0",
+      name: "Pointer Gestures",
+      number: "2.5.1",
+      version: "2.1",
     },
     {
-      id: "sc_4-1-2",
       level: "A",
-      text: "SC 4.1.2 Name, Role, Value",
+      name: "Pointer Cancellation",
+      number: "2.5.2",
+      version: "2.1",
+    },
+    {
+      level: "A",
+      name: "Label in Name",
+      number: "2.5.3",
+      version: "2.1",
+    },
+    {
+      level: "A",
+      name: "Motion Actuation",
+      number: "2.5.4",
+      version: "2.1",
+    },
+    {
+      level: "AAA",
+      name: "Target Size (Enhanced)",
+      number: "2.5.5",
+      version: "2.1",
+    },
+    {
+      level: "AAA",
+      name: "Concurrent Input Mechanisms",
+      number: "2.5.6",
+      version: "2.1",
+    },
+    {
+      level: "AA",
+      name: "Dragging Movements",
+      number: "2.5.7",
+      version: "2.2",
+    },
+    {
+      level: "AA",
+      name: "Target Size (Minimum)",
+      number: "2.5.8",
+      version: "2.2",
+    },
+    {
+      level: "A",
+      name: "Language of Page",
+      number: "3.1.1",
       version: "2.0",
     },
     {
-      id: "sc_4-1-3",
       level: "AA",
-      text: "SC 4.1.3 Status Messages",
+      name: "Language of Parts",
+      number: "3.1.2",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Unusual Words",
+      number: "3.1.3",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Abbreviations",
+      number: "3.1.4",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Reading Level",
+      number: "3.1.5",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Pronunciation",
+      number: "3.1.6",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "On Focus",
+      number: "3.2.1",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "On Input",
+      number: "3.2.2",
+      version: "2.0",
+    },
+    {
+      level: "AA",
+      name: "Consistent Navigation",
+      number: "3.2.3",
+      version: "2.0",
+    },
+    {
+      level: "AA",
+      name: "Consistent Identification",
+      number: "3.2.4",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Change on Request",
+      number: "3.2.5",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "Consistent Help",
+      number: "3.2.6",
+      version: "2.2",
+    },
+    {
+      level: "A",
+      name: "Error Identification",
+      number: "3.3.1",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "Labels or Instructions",
+      number: "3.3.2",
+      version: "2.0",
+    },
+    {
+      level: "AA",
+      name: "Error Suggestion",
+      number: "3.3.3",
+      version: "2.0",
+    },
+    {
+      level: "AA",
+      name: "Error Prevention (Legal, Financial, Data)",
+      number: "3.3.4",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Help",
+      number: "3.3.5",
+      version: "2.0",
+    },
+    {
+      level: "AAA",
+      name: "Error Prevention (All)",
+      number: "3.3.6",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "Redundant Entry",
+      number: "3.3.7",
+      version: "2.2",
+    },
+    {
+      level: "AA",
+      name: "Accessible Authentication (Minimum)",
+      number: "3.3.8",
+      version: "2.2",
+    },
+    {
+      level: "AAA",
+      name: "Accessible Authentication (Enhanced)",
+      number: "3.3.9",
+      version: "2.2",
+    },
+    {
+      level: "A",
+      name: "Parsing",
+      number: "4.1.1",
+      version: "2.0",
+    },
+    {
+      level: "A",
+      name: "Name, Role, Value",
+      number: "4.1.2",
+      version: "2.0",
+    },
+    {
+      level: "AA",
+      name: "Status Messages",
+      number: "4.1.3",
       version: "2.1",
     },
   ];
@@ -6890,32 +7331,32 @@ function mainNav(reportID, moduleID) {
   linksDIV.appendChild(
     buildLink(
       "Dashboard",
-      `/public/reporting/view_report.php?report_id=${reportID}`,
-    ),
+      `/public/reporting/view_report.php?report_id=${reportID}`
+    )
   );
   linksDIV.appendChild(
     buildLink(
       "Modules",
-      `/public/reporting/view_modules.php?report_id=${reportID}`,
-    ),
+      `/public/reporting/view_modules.php?report_id=${reportID}`
+    )
   );
   linksDIV.appendChild(
     buildLink(
       "Patterns",
-      `/public/reporting/view_globals_and_patterns.php?report_id=${reportID}`,
-    ),
+      `/public/reporting/view_globals_and_patterns.php?report_id=${reportID}`
+    )
   );
   linksDIV.appendChild(
     buildLink(
       "Violations",
-      `/public/reporting/view_instances.php?report_id=${reportID}`,
-    ),
+      `/public/reporting/view_instances.php?report_id=${reportID}`
+    )
   );
   linksDIV.appendChild(
     buildLink(
       "Use Cases",
-      `/public/reporting/view_use_cases.php?report_id=${reportID}`,
-    ),
+      `/public/reporting/view_use_cases.php?report_id=${reportID}`
+    )
   );
 
   // If a module ID is present, then add two links to the module. Also adds a link to "mark complete"
@@ -6926,8 +7367,8 @@ function mainNav(reportID, moduleID) {
     linksDIV.appendChild(
       buildLink(
         "* Edit Module/Instances *",
-        `/public/reporting/view_module.php?module_id=${moduleID}`,
-      ),
+        `/public/reporting/view_module.php?module_id=${moduleID}`
+      )
     );
   }
   return linksDIV;
@@ -7027,7 +7468,7 @@ function injectProblems(element, type) {
     sectionsRequiredToExist.forEach((section) => {
       if (!sectionMap.has(section.name)) {
         errorArray.push(
-          `Error: Required section [${section.name}] was not found. Please add this section or double-check its spelling.`,
+          `Error: Required section [${section.name}] was not found. Please add this section or double-check its spelling.`
         );
       }
     });
@@ -7036,12 +7477,12 @@ function injectProblems(element, type) {
       // Detect any empty sections that are required to have content
       if (
         sectionsRequiredToHaveContent.find(
-          (section) => section.name === sectionName,
+          (section) => section.name === sectionName
         )
       ) {
         if (sectionContents === "") {
           errorArray.push(
-            `Error: [${sectionName}] appears to be empty. Please add content in this section.`,
+            `Error: [${sectionName}] appears to be empty. Please add content in this section.`
           );
         }
       }
@@ -7049,12 +7490,12 @@ function injectProblems(element, type) {
       // Detect any code sections that don't contain code
       if (
         sectionsRequiredToHaveCode.find(
-          (section) => section.name === sectionName,
+          (section) => section.name === sectionName
         )
       ) {
         if (!sectionContents.match(/[<>{}]|(\/\*)|(\*\/)|^N\/A|^None|^$/gmu)) {
           errorArray.push(
-            `Error: [${sectionName}] does not appear to contain code. Please ensure HTML or CSS code is present or put "N/A".`,
+            `Error: [${sectionName}] does not appear to contain code. Please ensure HTML or CSS code is present or put "N/A".`
           );
         }
 
@@ -7062,7 +7503,7 @@ function injectProblems(element, type) {
         badCodeStrings.forEach((badString) => {
           if (sectionContents.includes(badString.css)) {
             errorArray.push(
-              `Error: [${sectionName}] contains ${badString.css} attribute injected by ${badString.cause}. Please remove this attribute.`,
+              `Error: [${sectionName}] contains ${badString.css} attribute injected by ${badString.cause}. Please remove this attribute.`
             );
           }
         });
@@ -7072,7 +7513,7 @@ function injectProblems(element, type) {
       badSiteStrings.forEach((badString) => {
         if (sectionContents.includes(badString.url)) {
           errorArray.push(
-            `Error: [${sectionName}] contains ${badString.reason} site ${badString.url}. Please change or remove this link.`,
+            `Error: [${sectionName}] contains ${badString.reason} site ${badString.url}. Please change or remove this link.`
           );
         }
       });
@@ -7080,7 +7521,7 @@ function injectProblems(element, type) {
       // Detect remnant instructions from client-specific templates
       if (sectionContents.includes("**")) {
         errorArray.push(
-          `Error: [${sectionName}] contains two asterisks in a row (**). This is usually from instructions in client-specific custom issue formats. Please make sure these instructions are removed if present.`,
+          `Error: [${sectionName}] contains two asterisks in a row (**). This is usually from instructions in client-specific custom issue formats. Please make sure these instructions are removed if present.`
         );
       }
 
@@ -7089,7 +7530,7 @@ function injectProblems(element, type) {
         sectionContents.match(/^-\s*$/gmu)
       ) {
         errorArray.push(
-          `Error: Content appears to be missing in [${sectionName}].`,
+          `Error: Content appears to be missing in [${sectionName}].`
         );
       }
     });
@@ -7226,30 +7667,30 @@ function preferencesBox() {
     buildCheckbox(
       "hideNew",
       "Hide unused fields",
-      "Hides the fields added February 2019 such as 'Content Identifier' and 'User Impact'",
-    ),
+      "Hides the fields added February 2019 such as 'Content Identifier' and 'User Impact'"
+    )
   );
   prefTD1.appendChild(
     buildCheckbox(
       "showOne",
       "Hide instances 2-6 on add",
-      "Add instance will only show a single item rather than a list of 6",
-    ),
+      "Add instance will only show a single item rather than a list of 6"
+    )
   );
   prefTD1.appendChild(
     buildCheckbox(
       "addWarning",
       "Add content warnings (add/edit)",
-      "Adds warnings to the modal for injected classes and missing information",
-    ),
+      "Adds warnings to the modal for injected classes and missing information"
+    )
   );
 
   prefTD1.appendChild(
     buildCheckbox(
       "bpListCompact",
       "Use compact BP List",
-      "Compact best practices list in the add modal",
-    ),
+      "Compact best practices list in the add modal"
+    )
   );
 
   prefTD1
@@ -7259,43 +7700,43 @@ function preferencesBox() {
     buildCheckbox(
       "addPatternLink",
       "Add link to pattern edit",
-      "Adds a button to each pattern in the table that takes you to the edit pattern page",
-    ),
+      "Adds a button to each pattern in the table that takes you to the edit pattern page"
+    )
   );
   prefTD1.appendChild(
     buildCheckbox(
       "thumbALT",
       "Add thumbnail ALT",
-      "Exposes the ALT text of screen shots",
-    ),
+      "Exposes the ALT text of screen shots"
+    )
   );
   prefTD1.appendChild(
     buildCheckbox(
       "tableWarning",
       "Add content warnings (tables)",
-      "Adds warnings to the table for injected classes and missing information",
-    ),
+      "Adds warnings to the table for injected classes and missing information"
+    )
   );
   prefTD1.appendChild(
     buildCheckbox(
       "addPatterns",
       "Add Patterns",
-      "Adds the table of patterns to the bottom of the view module page",
-    ),
+      "Adds the table of patterns to the bottom of the view module page"
+    )
   );
   prefTD1.appendChild(
     buildCheckbox(
       "moveInstanceLink",
       "Move the instance link",
-      'Moves the "Open view instance page: " link to the Actions column',
-    ),
+      'Moves the "Open view instance page: " link to the Actions column'
+    )
   );
   prefTD1.appendChild(
     buildCheckbox(
       "bpWarnings",
       "Add warnings for non-Baseline BPs",
-      "Adds warnings below BPs that are not part of Baseline. Web only.",
-    ),
+      "Adds warnings below BPs that are not part of Baseline. Web only."
+    )
   );
 
   prefTD3
@@ -7305,38 +7746,38 @@ function preferencesBox() {
     buildCheckbox(
       "globals",
       "Hide globals (patterns)",
-      "In the patterns edit, globals are hidden",
-    ),
+      "In the patterns edit, globals are hidden"
+    )
   );
   prefTD3.appendChild(
     buildCheckbox(
       "instanceFilter",
       "Add filter instances by name",
-      "On the edit modal page, adds a search by best practice",
-    ),
+      "On the edit modal page, adds a search by best practice"
+    )
   );
   prefTD3.appendChild(
     buildCheckbox(
       "addBPLink",
       "Add best practice links",
-      "Adds links everywhere there is a best practice modal to the best practice page",
-    ),
+      "Adds links everywhere there is a best practice modal to the best practice page"
+    )
   );
   if (getCookieValue("kpmPref-showBaseline")) {
     prefTD3.appendChild(
       buildCheckbox(
         "showBaseline",
         "Add baseline checklist",
-        "Shows/Hides the baseline checklist",
-      ),
+        "Shows/Hides the baseline checklist"
+      )
     );
   }
   prefTD3.appendChild(
     buildCheckbox(
       "nonBookmarkedOrgs",
       "Default to non-bookmarked Orgs",
-      "Don't check the 'Bookmarks only' checkbox in the 'Change Organization' modal",
-    ),
+      "Don't check the 'Bookmarks only' checkbox in the 'Change Organization' modal"
+    )
   );
   prefTD3
     .appendChild(document.createElement("h3"))
@@ -7345,16 +7786,16 @@ function preferencesBox() {
     buildCheckbox(
       "hidePrefs",
       "Hide AMP script preferences",
-      "Hides the ACE AMP Script preferences box",
-    ),
+      "Hides the ACE AMP Script preferences box"
+    )
   );
   if (getCookieValue("kpmPref-hideAlertBox")) {
     prefTD3.appendChild(
       buildCheckbox(
         "hideAlertBox",
         "Show the alert box",
-        "Shows/Hides the alert box when present",
-      ),
+        "Shows/Hides the alert box when present"
+      )
     );
   }
 
@@ -7415,13 +7856,13 @@ function bestPracticeLinks() {
       `Go to BP ${BPID}`,
       "fas fa-external-link-alt fa-w-16 medium",
       thisURL,
-      `goto${BPID}`,
+      `goto${BPID}`
     );
     const copyAnchor = buildIcon(
       `Copy BP ${BPID}`,
       "far fa-copy fa-w-16 medium",
       thisURL,
-      `copy${BPID}`,
+      `copy${BPID}`
     );
 
     div.appendChild(goAnchor);
@@ -7434,7 +7875,7 @@ function bestPracticeLinks() {
       e.preventDefault();
       const copyDialog = createDialog(
         "Success",
-        `Copied Best Practice URL\n\n${completeURL}`,
+        `Copied Best Practice URL\n\n${completeURL}`
       );
       copyDialog.showModal();
       const temp = $("<input>").val(completeURL).appendTo("body").select();
@@ -7507,7 +7948,7 @@ function clientHide() {
      must have "**" at the start of a line (i.e. "\n**"), and then finish
      with "**" (the "**" at the end can either be on the same line as the start,
      or on a different line). */
-function formatDescription(boilerplate, engineElement) {
+function formatDescription(boilerplate) {
   let output = "";
   const currentSchema = getSchema();
   const descriptionSchema = currentSchema.description;
@@ -7526,11 +7967,7 @@ function formatDescription(boilerplate, engineElement) {
         schemaSection.mapsTo.forEach((mappedBoilerplateSection) => {
           const boilerplateSectionContents =
             boilerplate[mappedBoilerplateSection];
-          // If the section is a code reference section, inject the AE element
-          // Otherwise, inject the boilerplate section text
-          if (schemaSection.mapsTo.includes("codeReference") && engineElement) {
-            concatenatedBoilerplate += engineElement;
-          } else if (boilerplateSectionContents) {
+          if (boilerplateSectionContents) {
             concatenatedBoilerplate += boilerplate[mappedBoilerplateSection];
           }
           concatenatedBoilerplate += "\n\n";
@@ -7541,30 +7978,6 @@ function formatDescription(boilerplate, engineElement) {
       output += "\n\n";
     }
   });
-
-  /* Boilerplate modifications for specific clients. Please use sparingly.
-   * Creating a schema should be sufficient for most clients.
-   * If you just need to create a new section for a client -- create a schema.
-   * If you need to customize content within a section -- put code here. */
-  if (
-    getCookieValue("kpmCustom-custom-progressive-apq") ||
-    getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
-  ) {
-    output = output.replaceAll("Examples include:", "Specific instances are:");
-  }
-
-  if (getCookieValue("kpmCustom-custom-wf")) {
-    let defectGrade = "";
-    if (boilerplate.type === "web") {
-      defectGrade = "ADA_Grade_Web";
-    } else if (boilerplate.type === "ios" || boilerplate.type === "android") {
-      defectGrade = "ADA_Grade_Native";
-    }
-    output = output.replaceAll(
-      "[Defect Grade]",
-      `[Defect Grade]\n${defectGrade}`,
-    );
-  }
 
   output = output.trim();
   return output;
@@ -7609,7 +8022,7 @@ function formatNote(boilerplate) {
   ) {
     output = output.replace(
       "\n\n[Compliant Code Example]",
-      "\n\n** When using AMPScript template text here, be sure that the recommendation is specific, usually by editing the following line: **\n\nIn this case, {designers OR developers} must ...\n\n[Compliant Code Example]",
+      "\n\n** When using AMPScript template text here, be sure that the recommendation is specific, usually by editing the following line: **\n\nIn this case, {designers OR developers} must ...\n\n[Compliant Code Example]"
     );
   }
 
@@ -7623,7 +8036,7 @@ function listAllResponses(array) {
   array.sort((o1, o2) => o1.title.localeCompare(o2.title));
 
   array.forEach((item) => {
-    const tempElement = escapeHtml(formatDescription(item, ""));
+    const tempElement = escapeHtml(formatDescription(item));
     const tempAttribute = escapeHtml(formatNote(item));
 
     output += `<h2>${item.title}: `;
@@ -7670,14 +8083,14 @@ function handleTestingCompleteCheckbox(reportID) {
 
 function removeSpecialCharacters(event) {
   const textFields = document.querySelectorAll(
-    "#modal_form input[type='text'], #modal_form textarea",
+    "#modal_form input[type='text'], #modal_form textarea"
   );
   const specialCharacters = dataSpecialCharacters();
   textFields.forEach((textField) => {
     specialCharacters.forEach((specialCharacter) => {
       textField.value = textField.value.replaceAll(
         specialCharacter.id,
-        specialCharacter.replacement,
+        specialCharacter.replacement
       );
     });
   });
@@ -7713,7 +8126,7 @@ function retestColor() {
           .closest("tr")
           .attr(
             "style",
-            `background-color: ${color} !important; border-bottom: 1px solid #ccc;`,
+            `background-color: ${color} !important; border-bottom: 1px solid #ccc;`
           );
       }
 
@@ -7722,7 +8135,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number}" style="background-color: #800000; color: #ffffff; text-align: center; font-weight: bold;">Work In Progress</td></th>`,
+            `<tr><td colspan="${number}" style="background-color: #800000; color: #ffffff; text-align: center; font-weight: bold;">Work In Progress</td></th>`
           );
       }
 
@@ -7731,7 +8144,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number0}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Under Review</td></th>`,
+            `<tr><td colspan="${number0}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Under Review</td></th>`
           );
       }
 
@@ -7742,7 +8155,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Code Snippet Error</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Code Snippet Error</td></th>`
           );
       }
 
@@ -7751,7 +8164,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Compliant Code Example Not Required (Mobile Only)</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Compliant Code Example Not Required (Mobile Only)</td></th>`
           );
       }
 
@@ -7760,7 +8173,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Compliant Code Example or Recommendation Missing (Web Only)</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Compliant Code Example or Recommendation Missing (Web Only)</td></th>`
           );
       }
 
@@ -7774,7 +8187,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Missing or Unidentified Violation</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Missing or Unidentified Violation</td></th>`
           );
       }
 
@@ -7785,7 +8198,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Issue does not make sense</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Issue does not make sense</td></th>`
           );
       }
       if (thisTD.text().split("]")[0].indexOf("ISSUE MISALIGNMENT") >= 0) {
@@ -7793,7 +8206,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Issue Misalignment</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Issue Misalignment</td></th>`
           );
       }
 
@@ -7805,7 +8218,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Not an Issue</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Not an Issue</td></th>`
           );
       }
 
@@ -7816,7 +8229,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Pattern incorrectly used</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Pattern incorrectly used</td></th>`
           );
       }
 
@@ -7830,7 +8243,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Recommendation does not make sense</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Recommendation does not make sense</td></th>`
           );
       }
 
@@ -7839,7 +8252,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Silly Mistake</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Silly Mistake</td></th>`
           );
       }
 
@@ -7848,7 +8261,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Typo or Grammar Issue</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Typo or Grammar Issue</td></th>`
           );
       }
 
@@ -7860,7 +8273,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Missing Use Case Issue</td></th>`,
+            `<tr><td colspan="${number00}" style="background-color: #BF590F; color: #ffffff; text-align: center; font-weight: bold;">Missing Use Case Issue</td></th>`
           );
       }
 
@@ -7869,7 +8282,7 @@ function retestColor() {
         thisTD
           .closest("tr")
           .before(
-            `<tr><td colspan="${number2}" style="background-color: #1F730D; color: #ffffff; text-align: center; font-weight: bold;">Updated</td></th>`,
+            `<tr><td colspan="${number2}" style="background-color: #1F730D; color: #ffffff; text-align: center; font-weight: bold;">Updated</td></th>`
           );
       }
     });
@@ -7951,22 +8364,6 @@ function bestPracticeList2(elements) {
     newList.push(newOption);
   });
   return newList;
-}
-
-// ADD Success Criteria dropdown for SalesForce
-function addSuccessCriteria() {
-  const customSCOptions = dataSuccessCriteria();
-  let scOption = "";
-
-  customSCOptions.forEach((option) => {
-    scOption += `<option id='${option.id}'>${option.text} (Level ${option.level}) [WCAG ${option.version}]</option>`;
-  });
-
-  let scSelect = `<div class='kpmP flex-center'><label class='right-margin' for='${customSCOptions[0].id}'>${customSCOptions[0].text}</label><select id='${customSCOptions[0].id}'>${scOption}</select></div>`;
-  // Add update button
-  scSelect +=
-    "<input type='button' id='update-sc' value='Update' class='kpmFirstButton' aria-label='Update Success Criterion'>";
-  return scSelect;
 }
 
 // ADD INSTANCE: Hides the instances 2-6 on the add instance modal
@@ -8112,10 +8509,10 @@ function addEditor(reportID) {
   ) {
     // Create the new best practice lists
     $("select[id*='violation_']:first").before(
-      "<label for='ampOptsInpt'>Find a Best Practice: </label><br><input id='ampOptsInpt' list='AmpOpts' autocomplete='off'><datalist id='AmpOpts'></datalist><br>",
+      "<label for='ampOptsInpt'>Find a Best Practice: </label><br><input id='ampOptsInpt' list='AmpOpts' autocomplete='off'><datalist id='AmpOpts'></datalist><br>"
     );
     $("#AmpOpts").append(
-      bestPracticeList2("select[id*='violation_']:first option"),
+      bestPracticeList2("select[id*='violation_']:first option")
     );
 
     const instanceID = $("#instance_id-").attr("value");
@@ -8128,7 +8525,7 @@ function addEditor(reportID) {
 
     const currentID = parseInt(
       $("[id*='violation_']").children("option:selected").attr("value"),
-      10,
+      10
     );
 
     // Place the buttons
@@ -8138,8 +8535,8 @@ function addEditor(reportID) {
         dataStatus(),
         dataReading(),
         dataCode(),
-        dataReviews(),
-      ),
+        dataReviews()
+      )
     );
 
     // Changes the best practice
@@ -8147,7 +8544,7 @@ function addEditor(reportID) {
       const inputValue = $("#ampOptsInpt").val().trim();
       const newBP = parseInt(
         $(`#AmpOpts option[value="${inputValue}"]`).attr("data-value"),
-        10,
+        10
       );
 
       if (newBP && newBP > 0) {
@@ -8157,7 +8554,7 @@ function addEditor(reportID) {
         const newPreferredListList = dataPreferredFiltered(newBP);
         if (newPreferredListList.length > 0) {
           $("#kpmPreferred").replaceWith(
-            createList2(newPreferredListList, "Preferred", "kpmPreferred"),
+            createList2(newPreferredListList, "Preferred", "kpmPreferred")
           );
         }
       } else {
@@ -8170,7 +8567,7 @@ function addEditor(reportID) {
     $("#GoToBP").on("click", () => {
       const inputValue = $("#ampOptsInpt").val().trim();
       let newBP = $(`#AmpOpts option[value="${inputValue}"]`).attr(
-        "data-value",
+        "data-value"
       );
       if (!newBP) {
         newBP = $("select[id*='violation_']:first").val();
@@ -8187,7 +8584,7 @@ function addEditor(reportID) {
     // Two single use statuses - Blank and clear everything
     $("#addLangBlank").on("click", () => {
       let origVal = $("textarea[id*='element']:first").val();
-      let newText = formatDescription({}, "");
+      let newText = formatDescription({});
       if (
         getCookieValue("kpmCustom-custom-progressive-apq") ||
         getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
@@ -8214,14 +8611,22 @@ function addEditor(reportID) {
         .val("");
     });
 
+    // INJECT BOILERPLATE
     // When a response is given, this fills in the fields.
     $("body").delegate("[id*='response-']", "click", async (event) => {
       const clickID = $(event.target).attr("id");
       const responses = dataPreferred();
-      const entry = responses.find((e) => e.id === clickID);
+      const boilerplate = responses.find((e) => e.id === clickID);
+      const currentSchema = getSchema();
+      const descriptionTextarea = document.querySelector(
+        "textarea[id*='element']"
+      );
+      const previousDescription = descriptionTextarea.value;
+      const previousMap = mapifyDescNote(previousDescription);
 
-      // Inject color contrast data
-      if (entry.convertColorContrastText) {
+      // ISSUE SECTION MODIFICATIONS
+      // Inject formatted color contrast information.
+      if (boilerplate.convertColorContrastText) {
         const oldVar2 = $("textarea[id*='attribute']:first")
           .add("textarea[id*='note']:first")
           .val();
@@ -8229,77 +8634,151 @@ function addEditor(reportID) {
         const colorContrastStats = convertColorContrastTextFromAE(oldVar2);
 
         if (colorContrastStats) {
-          const issueLines = entry.issue.split("\n\n");
-          entry.issue = `${issueLines[0] + colorContrastStats}\n\n${
+          const issueLines = boilerplate.issue.split("\n\n");
+          boilerplate.issue = `${issueLines[0] + colorContrastStats}\n\n${
             issueLines[2]
           }`;
         }
       }
 
-      // Inject the description
-      // Extract any existing code reference from the description
-      const currentSchema = getSchema();
-      const descriptionTextarea = document.querySelector(
-        "textarea[id*='element']",
-      );
-      const oldDescription = descriptionTextarea.value;
-      const sectionMap = mapifyDescNote(oldDescription);
-      let codeReference = "";
+      // Change some wording for Progressive.
+      if (
+        getCookieValue("kpmCustom-custom-progressive-apq") ||
+        getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
+      ) {
+        boilerplate.issue = boilerplate.issue.replaceAll(
+          "Examples include:",
+          "Specific instances are:"
+        );
+      }
 
-      // If the map exists, then it already has boilerplate
-      if (sectionMap.size > 0) {
-        // In the schema, determine which section maps to code reference
-        // We do this because the name is not always just "Code Reference"
+      // Customize steps to reproduce for Disney
+      if (getCookieValue("kpmCustom-custom-disney")) {
+        /* If JAWS functional steps to reproduce exist, then replace the normal 
+          steps to reproduce with the JAWS ones. */
+        if (boilerplate.jawsFunctionalSteps) {
+          boilerplate.stepsToReproduce = boilerplate.jawsFunctionalSteps;
+        } else {
+          /* Otherwise, keep the existing steps to reproduce, but add some 
+             extra wording. */
+          boilerplate.stepsToReproduce += "\nExpected result:\nActual result:";
+        }
+      }
+
+      // CODE REFERENCE SECTION MODIFICATIONS
+      // Extract any existing code reference from the description
+      boilerplate.codeReference = "";
+      // If the map exists, then this issue already has boilerplate
+      if (previousMap.size > 0) {
+        // Get the code reference section
         const codeReferenceSections = currentSchema.description.filter(
-          (section) => section.mapsTo.includes("codeReference"),
+          (section) => section.mapsTo.includes("codeReference")
         );
 
         // If any code reference sections exist...
         if (codeReferenceSections.length > 0) {
-          // Search the old description map for the value of that section
-          // Then set it as `codeReference`
-          codeReference = sectionMap.get(codeReferenceSections[0].name);
+          // Search the old description map to get the existing code reference
+          boilerplate.codeReference = previousMap.get(
+            codeReferenceSections[0].name
+          );
         }
       } else {
         /* Otherwise, it doesn't have any boilerplate.
-        It's either empty or has an existing code reference, so just reuse the 
-        original description.*/
-        codeReference = oldDescription;
+           It's either empty or has an existing code reference, so just reuse 
+           the original description.*/
+        boilerplate.codeReference = previousDescription;
       }
 
       // If any code reference was extracted, format it
-      if (codeReference) {
+      if (boilerplate.codeReference) {
         // Get rid of AE's invalid `/>` ending of every tag
-        codeReference = codeReference.replaceAll("/>", ">");
+        boilerplate.codeReference = boilerplate.codeReference.replaceAll(
+          "/>",
+          ">"
+        );
 
         // For Progressive, get rid of Angular cruft
         if (
           getCookieValue("kpmCustom-custom-progressive-apq") ||
           getCookieValue("kpmCustom-custom-progressive-dq-inc-mobile")
         ) {
-          codeReference = stripAngularFeatures(codeReference);
+          boilerplate.codeReference = stripAngularFeatures(
+            boilerplate.codeReference
+          );
         }
 
         // Try to format it, otherwise do nothing
         try {
-          codeReference = await prettier.format(codeReference, {
-            parser: "html",
-            plugins: prettierPlugins,
-            htmlWhitespaceSensitivity: "ignore",
-          });
+          boilerplate.codeReference = await prettier.format(
+            boilerplate.codeReference,
+            {
+              parser: "html",
+              plugins: prettierPlugins,
+              htmlWhitespaceSensitivity: "ignore",
+            }
+          );
         } catch (error) {
           // Do nothing
         }
       }
 
+      // SUCCESS CRITERIA SECTION MODIFICATIONS
+      // Expand success criteria from number to full details
+      let expandedStructure = [];
+      boilerplate.successCriteria.forEach((criterion) => {
+        let details = dataSuccessCriteria();
+        expandedStructure.push(
+          details.find((detail) => detail.number === criterion)
+        );
+      });
+      boilerplate.successCriteria = expandedStructure;
+
+      // Filter out AAA for now
+      boilerplate.successCriteria = boilerplate.successCriteria.filter(
+        (criterion) => criterion.level !== "AAA"
+      );
+
+      // Handle formats for different clients
+      let formattedCriteria = "";
+      if (getCookieValue("kpmCustom-custom-salesforce")) {
+        let formattedStandard = "";
+        boilerplate.successCriteria.forEach((criterion) => {
+          formattedCriteria += `SC ${criterion.number} ${criterion.name} (Level ${criterion.level})\n`;
+          formattedStandard += `WCAG ${criterion.version}\n`;
+        });
+        boilerplate.salesforceStandard = formattedStandard;
+      } else if (getCookieValue("kpmCustom-custom-adobe")) {
+        boilerplate.successCriteria.forEach((criterion) => {
+          formattedCriteria += `SC ${criterion.number} ${criterion.name}\n`;
+        });
+      } else if (getCookieValue("kpmCustom-custom-disney")) {
+        boilerplate.successCriteria.forEach((criterion) => {
+          formattedCriteria += `${criterion.number} ${criterion.name}\n`;
+        });
+      }
+      boilerplate.successCriteria = formattedCriteria;
+
+      // DEFECT GRADE SECTION MODIFICATIONS
+      // Modify "type" for use as defect grade by WF
+      if (getCookieValue("kpmCustom-custom-wf")) {
+        if (boilerplate.type === "web") {
+          boilerplate.type = "ADA_Grade_Web";
+        } else if (
+          boilerplate.type === "ios" ||
+          boilerplate.type === "android"
+        ) {
+          boilerplate.type = "ADA_Grade_Native";
+        }
+      }
+
       // Generate and inject the new description
-      const newDescription = formatDescription(entry, codeReference);
+      const newDescription = formatDescription(boilerplate);
       descriptionTextarea.value = newDescription;
 
       // Inject the note
-      const newNote = formatNote(entry);
+      const newNote = formatNote(boilerplate);
       const noteTextarea = document.querySelector(
-        "textarea[id*='attribute'], textarea[id*='note']",
+        "textarea[id*='attribute'], textarea[id*='note']"
       );
       noteTextarea.value = newNote;
     });
@@ -8342,7 +8821,7 @@ function addEditor(reportID) {
         const name1 = $("#userinfo ul li:first").text();
         const newText1 = entry1.title.split("-")[0].trim();
         text1 = `[${newText1.toUpperCase()} -${name1}]\nPlease review the 'Defect Comments' area for more details\n\n--------------------------\n\n${$(
-          "textarea[id*='element']:first",
+          "textarea[id*='element']:first"
         ).val()}`;
       } else {
         // For Clear Review
@@ -8357,7 +8836,7 @@ function addEditor(reportID) {
           text1 = `[${$today1}: ${entry1.title.toUpperCase()}]\n\n--------------------------\n\n${formatted1}`;
         } else {
           text1 = `[${$today1}: ${entry1.title.toUpperCase()}]\n\n--------------------------\n\n${$(
-            "textarea[id*='element']:first",
+            "textarea[id*='element']:first"
           ).val()}`;
         }
       }
@@ -8369,7 +8848,7 @@ function addEditor(reportID) {
             $("textarea[id*='defect_comments_']:first").val("");
           } else {
             $("textarea[id*='defect_comments_']:first").val(
-              "Please go into the baseline list and locate the test for this missing violation.",
+              "Please go into the baseline list and locate the test for this missing violation."
             );
           }
         }
@@ -8387,17 +8866,17 @@ function addEditor(reportID) {
       if (clickID.indexOf("status-wcag") >= 0) {
         const level = clickID.split("-")[2].toUpperCase();
         text = `[WCAG Level: ${level}]\n\n${$(
-          "textarea[id*='element']:first",
+          "textarea[id*='element']:first"
         ).val()}`;
       } else if (entry.date === "name") {
         const name = $("#userinfo ul li:first").text();
         const newText = entry.title.split("-")[0].trim();
         text = `[${newText.toUpperCase()} -${name}]\n\n${$(
-          "textarea[id*='element']:first",
+          "textarea[id*='element']:first"
         ).val()}`;
       } else if (entry.date === "no") {
         text = `[${entry.title.toUpperCase()}]\n\n${$(
-          "textarea[id*='element']:first",
+          "textarea[id*='element']:first"
         ).val()}`;
       } else {
         let $today = new Date();
@@ -8406,7 +8885,7 @@ function addEditor(reportID) {
         const yyyy = $today.getFullYear();
         $today = `${mm}/${dd}/${yyyy}`;
         text = `[${$today}: ${entry.title.toUpperCase()}]\n\n--------------------------\n\n${$(
-          "textarea[id*='element']:first",
+          "textarea[id*='element']:first"
         ).val()}`;
       }
       if (entry.title) {
@@ -8466,7 +8945,7 @@ function addEditor(reportID) {
 
       if (entry.var1 && entry.loc === "1") {
         const text = `[${entry.var1}]\n\n${$(
-          "textarea[id*='element']:first",
+          "textarea[id*='element']:first"
         ).val()}`;
         $("textarea[id*='element']:first").val(text);
       } else if (entry.var1) {
@@ -8558,27 +9037,6 @@ function addEditor(reportID) {
     // This section is to hide input fields 2-6 on ADD only.
     if (!getCookieValue("kpmPref-showOne")) {
       hideAdditionalInstances();
-    }
-
-    /* For Salesforce Custom Success Criteria
-       TODO: (Perla - Would be a better idea to link each BP to the level, name of sc, and version) */
-    if (getCookieValue("kpmCustom-custom-salesforce")) {
-      $("select[id*='violation_']:first").after(addSuccessCriteria());
-
-      // Add tags to the description field
-      $("#update-sc").on("click", () => {
-        // Format of options on-screen is: SC 1.1.1 Non-text Context (Level A) [WCAG 2.0]
-        const selectSCVal = $("#select-sc").val().split("[");
-        const wcagSC = selectSCVal[0];
-        const wcagVersion = selectSCVal[1].split("]")[0];
-
-        let text = $("textarea[id*='element']:first").val();
-        // Add success criteria
-        text += `\n\n[WCAG Success Criteria]\n${wcagSC}`;
-        // Add version
-        text += `\n\n[WCAG Standard]\n${wcagVersion}`;
-        $("textarea[id*='element']:first").val(text);
-      });
     }
   }
 }
