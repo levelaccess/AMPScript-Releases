@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.10.0
+// @version      6.11.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -671,12 +671,20 @@ function dataErrors() {
       css: "lpform",
     },
     {
+      cause: "Linguix",
+      css: "linguix-spellcheck",
+    },
+    {
       cause: "Microsoft Editor",
       css: "data-ms-editor",
     },
     {
       cause: "the Target Size bookmarklet",
       css: 'aria-description="overlap"',
+    },
+    {
+      cause: "various spellcheck extensions",
+      css: "data-gramm",
     },
     {
       cause: "Visual ARIA",
