@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.11.0
+// @version      6.12.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -456,7 +456,9 @@ function dataCSS() {
     // View All Instances Description column styling reset
     "table#instances": "border-collapse: collapse",
     "table#instances th[scope='row']":
-      "font-weight: normal; border: 1px solid #ddd !important; background: inherit;",
+      "font-weight: normal; border: 1px solid #ddd !important; background: inherit; max-width: 40ch; overflow-wrap: break-word !important;",
+    "#instances td":
+      "max-width: 40ch; white-space: pre-wrap !important; overflow-wrap: break-word !important;",
 
     // Best Practice Buttons - Data Cells
     "td .modalButtons":
@@ -483,7 +485,7 @@ function dataCSS() {
 
     // Errors about content
     ".kpmAlert":
-      "display: flex; gap: 0.3em; margin: 0 0 0.2em 0 !important; padding: 0.25em !important; font-weight: bold; font-size: 0.9em; color: #FFFFFF !important; background-color: #B60000;",
+      "margin: 0 0 0.2em 0 !important; padding: 0.25em !important; font-weight: bold; font-size: 0.9em; color: #FFFFFF !important; background-color: #B60000; white-space: normal;",
     ".kpmAlert > svg": "margin: 0.2em 0 0 0.1em;",
 
     // Warnings about content
@@ -7435,8 +7437,10 @@ function injectProblems(element, type) {
   if (type === "best practice") {
     /* BEST PRACTICE ERROR HANDLING
     /* Check if there are any warnings associated with this BP */
+    const bpLink = element.querySelector("[onclick^='modal_best_practice']");
     const nonBaselineBPs = dataNonBaselineBPs();
-    const bpId = element.getAttribute("id").replace("bp_", "");
+    const bpId = bpLink.getAttribute("onclick").split(", ")?.at(1);
+
     let warning = "";
     nonBaselineBPs.forEach((nonBaselineBP) => {
       if (bpId === nonBaselineBP.id) {
@@ -7453,7 +7457,7 @@ function injectProblems(element, type) {
   } else if (type === "description" || type === "note") {
     /* DESCRIPTION/NOTE ERROR HANDLING
     /* Generate a Map of the sections */
-    const sectionMap = mapifyDescNote(element.innerText);
+    const sectionMap = mapifyDescNote(element.textContent);
 
     // Detect errors, using the Map to simplify things
     const badCodeStrings = dataErrors();
@@ -7553,7 +7557,12 @@ function injectProblems(element, type) {
     element.prepend(problemContainer);
   } else if (type === "thumbnail" && currentSchema.thumbnail.required) {
     // Check if it contains an image; if so, add error
-    if (element.getElementsByTagName("img").length === 0) {
+    if (
+      !(
+        element.innerHTML.includes("<img") ||
+        element.innerHTML.includes('role="img"')
+      )
+    ) {
       const errorContents =
         "<p class='kpmAlert'>Error: This issue appears to be missing a screenshot. Please add one.</p>";
       problemContainer.innerHTML = errorContents;
@@ -9185,14 +9194,87 @@ function testModuleLinks(moduleID) {
     '<li><a href="#" onclick="window.location.search=window.location.search+\'&mark_complete=true\'; instHandler.showModule(); return false;">Mark Complete<span class="accessibleAltText">Opens separate pane</span></a></li>';
   return editLink;
 }
+function testModuleAlternate() {
+  // ALWAYS ON: Makes the test module open with the review tab (mark complete) by default rather than an empty page.
+  $("body").attr(
+    "onload",
+    "javascript:instHandler.showModule(); return false;"
+  );
+
+  // ALWAYS ON: Adds the links to the top of the page for mark complete and edit module.
+  $("#menu_table_toolbar_actions").append(testModuleLinks(moduleID));
+}function viewGlobalsAndPatterns() {
+  if (!getCookieValue("kpmPref-globals")) {
+    $("h2:contains('Globals')").hide();
+    $("#view_globals_container").hide();
+    $("#view_globals_container").after(
+      '<p class="kpmSmall">Globals hidden by the ACE AMP Script. You can make them show again in the preferences below.</p>'
+    );
+    $("a[onclick^='modal_create_global']").hide();
+  }
+}
+function updateInstancesTable() {
+  // INJECT WARNINGS FOR EACH BEST PRACTICE
+  if (!getCookieValue("kpmPref-bpWarnings")) {
+    const bpTableHeaders = document.querySelectorAll(
+      "td:has([onclick^='modal_best_practice'])"
+    );
+    bpTableHeaders.forEach((bpRow) => {
+      injectProblems(bpRow, "best practice");
+    });
+  }
+
+  // INJECT WARNINGS FOR EACH ISSUE
+  if (!getCookieValue("kpmPref-tableWarning")) {
+    const headers = Array.from(
+      document.querySelectorAll("#instances thead tr th")
+    );
+    const descriptionColumnPosition =
+      headers.find((header) => header.innerText === "Description")?.cellIndex +
+      1;
+    const noteColumnPosition =
+      headers.find((header) => header.innerText === "Note")?.cellIndex + 1;
+    const thumbnailColumnPosition =
+      headers.find((header) => header.innerText === "Thumbnail")?.cellIndex + 1;
+
+    const issueRows = document.querySelectorAll("#instances tbody tr");
+    issueRows.forEach((issueRow) => {
+      if (!isNaN(descriptionColumnPosition)) {
+        const descriptionElement = issueRow.querySelector(
+          `tr > :nth-child(${descriptionColumnPosition})`
+        );
+        injectProblems(descriptionElement, "description");
+      }
+
+      if (!isNaN(noteColumnPosition)) {
+        const noteElement = issueRow.querySelector(
+          `tr > :nth-child(${noteColumnPosition})`
+        );
+        injectProblems(noteElement, "note");
+      }
+
+      if (!isNaN(thumbnailColumnPosition)) {
+        const thumbnailElement = issueRow.querySelector(
+          `tr > :nth-child(${thumbnailColumnPosition})`
+        );
+        injectProblems(thumbnailElement, "thumbnail");
+      }
+    });
+  }
+}
+
 // This looks at the View All Instances list page.
-function viewInstance() {
+function viewInstances() {
   if (!getCookieValue("kpmPref-retestColor")) {
     retestColor();
   }
   if (!getCookieValue("kpmPref-thumbALT")) {
     viewDivAltText();
   }
+
+  $("#instances").on("draw.dt", function () {
+    updateInstancesTable();
+  });
 }
 /* View Module Specific Functions */
 
@@ -9253,17 +9335,17 @@ function filterClearBPs(ipt) {
     const reg = new RegExp(temp, "ig");
     /* Uncheck and disable the main header checkbox for all violations to prevent mass deletion*/
     document.querySelector(
-      "table[id*='view_module'] input[type='checkbox']",
+      "table[id*='view_module'] input[type='checkbox']"
     ).checked = false;
     document.querySelector(
-      "table[id*='view_module'] input[type='checkbox']",
+      "table[id*='view_module'] input[type='checkbox']"
     ).disabled = true;
 
     [].slice
       .call(
         document
           .querySelector("table[id*='view_module']")
-          .querySelectorAll("tr.odd, tr.even"),
+          .querySelectorAll("tr.odd, tr.even")
       )
       .forEach((elem) => {
         /* Hide all rows and then unhide the ones that have matches*/
@@ -9287,7 +9369,7 @@ function filterClearBPs(ipt) {
       .call(
         document
           .querySelector("table[id*='view_module']")
-          .querySelectorAll("tr.odd:not(.bpHide), tr.even:not(.bpHide)"),
+          .querySelectorAll("tr.odd:not(.bpHide), tr.even:not(.bpHide)")
       )
       .forEach((elem) => {
         if (elem.nextElementSibling !== null && elem.querySelector("th")) {
@@ -9398,14 +9480,14 @@ function addRetestCheckbox() {
   const addCheckboxDIV = document.createElement("li");
   addCheckboxDIV.setAttribute(
     "style",
-    "display: inline; float: right; margin-right: 1em;",
+    "display: inline; float: right; margin-right: 1em;"
   );
   addCheckboxDIV.appendChild(
     buildCheckbox(
       "retestColor",
       "Colorize Rows for Retests",
-      "Colorizes the cells that have a retest [DATE: FIXED] in them",
-    ),
+      "Colorizes the cells that have a retest [DATE: FIXED] in them"
+    )
   );
   return addCheckboxDIV;
 }
@@ -9436,10 +9518,94 @@ function moveViewInstanceToActions() {
       const itemURL = linkItem.attr("href");
       const instanceID = itemURL.split("=")[1].toString();
       actionsCol.append(
-        `<a href="${itemURL}" style="margin-left: 3px;" aria-label="View details, ${instanceID}"><svg class="svg-inline--fa fa-external-link-alt fa-w-16 medium" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="external-link-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"></path></svg></a>`,
+        `<a href="${itemURL}" style="margin-left: 3px;" aria-label="View details, ${instanceID}"><svg class="svg-inline--fa fa-external-link-alt fa-w-16 medium" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="external-link-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"></path></svg></a>`
       );
       // Must be removed rather than hidden for raw HTML warnings to work.
       linkItem.remove();
+    });
+  }
+}
+
+function viewModule(reportID, moduleID) {
+  // EXPERIMENTAL - Get the table of patterns from the patterns page
+  if (!getCookieValue("kpmPref-addPatterns")) {
+    const table = ajaxCall(
+      `/public/reporting/view_globals_and_patterns.php?report_id=${reportID}`,
+      "#view_patterns_container table"
+    );
+    setTimeout(() => {
+      $("#MODULE_TAB_CONFIRMED-content").append(
+        `<h3>Existing Patterns</h3><table>${table}</table>`
+      );
+    }, 1500);
+  }
+
+  // ALWAYS ON: This adds links/tabs/access keys to the View Module page.
+  $("#menu_table_toolbar_actions").append(viewModuleAddInstance());
+  $("#menu_table_toolbar_actions").append(viewModuleAddPattern());
+  $("#menu_table_toolbar_actions").append(addRetestCheckbox());
+  $("a[onclick*='modal_edit_report_instances']").attr("accesskey", "z");
+  $("a[onclick*='modal_delete_report_instances']").attr("accesskey", "x");
+  $("ul[class='a11y-tabs-list']").append(viewModuleMark(moduleID));
+  // ALWAYS ON: This makes the thumbnails retain their shape rather than being forced into a square
+  $("table[id*='view_module'] img").attr("height", "auto");
+
+  // FROM ALEX - FILTER FOR BP
+  if (!getCookieValue("kpmPref-instanceFilter")) {
+    $("#page_form").before(filterBP());
+  }
+
+  // Makes the ALT text visible for images. Doesn't work on the modal list as those are DIVs with background images
+  if (!getCookieValue("kpmPref-thumbALT")) {
+    viewAltText();
+  }
+
+  // Baseline Checkbox
+  if (!getCookieValue("kpmPref-showBaseline")) {
+    $(".view-module-container:first").prepend(baseLine(moduleID));
+  }
+
+  // For each pattern in the list, creates a link button so that you can navigate there quickly
+  if (!getCookieValue("kpmPref-addPatternLink")) {
+    editPattern();
+  }
+
+  // Figure out if there is a status on this and apply a color.
+  if (!getCookieValue("kpmPref-retestColor")) {
+    retestColor();
+  }
+
+  /* Move the view instance link over to the Actions column
+              Must occur before warning injection, or raw HTML warnings will
+              break */
+  if (!getCookieValue("kpmPref-moveInstanceLink")) {
+    moveViewInstanceToActions();
+  }
+
+  // INJECT WARNINGS FOR EACH BEST PRACTICE
+  if (!getCookieValue("kpmPref-bpWarnings")) {
+    const bpTableHeaders = document.querySelectorAll("[id^='bp_']");
+    bpTableHeaders.forEach((bpRow) => {
+      injectProblems(bpRow, "best practice");
+    });
+  }
+
+  // INJECT WARNINGS FOR EACH ISSUE
+  if (!getCookieValue("kpmPref-tableWarning")) {
+    const headerRow = document.querySelector("[id^='view_module_table'] thead");
+    const issueRows = document.querySelectorAll(
+      "[id^='view_module_table'] tr:has(td.wrap.topvalign)"
+    );
+    issueRows.forEach((issueRow) => {
+      const descriptionElement = issueRow.querySelector("td:nth-of-type(2)");
+      const noteElement = issueRow.querySelector("td:nth-of-type(3)");
+      injectProblems(descriptionElement, "description");
+      injectProblems(noteElement, "note");
+
+      if (headerRow.innerText.includes("Thumbnail")) {
+        const thumbnailElement = issueRow.querySelector("td:nth-of-type(5)");
+        injectProblems(thumbnailElement, "thumbnail");
+      }
     });
   }
 }
@@ -9457,29 +9623,41 @@ function copyModuleListToClipboard() {
     () => {
       const copyDialog = createDialog(
         "Success",
-        "Copied plain text list of modules to clipboard!",
+        "Copied plain text list of modules to clipboard!"
       );
       copyDialog.showModal();
     },
     (err) => {
       const copyDialog = createDialog("Error", err);
       copyDialog.showModal();
-    },
+    }
   );
+}
+
+function updateModulesTable() {
+  $("td:contains('http')").each((index, element) => {
+    const thisTD = $(element);
+    const thisURL = thisTD.html();
+    thisTD.html(
+      `<a href="${thisURL}" target="_blank">${thisURL}<span class="accessibleAltText"> (Opens in New Window)</span></a>`
+    );
+  });
+
+  // Add warnings for garbage characters
+  const moduleDetails = document.querySelectorAll(
+    "#modules th[scope='row'], #modules td:nth-child(4), #modules td:nth-child(6)"
+  );
+
+  const specialCharacters = dataSpecialCharacters();
+  moduleDetails.forEach((moduleDetail) => {
+    injectProblems(moduleDetail, "module name");
+  });
 }
 
 /* These are the containers of functions that are called below dynamically using mutation observers or delays */
 
 // This looks at the view modules page.
 function viewModules() {
-  $("td:contains('http')").each((index, element) => {
-    const thisTD = $(element);
-    const thisURL = thisTD.html();
-    thisTD.html(
-      `<a href="${thisURL}" target="_blank">${thisURL}<span class="accessibleAltText"> (Opens in New Window)</span></a>`,
-    );
-  });
-
   // Adds button for copying/pasting module list.
   const copyModulesElement = document.createElement("button");
   copyModulesElement.classList.add("dt-button");
@@ -9498,21 +9676,31 @@ function viewModules() {
     viewDivAltText();
   }
 
-  // Add warnings for garbage characters
-  const moduleDetails = document.querySelectorAll(
-    "#modules th[scope='row'], #modules td:nth-child(4), #modules td:nth-child(6)",
-  );
-
-  const specialCharacters = dataSpecialCharacters();
-  moduleDetails.forEach((moduleDetail) => {
-    injectProblems(moduleDetail, "module name");
+  $("#modules").on("draw.dt", function () {
+    updateModulesTable();
   });
+}
+function viewPattern() {
+  // ALWAYS ON: Adds accesskey to the patterns side rather than the module details side.
+  $("a[onclick*='modal_create_pattern_violation']").attr("accesskey", "a");
+  $("a[onclick*='modal_delete_pattern_violations']").attr("accesskey", "x");
+}
+function viewReport() {
+  // ALWAYS ON: if Dashboard, checkbox for full description
+  $(".description:first h3").prepend(
+    buildCheckbox(
+      "fullDescription",
+      "Show Full Description",
+      "Makes the description box show all the content",
+      "kpmDescPref"
+    )
+  );
 }
 // USE CASES
 function copyUseCasesToClipboard() {
   const useCaseSet = new Set();
   const useCaseHeaderElements = document.querySelectorAll(
-    "table.large td:nth-child(2) a",
+    "table.large td:nth-child(2) a"
   );
   useCaseHeaderElements.forEach((useCaseHeaderElement) => {
     const useCaseNameRaw = useCaseHeaderElement.innerHTML;
@@ -9532,19 +9720,32 @@ function copyUseCasesToClipboard() {
     () => {
       const copyDialog = createDialog(
         "Success",
-        "Copied plain text list of use cases to clipboard!",
+        "Copied plain text list of use cases to clipboard!"
       );
       copyDialog.showModal();
     },
     (err) => {
       const copyDialog = createDialog("Error", err);
       copyDialog.showModal();
-    },
+    }
   );
+}
+
+function viewUseCases() {
+  const copyUseCaseLink = document.createElement("a");
+  copyUseCaseLink.href = "#";
+  copyUseCaseLink.classList.add("bulk_actions");
+  copyUseCaseLink.innerHTML =
+    "<i class='far fa-copy'></i>Copy use cases to clipboard";
+  copyUseCaseLink.addEventListener("click", copyUseCasesToClipboard);
+  const copyUseCaseListItem = document.createElement("li");
+  copyUseCaseListItem.append(copyUseCaseLink);
+  const injectionPoint = document.querySelector("#menu_table_toolbar_actions");
+  injectionPoint.append(copyUseCaseListItem);
 }
 /* This is what injects into the page */
 (function () {
-  'use strict';
+  "use strict";
   console.log("The AMP Script has begun loading.");
   const startTime = performance.now();
   const target = document.body;
@@ -9556,7 +9757,7 @@ function copyUseCasesToClipboard() {
   if (document.getElementById("kpmScriptRunning") !== null) {
     const doubleScriptDialog = createDialog(
       "Error",
-      "You have multiple versions of the AMP Script running. Go to Tampermonkey and ensure only one is toggled on.",
+      "You have multiple versions of the AMP Script running. Go to Tampermonkey and ensure only one is toggled on."
     );
     doubleScriptDialog.showModal();
   }
@@ -9575,7 +9776,7 @@ function copyUseCasesToClipboard() {
 
     // Place the testing mode button in the side so that users can get back
     $("#container nav ul").append(
-      '<li tabindex="-1"><a href="#" id="kpmPref-clientMode"><span class="fas fa-laptop-code"></span>Testing Mode</a></li>',
+      '<li tabindex="-1"><a href="#" id="kpmPref-clientMode"><span class="fas fa-laptop-code"></span>Testing Mode</a></li>'
     );
 
     // Hide function
@@ -9583,15 +9784,15 @@ function copyUseCasesToClipboard() {
 
     // Misc functions to clean up items after things have been removed
     const vmColspan = $('table[id*="view_module"] th[colspan]:first').attr(
-      "colspan",
+      "colspan"
     );
     $('table[id*="view_module"] th[colspan]').attr(
       "colspan",
-      parseInt(vmColspan, 10) - 2,
+      parseInt(vmColspan, 10) - 2
     );
     $("#view_patterns_container thead th:not([width])").attr(
       "style",
-      "width: 100%;",
+      "width: 100%;"
     );
 
     // For the things I can't directly control, modify with CSS
@@ -9610,24 +9811,8 @@ function copyUseCasesToClipboard() {
 
     // Add button for client mode
     $("#container nav ul").append(
-      '<li tabindex="-1"><a href="#" id="kpmPref-clientMode" title="Simulates the client\'s view for delivery calls"><span class="fas fa-laptop-code"></span>Client Mode</a></li>',
+      '<li tabindex="-1"><a href="#" id="kpmPref-clientMode" title="Simulates the client\'s view for delivery calls"><span class="fas fa-laptop-code"></span>Client Mode</a></li>'
     );
-
-    // EXPERIMENTAL - Get the table of patterns from the patterns page
-    if (
-      window.location.href.indexOf("/view_module.php?module_id=") >= 0 &&
-      !getCookieValue("kpmPref-addPatterns")
-    ) {
-      const table = ajaxCall(
-        `/public/reporting/view_globals_and_patterns.php?report_id=${reportID}`,
-        "#view_patterns_container table",
-      );
-      setTimeout(() => {
-        $("#MODULE_TAB_CONFIRMED-content").append(
-          `<h3>Existing Patterns</h3><table>${table}</table>`,
-        );
-      }, 1500);
-    }
 
     // Builds the preferences box for the bottom of the page.
     if (
@@ -9641,8 +9826,8 @@ function copyUseCasesToClipboard() {
         buildCheckbox(
           "hidePrefs",
           "Show AMP Script Preferences",
-          "Shows The ACE AMP Script preferences box",
-        ),
+          "Shows The ACE AMP Script preferences box"
+        )
       );
     }
 
@@ -9652,145 +9837,40 @@ function copyUseCasesToClipboard() {
 
     // DASHBOARD (view_report.php)
     if (window.location.href.indexOf("/view_report.php") >= 0) {
-      // ALWAYS ON: if Dashboard, checkbox for full description
-      $(".description:first h3").prepend(
-        buildCheckbox(
-          "fullDescription",
-          "Show Full Description",
-          "Makes the description box show all the content",
-          "kpmDescPref",
-        ),
-      );
+      viewReport();
     }
 
     // VIEW MODULE (view_module.php)
     if (window.location.href.indexOf("/view_module.php?module_id=") >= 0) {
-      // ALWAYS ON: This adds links/tabs/access keys to the View Module page.
-      $("#menu_table_toolbar_actions").append(viewModuleAddInstance());
-      $("#menu_table_toolbar_actions").append(viewModuleAddPattern());
-      $("#menu_table_toolbar_actions").append(addRetestCheckbox());
-      $("a[onclick*='modal_edit_report_instances']").attr("accesskey", "z");
-      $("a[onclick*='modal_delete_report_instances']").attr("accesskey", "x");
-      $("ul[class='a11y-tabs-list']").append(viewModuleMark(moduleID));
-      // ALWAYS ON: This makes the thumbnails retain their shape rather than being forced into a square
-      $("table[id*='view_module'] img").attr("height", "auto");
-
-      // FROM ALEX - FILTER FOR BP
-      if (!getCookieValue("kpmPref-instanceFilter")) {
-        $("#page_form").before(filterBP());
-      }
-
-      // Makes the ALT text visible for images. Doesn't work on the modal list as those are DIVs with background images
-      if (!getCookieValue("kpmPref-thumbALT")) {
-        viewAltText();
-      }
-
-      // Baseline Checkbox
-      if (!getCookieValue("kpmPref-showBaseline")) {
-        $(".view-module-container:first").prepend(baseLine(moduleID));
-      }
-
-      // For each pattern in the list, creates a link button so that you can navigate there quickly
-      if (!getCookieValue("kpmPref-addPatternLink")) {
-        editPattern();
-      }
-
-      // Figure out if there is a status on this and apply a color.
-      if (!getCookieValue("kpmPref-retestColor")) {
-        retestColor();
-      }
-
-      /* Move the view instance link over to the Actions column
-            Must occur before warning injection, or raw HTML warnings will
-            break */
-      if (!getCookieValue("kpmPref-moveInstanceLink")) {
-        moveViewInstanceToActions();
-      }
-
-      // INJECT WARNINGS FOR EACH BEST PRACTICE
-      if (!getCookieValue("kpmPref-bpWarnings")) {
-        const bpTableHeaders = document.querySelectorAll("[id^='bp_']");
-        bpTableHeaders.forEach((bpRow) => {
-          injectProblems(bpRow, "best practice");
-        });
-      }
-
-      // INJECT WARNINGS FOR EACH ISSUE
-      if (!getCookieValue("kpmPref-tableWarning")) {
-        const headerRow = document.querySelector(
-          "[id^='view_module_table'] thead",
-        );
-        const issueRows = document.querySelectorAll(
-          "[id^='view_module_table'] tr:has(td.wrap.topvalign)",
-        );
-        issueRows.forEach((issueRow) => {
-          const descriptionElement =
-            issueRow.querySelector("td:nth-of-type(2)");
-          const noteElement = issueRow.querySelector("td:nth-of-type(3)");
-          injectProblems(descriptionElement, "description");
-          injectProblems(noteElement, "note");
-
-          if (headerRow.innerText.includes("Thumbnail")) {
-            const thumbnailElement =
-              issueRow.querySelector("td:nth-of-type(5)");
-            injectProblems(thumbnailElement, "thumbnail");
-          }
-        });
-      }
+      viewModule(reportID, moduleID);
     }
 
     // TEST MODULE (test_module_alternate.php)
     if (window.location.href.indexOf("test_module_alternate.php") >= 0) {
-      // ALWAYS ON: Makes the test module open with the review tab (mark complete) by default rather than an empty page.
-      $("body").attr(
-        "onload",
-        "javascript:instHandler.showModule(); return false;",
-      );
-
-      // ALWAYS ON: Adds the links to the top of the page for mark complete and edit module.
-      $("#menu_table_toolbar_actions").append(testModuleLinks(moduleID));
+      testModuleAlternate();
     }
 
     // VIEW PATTERN (view_pattern.php)
     if (window.location.href.indexOf("/view_pattern.php") >= 0) {
-      // ALWAYS ON: Adds accesskey to the patterns side rather than the module details side.
-      $("a[onclick*='modal_create_pattern_violation']").attr("accesskey", "a");
-      $("a[onclick*='modal_delete_pattern_violations']").attr("accesskey", "x");
-    }
-
-    /* ADD INSTANCE (add_instance.php) - This is the window that appears if you mess up a submission from the modal
-       TODO: this doesn't fully work. Look into it */
-    if (window.location.href.indexOf("/add_instance.php") >= 0) {
-      addEditor(reportID);
+      viewPattern();
     }
 
     if (window.location.href.indexOf("/view_use_cases.php") >= 0) {
-      const copyUseCaseLink = document.createElement("a");
-      copyUseCaseLink.href = "#";
-      copyUseCaseLink.classList.add("bulk_actions");
-      copyUseCaseLink.innerHTML =
-        "<i class='far fa-copy'></i>Copy use cases to clipboard";
-      copyUseCaseLink.addEventListener("click", copyUseCasesToClipboard);
-      const copyUseCaseListItem = document.createElement("li");
-      copyUseCaseListItem.append(copyUseCaseLink);
-      const injectionPoint = document.querySelector(
-        "#menu_table_toolbar_actions",
-      );
-      injectionPoint.append(copyUseCaseListItem);
+      viewUseCases();
     }
 
     /* GLOBAL ELEMENTS
-       GLOBAL ALWAYS ON: Adds the links to the header IF there is a report id (this way they don't appear on the best practices, etc.). */
+         GLOBAL ALWAYS ON: Adds the links to the header IF there is a report id (this way they don't appear on the best practices, etc.). */
     if (reportID) {
       $("#secondary-header>.chooser").after(mainNav(reportID, moduleID));
     }
 
     // GLOBAL ALWAYS ON: Add options to number of items shown in the Violations Lists
     $("#instances_length select").prepend(
-      '<option value="5">5</option><option value="10">10</option>',
+      '<option value="5">5</option><option value="10">10</option>'
     );
     $("#instances_length select option[value='2000']").before(
-      '<option value="500">500</option><option value="1000">1000</option>',
+      '<option value="500">500</option><option value="1000">1000</option>'
     );
 
     // GLOBAL: Any time there is a best practice modal link, create buttons to the page best practice and the copy best practice
@@ -9799,84 +9879,58 @@ function copyUseCasesToClipboard() {
     }
 
     // GLOBAL: Hide Global Patterns
-    if (!getCookieValue("kpmPref-globals")) {
-      // Hides Globals from edit pattern
-      if (window.location.href.indexOf("/view_globals_and_patterns.php") >= 0) {
-        $("h2:contains('Globals')").hide();
-        $("#view_globals_container").hide();
-        $("#view_globals_container").after(
-          '<p class="kpmSmall">Globals hidden by the ACE AMP Script. You can make them show again in the preferences below.</p>',
-        );
-      }
-      $("a[onclick^='modal_create_global']").hide();
+    // Hides Globals from edit pattern
+    if (window.location.href.indexOf("/view_globals_and_patterns.php") >= 0) {
+      viewGlobalsAndPatterns();
     }
 
-    /* The following should be done with mutationObservers, but I can't figure it out right now. So for now, they are on delay.
-       VIEW MODULES (view_modules.php) */
+    // VIEW MODULES (view_modules.php)
     if (window.location.href.indexOf("/view_modules.php") >= 0) {
-      setTimeout(() => {
-        viewModules();
-      }, 1500);
+      viewModules();
     }
 
+    // VIEW INSTANCES (view_instances.php)
     if (window.location.href.indexOf("/view_instances.php") >= 0) {
-      setTimeout(() => {
-        viewInstance();
-      }, 3000);
+      viewInstances();
     }
 
-    /* The following are tools for functionality, not functionality itself, so there is no preference for turning on/off.
-       Parameters for the mutation observers */
-    const config = {
-      attributes: true,
-      childList: true,
-      characterData: true,
-      subtree: true,
-    };
-
-    // Add Editor
-    if ($("#amp_modal_reportModal").length === 0) {
-      // Set up the mutation observer for the view modules page
-      const addObserver = new MutationObserver((mutations, me) => {
-        const addModal = document.getElementById("modal_form");
-        if (addModal) {
-          if ($(addModal).prop("action").indexOf("edit_module.php") >= 0) {
-            handleEditModuleForm();
-          } else if (
-            $(addModal).prop("action").indexOf("edit_multiple_modules.php") >= 0
-          ) {
-            handleEditMultipleModuleForm();
-          } else if (
-            $(addModal).prop("action").indexOf("perform_use_case_test.php") >= 0
-          ) {
-            addGenerateSummaryButton();
-          } else {
-            addEditor(reportID);
-          }
-
-          // Stop observing
-          me.disconnect();
-          return;
-        }
-        const changeOrganization = document.getElementById(
-          "organization-filter-form",
-        );
-        if (changeOrganization) {
-          handleOrganizationFilterForm(reportID);
-          // Stop observing
-          me.disconnect();
-          return;
-        }
-        const testingCompleteCheckbox =
-          document.getElementById("testing_complete");
-        if (testingCompleteCheckbox) {
-          handleTestingCompleteCheckbox(reportID);
-          // Stop observing
-          me.disconnect();
+    const modalObserver = new MutationObserver((mutations, observer) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType === 1) {
+              const action = node.getAttribute("action");
+              if (action?.includes("/public/audit/edit_module.php")) {
+                handleEditModuleForm();
+              } else if (
+                action?.includes("/public/audit/edit_multiple_modules.php")
+              ) {
+                handleEditMultipleModuleForm();
+              } else if (
+                action?.includes(
+                  "/public/audit/use_case/perform_use_case_test.php"
+                )
+              ) {
+                addGenerateSummaryButton();
+              } else if (
+                action?.includes("/public/audit/add_instance.php") ||
+                action?.includes("/public/audit/edit_instance.php") ||
+                action?.includes("/public/audit/edit_pattern_member.php") ||
+                action?.includes("/public/audit/edit_pattern.php")
+              ) {
+                addEditor(reportID);
+              } else if (node.id === "organizationTable") {
+                handleOrganizationFilterForm(reportID);
+              } else if (node.id === "testing_complete") {
+                handleTestingCompleteCheckbox(reportID);
+              }
+            }
+          });
         }
       });
-      addObserver.observe(target, config);
-    }
+    });
+
+    modalObserver.observe(document.body, { childList: true, subtree: true });
   }
 
   // Function to set the cookie if click on a checkbox happened. All the way at the bottom of the script to make sure that it catches everything
@@ -9918,6 +9972,6 @@ function copyUseCasesToClipboard() {
   const endTime = performance.now();
   const duration = (endTime - startTime).toFixed(2);
   console.log(
-    `The AMP Script has finished loading. Time taken: ${duration} ms`,
+    `The AMP Script has finished loading. Time taken: ${duration} ms`
   );
 })();
