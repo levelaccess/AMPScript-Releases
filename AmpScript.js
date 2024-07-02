@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.12.0
+// @version      6.12.1
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -1141,6 +1141,10 @@ function dataNonBaselineBPs() {
       id: "392",
       note: 'Consider using "Ensure custom controls provide proper textual name, role, and state information" instead.',
     },
+    {
+      id: "2044",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
   ];
   return nonBaselineBPs;
 }
@@ -1157,7 +1161,7 @@ function dataPreferred() {
         'Ensure fieldsets are labelled appropriately. If role="radiogroup" is used, the element with this role must have an accessible name. This can be set with an aria-label or aria-labelledby attribute.',
       stepsToReproduce:
         '1. Locate the radio buttons.\n2. Inspect them with Chrome DevTools.\n3. Select the role="radiogroup" element.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the value for "Name".',
-      jawsFunctionalSteps: 
+      jawsFunctionalSteps:
         '1. Enable JAWS.\n2. Press TAB key to move focus to the first radio button in the group (not checked).\nExpected result: JAWS announces, "[Group name], group. [Radio name], radio button, not checked.\nActual result: JAWS announces, "[Radio name], radio button, not checked" and omits any group information.',
       successCriteria: ["1.3.1", "3.3.2"],
       title: 'role="radiogroup" with no accessible name',
@@ -1208,7 +1212,7 @@ function dataPreferred() {
         "Provide fieldsets for groups of form controls. Common groups of form controls include related radio buttons, checkboxes, and shipping/billing address groupings. The <fieldset> element must have a descriptive <legend> element as its first child. The form controls must appear as descendants of the fieldset.",
       stepsToReproduce:
         '1. Locate the form field grouping.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
-      jawsFunctionalSteps: 
+      jawsFunctionalSteps:
         '1. Enable JAWS.\n2. Press TAB key to move focus to the first control in the group (not checked).\nExpected result: JAWS announces, "[Group name], group. [Name], [Role], not checked.\nActual result: JAWS announces, "[Name], [Role], not checked" and omits any group information.',
       successCriteria: ["1.3.1", "3.3.2"],
       title: "Form groups lack fieldset",
@@ -1404,7 +1408,7 @@ function dataPreferred() {
         "Provide alternative text for images. Meaningful images must have a concise but descriptive textual equivalent.\n\nTo add a textual equivalent to an <img> element, set its alt attribute to a descriptive value.\n\nTo add a textual equivalent to an <svg> element, add a <title> child to the SVG. Place the textual equivalent in the <title>, then add an ID to the <title>. Finally, on the <svg>, add an aria-labelledby attribute and set its value to the ID of the <title>.",
       stepsToReproduce:
         '1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
-      jawsFunctionalSteps: 
+      jawsFunctionalSteps:
         '1. Enable JAWS.\nPress Down Arrow key to read content line by line.\n3. Alternatively, press the "G" key to move to the next graphic.\nExpected result: JAWS cursor moves to the graphic and announces a brief, meaningful description.\nActual result: JAWS cursor moves to this graphic, and is silent.',
       successCriteria: ["1.1.1"],
       title: "Meaningful image with no textual equivalent",
@@ -1421,7 +1425,7 @@ function dataPreferred() {
         'Provide alternative text for images. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an <img> element as decorative, set its alt attribute to "" (that is, alt="" exactly as written, with no space between the quotation marks). To mark an <svg> element as decorative, add aria-hidden="true" to the element.',
       stepsToReproduce:
         "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
-      jawsFunctionalSteps: 
+      jawsFunctionalSteps:
         '1. Enable JAWS.\n2. Press the Down Arrow key to read content line by line.\n3. Alternatively, press the "G" key to move to the next graphic.\nExpected result: JAWS cursor skips over this decorative content and does not announce it.\nActual result: JAWS cursor moves to the graphic and is silent.',
       successCriteria: ["1.1.1"],
       title: "Decorative image not marked decorative",
@@ -1463,10 +1467,11 @@ function dataPreferred() {
         "Screen reader users and some users with cognitive disabilities will have difficulty determining the purpose of the page.",
       issue: "The page has no title.",
       recommendation:
-        "Ensure pages use the title element. The title must contain both the name of the page and the name of the site.",
+        "Ensure pages use the title element. Alter the page title to include the specific name for the page.",
       stepsToReproduce:
         "1. Open Chrome DevTools.\n2. Locate the <head> element, if any.\n3. Notice that no <title> element is present.",
-      jawsFunctionalSteps: '1. Enable JAWS.\n2. Press the "T" key to read the document title.\nExpected result: JAWS announces a brief description of the current page, followed by the website name.\nActual result: The title is not announced.',
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Press the "T" key to read the document title.\nExpected result: JAWS announces a brief description of the current page, followed by the website name.\nActual result: The title is not announced.',
       successCriteria: ["2.4.2"],
       title: "Title element missing",
       type: "web",
@@ -1485,21 +1490,6 @@ function dataPreferred() {
         "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color and background color.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below the required value for this size of text.",
       successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
-      type: "web",
-    },
-    {
-      bp: 368,
-      id: "response-web-text-on-image-contrast",
-      impact:
-        "Users with low vision will have difficulty reading this content.",
-      issue:
-        "There is text on an image background that does not meet the required minimum color contrast ratio.\n\nForeground color: \nBackground color: \nContrast ratio: \nRequired contrast ratio for this content: \n\nExamples of insufficiently contrasting text in front of images include:\n- ",
-      recommendation:
-        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
-      stepsToReproduce:
-        "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color.\n4. Using a color picker, such as https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld to select a color from the background that touches the text.\n5. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n6. Notice that the contrast ratio is below the required value for this size of text.",
-      successCriteria: ["1.4.3"],
-      title: "Text on image contrast",
       type: "web",
     },
     {
@@ -1560,7 +1550,7 @@ function dataPreferred() {
         'Ensure images provide informative alternative text. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an <img> element as decorative, set its alt attribute to "" (that is, alt="" exactly as written, with no space between the quotation marks). To mark an <svg> element as decorative, add aria-hidden="true" to the element.',
       stepsToReproduce:
         "1. Locate the image.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Verify that the accessibility node is not exposed.",
-      jawsFunctionalSteps: 
+      jawsFunctionalSteps:
         '1. Enable JAWS.\n2. Press the Down Arrow key to read content line by line.\n3. Alternatively, press the "G" key to move to the next graphic.\nExpected result: JAWS cursor skips over this decorative content and does not announce it.\nActual result: JAWS announces, "[Actual Name], graphic".',
       successCriteria: ["1.1.1"],
       title: "Decorative image with textual equivalent",
@@ -1975,7 +1965,7 @@ function dataPreferred() {
         "Screen reader users and users with cognitive disabilities will have difficulty determining the purpose of the page.",
       issue: "The page title insufficiently describes the page's purpose.",
       recommendation:
-        "Provide an informative, context-sensitive page title. The title must contain both the name of the page and the name of the site.",
+        "Provide an informative, context-sensitive page title. Alter the page title to include the specific name for the page.",
       stepsToReproduce:
         "1. Inspect the page with Chrome DevTools.\n2. Locate the <title> element within the <head>.\n3. Review its text.",
       jawsFunctionalSteps:
@@ -2313,7 +2303,7 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the form submission control is focused.\n5. Press Enter on the submission control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the top-of-form error container.',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the top-of-form error. JAWS announces error message.\nActual result: [Actual result].',
+        "1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the top-of-form error. JAWS announces error message.\nActual result: [Actual result].",
       successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not moved to top-of-form error",
       type: "web",
@@ -2329,8 +2319,8 @@ function dataPreferred() {
         "Ensure content updates define focus updates appropriately. When inline errors appear, focus must move to the first field in error and the form field must have aria-describedby set to the ID of the error so that the error is announced when the field is focused.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the form submission control is focused.\n5. Press Enter on the submission control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the first form field with an error.',
-      jawsFunctionalSteps: 
-        '1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the first invalid field. JAWS announces the field information, invalid state, and error message.\nActual result: [Actual result].',
+      jawsFunctionalSteps:
+        "1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the first invalid field. JAWS announces the field information, invalid state, and error message.\nActual result: [Actual result].",
       successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not moved to first field in error",
       type: "web",
@@ -2376,7 +2366,7 @@ function dataPreferred() {
         "Ensure form field constraints and errors are associated with their corresponding field.\n\nFor most form controls, the best way to associate the error is to use an aria-describedby attribute on the field set to the ID of the corresponding error.\n\nFor groups of form controls like radio buttons and checkboxes, it is best to include the error text inside the element that labels the group (such as a <legend>).",
       stepsToReproduce:
         '1. Locate the form field with an inline error.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Description".',
-      jawsFunctionalSteps: 
+      jawsFunctionalSteps:
         '1. Enable JAWS.\n2. Reproduce the inline form errors.\n3. Press Tab key to move focus to the [Example Name] field.\n4. Repeat for each field with an inline error.\nExpected result: JAWS announces the field information, followed by the error message. For example, "[Name], [Role], [State/Value], [Error Message].".\nActual result: [Actual result].',
       successCriteria: ["1.3.1", "3.3.2", "4.1.2"],
       title: "Unassociated inline errors",
@@ -2393,7 +2383,7 @@ function dataPreferred() {
         "Ensure form field constraints and errors are associated with their corresponding field.\n\nFor most form controls, the best way to associate the constraint is to add an aria-describedby attribute to the field. Set the value of aria-describedby to the ID of the corresponding constraint.\n\nFor groups of form controls like radio buttons and checkboxes, it is best to include the constraint text inside the element that labels the group (such as a <legend>).",
       stepsToReproduce:
         '1. Locate the form field with inline constraints or instructions.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Description".',
-      jawsFunctionalSteps: 
+      jawsFunctionalSteps:
         '1. Enable JAWS.\n2. Press the Tab key to move focus to the [Name] field.\n3. Repeat for each field with a constraint or help text.\nExpected result: JAWS announces the field information, followed by the constraint/help text. For example, "[Name], [Role], [State/Value], [Constraint/Help Text].".\nActual result: [Actual result].',
       successCriteria: ["1.3.1", "3.3.2", "4.1.2"],
       title: "Unassociated constraints",
@@ -2576,19 +2566,6 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
-      type: "pdf",
-    },
-    {
-      bp: 653,
-      id: "response-pdf-text-on-image-contrast",
-      impact:
-        "Users with low vision will have difficulty reading this content.",
-      issue:
-        "There is text on an image background that does not meet the required minimum color contrast ratio.\n\nForeground color: \nBackground color: \nContrast ratio: \nRequired contrast ratio for this content: \n\nExamples of insufficiently contrasting text in front of images include:\n- ",
-      recommendation:
-        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
-      successCriteria: ["1.4.3"],
-      title: "Text on image contrast",
       type: "pdf",
     },
     {
@@ -3627,23 +3604,6 @@ function dataPreferred() {
       type: "web",
     },
     {
-      bp: 1301,
-      id: "response-links-with-identical-names",
-      impact:
-        "Screen reader users who navigate the page using a list of links provided by the screen reader will be unable to differentiate between these links.",
-      issue:
-        "There are links with identical accessible names that navigate to different locations. Examples include:\n- ",
-      recommendation:
-        'Ensure link text is meaningful within context. Links that go to different locations must have different accessible names.\n\nTo resolve the issue, add information to the links\' accessible names. For example, two "Learn more" links might become "Learn more about products" and "Learn more about services." When altering the accessible name, be sure to include all of the link\'s visual text in the accessible name.',
-      stepsToReproduce:
-        '1. Locate the link.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
-      jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press the Tab key to move focus to the link.\nExpected result: JAWS announces, "[Recommended Name], link". The link name includes [Missing Context].\nActual result: JAWS announces, "[Actual Name], link". There is no indication of [Missing Context].',
-      successCriteria: ["2.4.4"],
-      title: "Links with identical names",
-      type: "web",
-    },
-    {
       bp: 1302,
       id: "response-pdf-links-with-non-descriptive-names",
       impact:
@@ -3815,21 +3775,6 @@ function dataPreferred() {
         "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
       successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
-      type: "ios",
-    },
-    {
-      bp: 1581,
-      id: "response-ios-text-on-image-contrast",
-      impact:
-        "Users with low vision will have difficulty reading this content.",
-      issue:
-        "There is text on an image background that does not meet the required minimum color contrast ratio.\n\nForeground color: \nBackground color: \nContrast ratio: \nRequired contrast ratio for this content: \n\nExamples of insufficiently contrasting text in front of images include:\n- ",
-      recommendation:
-        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
-      stepsToReproduce:
-        "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
-      successCriteria: ["1.4.3"],
-      title: "Text on image contrast",
       type: "ios",
     },
     {
@@ -4140,21 +4085,6 @@ function dataPreferred() {
         "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
       successCriteria: ["1943"],
       title: "Text contrast insufficient",
-      type: "android",
-    },
-    {
-      bp: 1943,
-      id: "response-android-text-on-image-contrast",
-      impact:
-        "Users with low vision will have difficulty reading this content.",
-      issue:
-        "There is text on an image background that does not meet the required minimum color contrast ratio.\n\nForeground color: \nBackground color: \nContrast ratio: \nRequired contrast ratio for this content: \n\nExamples of insufficiently contrasting text in front of images include:\n- ",
-      recommendation:
-        "Ensure text and images of text provide sufficient contrast.\n\nFor text in front of images, the best way to meet contrast requirements is to use a solid, opaque background behind the text. Alternatively, provide a transparent colored background that ensures all parts of the background image provide sufficient contrast with the text.\n\nThe following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
-      stepsToReproduce:
-        "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
-      successCriteria: ["1943"],
-      title: "Text on image contrast",
       type: "android",
     },
     {
@@ -5014,7 +4944,7 @@ function dataPreferred() {
       issue:
         "There are user interface components with a contrast ratio below 3.00:1.\n\nForeground color: \nBackground color: \nContrast ratio: \n\nExamples of this user interface component include:\n- ",
       recommendation:
-        'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
+        "Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls. Non-interactive controls are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the user interface component.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
       successCriteria: ["1.4.11"],
@@ -5029,7 +4959,7 @@ function dataPreferred() {
       issue:
         "There are graphical objects with a color contrast ratio below 3.00:1.\n\nForeground color: \nBackground color: \nContrast ratio: \n\nExamples include:\n- ",
       recommendation:
-        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
+        "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image. Graphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the graphical object.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
       successCriteria: ["1.4.11"],
@@ -8300,6 +8230,15 @@ function retestColor() {
           .closest("tr")
           .before(
             `<tr><td colspan="${number2}" style="background-color: #1F730D; color: #ffffff; text-align: center; font-weight: bold;">Updated</td></th>`
+          );
+      }
+
+      if (thisTD.text().split("]")[0].indexOf("QUESTION FOR PT") >= 0) {
+        const number2 = thisTD.closest("tr").children("td").length;
+        thisTD
+          .closest("tr")
+          .before(
+            `<tr><td colspan="${number2}" style="background-color: #673ab7; color: #ffffff; text-align: center; font-weight: bold;">QUESTION FOR PT</td></th>`
           );
       }
     });
