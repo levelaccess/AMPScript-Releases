@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.12.1
+// @version      6.13.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -592,6 +592,10 @@ function dataCustom() {
       name: "Salesforce",
     },
     {
+      id: "custom-thomsonReuters",
+      name: "Thomson Reuters",
+    },
+    {
       id: "custom-pod-web",
       name: "Pod - Web",
     },
@@ -859,7 +863,7 @@ function dataNonBaselineBPs() {
     },
     {
       id: "403",
-      note: 'Consider using "Ensure text can be resized" or "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality"',
+      note: 'Consider using "Ensure text can be resized" or "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality" instead.',
     },
     {
       id: "734",
@@ -1143,6 +1147,658 @@ function dataNonBaselineBPs() {
     },
     {
       id: "2044",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "913",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "3157",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "3109",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "623",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "928",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2955",
+      note: 'Consider using "Ensure parts of graphical objects essential for understanding content have sufficient contrast" instead.',
+    },
+    {
+      id: "932",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2579",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "3039",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "898",
+      note: 'Consider using "Provide a text transcript for audio only presentations" instead.',
+    },
+    {
+      id: "1273",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "920",
+      note: 'Consider using "Ensure the visible text label for a control is included in the control\'s accessible name" instead.',
+    },
+    {
+      id: "628",
+      note: 'Consider using "Ensure data table headers are associated with data cells" instead.',
+    },
+    {
+      id: "641",
+      note: 'Consider using "Ensure tags are used to structure content in a valid manner" instead.',
+    },
+    {
+      id: "1278",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2567",
+      note: 'Consider using "Avoid using tables for non-tabular data" instead.',
+    },
+    {
+      id: "1354",
+      note: 'Consider using "Avoid using tables for non-tabular data" instead.',
+    },
+    {
+      id: "717",
+      note: 'Consider using "Ensure links are tagged structurally as links with a Link OBJR tag" instead.',
+    },
+    {
+      id: "927",
+      note: 'Consider using "Ensure the focus order of form fields is logical" instead.',
+    },
+    {
+      id: "3200",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "648",
+      note: 'Consider using "Ensure list items are structured properly" instead.',
+    },
+    {
+      id: "909",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "656",
+      note: 'Consider using "Ensure data table headers are associated with data cells" instead.',
+    },
+    {
+      id: "2568",
+      note: 'Consider using "Ensure list items are structured properly" instead.',
+    },
+    {
+      id: "3011",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2969",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "3025",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1280",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "3053",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "925",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "3095",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "929",
+      note: 'Consider using "Ensure that document content is rendered in the proper order" instead.',
+    },
+    {
+      id: "1297",
+      note: 'Consider using "Ensure keyboard focus can be moved away from keyboard accessible components" instead.',
+    },
+    {
+      id: "650",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1269",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1267",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "1950",
+      note: 'Consider using "Ensure focus is logically set when a module opens and when pop-up alerts close" instead.',
+    },
+    {
+      id: "2958",
+      note: 'Consider using "Ensure parts of graphical objects essential for understanding content have sufficient contrast" instead.',
+    },
+    {
+      id: "1944",
+      note: 'Consider using "Provide textual equivalents for all non-text elements including sounds and images" instead.',
+    },
+    {
+      id: "1937",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1930",
+      note: 'Consider using "Provide textual equivalents for all non-text elements including sounds and images" instead.',
+    },
+    {
+      id: "2585",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1940",
+      note: 'Consider using "Ensure color and text formatting are not the sole means of communicating information" instead.',
+    },
+    {
+      id: "1941",
+      note: 'Consider using "Ensure color and text formatting are not the sole means of communicating information" instead.',
+    },
+    {
+      id: "2614",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1952",
+      note: 'Consider using "Ensure focus is logically set when a module opens and when pop-up alerts close" instead.',
+    },
+    {
+      id: "1966",
+      note: 'Consider using "Ensure element role and state are correct" instead.',
+    },
+    {
+      id: "2625",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "1945",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "1992",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2509",
+      note: 'Consider using "Ensure keyboard-operable elements which receive focus are not fully obscured" instead.',
+    },
+    {
+      id: "1981",
+      note: 'Consider using "Ensure element role and state are correct" instead.',
+    },
+    {
+      id: "2589",
+      note: 'Consider using "Ensure access to alternative input methods" instead.',
+    },
+    {
+      id: "2687",
+      note: 'Consider using "Ensure element role and state are correct" instead.',
+    },
+    {
+      id: "3296",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2348",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2683",
+      note: 'Consider using "Ensure element role and state are correct" instead.',
+    },
+    {
+      id: "2345",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1991",
+      note: 'Consider using "Provide sufficient area for pointer targets (minimum)" instead.',
+    },
+    {
+      id: "1986",
+      note: 'Consider using "Ensure events triggered by single-point activation can be cancelled" instead.',
+    },
+    {
+      id: "2630",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1994",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1953",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2631",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1948",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "2562",
+      note: 'Consider using "Ensure assistive technologies are aware of content changes in real time" instead.',
+    },
+    {
+      id: "2612",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1982",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2620",
+      note: 'Consider using "Ensure all controls and non-decorative content enable accessibility" instead.',
+    },
+    {
+      id: "1902",
+      note: 'Consider using "Ensure assistive technologies are aware of content changes in real time" instead.',
+    },
+    {
+      id: "2961",
+      note: 'Consider using "Ensure parts of graphical objects essential for understanding content have sufficient contrast" instead.',
+    },
+    {
+      id: "1901",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1583",
+      note: 'Consider using "Provide textual equivalents for all non-text elements including sounds and images" instead.',
+    },
+    {
+      id: "1578",
+      note: 'Consider using "Ensure color and text formatting are not the sole means of communicating information" instead.',
+    },
+    {
+      id: "1579",
+      note: 'Consider using "Ensure color and text formatting are not the sole means of communicating information" instead.',
+    },
+    {
+      id: "1585",
+      note: 'Consider using "Ensure focus is logically set when a module opens and when pop-up alerts close" instead.',
+    },
+    {
+      id: "2513",
+      note: 'Consider using "Ensure assistive technologies are aware of content changes in real time" instead.',
+    },
+    {
+      id: "2622",
+      note: 'Consider using "Ensure element traits (role and state) are correct" instead.',
+    },
+    {
+      id: "2609",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "1571",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "1921",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1924",
+      note: 'Consider using "Ensure keyboard-operable elements which receive focus are not fully obscured" instead.',
+    },
+    {
+      id: "1914",
+      note: 'Consider using "Ensure element traits (role and state) are correct" instead.',
+    },
+    {
+      id: "2590",
+      note: 'Consider using "Ensure access to alternative input methods" instead.',
+    },
+    {
+      id: "2686",
+      note: 'Consider using "Ensure element traits (role and state) are correct" instead.',
+    },
+    {
+      id: "3295",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2507",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2682",
+      note: 'Consider using "Ensure element traits (role and state) are correct" instead.',
+    },
+    {
+      id: "2344",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1926",
+      note: 'Consider using "Provide sufficient area for pointer targets (minimum)" instead.',
+    },
+    {
+      id: "1919",
+      note: 'Consider using "Ensure events triggered by single-point activation can be cancelled" instead.',
+    },
+    {
+      id: "1927",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1594",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2618",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "3158",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1574",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "2561",
+      note: 'Consider using "Ensure assistive technologies are aware of content changes in real time" instead.',
+    },
+    {
+      id: "1915",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2337",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2698",
+      note: 'Consider using "Ensure parts of graphical objects essential for understanding content have sufficient contrast" instead.',
+    },
+    {
+      id: "2355",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "564",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "1465",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1138",
+      note: 'Consider using "Ensure color and text formatting are not the sole means of communicating information" instead.',
+    },
+    {
+      id: "557",
+      note: 'Consider using "Ensure all functionality is accessible from the keyboard" instead.',
+    },
+    {
+      id: "1357",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "529",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "822",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "517",
+      note: 'Consider using "Ensure all functionality is accessible from the keyboard" instead.',
+    },
+    {
+      id: "669",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "515",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "496",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "604",
+      note: 'Consider using "Ensure keyboard-operable elements which receive focus are not fully obscured" instead.',
+    },
+    {
+      id: "877",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1142",
+      note: 'Consider using "Ensure all functionality is accessible from the keyboard" instead.',
+    },
+    {
+      id: "2481",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "671",
+      note: 'Consider using "Ensure all functionality is accessible from the keyboard" instead.',
+    },
+    {
+      id: "2457",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "823",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "2747",
+      note: 'Consider using "Ensure all functionality is accessible from the keyboard" instead.',
+    },
+    {
+      id: "497",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "3318",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "668",
+      note: 'Consider using "Ensure all functionality is accessible from the keyboard" instead.',
+    },
+    {
+      id: "1137",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "670",
+      note: 'Consider using "Ensure all functionality is accessible from the keyboard" instead.',
+    },
+    {
+      id: "2678",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "1141",
+      note: 'Consider using "Ensure keyboard-operable elements which receive focus are not fully obscured" instead.',
+    },
+    {
+      id: "2458",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "382",
+      note: 'Consider using "Ensure all functionality is accessible from the keyboard" instead.',
+    },
+    {
+      id: "552",
+      note: 'Consider using "Ensure all functionality is accessible from the keyboard" instead.',
+    },
+    {
+      id: "514",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1134",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "2459",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "678",
+      note: 'Consider using "Ensure auto-updating dynamic content can be paused, stopped, or hidden" instead.',
+    },
+    {
+      id: "2963",
+      note: 'Consider using "Ensure parts of graphical objects essential for understanding content have sufficient contrast" instead.',
+    },
+    {
+      id: "1153",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "1185",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "1160",
+      note: 'Consider using "Ensure color and text formatting are not the sole means of communicating information" instead.',
+    },
+    {
+      id: "1173",
+      note: 'Consider using "Ensure keyboard focus is provided to active elements and element functionality can be activated from the keyboard" instead.',
+    },
+    {
+      id: "1157",
+      note: 'Consider using "Provide a non-animated method to step through/control animation" instead.',
+    },
+    {
+      id: "1187",
+      note: 'Consider using "Provide labels for all form elements" instead.',
+    },
+    {
+      id: "1200",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1174",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1179",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1178",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1142",
+      note: 'Consider using "Ensure keyboard focus is provided to active elements and element functionality can be activated from the keyboard" instead.',
+    },
+    {
+      id: "1170",
+      note: 'Consider using "Ensure keyboard or alternative input access is not trapped" instead.',
+    },
+    {
+      id: "1177",
+      note: 'Consider using "Ensure keyboard focus is provided to active elements and element functionality can be activated from the keyboard" instead.',
+    },
+    {
+      id: "1167",
+      note: 'Consider using "Ensure keyboard focus is provided to active elements and element functionality can be activated from the keyboard" instead.',
+    },
+    {
+      id: "2689",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "2750",
+      note: 'Consider using "Ensure keyboard focus is provided to active elements and element functionality can be activated from the keyboard" instead.',
+    },
+    {
+      id: "1197",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "1195",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "3319",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1148",
+      note: 'Consider using "Ensure keyboard focus is provided to active elements and element functionality can be activated from the keyboard" instead.',
+    },
+    {
+      id: "1184",
+      note: 'Consider using "Provide labels for all form elements" instead.',
+    },
+    {
+      id: "1176",
+      note: 'Consider using "Ensure keyboard focus is provided to active elements and element functionality can be activated from the keyboard" instead.',
+    },
+    {
+      id: "2680",
+      note: 'Consider using "Ensure objects and graphics provide textual names, descriptions, role, state, and value" instead.',
+    },
+    {
+      id: "1152",
+      note: 'Consider using "Ensure keyboard-operable elements which receive focus are not fully obscured" instead.',
+    },
+    {
+      id: "1166",
+      note: 'Consider using "Ensure keyboard focus is provided to active elements and element functionality can be activated from the keyboard" instead.',
+    },
+    {
+      id: "1169",
+      note: 'Consider using "Ensure keyboard focus is provided to active elements and element functionality can be activated from the keyboard" instead.',
+    },
+    {
+      id: "1196",
+      note: "Consider marking this issue as [ADVISORY] or removing it.",
+    },
+    {
+      id: "1190",
       note: "Consider marking this issue as [ADVISORY] or removing it.",
     },
   ];
@@ -4083,7 +4739,7 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
-      successCriteria: ["1943"],
+      successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
       type: "android",
     },
@@ -5916,6 +6572,7 @@ function dataSchemas() {
         },
       },
     ],
+    
     [
       "pdf-software",
       {
@@ -6329,6 +6986,81 @@ function dataSchemas() {
             instructions: "",
             mapsTo: ["recommendation"],
             name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["compliantExample"],
+            name: "Compliant Code Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        thumbnail: {
+          required: false,
+        },
+      },
+    ],
+    [
+      "thomsonReuters",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["successCriteria"],
+            name: "WCAG",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          }, 
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["codeReference"],
+            name: "Code Reference",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [""],
+            name: "Screencast",
             requiredToExist: true,
             requiredToHaveCode: false,
             requiredToHaveContent: true,
@@ -7335,6 +8067,8 @@ function getSchema() {
     currentSchema = schemaMap.get("progressiveDQ");
   } else if (getCookieValue("kpmCustom-custom-salesforce")) {
     currentSchema = schemaMap.get("salesforce");
+  } else if (getCookieValue("kpmCustom-custom-thomsonReuters")) {
+    currentSchema = schemaMap.get("thomsonReuters");
   } else if (getCookieValue("kpmCustom-custom-wf")) {
     currentSchema = schemaMap.get("wellsFargo");
   } else {
@@ -8696,20 +9430,24 @@ function addEditor(reportID) {
 
       // Handle formats for different clients
       let formattedCriteria = "";
-      if (getCookieValue("kpmCustom-custom-salesforce")) {
-        let formattedStandard = "";
-        boilerplate.successCriteria.forEach((criterion) => {
-          formattedCriteria += `SC ${criterion.number} ${criterion.name} (Level ${criterion.level})\n`;
-          formattedStandard += `WCAG ${criterion.version}\n`;
-        });
-        boilerplate.salesforceStandard = formattedStandard;
-      } else if (getCookieValue("kpmCustom-custom-adobe")) {
+      if (getCookieValue("kpmCustom-custom-adobe")) {
         boilerplate.successCriteria.forEach((criterion) => {
           formattedCriteria += `SC ${criterion.number} ${criterion.name}\n`;
         });
       } else if (getCookieValue("kpmCustom-custom-disney")) {
         boilerplate.successCriteria.forEach((criterion) => {
           formattedCriteria += `${criterion.number} ${criterion.name}\n`;
+        });
+      } else if (getCookieValue("kpmCustom-custom-salesforce")) {
+        let formattedStandard = "";
+        boilerplate.successCriteria.forEach((criterion) => {
+          formattedCriteria += `SC ${criterion.number} ${criterion.name} (Level ${criterion.level})\n`;
+          formattedStandard += `WCAG ${criterion.version}\n`;
+        });
+        boilerplate.salesforceStandard = formattedStandard;
+      } else if (getCookieValue("kpmCustom-custom-thomsonReuters")) {
+        boilerplate.successCriteria.forEach((criterion) => {
+          formattedCriteria += `${criterion.number}\n`;
         });
       }
       boilerplate.successCriteria = formattedCriteria;
