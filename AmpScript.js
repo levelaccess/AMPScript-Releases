@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.13.2
+// @version      6.13.3
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -7050,7 +7050,7 @@ function dataSchemas() {
             instructions: "",
             mapsTo: ["codeReference"],
             name: "Code Reference",
-            requiredToExist: false,
+            requiredToExist: true,
             requiredToHaveCode: true,
             requiredToHaveContent: true,
           },
@@ -7088,7 +7088,7 @@ function dataSchemas() {
             instructions: "",
             mapsTo: ["compliantExample"],
             name: "Compliant Code Example",
-            requiredToExist: false,
+            requiredToExist: true,
             requiredToHaveCode: true,
             requiredToHaveContent: true,
           },
