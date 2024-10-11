@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.13.3
+// @version      6.14.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -17,7 +17,7 @@
 // @updateURL    https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
 // @downloadURL  https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
 // @supportURL   https://level-access.slack.com/messages/CK79W4PPU/
-// @icon         https://labs.levelaccess.com/level_logo.png
+// @icon         https://amp.levelaccess.net/img/favicon.png
 // @require      https://unpkg.com/prettier@3.1.0/standalone.js
 // @require      https://unpkg.com/prettier@3.1.0/plugins/html.js
 // ==/UserScript==
@@ -605,7 +605,11 @@ function dataCustom() {
     },
     {
       id: "custom-disney",
-      name: "Disney",
+      name: "Disney - Web",
+    },
+    {
+      id: "custom-disney-mobile",
+      name: "Disney - Mobile native apps",
     },
   ];
   return custom;
@@ -1818,7 +1822,7 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Locate the radio buttons.\n2. Inspect them with Chrome DevTools.\n3. Select the role="radiogroup" element.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the value for "Name".',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press TAB key to move focus to the first radio button in the group (not checked).\nExpected result: JAWS announces, "[Group name], group. [Radio name], radio button, not checked.\nActual result: JAWS announces, "[Radio name], radio button, not checked" and omits any group information.',
+        '1. Enable JAWS.\n2. Press TAB key to move focus to the first radio button in the group (not checked).\nExpected result: JAWS announces, "[Group name], group. [Radio name], radio button, not checked."\nActual result: JAWS announces, "[Radio name], radio button, not checked" and omits any group information.',
       successCriteria: ["1.3.1", "3.3.2"],
       title: 'role="radiogroup" with no accessible name',
       type: "web",
@@ -2144,6 +2148,8 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color and background color.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below the required value for this size of text.",
+      dxCustomSTR:
+        "1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. In the Styles tab, copy the text color and background color.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below the required value for this size of text.\nExpected result: Text has a color contrast ratio of [4.5:1/3:1] or greater.\nActual result: Text has a color contrast ratio of [ratio].",
       successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
       type: "web",
@@ -2359,7 +2365,7 @@ function dataPreferred() {
       recommendation:
         "Ensure text can be resized. Users must be able to resize text up to 200% zoom at a 1280-pixel viewport width without loss of content or functionality.\n\nMoving content to an accessible show/hide control, such as a hamburger menu, is acceptable.",
       stepsToReproduce:
-        "1. Set the viewport width to 1280 pixels using Chrome DevTools.\n2. Increase the browser zoom level to 200% using Ctrl+Plus or by going to Customize and control Google Chrome > Zoom > Make Text Smaller.\n3. Refresh the page.\n4. Notice that content disappears, is cut off, or overlaps.",
+        "1. Set the viewport width to 1280 pixels using Chrome DevTools.\n2. Increase the browser zoom level to 200% using Ctrl+Plus or by going to Customize and control Google Chrome > Zoom > Make Text Larger.\n3. Refresh the page.\n4. Notice that content disappears, is cut off, or overlaps.",
       successCriteria: ["1.4.4"],
       title: "Text cannot be resized to 200%",
       type: "web",
@@ -4429,6 +4435,8 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
+      dxCustomSTR:
+        "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.\nExpected result: Text has a color contrast ratio of [4.5:1/3:1] or greater.\nActual result: Text has a color contrast ratio of [ratio].",
       successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
       type: "ios",
@@ -4444,6 +4452,8 @@ function dataPreferred() {
         "Ensure elements are sufficiently described. Add an accessibilityLabel property to the control with an appropriate description.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the control is focused.\n4. Notice that VoiceOver does not announce any name for the control.",
+      dxCustomSTR:
+        "1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the control is focused.\n4. Notice that VoiceOver does not announce any name for the control.\nExpected result: VoiceOver announces, \"[Output]\".\nActual result: VoiceOver announces, \"[Output]\".",
       successCriteria: ["1.3.1", "4.1.2"],
       title: "Elements without accessible names",
       type: "ios",
@@ -4588,11 +4598,30 @@ function dataPreferred() {
       issue:
         "There are decorative images with textual equivalents. Examples include:\n- ",
       recommendation:
-        "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an image as decorative, remove any accessibilityLabel property and set its isAccessibilityElement property to YES.",
+        "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an image as decorative, remove any accessibilityLabel property and set its isAccessibilityElement property to NO.",
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces the presence and contents of the image unnecessarily.",
+      dxCustomSTR:
+        "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right to navigate forward.\n4. Notice that VoiceOver announces the presence and contents of the image unnecessarily.\nExpected result: VoiceOver focus skips over this decorative content. It is not announced.\nActual result: VoiceOver focus moves to the image. VoiceOver announces, \"[Output]\".",
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Decorative images with textual equivalents",
+      type: "ios",
+    },
+    {
+      bp: 1907,
+      id: "response-ios-duplicated-elements",
+      impact:
+        "Screen reader users will receive redundant information and will be prevented from navigating efficiently.",
+      issue:
+        "There are non-meaningful, duplicated elements exposed to screen readers. Examples include:\n- ",
+      recommendation:
+        'Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies.  Mark non-meaningful, duplicated content as decorative by removing any accessibilityLabel property and setting its isAccessibilityElement property to NO.',
+      stepsToReproduce:
+        "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right to navigate through the contents of the screen.\n4. Notice that VoiceOver focuses on the content twice.",
+      dxCustomSTR:
+        "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right to navigate forward.\n4. Notice that VoiceOver focuses on the content twice.\nExpected result: VoiceOver announces, \"[Output]\" only once.\nActual result: VoiceOver announces the [Component name] twice.",
+      successCriteria: ["1.1.1", "4.1.2"],
+      title: "Duplicated elements",
       type: "ios",
     },
     {
@@ -4636,6 +4665,8 @@ function dataPreferred() {
         "Ensure non-decorative images provide informative alternative text. Textual equivalents must be both concise and descriptive. Alter the accessibilityLabel property of the image.",
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces an improper name for the image.",
+      dxCustomSTR:
+        "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces an improper name for the image.\nExpected result: VoiceOver announces, \"[Expected text], Image\".\nActual result: VoiceOver announces, \"[Actual text], Image\".",
       successCriteria: ["1.1.1"],
       title: "Meaningful images with improper equivalents",
       type: "ios",
@@ -4666,6 +4697,8 @@ function dataPreferred() {
         "Ensure element traits (role and state) are correct. The best way to do this is to use native views and states, which come with this information built in.\n\nIf using native views is not possible, this information must be set manually through the use of UIAccessibilityTraits. A list of these traits can be found on the Apple website: https://developer.apple.com/documentation/uikit/uiaccessibility/uiaccessibilitytraits",
       stepsToReproduce:
         "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right until the content is focused.\n4. Notice that VoiceOver does not announce the appropriate role or state for the content.",
+      dxCustomSTR:
+        "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right until the content is focused.\n4. Notice that VoiceOver does not announce the appropriate role or state for the content.\nExpected result: VoiceOver announces, \"[Output]\".\nActual result: VoiceOver announces, \"[Output]\".",
       successCriteria: ["4.1.2"],
       title: "Elements with improper roles and states",
       type: "ios",
@@ -4709,6 +4742,8 @@ function dataPreferred() {
         'Provide for user control of font size. Users must be able to resize text up to 200%. \n\nThe best way to do this is to allow the app to respond to changes in the OS font size through the use of Dynamic Type. When using Dynamic Type, apps should allow their text to be resized up to the AX2 font size, which is twice the default. This font size can be activated by going to Accessibility > Display & Text Size > Larger Text and toggling on Larger Accessibility Sizes. Then, select the fourth notch from the right (announced as "73%" by VoiceOver).\n',
       stepsToReproduce:
         "1. Go to Settings > Accessibility > Display & Text Size > Larger Text.\n2. Toggle on Larger Accessibility Sizes.\n3. In the slider, select the fourth notch from the right.\n4. Return to the app.\n5. Notice that content disappears, is cut off, or overlaps.",
+      dxCustomSTR:
+        "1. Go to Settings > Accessibility > Display & Text Size > Larger Text.\n2. Toggle on Larger Accessibility Sizes.\n3. In the slider, select the fourth notch from the right.\n4. Return to the app.\n5. Notice that content disappears, is cut off, or overlaps.\nExpected result: The text resizes, and all content and functionality is available.\nActual result: The text resizes, and content is lost, cutoff, or overlapping.",
       successCriteria: ["1.4.4"],
       title: "Content cut off at 200%",
       type: "ios",
@@ -4724,6 +4759,8 @@ function dataPreferred() {
         'Provide for user control of font size. Users must be able to resize text up to 200%. \n\nThe best way to do this is to allow the app to respond to changes in the OS font size through the use of Dynamic Type. When using Dynamic Type, apps should allow their text to be resized up to the AX2 font size, which is twice the default. This font size can be activated by going to Accessibility > Display & Text Size > Larger Text and toggling on Larger Accessibility Sizes. Then, select the fourth notch from the right (announced as "73%" by VoiceOver).\n',
       stepsToReproduce:
         "1. Go to Settings > Accessibility > Display & Text Size > Larger Text.\n2. Toggle on Larger Accessibility Sizes.\n3. In the slider, select the fourth notch from the right.\n4. Return to the app.\n5. Notice that the app text size has not increased.",
+      dxCustomSTR:
+        "1. Go to Settings > Accessibility > Display & Text Size > Larger Text.\n2. Toggle on Larger Accessibility Sizes.\n3. In the slider, select the fourth notch from the right.\n4. Return to the app.\n5. Notice that the app text size has not increased.\nExpected result: The text resizes, and all content and functionality is available.\nActual result: The text does not resize.",
       successCriteria: ["1.4.4"],
       title: "App text does not increase when OS font size increases",
       type: "ios",
@@ -4739,6 +4776,8 @@ function dataPreferred() {
         "Ensure text and images of text provide sufficient contrast. The following contrast ratios are required:\n\n- Text smaller than 18 pt (24 px), or smaller than 14 pt (19 px) if bold, must have a color contrast ratio of 4.50:1 or more with adjacent colors.\n\n- Text 18 pt (24 px) or larger, or 14 pt (19 px) or larger if bold, must have a color contrast ratio of 3.00:1 or more with adjacent colors.\n\nDisabled controls that do not accept user interaction are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.",
+      dxCustomSTR:
+        "1. Locate the text.\n2. Determine the text color, background color, and font size.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below the required value for this size of text.\nExpected result: Text has a color contrast ratio of [4.5:1/3:1] or greater.\nActual result: Text has a color contrast ratio of [ratio].",
       successCriteria: ["1.4.3"],
       title: "Text contrast insufficient",
       type: "android",
@@ -4813,6 +4852,8 @@ function dataPreferred() {
         "Ensure elements are sufficiently described. Add an android:contentDescription attribute to the control with an appropriate description.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the control is focused.\n4. Notice that TalkBack does not announce any name for the control.",
+      dxCustomSTR:
+        "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the control is focused.\n4. Notice that TalkBack does not announce any name for the control.\nExpected result: TalkBack announces, \"[Output]\".\nActual result: TalkBack announces, \"[Output]\".",
       successCriteria: ["1.3.1", "4.1.2"],
       title: "Controls with no name",
       type: "android",
@@ -4858,6 +4899,8 @@ function dataPreferred() {
         "Ensure element role and state are correct. The best way to do this is to use native views and states, which come with this information built in.\n\nIf using native views is not possible, this information must be set manually. To set an element's role manually, use the setClassName() method with an argument to the getter of the desired Android native control class name, such as Button.class.getName().",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the control.\n4. Notice that TalkBack does not announce the appropriate role or state for the control.",
+      dxCustomSTR:
+        "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the control.\n4. Notice that TalkBack does not announce the appropriate role or state for the control.\nExpected result: TalkBack announces, \"[Output]\".\nActual result: TalkBack announces, \"[Output]\".",
       successCriteria: ["4.1.2"],
       title: "Controls with improper role and state",
       type: "android",
@@ -4873,6 +4916,8 @@ function dataPreferred() {
         "Ensure non-decorative images provide informative alternative text. Textual equivalents must be both concise and descriptive. Alter the contentDescription attribute of the image.",
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce an appropriate name for the image.",
+      dxCustomSTR:
+        "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce an appropriate name for the image.\nExpected result: TalkBack announces, \"[Expected text], Image\".\nActual result: TalkBack announces, \"[Actual text], Image\".",
       successCriteria: ["1.1.1"],
       title: "Meaningful images with improper textual equivalents",
       type: "android",
@@ -4887,6 +4932,8 @@ function dataPreferred() {
       recommendation:
         "Provide textual equivalents for all non-text elements including sounds and images. Meaningful images must have a concise but descriptive textual equivalent. To add a textual equivalent to an image, set its android:contentDescription attribute to a meaningful equivalent.",
       stepsToReproduce:
+        "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce any name for the image.",
+      dxCustomSTR:
         "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce any name for the image.",
       successCriteria: ["1.1.1"],
       title: "Meaningful images without textual equivalents",
@@ -4903,6 +4950,8 @@ function dataPreferred() {
         'Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. Non-meaningful images must be marked as decorative, which causes screen readers to ignore them. To mark an image as decorative, remove any contentDescription attribute and set its importantForAccessibility attribute to "no".',
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack announces the presence of the image unnecessarily.",
+      dxCustomSTR:
+        "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right to navigate forward.\n4. Notice that TalkBack announces the presence of the image unnecessarily.\nExpected result: TalkBack focus skips over this decorative content. It is not announced.\nActual result: TalkBack focus moves to the image. TalkBack announces, \"[Output]\".",
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Decorative image with textual equivalent",
       type: "android",
@@ -4917,7 +4966,9 @@ function dataPreferred() {
       recommendation:
         'Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies.  Mark non-meaningful, duplicated content as decorative by setting its android:importantForAccessibility attribute to "no".',
       stepsToReproduce:
-        "1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right through the contents of the screen.\n4. Notice that TalkBack focuses on the content twice.",
+        "1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right to navigate through the contents of the screen.\n4. Notice that TalkBack focuses on the content twice.",
+      dxCustomSTR:
+        "1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right to navigate forward.\n4. Notice that TalkBack focuses on the content twice.\nExpected result: TalkBack announces, \"[Output]\" only once.\nActual result: TalkBack announces the [Component name] twice.",
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Duplicated elements",
       type: "android",
@@ -4989,9 +5040,28 @@ function dataPreferred() {
       recommendation:
         "Provide for user control of font size. Users must be able to resize text up to 200%. Allow the app's text to resize according to the font size set in the OS settings.",
       stepsToReproduce:
-        '1. Go to Settings > Accessibility > Display size and text.\n2. In "Font size", select the maximum value.\n3. In "Display", select the second notch from the left.\n4. Return to the app.\n5. Note that the text in the application has not resized to match the OS font size settings.',
+        '1. Go to Settings > Accessibility > Display size and text.\n2. In "Font size", select the maximum value.\n3. In "Display", select the second notch from the left.\n4. Return to the app.\n5. Notice that content disappears, is cut off, or overlaps.',
+      dxCustomSTR:
+        '1. Go to Settings > Accessibility > Display size and text.\n2. In "Font size", select the maximum value.\n3. In "Display", select the second notch from the left.\n4. Return to the app.\n5. Notice that content disappears, is cut off, or overlaps.\nExpected result: The text resizes, and all content and functionality is available.\nActual result: The text resizes, and content is lost, cutoff, or overlapping.',
       successCriteria: ["1.4.4"],
-      title: "Text cannot be resized to 200%",
+      title: "Content cutoff at 200%",
+      type: "android",
+    },
+    {
+      bp: 1995,
+      id: "response-android-text-resizing-not-responding",
+      impact:
+        "Users with low vision who need to resize text will be prevented from accessing this content.",
+      issue:
+        "When users change the OS font size, the text in the app does not increase to reflect this setting.",
+      recommendation:
+        "Provide for user control of font size. Users must be able to resize text up to 200%. Allow the app's text to resize according to the font size set in the OS settings.",
+      stepsToReproduce:
+        '1. Go to Settings > Accessibility > Display size and text.\n2. In "Font size", select the maximum value.\n3. In "Display", select the second notch from the left.\n4. Return to the app.\n5. Note that the text in the application has not resized to match the OS font size settings.',
+      dxCustomSTR:
+        '1. Go to Settings > Accessibility > Display size and text.\n2. In "Font size", select the maximum value.\n3. In "Display", select the second notch from the left.\n4. Return to the app.\n5. Note that the text in the application has not resized to match the OS font size settings.\nExpected result: The text resizes, and all content and functionality is available.\nActual result: The text does not resize.',
+      successCriteria: ["1.4.4"],
+      title: "App text does not increase when OS font size increases",
       type: "android",
     },
     {
@@ -5109,6 +5179,8 @@ function dataPreferred() {
         "Ensure headings are denoted through structure and not implicitly. Set a UIAccessibilityTraitHeader trait on elements that function as headings.",
       stepsToReproduce:
         "1. Locate the text.\n2. Turn on VoiceOver.\n3. Swipe right until the text is focused.\n4. Note that VoiceOver does not announce the content as a heading.",
+      dxCustomSTR:
+        "1. Locate the text.\n2. Turn on VoiceOver.\n3. Swipe right until the text is focused.\n4. Note that VoiceOver does not announce the content as a heading.\nExpected result: VoiceOver announces, \"[Text], heading.\"\nActual result: VoiceOver announces, \"[Text]\" without the heading role.",
       successCriteria: ["1.3.1"],
       title: "Implicit headings",
       type: "ios",
@@ -5603,6 +5675,8 @@ function dataPreferred() {
         "Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls. Non-interactive controls are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the user interface component.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
+      dxCustomSTR:
+        "1. Locate the user interface component.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.\nExpected result: The component has a color contrast ratio of 3:1 or greater.\nActual result: The component has a color contrast ratio of [ratio].",
       successCriteria: ["1.4.11"],
       title: "Active interface contrast insufficient",
       type: "web",
@@ -5646,6 +5720,8 @@ function dataPreferred() {
         'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
       stepsToReproduce:
         "1. Locate the component.\n2. Determine the component color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.",
+      dxCustomSTR:
+        "1. Locate the component.\n2. Determine the component color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.\nExpected result: The component has a color contrast ratio of 3:1 or greater.\nActual result: The component has a color contrast ratio of [ratio].",
       successCriteria: ["1.4.11"],
       title: "Active interface contrast insufficient",
       type: "android",
@@ -5661,6 +5737,8 @@ function dataPreferred() {
         'Ensure active user interface components have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying components include text field borders, check marks for checkboxes, fillings for radio buttons, focus indicators, and icon-only controls.\n\nFor borders, the "adjacent color" can be the color that touches the outside of the border or the color that touches the inside of the border. Contrast with both is not required.\n\nDisabled controls that cannot be navigated to with the keyboard are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/',
       stepsToReproduce:
         "1. Locate the component.\n2. Determine the component color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.",
+      dxCustomSTR:
+        "1. Locate the component.\n2. Determine the component color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.\nExpected result: The component has a color contrast ratio of 3:1 or greater.\nActual result: The component has a color contrast ratio of [ratio].",
       successCriteria: ["1.4.11"],
       title: "Active interface contrast insufficient",
       type: "ios",
@@ -5789,6 +5867,8 @@ function dataPreferred() {
         "Avoid restricting the operation or viewing of content in different display orientations. Reflow the content of the screen according to the orientation communicated by the OS.",
       stepsToReproduce:
         '1. Go to Settings > Display and ensure that "Auto-rotate screen" is toggled on.\n2. Rotate the device into landscape orientation.\n3. Return to the app.\n4. Notice that the app content does not rotate into landscape orientation.',
+      dxCustomSTR:
+        '1. Go to Settings > Display and ensure that "Auto-rotate screen" is toggled on.\n2. Rotate the device into landscape orientation.\n3. Return to the app.\n4. Notice that the app content does not rotate into landscape orientation.\nExpected result: Content rotates and adapts to landscape orientation.\nActual result: Content remains locked in portrait orientation.',
       successCriteria: ["1.3.4"],
       title: "Content restricted to one orientation",
       type: "android",
@@ -5803,6 +5883,8 @@ function dataPreferred() {
         "Avoid restricting the operation or viewing of content in different display orientations. Reflow the content of the screen according to the orientation communicated by the OS.",
       stepsToReproduce:
         "1. Open Control Center by swiping down from the top-right corner.\n2. Ensure the Portrait Orientation Lock control is off.\n3. Rotate the device into landscape orientation.\n4. Open the app.\n5. Note that the app's content does not rotate into landscape orientation.",
+      dxCustomSTR:
+        "1. Open Control Center by swiping down from the top-right corner.\n2. Ensure the Portrait Orientation Lock control is off.\n3. Rotate the device into landscape orientation.\n4. Open the app.\n5. Note that the app's content does not rotate into landscape orientation.\nExpected result: Content rotates and adapts to landscape orientation.\nActual result: Content remains locked in portrait orientation.",
       successCriteria: ["1.3.4"],
       title: "Content restricted to one orientation",
       type: "ios",
@@ -5860,6 +5942,8 @@ function dataPreferred() {
         'Ensure headings are denoted through structure and not implicitly. Set the android:accessibilityHeading attribute to "true" on elements meant to serve as headings.',
       stepsToReproduce:
         "1. Locate the text.\n2. Turn on TalkBack.\n3. Swipe right until the text is focused.\n4. Note that TalkBack does not announce the content as a heading.",
+      dxCustomSTR:
+        "1. Locate the text.\n2. Turn on TalkBack.\n3. Swipe right until the text is focused.\n4. Note that TalkBack does not announce the content as a heading.\nExpected result: TalkBack announces, \"[Text], heading\".\nActual result: TalkBack announces, \"[Text]\" without the heading role.",
       successCriteria: ["1.3.1"],
       title: "Implicit headings",
       type: "android",
@@ -6375,6 +6459,10 @@ function dataReviews() {
   ];
   return reviews;
 }
+// Note that several schemas have two versions, one for web and one for mobile (e.g. pod- and disney-);
+//   If making changes to one of those schemas, pay attention to whether the same change needs to 
+//   be made to the other one in the pair.
+
 function dataSchemas() {
   return new Map([
     [
@@ -6480,7 +6568,7 @@ function dataSchemas() {
       },
     ],
     [
-      "disney",
+      "disney-web",
       {
         description: [
           {
@@ -6504,7 +6592,7 @@ function dataSchemas() {
           {
             appearsByDefault: true,
             instructions: "",
-            mapsTo: [],
+            mapsTo: ["moduleurl"],
             name: "Test URL",
             requiredToExist: true,
             requiredToHaveCode: false,
@@ -6573,6 +6661,72 @@ function dataSchemas() {
       },
     ],
 
+    [
+      "disney-mobile",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: [],
+            name: "Type: *** DEV/DESIGN ***",
+            requiredToExist: false,
+            requiredToHaveCode: false,
+            requiredToHaveContent: false,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["successCriteria"],
+            name: "WCAG Requirement",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["stepsToReproduce"],
+            name: "Steps to Reproduce",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+        ],
+        thumbnail: {
+          required: false,
+        },
+      },
+    ],
     [
       "pdf-software",
       {
@@ -7258,56 +7412,74 @@ function dataSpecialCharacters() {
     {
       id: "–",
       replacement: "-",
+      affects: ["module", "instance"],
     },
-    { id: "&ndash;", replacement: "-" },
+    { id: "&ndash;", replacement: "-", affects: ["module"] },
     {
       id: "‘",
       replacement: "'",
+      affects: ["module", "instance"],
     },
     {
       id: "&lsquo;",
       replacement: "'",
+      affects: ["module"],
     },
     {
       id: "’",
       replacement: "'",
+      affects: ["module", "instance"],
     },
     {
       id: "&rsquo;",
       replacement: "'",
+      affects: ["module"],
     },
     {
       id: "“",
       replacement: '"',
+      affects: ["module", "instance"],
     },
     {
       id: "&ldquo;",
       replacement: '"',
+      affects: ["module"],
     },
     {
       id: "”",
       replacement: '"',
+      affects: ["module", "instance"],
     },
     {
       id: "&rdquo;",
       replacement: '"',
+      affects: ["module"],
     },
     {
       id: "&quot;",
       replacement: '"',
+      affects: ["module"],
     },
     {
       id: "&#039;",
       replacement: "'",
+      affects: ["module"],
     },
     {
       id: "é",
       replacement: "e",
+      affects: ["module"],
     },
-    { id: "&eacute;", replacement: "e" },
+    { id: "&eacute;", replacement: "e", affects: ["module"] },
     {
       id: "&amp;",
       replacement: "and",
+      affects: ["module"],
+    },
+    {
+      id: "​",
+      replacement: "",
+      affects: ["module"],
     },
   ];
   return specialCharacters;
@@ -8072,7 +8244,11 @@ function getSchema() {
   if (getCookieValue("kpmCustom-custom-adobe")) {
     currentSchema = schemaMap.get("adobe");
   } else if (getCookieValue("kpmCustom-custom-disney")) {
-    currentSchema = schemaMap.get("disney");
+    // Note that the cookie is "kpmCustom-custom-disney" not "kpmCustom-custom-disney-web" for
+    //  backward compatibility, but the schema is "disney-web"
+    currentSchema = schemaMap.get("disney-web");
+  } else if (getCookieValue("kpmCustom-custom-disney-mobile")) {
+    currentSchema = schemaMap.get("disney-mobile");
   } else if (getCookieValue("kpmCustom-custom-pdf")) {
     currentSchema = schemaMap.get("pdf-software");
   } else if (getCookieValue("kpmCustom-custom-pod-web")) {
@@ -8144,6 +8320,7 @@ function injectProblems(element, type) {
     // Detect errors, using the Map to simplify things
     const badCodeStrings = dataErrors();
     const badSiteStrings = dataBadSites();
+    const specialCharacters = dataSpecialCharacters();
     const errorArray = [];
     let schemaSections = {};
     if (type === "description") {
@@ -8201,6 +8378,22 @@ function injectProblems(element, type) {
             );
           }
         });
+      } else {
+        // Detect non-code sections that contain special characters
+        let hasSpecialCharacters = false;
+        specialCharacters.forEach((specialCharacter) => {
+          if (
+            specialCharacter.affects.includes("instance") &&
+            sectionContents.includes(specialCharacter.id)
+          ) {
+            hasSpecialCharacters = true;
+          }
+        });
+        if (hasSpecialCharacters) {
+          errorArray.push(
+            `Error: [${sectionName}] appears to contain special or escaped characters. Please edit the instance and remove them.`
+          );
+        }
       }
 
       // Detect any content that contains links to disallowed resources
@@ -8219,6 +8412,7 @@ function injectProblems(element, type) {
         );
       }
 
+      // Detect missing content
       if (
         sectionContents.at(-1) === ":" ||
         sectionContents.match(/^-\s*$/gmu)
@@ -8251,19 +8445,20 @@ function injectProblems(element, type) {
       element.prepend(problemContainer);
     }
   } else if (type === "module name") {
-    // Check if it contains special characters
+    // Check if it contains special characters. If so, inject an error
     const specialCharacters = dataSpecialCharacters();
     let hasSpecialCharacters = false;
     specialCharacters.forEach((specialCharacter) => {
-      if (element.innerText.includes(specialCharacter.id)) {
+      if (
+        specialCharacter.affects.includes("module") &&
+        element.innerText.includes(specialCharacter.id)
+      ) {
         hasSpecialCharacters = true;
       }
     });
-
-    // If so, inject an error
     if (hasSpecialCharacters) {
       const errorContents =
-        "<p class='kpmAlert'>Error: This text appears to contain special or escaped characters. Please edit the module and remove them.</p>";
+        "<p class='kpmAlert'>Error: This text appears to contain special, escaped, or invisible characters. Please edit the module and remove them.</p>";
       problemContainer.innerHTML = errorContents;
       element.appendChild(problemContainer);
     }
@@ -8780,19 +8975,17 @@ function handleTestingCompleteCheckbox(reportID) {
   }
 }
 
-function removeSpecialCharacters(event) {
-  const textFields = document.querySelectorAll(
-    "#modal_form input[type='text'], #modal_form textarea"
-  );
+function removeSpecialCharacters(string, type) {
   const specialCharacters = dataSpecialCharacters();
-  textFields.forEach((textField) => {
-    specialCharacters.forEach((specialCharacter) => {
-      textField.value = textField.value.replaceAll(
+  specialCharacters.forEach((specialCharacter) => {
+    if (specialCharacter.affects.includes(type)) {
+      string = string.replaceAll(
         specialCharacter.id,
         specialCharacter.replacement
       );
-    });
+    }
   });
+  return string;
 }
 
 // Colorize rows based on status message that was inserted
@@ -9123,13 +9316,15 @@ function createAddInstanceButtons(preferred, status, reading, code, reviews) {
   let createButtons = "";
   createButtons += "<br>";
   createButtons +=
-    "<input type='button' id='ChgBPNow' value='Change Best Practice' class='kpmFirstButton'>&nbsp;";
+    "<input type='button' id='ChgBPNow' value='Change BP' class='kpmFirstButton'>&nbsp;";
   createButtons +=
-    "<input type='button' id='GoToBP' value='Open BP (New Window)' class='kpmFirstButton'>&nbsp;";
+    "<input type='button' id='GoToBP' value='Open BP (New Tab)' class='kpmFirstButton'>&nbsp;";
   createButtons +=
     "<input type='button' id='addLangBlank' value='Blank Response' class='kpmFirstButton'>&nbsp;";
   createButtons +=
-    "<input type='button' id='clearFields' value='Clear Fields' class='kpmFirstButton'><br>";
+    "<input type='button' id='clearFields' value='Clear Fields' class='kpmFirstButton'>&nbsp;";
+  createButtons +=
+    "<input type='button' id='remove-special-characters' value='Remove Special Characters' class='kpmFirstButton'></br>";
   createButtons += '<nav id="kpmNav"><ul>';
   if (preferred.length > 0) {
     createButtons += createList2(preferred, "Preferred", "kpmPreferred");
@@ -9236,7 +9431,7 @@ function addEditor(reportID) {
       10
     );
 
-    // Place the buttons
+    // Place the boilerplate buttons
     $("#AmpOpts").after(
       createAddInstanceButtons(
         dataPreferredFiltered(currentID),
@@ -9361,7 +9556,10 @@ function addEditor(reportID) {
       }
 
       // Customize steps to reproduce for Disney
-      if (getCookieValue("kpmCustom-custom-disney")) {
+      if (
+        getCookieValue("kpmCustom-custom-disney") ||
+        getCookieValue("kpmCustom-custom-disney-mobile")
+      ) {
         /* If JAWS functional steps to reproduce exist, then replace the normal 
           steps to reproduce with the JAWS ones. */
         if (boilerplate.jawsFunctionalSteps) {
@@ -9452,10 +9650,17 @@ function addEditor(reportID) {
         boilerplate.successCriteria.forEach((criterion) => {
           formattedCriteria += `SC ${criterion.number} ${criterion.name}\n`;
         });
-      } else if (getCookieValue("kpmCustom-custom-disney")) {
+      } else if (
+        getCookieValue("kpmCustom-custom-disney") ||
+        getCookieValue("kpmCustom-custom-disney-mobile")
+      ) {
         boilerplate.successCriteria.forEach((criterion) => {
           formattedCriteria += `${criterion.number} ${criterion.name}\n`;
         });
+        const moduleURL = $("p.location").text();
+        if (moduleURL) {
+          boilerplate.moduleurl = moduleURL;
+        }
       } else if (getCookieValue("kpmCustom-custom-salesforce")) {
         let formattedStandard = "";
         boilerplate.successCriteria.forEach((criterion) => {
@@ -9494,6 +9699,7 @@ function addEditor(reportID) {
       );
       noteTextarea.value = newNote;
     });
+
     // Chad added button handler
     $("[id*='reviews-']").on("click", (event) => {
       const clickID = $(event.target).attr("id");
@@ -9650,7 +9856,7 @@ function addEditor(reportID) {
     });
 
     // When a special is given, this appends the second field
-    $("[id*='special-']").on("click", (event) => {
+    $("[id^='special-']").on("click", (event) => {
       const clickID = $(event.target).attr("id");
       const status = dataStatus();
       const entry = status.find((e) => e.id === clickID);
@@ -9736,6 +9942,16 @@ function addEditor(reportID) {
       $("textarea[id*='element']:first").val(text);
     });
 
+    // Remove special characters
+    $("#remove-special-characters").on("click", () => {
+      const textFields = document.querySelectorAll(
+        "#modal_form input[type='text'], #modal_form textarea"
+      );
+      textFields.forEach((textField) => {
+        textField.value = removeSpecialCharacters(textField.value, "instance");
+      });
+    });
+
     /* Miscellanious items for the add instance modal
        Resize the text areas */
     $("textarea[id*='element']:first").attr("rows", "12");
@@ -9762,7 +9978,14 @@ function handleEditModuleForm() {
   const injectionPoint = document.querySelector("#update_me");
   fixButton.setAttribute("type", "button");
   fixButton.textContent = "Remove special characters";
-  fixButton.addEventListener("click", removeSpecialCharacters);
+  fixButton.addEventListener("click", () => {
+    const textFields = document.querySelectorAll(
+      "#modal_form input[type='text'], #modal_form textarea"
+    );
+    textFields.forEach((textField) => {
+      textField.value = removeSpecialCharacters(textField.value, "module");
+    });
+  });
   fixCell.append(fixButton);
   fixRow.append(fixCell);
   injectionPoint.after(fixRow);
@@ -9773,7 +9996,14 @@ function handleEditMultipleModuleForm() {
   const injectionPoint = document.querySelector("#modal_form #modules");
   fixButton.setAttribute("type", "button");
   fixButton.textContent = "Remove special characters";
-  fixButton.addEventListener("click", removeSpecialCharacters);
+  fixButton.addEventListener("click", () => {
+    const textFields = document.querySelectorAll(
+      "#modal_form input[type='text'], #modal_form textarea"
+    );
+    textFields.forEach((textField) => {
+      textField.value = removeSpecialCharacters(textField.value, "module");
+    });
+  });
   fixDiv.append(fixButton);
   injectionPoint.after(fixDiv);
 }
