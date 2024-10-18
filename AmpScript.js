@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.14.0
+// @version      6.15.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -6460,7 +6460,7 @@ function dataReviews() {
   return reviews;
 }
 // Note that several schemas have two versions, one for web and one for mobile (e.g. pod- and disney-);
-//   If making changes to one of those schemas, pay attention to whether the same change needs to 
+//   If making changes to one of those schemas, pay attention to whether the same change needs to
 //   be made to the other one in the pair.
 
 function dataSchemas() {
@@ -6817,19 +6817,11 @@ function dataSchemas() {
             requiredToHaveCode: false,
             requiredToHaveContent: true,
           },
-          {
-            appearsByDefault: true,
-            instructions: "",
-            mapsTo: ["compliantExample"],
-            name: "Compliant Code Example",
-            requiredToExist: false,
-            requiredToHaveCode: true,
-            requiredToHaveContent: true,
-          },
         ],
         thumbnail: {
           required: true,
         },
+        blocklist: ["Compliant Code Example"],
       },
     ],
     [
@@ -8322,7 +8314,7 @@ function injectProblems(element, type) {
     const badSiteStrings = dataBadSites();
     const specialCharacters = dataSpecialCharacters();
     const errorArray = [];
-    let schemaSections = {};
+    let schemaSections = [];
     if (type === "description") {
       schemaSections = currentSchema.description;
     } else if (type === "note") {
@@ -8419,6 +8411,13 @@ function injectProblems(element, type) {
       ) {
         errorArray.push(
           `Error: Content appears to be missing in [${sectionName}].`
+        );
+      }
+
+      // Detect non-standard sections
+      if (currentSchema.blocklist?.includes(sectionName)) {
+        errorArray.push(
+          `Error: [${sectionName}] is not permitted in this issue format. Remove this section or ensure you are using the correct format.`
         );
       }
     });
