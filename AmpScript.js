@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.15.0
+// @version      6.16.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -610,6 +610,10 @@ function dataCustom() {
     {
       id: "custom-disney-mobile",
       name: "Disney - Mobile native apps",
+    },
+    {
+      id: "custom-cloverGo-mobile",
+      name: "CloverGo - Mobile",
     },
   ];
   return custom;
@@ -6568,6 +6572,63 @@ function dataSchemas() {
       },
     ],
     [
+      "cloverGo-mobile",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["successCriteria"],
+            name: "WCAG",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["stepsToReproduce"],
+            name: "Steps to Reproduce",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+        ],
+        thumbnail: {
+          required: true,
+        },
+      },
+    ],
+    [
       "disney-web",
       {
         description: [
@@ -6660,7 +6721,6 @@ function dataSchemas() {
         },
       },
     ],
-
     [
       "disney-mobile",
       {
@@ -8235,9 +8295,9 @@ function getSchema() {
   let currentSchema = {};
   if (getCookieValue("kpmCustom-custom-adobe")) {
     currentSchema = schemaMap.get("adobe");
+  } else if (getCookieValue("kpmCustom-custom-cloverGo-mobile")) {
+    currentSchema = schemaMap.get("cloverGo-mobile");
   } else if (getCookieValue("kpmCustom-custom-disney")) {
-    // Note that the cookie is "kpmCustom-custom-disney" not "kpmCustom-custom-disney-web" for
-    //  backward compatibility, but the schema is "disney-web"
     currentSchema = schemaMap.get("disney-web");
   } else if (getCookieValue("kpmCustom-custom-disney-mobile")) {
     currentSchema = schemaMap.get("disney-mobile");
@@ -9670,6 +9730,10 @@ function addEditor(reportID) {
       } else if (getCookieValue("kpmCustom-custom-thomsonReuters")) {
         boilerplate.successCriteria.forEach((criterion) => {
           formattedCriteria += `${criterion.number}\n`;
+        });
+      } else if (getCookieValue("kpmCustom-custom-cloverGo-mobile")) {
+        boilerplate.successCriteria.forEach((criterion) => {
+          formattedCriteria += `${criterion.number} ${criterion.name} (${criterion.version}, Level ${criterion.level})\n`;
         });
       }
       boilerplate.successCriteria = formattedCriteria;
