@@ -12,6 +12,6 @@ Once installed this way, TamperMonkey will automatically check for and install u
 
 ### Ugi's "Assign all to me" favlet for Jira
 
-Open this file, and then drag the "Assign all to me" link to your bookmark bar/folder:
+Open this page, and then drag the "Assign all to me" link to your bookmark bar/folder:
 
-https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/Other-Level-Access-tools/AssignToMeFavlet.html
+[AssignToMeFavlet.html](https://html-preview.github.io/?url=https://github.com/levelaccess/AMPScript-Releases/blob/Other-Level-Access-tools/AssignToMeFavlet.html)
