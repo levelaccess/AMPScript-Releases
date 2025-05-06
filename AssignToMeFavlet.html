@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Assign all to me favlet for Jira | Level Access</title>
+
+        <meta name='robots' content='none, noarchive, nosnippet, noimageindex' />
+        
+        <link rel="shortcut icon"
+            href="https://cdn-ilbkkfp.nitrocdn.com/IitHsyZVCFBhhqcuBElDTFsjJOnzYnBg/assets/images/optimized/rev-0d9cb98/www.levelaccess.com/wp-content/uploads/2023/10/cropped-2023-LevelAccess_FavIcon_Midnight-RGB_215x215-1-32x32.png" />
+        <link rel="apple-touch-icon"
+            href="https://cdn-ilbkkfp.nitrocdn.com/IitHsyZVCFBhhqcuBElDTFsjJOnzYnBg/assets/images/optimized/rev-0d9cb98/www.levelaccess.com/wp-content/uploads/2023/10/cropped-2023-LevelAccess_FavIcon_Midnight-RGB_215x215-1-180x180.png" />
+        <link rel="icon" type="image/png"
+            href="https://cdn-ilbkkfp.nitrocdn.com/IitHsyZVCFBhhqcuBElDTFsjJOnzYnBg/assets/images/optimized/rev-0d9cb98/www.levelaccess.com/wp-content/uploads/2023/10/cropped-2023-LevelAccess_FavIcon_Midnight-RGB_215x215-1-192x192.png" />
+        <link rel="icon" sizes="32x32"
+            href="https://cdn-ilbkkfp.nitrocdn.com/IitHsyZVCFBhhqcuBElDTFsjJOnzYnBg/assets/images/optimized/rev-0d9cb98/www.levelaccess.com/wp-content/uploads/2023/10/cropped-2023-LevelAccess_FavIcon_Midnight-RGB_215x215-1-32x32.png" />
+        <link rel="icon" sizes="192x192"
+            href="https://cdn-ilbkkfp.nitrocdn.com/IitHsyZVCFBhhqcuBElDTFsjJOnzYnBg/assets/images/optimized/rev-0d9cb98/www.levelaccess.com/wp-content/uploads/2023/10/cropped-2023-LevelAccess_FavIcon_Midnight-RGB_215x215-1-192x192.png" />
+        <link rel="apple-touch-icon"
+            href="https://cdn-ilbkkfp.nitrocdn.com/IitHsyZVCFBhhqcuBElDTFsjJOnzYnBg/assets/images/optimized/rev-0d9cb98/www.levelaccess.com/wp-content/uploads/2023/10/cropped-2023-LevelAccess_FavIcon_Midnight-RGB_215x215-1-180x180.png" />
+    </head>
+
+    <body>
+        <h1>Ugi's "Assign all to me" favlet for Jira</h1>
+        <p>
+            Drag this link to your bookmark bar/folder:
+            <br>
+            <br>
+            <a href="javascript:(function()%7Bconst accountId %3D document.querySelector('meta%5Bname%3D%22ajs-atlassian-account-id%22%5D').content%3Bconst issueKeys %3D Array.from(document.querySelectorAll('a%5Bdata-testid%3D%22native-issue-table.common.ui.issue-cells.issue-key.issue-key-cell%22%5D')).map(link %3D> link.textContent.trim())%3Bconsole.log(%22Extracted Issue Keys%3A%22%2C issueKeys)%3Bif (!issueKeys.length) %7B return%3B %7Dif (confirm(%60Do you want to assign these to yourself%3F%5Cn%5Cn%24%7BissueKeys.join('%5Cn')%7D%60)) %7BissueKeys.forEach(issueKey %3D> %7Bfetch(%60https%3A%2F%2Flevelaccess-services.atlassian.net%2Frest%2Fapi%2F3%2Fissue%2F%24%7BissueKey%7D%2Fassignee%60%2C %7Bmethod%3A 'PUT'%2Cheaders%3A %7B'Content-Type'%3A 'application%2Fjson'%7D%2Cbody%3A JSON.stringify(%7B accountId %7D)%7D)%3B%7D)%3Bwindow.location.reload()%3B%7D%7D)()">Assign all to me</a>
+        </p>
+    </body>
+</html>
