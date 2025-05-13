@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.16.0
+// @version      6.17.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -617,6 +617,1179 @@ function dataCustom() {
     },
   ];
   return custom;
+}
+function dataEN301549() {
+  const clauses = [
+    {
+      name: "Usage without vision",
+      number: "4.2.1",
+    },
+    {
+      name: "Usage with limited vision",
+      number: "4.2.2",
+    },
+    {
+      name: "Usage without perception of colour",
+      number: "4.2.3",
+    },
+    {
+      name: "Usage without hearing",
+      number: "4.2.4",
+    },
+    {
+      name: "Usage with limited hearing",
+      number: "4.2.5",
+    },
+    {
+      name: "Usage with no or limited vocal capability",
+      number: "4.2.6",
+    },
+    {
+      name: "Usage with limited manipulation or strength",
+      number: "4.2.7",
+    },
+    {
+      name: "Usage with limited reach",
+      number: "4.2.8",
+    },
+    {
+      name: "Minimize photosensitive seizure triggers",
+      number: "4.2.9",
+    },
+    {
+      name: "Usage with limited cognition, language or learning",
+      number: "4.2.10",
+    },
+    {
+      name: "Privacy",
+      number: "4.2.11",
+    },
+    {
+      name: "Closed functionality",
+      number: "5.1.2.1",
+    },
+    {
+      name: "Assistive technology",
+      number: "5.1.2.2",
+    },
+    {
+      name: "Audio output of visual information",
+      number: "5.1.3.1",
+    },
+    {
+      name: "Auditory output delivery including speech",
+      number: "5.1.3.2",
+    },
+    {
+      name: "Auditory output correlation",
+      number: "5.1.3.3",
+    },
+    {
+      name: "Speech output user control",
+      number: "5.1.3.4",
+    },
+    {
+      name: "Speech output automatic interruption",
+      number: "5.1.3.5",
+    },
+    {
+      name: "Speech output for non-text content",
+      number: "5.1.3.6",
+    },
+    {
+      name: "Speech output for video information",
+      number: "5.1.3.7",
+    },
+    {
+      name: "Masked entry",
+      number: "5.1.3.8",
+    },
+    {
+      name: "Private access to personal data",
+      number: "5.1.3.9",
+    },
+    {
+      name: "Non-interfering audio output",
+      number: "5.1.3.10",
+    },
+    {
+      name: "Private listening volume",
+      number: "5.1.3.11",
+    },
+    {
+      name: "Speaker volume",
+      number: "5.1.3.12",
+    },
+    {
+      name: "Volume reset",
+      number: "5.1.3.13",
+    },
+    {
+      name: "Spoken languages",
+      number: "5.1.3.14",
+    },
+    {
+      name: "Non-visual error identification",
+      number: "5.1.3.15",
+    },
+    {
+      name: "Receipts, tickets, and transactional outputs",
+      number: "5.1.3.16",
+    },
+    {
+      name: "Functionality closed to text enlargement",
+      number: "5.1.4",
+    },
+    {
+      name: "Visual output for auditory information",
+      number: "5.1.5",
+    },
+    {
+      name: "Closed functionality",
+      number: "5.1.6.1",
+    },
+    {
+      name: "Input focus",
+      number: "5.1.6.2",
+    },
+    {
+      name: "Access without speech",
+      number: "5.1.7",
+    },
+    {
+      name: "Activation of accessibility features",
+      number: "5.2",
+    },
+    {
+      name: "Biometrics",
+      number: "5.3",
+    },
+    {
+      name: "Preservation of accessibility information during conversion",
+      number: "5.4",
+    },
+    {
+      name: "Means of operation",
+      number: "5.5.1",
+    },
+    {
+      name: "Operable parts discernibility",
+      number: "5.5.2",
+    },
+    {
+      name: "Tactile or auditory status",
+      number: "5.6.1",
+    },
+    {
+      name: "Visual status",
+      number: "5.6.2",
+    },
+    {
+      name: "Key repeat",
+      number: "5.7",
+    },
+    {
+      name: "Double-strike key acceptance",
+      number: "5.8",
+    },
+    {
+      name: "Simultaneous user actions",
+      number: "5.9",
+    },
+    {
+      name: "Audio bandwidth for speech",
+      number: "6.1",
+    },
+    {
+      name: "RTT communication",
+      number: "6.2.1.1",
+    },
+    {
+      name: "Concurrent voice and text",
+      number: "6.2.1.2",
+    },
+    {
+      name: "Visually distinguishable display",
+      number: "6.2.2.1",
+    },
+    {
+      name: "Programmatically determinable send and receive direction",
+      number: "6.2.2.2",
+    },
+    {
+      name: "Speaker identification",
+      number: "6.2.2.3",
+    },
+    {
+      name: "Visual indicator of Audio with RTT",
+      number: "6.2.2.4",
+    },
+    {
+      name: "Interoperability",
+      number: "6.2.3",
+    },
+    {
+      name: "RTT responsiveness",
+      number: "6.2.4",
+    },
+    {
+      name: "Caller ID",
+      number: "6.3",
+    },
+    {
+      name: "Alternatives to voice-based services",
+      number: "6.4",
+    },
+    {
+      name: "Resolution",
+      number: "6.5.2",
+    },
+    {
+      name: "Frame rate",
+      number: "6.5.3",
+    },
+    {
+      name: "Synchronization between audio and video",
+      number: "6.5.4",
+    },
+    {
+      name: "Visual indicator of audio with video",
+      number: "6.5.5",
+    },
+    {
+      name: "Speaker identification with video (sign language) communication",
+      number: "6.5.6",
+    },
+    {
+      name: "Alternatives to video-based services",
+      number: "6.6",
+    },
+    {
+      name: "Captioning playback",
+      number: "7.1.1",
+    },
+    {
+      name: "Captioning synchronization",
+      number: "7.1.2",
+    },
+    {
+      name: "Preservation of captioning",
+      number: "7.1.3",
+    },
+    {
+      name: "Captions characteristics",
+      number: "7.1.4",
+    },
+    {
+      name: "Spoken subtitles",
+      number: "7.1.5",
+    },
+    {
+      name: "Audio description playback",
+      number: "7.2.1",
+    },
+    {
+      name: "Audio description synchronization",
+      number: "7.2.2",
+    },
+    {
+      name: "Preservation of audio description",
+      number: "7.2.3",
+    },
+    {
+      name: "User controls for captions and audio description",
+      number: "7.3",
+    },
+    {
+      name: "Standard connections",
+      number: "8.1.2",
+    },
+    {
+      name: "Colour",
+      number: "8.1.3",
+    },
+    {
+      name: "Speech volume range",
+      number: "8.2.1.1",
+    },
+    {
+      name: "Incremental volume control",
+      number: "8.2.1.2",
+    },
+    {
+      name: "Fixed-line devices",
+      number: "8.2.2.1",
+    },
+    {
+      name: "Wireless communication devices",
+      number: "8.2.2.2",
+    },
+    {
+      name: "Unobstructed high forward reach",
+      number: "8.3.2.1",
+    },
+    {
+      name: "Unobstructed low forward reach",
+      number: "8.3.2.2",
+    },
+    {
+      name: "Clear space",
+      number: "8.3.2.3.1",
+    },
+    {
+      name: "Obstructed (< 510 mm) forward reach",
+      number: "8.3.2.3.2",
+    },
+    {
+      name: "Obstructed (< 635 mm) forward reach",
+      number: "8.3.2.3.3",
+    },
+    {
+      name: "Knee and toe clearance width",
+      number: "8.3.2.4",
+    },
+    {
+      name: "Toe clearance",
+      number: "8.3.2.5",
+    },
+    {
+      name: "Knee clearance",
+      number: "8.3.2.6",
+    },
+    {
+      name: "Unobstructed high side reach",
+      number: "8.3.3.1",
+    },
+    {
+      name: "Unobstructed low side reach",
+      number: "8.3.3.2",
+    },
+    {
+      name: "Obstructed (≤ 255 mm) side reach",
+      number: "8.3.3.3.1",
+    },
+    {
+      name: "Obstructed (≤ 610 mm) side reach",
+      number: "8.3.3.3.2",
+    },
+    {
+      name: "Change in level",
+      number: "8.3.4.1",
+    },
+    {
+      name: "Clear floor or ground space",
+      number: "8.3.4.2",
+    },
+    {
+      name: "General",
+      number: "8.3.4.3.1",
+    },
+    {
+      name: "Forward approach",
+      number: "8.3.4.3.2",
+    },
+    {
+      name: "Parallel approach",
+      number: "8.3.4.3.3",
+    },
+    {
+      name: "Visibility",
+      number: "8.3.5",
+    },
+    {
+      name: "Installation instructions",
+      number: "8.3.6",
+    },
+    {
+      name: "Numeric keys",
+      number: "8.4.1",
+    },
+    {
+      name: "Means of operation of mechanical parts",
+      number: "8.4.2.1",
+    },
+    {
+      name: "Force of operation of mechanical parts",
+      number: "8.4.2.2",
+    },
+    {
+      name: "Keys, tickets and fare cards",
+      number: "8.4.3",
+    },
+    {
+      name: "Tactile indication of speech mode",
+      number: "8.5",
+    },
+    {
+      name: "Non-text content",
+      number: "9.1.1.1",
+    },
+    {
+      name: "Audio-only and video-only (pre-recorded)",
+      number: "9.1.2.1",
+    },
+    {
+      name: "Captions (pre-recorded)",
+      number: "9.1.2.2",
+    },
+    {
+      name: "Audio description or media alternative (pre-recorded)",
+      number: "9.1.2.3",
+    },
+    {
+      name: "Captions (live)",
+      number: "9.1.2.4",
+    },
+    {
+      name: "Audio description (pre-recorded)",
+      number: "9.1.2.5",
+    },
+    {
+      name: "Info and relationships",
+      number: "9.1.3.1",
+    },
+    {
+      name: "Meaningful sequence",
+      number: "9.1.3.2",
+    },
+    {
+      name: "Sensory characteristics",
+      number: "9.1.3.3",
+    },
+    {
+      name: "Orientation",
+      number: "9.1.3.4",
+    },
+    {
+      name: "Identify input purpose",
+      number: "9.1.3.5",
+    },
+    {
+      name: "Use of colour",
+      number: "9.1.4.1",
+    },
+    {
+      name: "Audio control",
+      number: "9.1.4.2",
+    },
+    {
+      name: "Contrast (minimum)",
+      number: "9.1.4.3",
+    },
+    {
+      name: "Resize text",
+      number: "9.1.4.4",
+    },
+    {
+      name: "Images of text",
+      number: "9.1.4.5",
+    },
+    {
+      name: "Reflow",
+      number: "9.1.4.10",
+    },
+    {
+      name: "Non-text contrast",
+      number: "9.1.4.11",
+    },
+    {
+      name: "Text spacing",
+      number: "9.1.4.12",
+    },
+    {
+      name: "Content on hover or focus",
+      number: "9.1.4.13",
+    },
+    {
+      name: "Keyboard",
+      number: "9.2.1.1",
+    },
+    {
+      name: "No keyboard trap",
+      number: "9.2.1.2",
+    },
+    {
+      name: "Character key shortcuts",
+      number: "9.2.1.4",
+    },
+    {
+      name: "Timing adjustable",
+      number: "9.2.2.1",
+    },
+    {
+      name: "Pause, stop, hide",
+      number: "9.2.2.2",
+    },
+    {
+      name: "Three flashes or below threshold",
+      number: "9.2.3.1",
+    },
+    {
+      name: "Bypass blocks",
+      number: "9.2.4.1",
+    },
+    {
+      name: "Page titled",
+      number: "9.2.4.2",
+    },
+    {
+      name: "Focus Order",
+      number: "9.2.4.3",
+    },
+    {
+      name: "Link purpose (in context)",
+      number: "9.2.4.4",
+    },
+    {
+      name: "Multiple ways",
+      number: "9.2.4.5",
+    },
+    {
+      name: "Headings and labels",
+      number: "9.2.4.6",
+    },
+    {
+      name: "Focus visible",
+      number: "9.2.4.7",
+    },
+    {
+      name: "Pointer gestures",
+      number: "9.2.5.1",
+    },
+    {
+      name: "Pointer cancellation",
+      number: "9.2.5.2",
+    },
+    {
+      name: "Label in name",
+      number: "9.2.5.3",
+    },
+    {
+      name: "Motion actuation",
+      number: "9.2.5.4",
+    },
+    {
+      name: "Language of page",
+      number: "9.3.1.1",
+    },
+    {
+      name: "Language of parts",
+      number: "9.3.1.2",
+    },
+    {
+      name: "On focus",
+      number: "9.3.2.1",
+    },
+    {
+      name: "On input",
+      number: "9.3.2.2",
+    },
+    {
+      name: "Consistent navigation",
+      number: "9.3.2.3",
+    },
+    {
+      name: "Consistent identification",
+      number: "9.3.2.4",
+    },
+    {
+      name: "Error identification",
+      number: "9.3.3.1",
+    },
+    {
+      name: "Labels or instructions",
+      number: "9.3.3.2",
+    },
+    {
+      name: "Error suggestion",
+      number: "9.3.3.3",
+    },
+    {
+      name: "Error prevention (legal, financial, data)",
+      number: "9.3.3.4",
+    },
+    {
+      name: "Parsing",
+      number: "9.4.1.1",
+    },
+    {
+      name: "Name, role, value",
+      number: "9.4.1.2",
+    },
+    {
+      name: "Status messages",
+      number: "9.4.1.3",
+    },
+    {
+      name: "Non-text content",
+      number: "10.1.1.1",
+    },
+    {
+      name: "Audio-only and video-only (pre-recorded)",
+      number: "10.1.2.1",
+    },
+    {
+      name: "Captions (pre-recorded)",
+      number: "10.1.2.2",
+    },
+    {
+      name: "Audio description or media alternative (pre-recorded)",
+      number: "10.1.2.3",
+    },
+    {
+      name: "Captions (live)",
+      number: "10.1.2.4",
+    },
+    {
+      name: "Audio description (pre-recorded)",
+      number: "10.1.2.5",
+    },
+    {
+      name: "Info and relationships",
+      number: "10.1.3.1",
+    },
+    {
+      name: "Meaningful sequence",
+      number: "10.1.3.2",
+    },
+    {
+      name: "Sensory characteristics",
+      number: "10.1.3.3",
+    },
+    {
+      name: "Orientation",
+      number: "10.1.3.4",
+    },
+    {
+      name: "Identify input purpose",
+      number: "10.1.3.5",
+    },
+    {
+      name: "Use of colour",
+      number: "10.1.4.1",
+    },
+    {
+      name: "Audio control",
+      number: "10.1.4.2",
+    },
+    {
+      name: "Contrast (minimum)",
+      number: "10.1.4.3",
+    },
+    {
+      name: "Resize text",
+      number: "10.1.4.4",
+    },
+    {
+      name: "Images of text",
+      number: "10.1.4.5",
+    },
+    {
+      name: "Reflow",
+      number: "10.1.4.10",
+    },
+    {
+      name: "Non-text contrast",
+      number: "10.1.4.11",
+    },
+    {
+      name: "Text spacing",
+      number: "10.1.4.12",
+    },
+    {
+      name: "Content on hover or focus",
+      number: "10.1.4.13",
+    },
+    {
+      name: "Keyboard",
+      number: "10.2.1.1",
+    },
+    {
+      name: "No keyboard trap",
+      number: "10.2.1.2",
+    },
+    {
+      name: "Character key shortcuts",
+      number: "10.2.1.4",
+    },
+    {
+      name: "Timing adjustable",
+      number: "10.2.2.1",
+    },
+    {
+      name: "Pause, stop, hide",
+      number: "10.2.2.2",
+    },
+    {
+      name: "Three flashes or below threshold",
+      number: "10.2.3.1",
+    },
+    {
+      name: "Document titled",
+      number: "10.2.4.2",
+    },
+    {
+      name: "Focus Order",
+      number: "10.2.4.3",
+    },
+    {
+      name: "Link purpose (in context)",
+      number: "10.2.4.4",
+    },
+    {
+      name: "Headings and labels",
+      number: "10.2.4.6",
+    },
+    {
+      name: "Focus visible",
+      number: "10.2.4.7",
+    },
+    {
+      name: "Pointer gestures",
+      number: "10.2.5.1",
+    },
+    {
+      name: "Pointer cancellation",
+      number: "10.2.5.2",
+    },
+    {
+      name: "Label in name",
+      number: "10.2.5.3",
+    },
+    {
+      name: "Motion actuation",
+      number: "10.2.5.4",
+    },
+    {
+      name: "Language of document",
+      number: "10.3.1.1",
+    },
+    {
+      name: "Language of parts",
+      number: "10.3.1.2",
+    },
+    {
+      name: "On focus",
+      number: "10.3.2.1",
+    },
+    {
+      name: "On input",
+      number: "10.3.2.2",
+    },
+    {
+      name: "Error identification",
+      number: "10.3.3.1",
+    },
+    {
+      name: "Labels or instructions",
+      number: "10.3.3.2",
+    },
+    {
+      name: "Error suggestion",
+      number: "10.3.3.3",
+    },
+    {
+      name: "Error prevention (legal, financial, data)",
+      number: "10.3.3.4",
+    },
+    {
+      name: "Parsing",
+      number: "10.4.1.1",
+    },
+    {
+      name: "Name, role, value",
+      number: "10.4.1.2",
+    },
+    {
+      name: "Status messages",
+      number: "10.4.1.3",
+    },
+    {
+      name: "Caption positioning",
+      number: "10.5",
+    },
+    {
+      name: "Audio description timing",
+      number: "10.6",
+    },
+    {
+      name: "Non-text content (open functionality)",
+      number: "11.1.1.1.1",
+    },
+    {
+      name: "Non-text content (closed functionality)",
+      number: "11.1.1.1.2",
+    },
+    {
+      name: "Audio-only and video-only (pre-recorded - open functionality)",
+      number: "11.1.2.1.1",
+    },
+    {
+      name: "Pre-recorded audio-only (closed functionality)",
+      number: "11.1.2.1.2.1",
+    },
+    {
+      name: "Pre-recorded video-only (closed functionality)",
+      number: "11.1.2.1.2.2",
+    },
+    {
+      name: "Captions (pre-recorded)",
+      number: "11.1.2.2",
+    },
+    {
+      name: "Audio description or media alternative (pre-recorded - open functionality)",
+      number: "11.1.2.3.1",
+    },
+    {
+      name: "Audio description or media alternative (pre-recorded - closed functionality)",
+      number: "11.1.2.3.2",
+    },
+    {
+      name: "Captions (live)",
+      number: "11.1.2.4",
+    },
+    {
+      name: "Audio description (pre-recorded)",
+      number: "11.1.2.5",
+    },
+    {
+      name: "Info and relationships (open functionality)",
+      number: "11.1.3.1.1",
+    },
+    {
+      name: "Info and relationships (closed functionality)",
+      number: "11.1.3.1.2",
+    },
+    {
+      name: "Meaningful sequence (open functionality)",
+      number: "11.1.3.2.1",
+    },
+    {
+      name: "Meaningful sequence (closed functionality)",
+      number: "11.1.3.2.1",
+    },
+    {
+      name: "Sensory characteristics",
+      number: "11.1.3.3",
+    },
+    {
+      name: "Orientation",
+      number: "11.1.3.4",
+    },
+    {
+      name: "Identify input purpose (open functionality)",
+      number: "11.1.3.5.1",
+    },
+    {
+      name: "Identify input purpose (closed functionality)",
+      number: "11.1.3.5.2",
+    },
+    {
+      name: "Use of colour",
+      number: "11.1.4.1",
+    },
+    {
+      name: "Audio control",
+      number: "11.1.4.2",
+    },
+    {
+      name: "Contrast (minimum)",
+      number: "11.1.4.3",
+    },
+    {
+      name: "Resize text (open functionality)",
+      number: "11.1.4.4.1",
+    },
+    {
+      name: "Resize text (closed functionality)",
+      number: "11.1.4.4.2",
+    },
+    {
+      name: "Images of text (open functionality)",
+      number: "11.1.4.5.1",
+    },
+    {
+      name: "Images of text (closed functionality)",
+      number: "11.1.4.5.2",
+    },
+    {
+      name: "Reflow",
+      number: "11.1.4.10",
+    },
+    {
+      name: "Non-text contrast",
+      number: "11.1.4.11",
+    },
+    {
+      name: "Text spacing",
+      number: "11.1.4.12",
+    },
+    {
+      name: "Content on hover or focus",
+      number: "11.1.4.13",
+    },
+    {
+      name: "Keyboard (open functionality)",
+      number: "11.2.1.1.1",
+    },
+    {
+      name: "Keyboard (closed functionality)",
+      number: "11.2.1.1.2",
+    },
+    {
+      name: "No keyboard trap",
+      number: "11.2.1.2",
+    },
+    {
+      name: "Character key shortcuts (open functionality)",
+      number: "11.2.1.4.1",
+    },
+    {
+      name: "Character key shortcuts (closed functionality)",
+      number: "11.2.1.4.2",
+    },
+    {
+      name: "Timing adjustable",
+      number: "11.2.2.1",
+    },
+    {
+      name: "Pause, stop, hide",
+      number: "11.2.2.2",
+    },
+    {
+      name: "Three flashes or below threshold",
+      number: "11.2.3.1",
+    },
+    {
+      name: "Focus order",
+      number: "11.2.4.3",
+    },
+    {
+      name: "Link purpose (in context)",
+      number: "11.2.4.4",
+    },
+    {
+      name: "Headings and labels",
+      number: "11.2.4.6",
+    },
+    {
+      name: "Focus visible",
+      number: "11.2.4.7",
+    },
+    {
+      name: "Pointer gestures",
+      number: "11.2.5.1",
+    },
+    {
+      name: "Pointer cancellation",
+      number: "11.2.5.2",
+    },
+    {
+      name: "Label in name (open functionality)",
+      number: "11.2.5.3.1",
+    },
+    {
+      name: "Label in name (closed functionality)",
+      number: "11.2.5.3.2",
+    },
+    {
+      name: "Motion actuation",
+      number: "11.2.5.4",
+    },
+    {
+      name: "Language of software (open functionality)",
+      number: "11.3.1.1.1",
+    },
+    {
+      name: "Language of software (closed functionality)",
+      number: "11.3.1.1.2",
+    },
+    {
+      name: "On focus",
+      number: "11.3.2.1",
+    },
+    {
+      name: "On input",
+      number: "11.3.2.2",
+    },
+    {
+      name: "Error identification (open functionality)",
+      number: "11.3.3.1.1",
+    },
+    {
+      name: "Error identification (closed functionality)",
+      number: "11.3.3.1.2",
+    },
+    {
+      name: "Labels or instructions",
+      number: "11.3.3.2",
+    },
+    {
+      name: "Error suggestion",
+      number: "11.3.3.3",
+    },
+    {
+      name: "Error prevention (legal, financial, data)",
+      number: "11.3.3.4",
+    },
+    {
+      name: "Parsing (open functionality)",
+      number: "11.4.1.1.1",
+    },
+    {
+      name: "Name, role, value (open functionality)",
+      number: "11.4.1.2.1",
+    },
+    {
+      name: "Status messages (open functionality)",
+      number: "11.4.1.3.1",
+    },
+    {
+      name: "Platform accessibility service support for software that provides a user interface",
+      number: "11.5.2.1",
+    },
+    {
+      name: "Platform accessibility service support for assistive technologies",
+      number: "11.5.2.2",
+    },
+    {
+      name: "Use of accessibility services",
+      number: "11.5.2.3",
+    },
+    {
+      name: "Assistive technology",
+      number: "11.5.2.4",
+    },
+    {
+      name: "Object information",
+      number: "11.5.2.5",
+    },
+    {
+      name: "Row, column, and headers",
+      number: "11.5.2.6",
+    },
+    {
+      name: "Values",
+      number: "11.5.2.7",
+    },
+    {
+      name: "Label relationships",
+      number: "11.5.2.8",
+    },
+    {
+      name: "Parent-child relationships",
+      number: "11.5.2.9",
+    },
+    {
+      name: "Text",
+      number: "11.5.2.10",
+    },
+    {
+      name: "List of available actions",
+      number: "11.5.2.11",
+    },
+    {
+      name: "Execution of available actions",
+      number: "11.5.2.12",
+    },
+    {
+      name: "Tracking of focus and selection attributes",
+      number: "11.5.2.13",
+    },
+    {
+      name: "Modification of focus and selection attributes",
+      number: "11.5.2.14",
+    },
+    {
+      name: "Change notification",
+      number: "11.5.2.15",
+    },
+    {
+      name: "Modifications of states and properties",
+      number: "11.5.2.16",
+    },
+    {
+      name: "Modifications of values and text",
+      number: "11.5.2.17",
+    },
+    {
+      name: "User control of accessibility features",
+      number: "11.6.1",
+    },
+    {
+      name: "No disruption of accessibility features",
+      number: "11.6.2",
+    },
+    {
+      name: "User preferences",
+      number: "11.7",
+    },
+    {
+      name: "Accessible content creation",
+      number: "11.8.2",
+    },
+    {
+      name: "Preservation of accessibility information in transformations",
+      number: "11.8.3",
+    },
+    {
+      name: "Repair assistance",
+      number: "11.8.4",
+    },
+    {
+      name: "Templates",
+      number: "11.8.5",
+    },
+    {
+      name: "Accessibility and compatibility features",
+      number: "12.1.1",
+    },
+    {
+      name: "Accessible documentation",
+      number: "12.1.2",
+    },
+    {
+      name: "Information on accessibility and compatibility features",
+      number: "12.2.2",
+    },
+    {
+      name: "Effective communication",
+      number: "12.2.3",
+    },
+    {
+      name: "Accessible documentation",
+      number: "12.2.4",
+    },
+    {
+      name: "Text relay services",
+      number: "13.1.2",
+    },
+    {
+      name: "Sign relay services",
+      number: "13.1.3",
+    },
+    {
+      name: "Lip-reading relay services",
+      number: "13.1.4",
+    },
+    {
+      name: "Captioned telephony services",
+      number: "13.1.5",
+    },
+    {
+      name: "Speech to speech relay services",
+      number: "13.1.6",
+    },
+    {
+      name: "Access to relay services",
+      number: "13.2",
+    },
+    {
+      name: "Access to emergency services",
+      number: "13.2",
+    },
+  ];
+  return clauses;
 }
 function dataErrors() {
   const array = [
@@ -1816,6 +2989,7 @@ function dataPreferred() {
   const preferred = [
     {
       bp: 332,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "9.1.3.1", "9.3.3.2"],
       id: "response-radiogroup-no-name",
       impact:
         "Screen reader users will have difficulty understanding the purpose of this control group.",
@@ -1833,6 +3007,15 @@ function dataPreferred() {
     },
     {
       bp: 338,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "4.2.8",
+        "9.1.3.1",
+        "9.2.5.3",
+        "9.4.1.2",
+      ],
       id: "response-missing-label",
       impact:
         "Screen reader users and users with cognitive disabilities may be unable to determine what these controls are for. Speech input users will have difficulty navigating to them.",
@@ -1850,6 +3033,15 @@ function dataPreferred() {
     },
     {
       bp: 338,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "4.2.8",
+        "9.1.3.1",
+        "9.2.5.3",
+        "9.4.1.2",
+      ],
       id: "response-field-with-unassociated-label",
       impact:
         "Screen reader users will have difficulty determining the purpose of these controls. Speech input users will have difficulty navigating to them.",
@@ -1867,6 +3059,7 @@ function dataPreferred() {
     },
     {
       bp: 341,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "9.1.3.1", "9.3.3.2"],
       id: "response-form-groups-lack-fieldset",
       impact:
         "Screen reader users will have difficulty understanding the relationship between these form controls.",
@@ -1884,6 +3077,7 @@ function dataPreferred() {
     },
     {
       bp: 343,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.1.1.1", "9.2.4.4"],
       id: "response-area-without-equivalent",
       impact:
         "Screen reader users will be unable to determine what these images represent.",
@@ -1899,6 +3093,7 @@ function dataPreferred() {
     },
     {
       bp: 345,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.1"],
       id: "response-skip-link-missing",
       impact:
         "Keyboard users will have to execute numerous key presses in order to get to the following content.",
@@ -1914,6 +3109,7 @@ function dataPreferred() {
     },
     {
       bp: 345,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.1"],
       id: "response-skip-link-broken",
       impact:
         "Keyboard users will have to execute numerous key presses in order to get to the following content.",
@@ -1928,6 +3124,7 @@ function dataPreferred() {
     },
     {
       bp: 345,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.1"],
       id: "response-skip-link-not-far-enough",
       impact:
         "Keyboard users will have to execute numerous key presses in order to get to the main content in the page.",
@@ -1943,6 +3140,15 @@ function dataPreferred() {
     },
     {
       bp: 347,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.10",
+        "9.2.2.1",
+      ],
       id: "response-page-refreshes-automatically",
       impact:
         "Screen reader users and users with cognitive disabilities may be disoriented by this refresh. They may also not have sufficient time to access page content.",
@@ -1958,6 +3164,7 @@ function dataPreferred() {
     },
     {
       bp: 358,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "9.1.1.1", "9.2.1.1"],
       id: "response-server-side-image-map",
       impact:
         "Keyboard users and screen reader users will be prevented from accessing the link in server-side image maps. Without alternative routes, these users will not be able to access the image map regions.",
@@ -1973,6 +3180,7 @@ function dataPreferred() {
     },
     {
       bp: 359,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "9.2.1.1"],
       id: "response-device-dependent-event-handlers",
       impact:
         "Keyboard users will be prevented from accessing the functionality provided by these controls.",
@@ -1988,6 +3196,7 @@ function dataPreferred() {
     },
     {
       bp: 361,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-invalid-headers-id",
       impact:
         "Screen reader users will not be able to determine which headers name these cells.",
@@ -2003,6 +3212,7 @@ function dataPreferred() {
     },
     {
       bp: 361,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-missing-rowgroup-colgroup",
       impact:
         "Screen reader users will not be able to determine which cells correspond to these headers.",
@@ -2018,6 +3228,7 @@ function dataPreferred() {
     },
     {
       bp: 361,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-missing-scope",
       impact:
         "Screen reader users will not be able to determine which cells correspond to these headers.",
@@ -2033,6 +3244,7 @@ function dataPreferred() {
     },
     {
       bp: 361,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-missing-id",
       impact:
         "Screen reader users will not be able to determine which cells correspond to these headers.",
@@ -2048,6 +3260,7 @@ function dataPreferred() {
     },
     {
       bp: 361,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-missing-headers",
       impact:
         "Screen reader users will not be able to determine which headers name these cells.",
@@ -2063,6 +3276,7 @@ function dataPreferred() {
     },
     {
       bp: 362,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-meaningful-img-has-no-alternative-text",
       impact:
         "Screen reader users will be unable to determine what these images represent.",
@@ -2080,6 +3294,7 @@ function dataPreferred() {
     },
     {
       bp: 362,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-img-is-not-marked-as-decorative",
       impact:
         'Screen readers may announce <img> elements with no alt attribute by their filename and SVGs with no accessible name as "group." This gives screen reader users irrelevant and confusing information.',
@@ -2097,6 +3312,7 @@ function dataPreferred() {
     },
     {
       bp: 363,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-object-element-accessible-name-missing",
       impact: "Screen reader users will not know the purpose of this object.",
       issue:
@@ -2111,6 +3327,7 @@ function dataPreferred() {
     },
     {
       bp: 363,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-decorative video",
       impact:
         "Screen reader users will be unable to determine whether the contents of this video are meaningful or decorative.",
@@ -2126,6 +3343,7 @@ function dataPreferred() {
     },
     {
       bp: 364,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.2"],
       id: "response-title-element-missing",
       impact:
         "Screen reader users and some users with cognitive disabilities will have difficulty determining the purpose of the page.",
@@ -2143,6 +3361,7 @@ function dataPreferred() {
     {
       bp: 368,
       convertColorContrastText: true,
+      en301549: ["4.2.2", "4.2.3", "9.1.4.3", "9.1.4.11"],
       id: "response-text-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty reading this content.",
@@ -2160,6 +3379,7 @@ function dataPreferred() {
     },
     {
       bp: 369,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "9.1.4.1"],
       id: "response-color-only-identification",
       impact:
         "Users with color blindness will have difficulty identifying the colors used to convey this information.",
@@ -2175,6 +3395,7 @@ function dataPreferred() {
     },
     {
       bp: 369,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "9.1.4.1"],
       id: "response-color-only-links",
       impact:
         "Users with color blindness will have difficulty distinguishing which text is a link.",
@@ -2190,6 +3411,7 @@ function dataPreferred() {
     },
     {
       bp: 370,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-alt-text-not-meaningful",
       impact:
         "Screen reader users will not receive an accurate impression of the contents of these images.",
@@ -2207,6 +3429,7 @@ function dataPreferred() {
     },
     {
       bp: 370,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-decorative-with-descriptive-alt",
       impact:
         "Screen reader users will receive unnecessary and potentially confusing information.",
@@ -2224,6 +3447,7 @@ function dataPreferred() {
     },
     {
       bp: 373,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-button-short-name",
       impact:
         "Screen reader users will be unable to determine the purpose of these buttons.",
@@ -2239,9 +3463,10 @@ function dataPreferred() {
     },
     {
       bp: 375,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-missing-table-headers",
       impact:
-        "Screen reader users will not be able to determine the relationships between cells in these tables.",
+        "Screen reader users will not be able to determine the relationships between cells in these tables, and will not be able to use keyboard shortcuts to navigate the information efficiently.",
       issue:
         "There are table headers that are not associated with their corresponding data cells. Examples include:\n- ",
       recommendation:
@@ -2254,9 +3479,10 @@ function dataPreferred() {
     },
     {
       bp: 376,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-implicit-table",
       impact:
-        "Screen reader users will not be able to determine the relationships between cells in these tables.",
+        "Screen reader users will not be able to determine the relationships between cells in these tables, and will not be able to use keyboard shortcuts to navigate the information efficiently.",
       issue:
         "There are data tables that do not use table markup. Examples include:\n- ",
       keepAttribute: true,
@@ -2271,6 +3497,15 @@ function dataPreferred() {
     },
     {
       bp: 380,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.10",
+        "9.2.2.1",
+      ],
       id: "response-timing-general",
       impact:
         "Users who require additional time to fill out forms will lose the information they've entered when a session times out.",
@@ -2286,6 +3521,7 @@ function dataPreferred() {
     },
     {
       bp: 387,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-heading-levels-match-visual-heading-hierarchy.",
       impact:
         "Screen reader users will have difficulty efficiently navigating and gaining an accurate overview of the page.",
@@ -2296,13 +3532,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Locate the heading.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Level".',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press the Down Arrow key to read line by line.\n3. Alternatively, press the "H" key repeatedly to Go to Next Heading.\n4. Note the purpose and level of each heading.\nExpected result: JAWS announces, "[Text], heading level [Level]"\nActual Result: JAWS announces, "[Text], heading level [Level]" which is not appropriate for its purpose.',
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read line by line.\n3. Alternatively, press the "H" key repeatedly to Go to Next Heading.\n4. Note the purpose and level of each heading.\nExpected result: JAWS announces, "[Output], heading level [Output]"\nActual Result: JAWS announces, "[Output], heading level [Output]" which is not appropriate for its purpose.',
       successCriteria: ["1.3.1", "2.4.10"],
       title: "Heading levels don't match visual heading hierarchy.",
       type: "web",
     },
     {
       bp: 389,
+      en301549: ["4.2.1", "9.3.1.2"],
       id: "response-inline-lang-missing",
       impact:
         "Screen readers will use inappropriate pronunciation when announcing this text.",
@@ -2318,8 +3555,10 @@ function dataPreferred() {
     },
     {
       bp: 393,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-list-items-without-list-parent",
-      impact: "Assistive technologies may be unable to parse this content.",
+      impact:
+        "Assistive technologies may be unable to parse this content, so users may not be able to perceive the relationship between information in the list.",
       issue: "There are improperly structured lists. Examples include:\n- ",
       recommendation:
         'Ensure sub-lists are marked up properly. <ul> and <ol> elements must only contain <li>, <script>, and <template> elements (without role attributes), and elements with role="listitem", as direct children. <li> elements must be direct children of an <ul> or an <ol> element.',
@@ -2331,6 +3570,7 @@ function dataPreferred() {
     },
     {
       bp: 395,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-layout-table-structural",
       impact:
         "Screen readers will treat this content as a data table, causing confusion about its layout and impeding navigation.",
@@ -2346,6 +3586,7 @@ function dataPreferred() {
     },
     {
       bp: 401,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-directly-linked-image",
       impact:
         "It is not possible to add a textual equivalent to an image file, so screen reader users will be prevented from accessing the contents of these images.",
@@ -2361,6 +3602,7 @@ function dataPreferred() {
     },
     {
       bp: 409,
+      en301549: ["4.2.2", "9.1.4.12"],
       id: "response-text-cannot-be-resized-to-200",
       impact:
         "Users with low vision who need to resize text will be prevented from accessing this content.",
@@ -2376,6 +3618,7 @@ function dataPreferred() {
     },
     {
       bp: 410,
+      en301549: ["4.2.2", "9.1.4.12"],
       id: "response-meta-viewport",
       impact:
         "Some browsers prevent users from resizing a page if these attributes are set, so users with low vision who rely on resizing text will be prevented from reading content on the page.",
@@ -2391,6 +3634,7 @@ function dataPreferred() {
     },
     {
       bp: 414,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-multiple-row-headers",
       impact:
         "Screen reader users will not understand the relationships between cells in these tables.",
@@ -2406,6 +3650,7 @@ function dataPreferred() {
     },
     {
       bp: 423,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-suspicious-object-name",
       impact: "Screen reader users will not know what these objects represent.",
       issue:
@@ -2420,6 +3665,7 @@ function dataPreferred() {
     },
     {
       bp: 429,
+      en301549: ["4.2.1", "9.3.1.1"],
       id: "response-page-lang-missing",
       impact:
         "Screen readers will use inappropriate pronunciation when announcing the text of the page.",
@@ -2434,6 +3680,17 @@ function dataPreferred() {
     },
     {
       bp: 441,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.3",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.8",
+        "4.2.9",
+        "4.2.10",
+      ],
       id: "response-marquee",
       impact:
         "Users with cognitive disabilities may be prevented from reading important content before it appears, or it may be too distracting for them to remain on the page. Users with vestibular disorders or migraine may experience symptoms caused by this movement.",
@@ -2448,6 +3705,7 @@ function dataPreferred() {
     },
     {
       bp: 444,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-video-no-name",
       impact:
         "Screen reader users will be unable to determine what these videos represent.",
@@ -2463,6 +3721,7 @@ function dataPreferred() {
     },
     {
       bp: 456,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-iframe-image",
       impact:
         "Screen reader users will be unable to determine what these images represent.",
@@ -2477,6 +3736,7 @@ function dataPreferred() {
     },
     {
       bp: 457,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-headings-are-implicit",
       impact:
         "Screen reader users will have difficulty efficiently navigating and gaining an accurate overview of the page.",
@@ -2487,15 +3747,17 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Locate the heading.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press the Down Arrow key to read line by line.\n3. Alternatively, press the "H" key repeatedly to Go to Next Heading.\n4. Note the purpose and level of each heading.\nExpected result: JAWS announces, "[Text], heading level [Level]"\nActual Result: JAWS announces, "[Text]" without the heading role or level.',
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read line by line.\n3. Alternatively, press the "H" key repeatedly to Go to Next Heading.\n4. Note the purpose and level of each heading.\nExpected result: JAWS announces, "[Output], heading level [Output]"\nActual Result: JAWS does not indicate this text as a heading.',
       successCriteria: ["1.3.1"],
       title: "Headings are implicit",
       type: "web",
     },
     {
       bp: 464,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-list-items-not-children-of-list",
-      impact: "Assistive technologies may be unable to parse this content.",
+      impact:
+        "Assistive technologies may be unable to parse this content, so users may not be able to perceive the relationship between information in the list.",
       issue: "There are improperly structured lists. Examples include:\n- ",
       recommendation:
         'Ensure list items are found in a list container. <ul> and <ol> elements must only contain <li>, <script>, and <template> elements (without role attributes), and elements with role="listitem", as direct children. <li> elements must be direct children of an <ul> or an <ol> element.',
@@ -2507,8 +3769,10 @@ function dataPreferred() {
     },
     {
       bp: 464,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-description-list",
-      impact: "Assistive technologies may be unable to parse this content.",
+      impact:
+        "Assistive technologies may be unable to parse this content, so users may not be able to perceive the relationship between information in the list.",
       issue:
         "There are description terms or details that are not appropriately nested in a description list element. Examples include:\n- ",
       recommendation:
@@ -2521,6 +3785,7 @@ function dataPreferred() {
     },
     {
       bp: 466,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "9.3.2.3"],
       id: "response-navigation-inconsistent",
       impact:
         "Screen reader users, people with low vision, and people with cognitive disabilities may have difficulty locating repeated content and navigation structures.",
@@ -2536,6 +3801,7 @@ function dataPreferred() {
     },
     {
       bp: 476,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-canvas-text-equivalent-missing",
       impact:
         "Screen reader users will be unable to determine what this canvas represents.",
@@ -2551,6 +3817,7 @@ function dataPreferred() {
     },
     {
       bp: 480,
+      en301549: ["4.2.2", "9.1.4.12"],
       id: "response-hr-width",
       impact:
         "Users with low vision who use browser zoom may need to scroll excessively to access content.",
@@ -2566,6 +3833,7 @@ function dataPreferred() {
     },
     {
       bp: 490,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "9.2.1.1"],
       id: "response-non-focusable-links",
       impact:
         "Keyboard users will be prevented from accessing the functionality provided by these controls.",
@@ -2581,6 +3849,7 @@ function dataPreferred() {
     },
     {
       bp: 523,
+      en301549: ["4.2.1", "4.2.2", "9.4.1.2"],
       id: "response-frame-with-no-title",
       impact:
         "Screen reader users will have difficulty determining the purpose of these iframes.",
@@ -2596,6 +3865,7 @@ function dataPreferred() {
     },
     {
       bp: 523,
+      en301549: ["4.2.1", "4.2.2", "9.4.1.2"],
       id: "response-decorative-iframe",
       impact:
         "Screen readers may generate irrelevant or confusing announcements for this content.",
@@ -2611,6 +3881,7 @@ function dataPreferred() {
     },
     {
       bp: 524,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "9.2.1.1"],
       id: "response-focusable-aria-hidden-true",
       impact:
         "Keyboard users will be able to navigate to this element even if it is off screen. Screen reader users will be able to focus this element if they press Tab, but they will be unable to determine its purpose.",
@@ -2626,6 +3897,7 @@ function dataPreferred() {
     },
     {
       bp: 542,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.2"],
       id: "response-page-title-repetitive",
       impact:
         "Screen reader users and users with cognitive disabilities will have difficulty determining the purpose of the page.",
@@ -2642,6 +3914,7 @@ function dataPreferred() {
     },
     {
       bp: 551,
+      en301549: ["4.2.1", "4.2.2", "9.4.1.2"],
       id: "response-multiple-labels",
       impact:
         "Assistive technologies may not associate all of the labels with the control. Different assistive technologies and browser combinations may use different labels as the accessible name.",
@@ -2657,6 +3930,7 @@ function dataPreferred() {
     },
     {
       bp: 566,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-implicit-lists",
       impact:
         "Screen reader users will have difficulty understanding that this content is a list.",
@@ -2672,6 +3946,7 @@ function dataPreferred() {
     },
     {
       bp: 588,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-avoid-unnecessary-use-headings",
       impact:
         "Screen reader users will have difficulty efficiently navigating and gaining an accurate overview of the page.",
@@ -2682,13 +3957,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Locate the text.\n2. Inspect it with Chrome DevTools.\n3. Notice that the text uses <h1>-<h6> elements or role="heading".',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press the Down Arrow key to read line by line.\n3. Alternatively, press the "H" key repeatedly to Go to Next Heading.\n4. Note the purpose and level of each heading.\nExpected result: JAWS announces, "[Expected Output]"\nActual Result: JAWS announces, "[Text], heading level [Level]" which is not appropriate for its purpose.',
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read line by line.\n3. Alternatively, press the "H" key repeatedly to Go to Next Heading.\n4. Note the purpose and level of each heading.\nExpected result: JAWS announces, "[Output]"\nActual Result: JAWS announces, "[Output], heading level [Output]" which is not appropriate for its purpose.',
       successCriteria: ["1.3.1"],
       title: "Unnecessary headings are used",
       type: "web",
     },
     {
       bp: 590,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-nested-tables",
       impact:
         "Screen readers may be unable to parse this content. This may cause incorrect header announcements and break table navigation shortcuts for users.",
@@ -2704,6 +3980,7 @@ function dataPreferred() {
     },
     {
       bp: 592,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "9.1.4.1", "9.4.1.2"],
       id: "response-page-tabs-lack-state-or-role",
       impact:
         "Screen reader users will be unable to determine that these controls reveal panels of content and which panel is currently revealed.",
@@ -2712,7 +3989,7 @@ function dataPreferred() {
       recommendation:
         'Ensure page tabs provide state and role.\n\nFor tabs, the following information is expected:\n- The container for the set of tabs must have role="tablist".\n- Each tab must have role="tab" and must be a descendant of the tablist element.\n- Each panel container must have role="tabpanel".\n- If the tablist has a visible label, the tablist element must have aria-labelledby set to the ID of the labelling element. Otherwise, the tablist element must have aria-label set to the accessible name.\n- Each tab must have aria-controls set to the ID of its corresponding tabpanel.\n- The selected tab must have aria-selected="true". All other tabs must have aria-selected="false".\n- Tabpanel elements must have aria-labelledby set to the ID of their corresponding tab.\n- If the tablist is vertically oriented, it must have aria-orientation="vertical".',
       stepsToReproduce:
-        '1. Locate the tabs.\n2. Inspect them with Chrome DevTools.\n3. Review their nesting structure.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the values for "Role" and "Selected".',
+        '1. Locate the tabs.\n2. Inspect them with Chrome DevTools.\n3. Review their structure, nesting, and attributes.\n4. In the Accessibility tab, expand the Computed Properties section.\n5. Review the values for "Role", "Selected", and "Controls". Repeat for each tab in the tablist to confirm that only one is marked selected, and that it is the tab that is visually indicated as selected.\n6. Inspect the tab panel element, and review the "Role" and "Name".',
       jawsFunctionalSteps:
         '1. Enable JAWS.\n2. Press the Tab key to move focus to the first tab control.\nExpected result: JAWS announces, "[@TODO]".\nActual result: JAWS announces, "[Actual Output]".',
       successCriteria: ["1.4.1", "4.1.2"],
@@ -2721,6 +3998,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-lack-name-role-state",
       impact:
         "Screen reader users will have difficulty determining the purpose and state of these controls.",
@@ -2738,6 +4016,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-accordion",
       impact:
         "Screen reader users will be unable to determine that these controls expand and collapse content. They will also have difficulty determining whether the controls are currently expanded or collapsed.",
@@ -2755,6 +4034,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-breadcrumbs",
       impact:
         "Screen reader users will have difficulty determining that this is a breadcrumb navigation and their current position within the breadcrumb.",
@@ -2772,6 +4052,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-buttons",
       impact:
         "Screen reader users will be unable to determine that this content is interactive.",
@@ -2782,13 +4063,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Locate the button.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press Tab key to move focus to the button.\nExpected result: JAWS announces, "[Name], button".\nActual result: JAWS announces, "[Actual Output]".',
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the button.\nExpected result: JAWS announces, "[Output], button".\nActual result: JAWS announces, "[Output]".',
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Buttons",
       type: "web",
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-checkboxes",
       impact:
         "Screen reader users will be unable to determine that these controls can be checked or unchecked. They will also be unable to review which options they have chosen.",
@@ -2806,6 +4088,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-comboboxes",
       impact:
         "Screen reader users will be unable to determine that a list of options are present. They will also be prevented from reviewing any options they have chosen.",
@@ -2823,6 +4106,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-links",
       impact:
         "Screen reader users will be unable to determine that these controls navigate to new pages.",
@@ -2833,13 +4117,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Locate the link.\n2. Inspect its <a> or role="link" element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press Tab key to move focus to the link.\nExpected result: JAWS announces, "[Name], link" or "[Name], visited link".\nActual result: JAWS announces, "[Actual Output]".',
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the link.\nExpected result: JAWS announces, "[Output], link" or "[Output], visited link".\nActual result: JAWS announces, "[Output]".',
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Custom controls - Links",
       type: "web",
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-radio",
       impact:
         "Screen reader users will be unable to determine that only one of these controls can be checked or unchecked. They will also be prevented from reviewing which option they have chosen.",
@@ -2857,6 +4142,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-selects",
       impact:
         "Screen reader users will have difficulty determining that a list of options is available for selection and which options they have selected.",
@@ -2874,6 +4160,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-show-hide",
       impact:
         "Screen reader users will be unable to determine that these controls expand and collapse content. They will also have difficulty determining whether a control is currently expanded or collapsed.",
@@ -2891,6 +4178,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-toggletips",
       impact:
         "Screen reader users will be prevented from accessing the tooltip's text and will have difficulty determining the purpose of the control.",
@@ -2908,6 +4196,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-custom-controls-tooltips",
       impact:
         "Screen reader users will be unable to determine that these tooltips are present.",
@@ -2925,6 +4214,7 @@ function dataPreferred() {
     },
     {
       bp: 602,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-button-no-name",
       impact:
         "Screen reader users will be unable to determine the purpose of these buttons. Speech input users will have difficulty activating them.",
@@ -2935,13 +4225,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Locate the button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press Tab key to move focus to the button.\nExpected result: JAWS announces, "[Name], button".\nActual result: JAWS announces an empty button, or tries to guess the button name using nearby text.',
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the button.\nExpected result: JAWS announces, "[Output], button".\nActual result: JAWS announces an empty button, or tries to guess the button name using nearby text.',
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Buttons - No accessible names",
       type: "web",
     },
     {
       bp: 605,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.1.3.1", "9.2.4.3"],
       id: "response-focus-not-moved-to-dialog",
       impact:
         "Screen reader users and screen magnification users will be unable to determine that these dialogs have appeared unless they review the entire page. Keyboard users will have difficulty navigating into the dialog.",
@@ -2952,13 +4243,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the dialog trigger is focused.\n5. Press Enter on the dialog trigger.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the first focusable element or the role="dialog" element.',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press Tab key to move focus to the dialog trigger.\n3. Press the Enter key to activate the dialog.\nExpected result: JAWS announces, "[Dialog Name], dialog".\nActual result: JAWS announces, "[Actual Output]".',
+        '1. Enable JAWS.\n2. Press Tab key to move focus to the dialog trigger.\n3. Press the Enter key to activate the dialog.\nExpected result: JAWS announces, "[Output], dialog".\nActual result: JAWS announces, "[Output]".',
       successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not moved to dialog",
       type: "web",
     },
     {
       bp: 605,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.1.3.1", "9.2.4.3"],
       id: "response-focus-not-moved-to-top-of-form-error",
       impact:
         "Screen reader users and screen magnification users will be unable to determine that these errors have appeared unless they review the entire page.",
@@ -2969,13 +4261,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the form submission control is focused.\n5. Press Enter on the submission control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the top-of-form error container.',
       jawsFunctionalSteps:
-        "1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the top-of-form error. JAWS announces error message.\nActual result: [Actual result].",
+        "1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the top-of-form error. JAWS announces the error message.\nActual result: [Output].",
       successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not moved to top-of-form error",
       type: "web",
     },
     {
       bp: 605,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.1.3.1", "9.2.4.3"],
       id: "response-focus-not-moved-to-first-error-field",
       impact:
         "Screen reader users and screen magnification users will be unable to determine that these errors have appeared unless they review the entire page.",
@@ -2986,13 +4279,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the form submission control is focused.\n5. Press Enter on the submission control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the first form field with an error.',
       jawsFunctionalSteps:
-        "1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the first invalid field. JAWS announces the field information, invalid state, and error message.\nActual result: [Actual result].",
+        "1. Enable JAWS.\n2. Partially complete the form, leaving one or more fields with invalid entries.\n3. Press Tab key to move focus to the form submission control.\n4. Activate form submit using Enter key.\nExpected result: Focus moves to the first invalid field. JAWS announces the field information, invalid state, and error message.\nActual result: [Output].",
       successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not moved to first field in error",
       type: "web",
     },
     {
       bp: 605,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.1.3.1", "9.2.4.3"],
       id: "response-focus-not-returned-to-trigger",
       impact:
         "Screen reader users and screen magnification users may become disoriented. Keyboard users will have to navigate through the contents of the page in order to return to the opening control.",
@@ -3002,12 +4296,15 @@ function dataPreferred() {
         "Ensure content updates define focus updates appropriately. When a dialog is closed, return focus to the control that opened the dialog. Use the JavaScript focus() method to move keyboard focus to this element.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the dialog close control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the control that opened the dialog.',
+      dxCustomSTR:
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the dialog close control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\nExpected result: Focus moves to the [Output] control.\nActual result: Focus strays to the HTML <body> element (focus is not defined).',
       successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not returned to triggering element",
       type: "web",
     },
     {
       bp: 605,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.1.3.1", "9.2.4.3"],
       id: "response-focus-load-more",
       impact:
         "Screen reader users and screen magnification users may become disoriented. Keyboard users will have to navigate backwards through the page to locate the newly revealed content.",
@@ -3017,12 +4314,15 @@ function dataPreferred() {
         "Ensure content updates define focus updates appropriately. When new content appears after activating a load more control, keyboard focus must move to the newly revealed content. Use the JavaScript focus() method to move keyboard focus to the first focusable element in the newly revealed content.",
       stepsToReproduce:
         '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the load more control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the first focusable element in the newly revealed content.',
+      dxCustomSTR:
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the load more control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\nExpected result: Focus moves to the [Output], [** REVIEW: **] with tabindex="-1" set to the element in order to receive focus.\nActual result: The focused element is not the first focusable element in the newly revealed content.',
       successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not updated with load more controls",
       type: "web",
     },
     {
       bp: 609,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "9.1.3.1", "9.3.3.2", "9.4.1.2"],
       id: "response-inline-unassociated-errors",
       impact:
         "Screen reader users will have difficulty determining which fields are in error and which errors correspond with which field.",
@@ -3040,6 +4340,7 @@ function dataPreferred() {
     },
     {
       bp: 609,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "9.1.3.1", "9.3.3.2", "9.4.1.2"],
       id: "response-inline-unassociated-constraints",
       impact:
         "Screen reader users will have difficulty determining which constraints correspond with which field.",
@@ -3050,13 +4351,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Locate the form field with inline constraints or instructions.\n2. Inspect its element with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Description".',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press the Tab key to move focus to the [Name] field.\n3. Repeat for each field with a constraint or help text.\nExpected result: JAWS announces the field information, followed by the constraint/help text. For example, "[Name], [Role], [State/Value], [Constraint/Help Text].".\nActual result: [Actual result].',
+        '1. Enable JAWS.\n2. Press the Tab key to move focus to the form field.\n3. Repeat for each field with a constraint or help text.\nExpected result: JAWS announces the field information, followed by the constraint/help text. For example, "[Name], [Role], [State/Value], [Constraint/Help Text].".\nActual result: [Actual result].',
       successCriteria: ["1.3.1", "3.3.2", "4.1.2"],
       title: "Unassociated constraints",
       type: "web",
     },
     {
       bp: 624,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-implicit-table-header",
       impact:
         "Screen reader users will not understand the relationships between cells in these tables.",
@@ -3070,9 +4372,10 @@ function dataPreferred() {
     },
     {
       bp: 626,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-table-span",
       impact:
-        "Screen reader users will not be able to determine the relationships between cells in these tables.",
+        "Screen reader users will not be able to determine the relationships between cells in these tables, and will not be able to use keyboard shortcuts to navigate the information efficiently.",
       issue:
         "There are table headers that span multiple rows/columns do not have values set for the Row Span/Column Span attributes",
       recommendation:
@@ -3083,6 +4386,7 @@ function dataPreferred() {
     },
     {
       bp: 630,
+      en301549: ["4.2.1", "4.2.2", "10.1.3.1", "10.4.1.2"],
       id: "response-pdf-bad-tags",
       impact:
         "Screen readers users may have difficulty navigating and understanding this content.",
@@ -3096,6 +4400,7 @@ function dataPreferred() {
     },
     {
       bp: 631,
+      en301549: ["4.2.1", "10.3.1.1"],
       id: "response-pdf-document-lang",
       impact:
         "Screen readers will use inappropriate pronunciation when announcing the text of the document.",
@@ -3108,6 +4413,7 @@ function dataPreferred() {
     },
     {
       bp: 633,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-heading-level",
       impact:
         "Screen reader users will have difficulty efficiently navigating and gaining an accurate overview of the document.",
@@ -3121,6 +4427,7 @@ function dataPreferred() {
     },
     {
       bp: 634,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-implicit-headings",
       impact:
         "Screen reader users will have difficulty efficiently navigating and gaining an accurate overview of the document.",
@@ -3134,6 +4441,7 @@ function dataPreferred() {
     },
     {
       bp: 635,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "10.1.1.1", "10.1.3.1", "10.1.4.5"],
       id: "response-pdf-formulas",
       impact:
         "Screen reader users will have difficulty understanding these formulas.",
@@ -3147,6 +4455,7 @@ function dataPreferred() {
     },
     {
       bp: 638,
+      en301549: ["4.2.1", "4.2.2", "10.1.1.1"],
       id: "response-pdf-decorative-with-alt",
       impact:
         "Screen reader users will receive unnecessary and potentially confusing information.",
@@ -3160,6 +4469,7 @@ function dataPreferred() {
     },
     {
       bp: 638,
+      en301549: ["4.2.1", "4.2.2", "10.1.1.1"],
       id: "response-pdf-meaningful-with-bad-alt",
       impact:
         "Screen reader users will not receive an accurate impression of the contents of these images.",
@@ -3173,6 +4483,7 @@ function dataPreferred() {
     },
     {
       bp: 640,
+      en301549: ["4.2.1", "4.2.2", "10.1.1.1"],
       id: "response-pdf-missing-ocr",
       impact:
         "Screen reader users will be prevented from accessing the text content within the scan.",
@@ -3186,6 +4497,7 @@ function dataPreferred() {
     },
     {
       bp: 649,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-list-structure",
       impact:
         "Screen reader users will have difficulty understanding that this content is a list.",
@@ -3199,6 +4511,7 @@ function dataPreferred() {
     },
     {
       bp: 651,
+      en301549: [],
       id: "response-pdf-missing-bookmarks",
       impact:
         "Keyboard users will have difficulty efficiently navigating the document.",
@@ -3212,6 +4525,7 @@ function dataPreferred() {
     },
     {
       bp: 652,
+      en301549: ["4.2.1", "10.1.3.2"],
       id: "response-pdf-reading-order",
       impact: "Screen reader users will be unable to understand this content.",
       issue: "The following reading order is illogical:\n1.",
@@ -3223,6 +4537,7 @@ function dataPreferred() {
     },
     {
       bp: 653,
+      en301549: ["4.2.2", "4.2.3", "10.1.4.3"],
       id: "response-pdf-text-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty reading this content.",
@@ -3236,6 +4551,7 @@ function dataPreferred() {
     },
     {
       bp: 655,
+      en301549: ["4.2.1", "10.1.3.2"],
       id: "response-pdf-header-footer",
       impact:
         "Screen readers will read this header/footer text in the middle of a paragraph, causing confusion for users.",
@@ -3249,6 +4565,7 @@ function dataPreferred() {
     },
     {
       bp: 663,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-unnecessary-headings",
       impact:
         "Screen reader users will have difficulty efficiently navigating and gaining an accurate overview of the document.",
@@ -3262,6 +4579,7 @@ function dataPreferred() {
     },
     {
       bp: 665,
+      en301549: ["4.2.1", "4.2.2", "10.1.1.1", "10.1.3.2", "10.4.1.2"],
       id: "response-pdf-untagged",
       impact:
         "Screen reader users will not have reliable access to content within the document.",
@@ -3274,6 +4592,7 @@ function dataPreferred() {
     },
     {
       bp: 665,
+      en301549: ["4.2.1", "4.2.2", "10.1.1.1", "10.1.3.2", "10.4.1.2"],
       id: "response-pdf-untagged-annotations",
       impact: "Screen reader users will not have access to this content.",
       issue: "There are annotations that are not tagged. Examples include:\n- ",
@@ -3285,6 +4604,7 @@ function dataPreferred() {
     },
     {
       bp: 666,
+      en301549: ["4.2.1", "4.2.2", "10.1.1.1"],
       id: "response-pdf-unicode",
       impact: "Screen reader users may not properly announce this content.",
       issue:
@@ -3297,9 +4617,10 @@ function dataPreferred() {
     },
     {
       bp: 722,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-unassociated-header",
       impact:
-        "Screen reader users will not be able to determine the relationships between cells in these tables.",
+        "Screen reader users will not be able to determine the relationships between cells in these tables, and will not be able to use keyboard shortcuts to navigate the information efficiently.",
       issue:
         "There are table headers that are not associated with their corresponding data cells. Examples include:\n- ",
       recommendation:
@@ -3310,6 +4631,7 @@ function dataPreferred() {
     },
     {
       bp: 733,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-visually-hidden-content-exposed-to-at",
       impact:
         "Screen reader and keyboard users will be able to access hidden content, such as form fields, text, or links.",
@@ -3327,6 +4649,7 @@ function dataPreferred() {
     },
     {
       bp: 733,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-dialog-focus-behind",
       impact:
         "Keyboard and/or screen reader users will have difficulty determining their position in the page. They could also have unintended access to controls behind the dialog.",
@@ -3342,6 +4665,7 @@ function dataPreferred() {
     },
     {
       bp: 794,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.3.2.2"],
       id: "response-focus-change-on-radio-button-input",
       impact:
         "Screen reader and keyboard users will be unable to select the option they want after focus or context updates occur.",
@@ -3357,6 +4681,7 @@ function dataPreferred() {
     },
     {
       bp: 794,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.3.2.2"],
       id: "response-focus-change-on-select-input",
       impact:
         "Screen reader and keyboard users will be unable to select the option they want after focus or context updates occur.",
@@ -3372,6 +4697,7 @@ function dataPreferred() {
     },
     {
       bp: 794,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.3.2.2"],
       id: "response-focus-change-on-input",
       impact:
         "Screen reader users and keyboard users will have difficulty reviewing the contents of these fields",
@@ -3387,6 +4713,7 @@ function dataPreferred() {
     },
     {
       bp: 796,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.3"],
       id: "response-focus-order-not-meaningful",
       impact:
         "Screen reader users and keyboard users will have difficulty efficiently navigating the site.",
@@ -3401,6 +4728,7 @@ function dataPreferred() {
     },
     {
       bp: 801,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.3.2.1"],
       id: "response-focus-is-shifted-on-focus",
       impact:
         "Screen reader users and keyboard users will lose their spot on the page and may be prevented from accessing the information they intended.",
@@ -3416,6 +4744,7 @@ function dataPreferred() {
     },
     {
       bp: 802,
+      en301549: ["4.2.1", "4.2.2", "9.1.3.1", "9.4.1.2"],
       id: "response-radio-buttons-not-grouped",
       impact:
         "Screen reader users will have difficulty understanding the relationship between these form controls.",
@@ -3431,6 +4760,7 @@ function dataPreferred() {
     },
     {
       bp: 807,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "10.2.1.1", "10.4.1.2"],
       id: "response-pdf-link-objr",
       impact:
         "Keyboard users will be prevented from accessing this link. Screen reader users will be unable to determine that it is a link.",
@@ -3444,6 +4774,7 @@ function dataPreferred() {
     },
     {
       bp: 808,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-css-images-missing-text-equivalent",
       impact:
         "Screen reader users will be unable to determine what these images represent.",
@@ -3459,6 +4790,7 @@ function dataPreferred() {
     },
     {
       bp: 809,
+      en301549: ["4.2.1", "9.1.3.2"],
       id: "response-reading-order-not-meaningful",
       impact: "Screen reader users will be unable to understand this content.",
       issue: "The following reading order is illogical:\n1. ",
@@ -3467,13 +4799,14 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Navigate through the content using the Down Arrow key to move element by element.\n3. Review the order in which the screen reader announces content.",
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press the Down Arrow key to read the content line by line.\n3. Compare the order of the JAWS announcement to the visual order of content.\nExpected result: JAWS announces the content in a logical order which follows the visual order.\nActual Result: JAWS announces, "[Text]" first, followed by "[Text]".',
+        '1. Enable JAWS.\n2. Press the Down Arrow key to read the content line by line.\n3. Compare the order of the JAWS announcement to the visual order of content.\nExpected result: JAWS announces the content in a logical order which follows the visual order.\nActual Result: JAWS announces, "[Output]" first, followed by "[Output]".',
       successCriteria: ["1.3.2"],
       title: "Reading order not meaningful",
       type: "web",
     },
     {
       bp: 886,
+      en301549: ["4.2.1", "4.2.2", "9.1.3.1", "9.4.1.2"],
       id: "response-dialog-lacks-boundaries",
       impact:
         "Screen reader users will be unable to determine where the dialog ends and begins. They will also have difficulty determining the purpose of the dialog.",
@@ -3491,6 +4824,7 @@ function dataPreferred() {
     },
     {
       bp: 897,
+      en301549: ["4.2.1", "4.2.2", "10.1.1.1"],
       id: "response-pdf-meaningful-image-without-alt",
       impact:
         "Screen reader users will be unable to determine what these images represent.",
@@ -3504,9 +4838,10 @@ function dataPreferred() {
     },
     {
       bp: 899,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-implicit-data-table",
       impact:
-        "Screen reader users will not be able to determine the relationships between cells in these tables.",
+        "Screen reader users will not be able to determine the relationships between cells in these tables, and will not be able to use keyboard shortcuts to navigate the information efficiently.",
       issue:
         "There are data tables that do not use table tags. Examples include:\n- ",
       recommendation:
@@ -3517,6 +4852,7 @@ function dataPreferred() {
     },
     {
       bp: 910,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-role-mapping",
       impact:
         "Screen readers users may have difficulty navigating and understanding this content.",
@@ -3530,6 +4866,7 @@ function dataPreferred() {
     },
     {
       bp: 914,
+      en301549: ["4.2.1", "10.3.1.2"],
       id: "response-pdf-inline-lang",
       impact:
         "Screen readers will use inappropriate pronunciation when announcing this text.",
@@ -3543,6 +4880,7 @@ function dataPreferred() {
     },
     {
       bp: 918,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "10.1.4.1"],
       id: "response-pdf-color-only-identification",
       impact:
         "Users with color blindness will have difficulty identifying the colors used to convey this information.",
@@ -3556,6 +4894,14 @@ function dataPreferred() {
     },
     {
       bp: 921,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.10",
+        "10.1.3.1",
+        "10.3.3.2",
+        "10.4.1.2",
+      ],
       id: "response-pdf-missing-constraint",
       impact:
         "Screen reader users will have difficulty determining which constraints correspond with which field.",
@@ -3569,6 +4915,7 @@ function dataPreferred() {
     },
     {
       bp: 922,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-missing-group",
       impact:
         "Screen reader users and users with cognitive disabilities may be unable to determine what these controls are for. Speech input users will have difficulty navigating to them.",
@@ -3582,6 +4929,7 @@ function dataPreferred() {
     },
     {
       bp: 923,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "10.2.4.3"],
       id: "response-pdf-focus-order-not-meaningful",
       impact:
         "Screen reader users and keyboard users will have difficulty efficiently navigating the form.",
@@ -3594,6 +4942,7 @@ function dataPreferred() {
     },
     {
       bp: 924,
+      en301549: ["4.2.1", "4.2.2", "10.1.3.1", "10.4.1.2"],
       id: "response-pdf-radio-group",
       impact:
         "Screen reader users will have difficulty understanding the relationship between these form controls.",
@@ -3607,6 +4956,7 @@ function dataPreferred() {
     },
     {
       bp: 926,
+      en301549: ["4.2.1", "4.2.2", "10.1.3.1", "10.4.1.2"],
       id: "response-pdf-missing-label",
       impact:
         "Screen reader users and users with cognitive disabilities may be unable to determine what these controls are for. Speech input users will have difficulty navigating to them.",
@@ -3620,6 +4970,7 @@ function dataPreferred() {
     },
     {
       bp: 930,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-toc-structure",
       impact:
         "Screen reader users will have difficulty efficiently navigating the document.",
@@ -3632,6 +4983,7 @@ function dataPreferred() {
     },
     {
       bp: 931,
+      en301549: ["4.2.1", "4.2.2", "10.1.1.1"],
       id: "response-pdf-font-attributes",
       impact:
         "Screen reader users will be unaware of the presence of this styling.",
@@ -3645,6 +4997,7 @@ function dataPreferred() {
     },
     {
       bp: 941,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-table-headers-empty",
       impact:
         "Screen reader users will be unable to understand the purpose of their associated columns or rows.",
@@ -3659,6 +5012,7 @@ function dataPreferred() {
     },
     {
       bp: 954,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "9.2.1.1"],
       id: "response-controls-screen-reader-keyboard",
       impact:
         "Screen reader users will be prevented from accessing the functionality provided by these controls.",
@@ -3675,6 +5029,7 @@ function dataPreferred() {
     },
     {
       bp: 963,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-captcha-no-visual-challenge",
       impact:
         "Deaf and hard of hearing users will be prevented from completing the CAPTCHA.",
@@ -3689,6 +5044,7 @@ function dataPreferred() {
     },
     {
       bp: 963,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-captcha-no-audio-challenge",
       impact:
         "Users who are blind or have low vision will be prevented from completing the CAPTCHA.",
@@ -3703,8 +5059,10 @@ function dataPreferred() {
     },
     {
       bp: 967,
+      en301549: ["4.2.1", "4.2.2", "9.4.1.2"],
       id: "response-form-and-link-improperly-nested",
-      impact: "Assistive technologies may be unable to parse this content.",
+      impact:
+        "Assistive technologies may be unable to parse this content, so users may not be able to perceive the control(s) correctly, or may not be able to operate them.",
       issue:
         "There are link and form elements that are improperly nested within one another. Examples include:\n- ",
       recommendation:
@@ -3717,6 +5075,7 @@ function dataPreferred() {
     },
     {
       bp: 971,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-live-region-needed",
       impact:
         "Screen reader users will be unaware of important updates to this content when they occur.",
@@ -3734,6 +5093,7 @@ function dataPreferred() {
     },
     {
       bp: 1031,
+      en301549: [],
       id: "response-pdf-reflow",
       impact:
         "Users with low vision who need to resize text will be prevented from accessing this content.",
@@ -3746,6 +5106,7 @@ function dataPreferred() {
     },
     {
       bp: 1143,
+      en301549: ["4.2.1", "4.2.2", "4.2.4", "4.2.5", "9.1.2.1"],
       id: "response-transcript-missing-for-audio",
       impact:
         "Users who are deaf or hard of hearing will not have access to this content.",
@@ -3761,6 +5122,7 @@ function dataPreferred() {
     },
     {
       bp: 1144,
+      en301549: ["4.2.1", "4.2.2", "4.2.4", "4.2.5", "9.1.2.1"],
       id: "response-alternative-missing-for-video-only",
       impact:
         "Users who are blind or have low vision will not have access to this content.",
@@ -3776,6 +5138,7 @@ function dataPreferred() {
     },
     {
       bp: 1233,
+      en301549: ["4.2.2", "4.2.3", "9.4.1.13"],
       id: "response-images-of-text",
       impact:
         "Users with low vision and users with cognitive disabilities will be prevented from modifying or enlarging this text.",
@@ -3791,6 +5154,7 @@ function dataPreferred() {
     },
     {
       bp: 1237,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "4.2.4", "4.2.5", "9.1.3.3"],
       id: "response-sensory-dependent-instructions",
       impact:
         "Users who are blind, have low vision, are deaf, or are hard of hearing may have difficulty following these instructions.",
@@ -3806,6 +5170,7 @@ function dataPreferred() {
     },
     {
       bp: 1238,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-web-text-level-semantics",
       impact:
         "Screen reader users will not be aware of the presence of this formatting.",
@@ -3821,6 +5186,18 @@ function dataPreferred() {
     },
     {
       bp: 1243,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.3",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.8",
+        "4.2.9",
+        "4.2.10",
+        "9.2.1.2",
+      ],
       id: "response-keyboard-trap",
       impact:
         "Keyboard users will have difficulty accessing controls of the page beyond this point.",
@@ -3836,6 +5213,18 @@ function dataPreferred() {
     },
     {
       bp: 1244,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.3",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.8",
+        "4.2.9",
+        "4.2.10",
+        "9.2.2.2",
+      ],
       id: "response-dynamic-auto-updating-without-pause-stop-hide",
       impact:
         "Users with cognitive disabilities may be prevented from reading important content before it appears, or it may be too distracting for them to remain on the page. Users with vestibular disorders or migraine may experience symptoms caused by this movement.",
@@ -3851,6 +5240,7 @@ function dataPreferred() {
     },
     {
       bp: 1247,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.5"],
       id: "response-one-way-page-location",
       impact:
         "Users with cognitive disabilities may be prevented from locating these pages.",
@@ -3866,6 +5256,7 @@ function dataPreferred() {
     },
     {
       bp: 1248,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.6"],
       id: "response-button-bad-name",
       impact:
         "Screen reader users will be unable to determine the purpose of these buttons.",
@@ -3876,13 +5267,14 @@ function dataPreferred() {
       stepsToReproduce:
         '1. Locate the button.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".',
       jawsFunctionalSteps:
-        '1. Enable JAWS.\n2. Press the Tab key to move focus to the button.\nExpected result: JAWS announces, "[Name], button".\nActual result: "JAWS announces, "[Name], button" with no indication of [Missing Context].',
+        '1. Enable JAWS.\n2. Press the Tab key to move focus to the button.\nExpected result: JAWS announces, "[Output], button".\nActual result: "JAWS announces, "[Output], button" which does not include identifying information.',
       successCriteria: ["2.4.6"],
       title: "Button with non-descriptive name",
       type: "web",
     },
     {
       bp: 1249,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.7"],
       id: "response-visual-keyboard-focus-missing",
       impact:
         "Keyboard users will have difficulty determining their position on the page.",
@@ -3898,6 +5290,7 @@ function dataPreferred() {
     },
     {
       bp: 1253,
+      en301549: ["4.2.2", "4.2.10", "9.3.2.4"],
       id: "response-inconsistent-identification-for-same-functionality",
       impact:
         "Screen reader users and users with cognitive disabilities will have difficulty locating and identifying controls and content.",
@@ -3913,6 +5306,7 @@ function dataPreferred() {
     },
     {
       bp: 1254,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "9.3.3.2"],
       id: "response-fields-without-visual-labels-or-instructions",
       impact:
         "Users with cognitive disabilities may be unable to determine the purpose of these fields.",
@@ -3928,6 +5322,7 @@ function dataPreferred() {
     },
     {
       bp: 1254,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "9.3.3.2"],
       id: "response-unexplained-asterisks",
       impact:
         "Users with cognitive disabilities may be unable to understand what asterisks are meant to represent.",
@@ -3943,6 +5338,7 @@ function dataPreferred() {
     },
     {
       bp: 1255,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "9.3.3.3"],
       id: "response-form-errors-without-suggestions",
       impact:
         "Users with cognitive disabilities and screen reader users will have difficulty determining how to resolve the error.",
@@ -3958,6 +5354,7 @@ function dataPreferred() {
     },
     {
       bp: 1256,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "4.2.11", "9.3.3.4"],
       id: "response-form-errors-without-prevention-financial",
       impact:
         "Users with disabilities may submit the form with errors by mistake.",
@@ -3973,6 +5370,7 @@ function dataPreferred() {
     },
     {
       bp: 1256,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "4.2.11", "9.3.3.4"],
       id: "response-form-errors-without-prevention-legal",
       impact:
         "Users with disabilities may submit the form with errors by mistake.",
@@ -3988,6 +5386,7 @@ function dataPreferred() {
     },
     {
       bp: 1256,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "4.2.11", "9.3.3.4"],
       id: "response-form-errors-without-prevention-user-data",
       impact:
         "Users with disabilities may submit the form with errors by mistake.",
@@ -4003,6 +5402,7 @@ function dataPreferred() {
     },
     {
       bp: 1256,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "4.2.11", "9.3.3.4"],
       id: "response-form-errors-without-prevention-test-responses",
       impact:
         "Users with disabilities may submit the form with incomplete or empty responses by mistake",
@@ -4018,6 +5418,7 @@ function dataPreferred() {
     },
     {
       bp: 1261,
+      en301549: ["4.2.1", "4.2.2", "4.2.4", "4.2.5", "10.1.2.1"],
       id: "response-pdf-transcript-missing-for-audio",
       impact:
         "Users who are deaf or hard of hearing will not have access to this content.",
@@ -4031,6 +5432,7 @@ function dataPreferred() {
     },
     {
       bp: 1262,
+      en301549: ["4.2.1", "4.2.2", "4.2.4", "4.2.5", "10.1.2.1"],
       id: "response-pdf-alternative-missing-for-video-only",
       impact:
         "Users who are blind or have low vision will not have access to this content.",
@@ -4044,6 +5446,7 @@ function dataPreferred() {
     },
     {
       bp: 1263,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "4.2.4", "4.2.5", "10.1.3.3"],
       id: "response-pdf-sensory-dependent-instructions",
       impact:
         "Users who are blind, have low vision, are deaf, or are hard of hearing may have difficulty following these instructions.",
@@ -4057,6 +5460,7 @@ function dataPreferred() {
     },
     {
       bp: 1264,
+      en301549: ["4.2.1", "4.2.5", "10.1.4.2"],
       id: "response-pdf-audio-plays-automatically",
       impact:
         "Screen reader users may have difficulty hearing speech output over autoplaying audio. Users with cognitive disabilities may be distracted by the audio.",
@@ -4070,6 +5474,7 @@ function dataPreferred() {
     },
     {
       bp: 1265,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "10.2.1.2"],
       id: "response-pdf-keyboard-trap",
       impact:
         "Keyboard users will have difficulty accessing controls of the page beyond this point.",
@@ -4083,6 +5488,7 @@ function dataPreferred() {
     },
     {
       bp: 1268,
+      en301549: [],
       id: "response-pdf-blinking-or-flashing",
       impact:
         "Users with photosensitive epilepsy may experience a seizure from excessive flashing. Users with cognitive disabilities may be distracted by the movement.",
@@ -4096,6 +5502,7 @@ function dataPreferred() {
     },
     {
       bp: 1270,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "10.2.4.2"],
       id: "response-pdf-title",
       impact:
         "Screen reader users and some users with cognitive disabilities will have difficulty determining the purpose of the document.",
@@ -4108,6 +5515,7 @@ function dataPreferred() {
     },
     {
       bp: 1270,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "10.2.4.2"],
       id: "response-pdf-title-not-shown",
       impact:
         "Screen reader users and users with cognitive disabilities will have difficulty determining the purpose of the document.",
@@ -4121,6 +5529,7 @@ function dataPreferred() {
     },
     {
       bp: 1272,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "10.3.2.2"],
       id: "response-pdf-focus-change-on-input",
       impact:
         "Screen reader and keyboard users will be unable to enter or select the option they want after focus or context updates occur.",
@@ -4134,6 +5543,7 @@ function dataPreferred() {
     },
     {
       bp: 1274,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "10.3.3.2"],
       id: "response-pdf-labels-instructions",
       impact:
         "Users with cognitive disabilities may be unable to determine the purpose of these fields.",
@@ -4147,6 +5557,7 @@ function dataPreferred() {
     },
     {
       bp: 1275,
+      en301549: ["4.2.2", "4.2.3", "10.1.4.5"],
       id: "response-pdf-images-of-text",
       impact:
         "Users with low vision and users with cognitive disabilities will be prevented from modifying or enlarging this text.",
@@ -4160,6 +5571,7 @@ function dataPreferred() {
     },
     {
       bp: 1277,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "10.2.4.6"],
       id: "response-pdf-headings-labels",
       impact:
         "Screen reader users and users with cognitive disabilities will have difficulty determining the purpose of these sections.",
@@ -4173,6 +5585,7 @@ function dataPreferred() {
     },
     {
       bp: 1281,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "10.3.3.3"],
       id: "response-pdf-errors-suggestions",
       impact:
         "Users with cognitive disabilities and screen reader users will have difficulty determining how to resolve the error.",
@@ -4186,6 +5599,7 @@ function dataPreferred() {
     },
     {
       bp: 1282,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "4.2.11", "10.3.3.4"],
       id: "response-pdf-form-errors-without-prevention-financial",
       impact:
         "Users with disabilities may submit the form with errors by mistake.",
@@ -4199,6 +5613,7 @@ function dataPreferred() {
     },
     {
       bp: 1282,
+      en301549: ["4.2.1", "4.2.2", "4.2.10", "4.2.11", "10.3.3.4"],
       id: "response-pdf-form-errors-without-prevention-legal",
       impact:
         "Users with disabilities may submit the form with errors by mistake.",
@@ -4212,6 +5627,15 @@ function dataPreferred() {
     },
     {
       bp: 1288,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.10",
+        "10.2.2.1",
+      ],
       id: "response-pdf-timing",
       impact:
         "Users who require additional time to fill out forms will lose the information they've entered when the timeout occurs.",
@@ -4225,6 +5649,15 @@ function dataPreferred() {
     },
     {
       bp: 1289,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.10",
+        "10.2.2.2",
+      ],
       id: "response-pdf-dynamic-auto-updating-without-pause-stop-hide",
       impact:
         "Users with cognitive disabilities may be prevented from reading important content before it appears, or it may be too distracting for them to remain on the page. Users with vestibular disorders or migraine may experience symptoms caused by this movement.",
@@ -4238,6 +5671,7 @@ function dataPreferred() {
     },
     {
       bp: 1301,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.4"],
       id: "response-links-without-meaningful-text",
       impact:
         "Screen reader users will be unable to determine the purpose of these links. Speech input users will have difficulty activating them.",
@@ -4254,6 +5688,7 @@ function dataPreferred() {
     },
     {
       bp: 1301,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.4"],
       id: "response-links-with-non-descriptive-names",
       impact:
         "Screen reader users will have difficulty determining where these links go.",
@@ -4271,6 +5706,7 @@ function dataPreferred() {
     },
     {
       bp: 1302,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "10.2.4.4"],
       id: "response-pdf-links-with-non-descriptive-names",
       impact:
         "Screen reader users will have difficulty determining where these links go.",
@@ -4284,6 +5720,18 @@ function dataPreferred() {
     },
     {
       bp: 1342,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.3",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.8",
+        "4.2.9",
+        "4.2.10",
+        "9.2.3.1",
+      ],
       id: "response-blinking-or-flashing",
       impact:
         "Users with photosensitive epilepsy may experience a seizure from excessive flashing. Users with cognitive disabilities may be distracted by the movement.",
@@ -4299,6 +5747,7 @@ function dataPreferred() {
     },
     {
       bp: 1352,
+      en301549: ["4.2.1", "9.4.1.1"],
       id: "response-duplicated-attribute",
       impact: "Assistive technologies may be unable to parse this content.",
       issue:
@@ -4313,6 +5762,7 @@ function dataPreferred() {
     },
     {
       bp: 1352,
+      en301549: ["4.2.1", "9.4.1.1"],
       id: "response-duplicated-id",
       impact: "Assistive technologies may be unable to parse this content.",
       issue:
@@ -4327,8 +5777,10 @@ function dataPreferred() {
     },
     {
       bp: 1352,
+      en301549: ["4.2.1", "9.4.1.1"],
       id: "response-improper-element-nesting",
-      impact: "Assistive technologies may be unable to parse this content.",
+      impact:
+        "Assistive technologies may be unable to parse this content, so users may not be able to perceive the feature(s) or control(s) correctly, or may not be able to operate them.",
       issue:
         "There are elements nested in a way that is not permitted by the HTML specification. Examples include:\n- ",
       recommendation:
@@ -4341,8 +5793,10 @@ function dataPreferred() {
     },
     {
       bp: 1352,
+      en301549: ["4.2.1", "9.4.1.1"],
       id: "response-incomplete-start-end-tag",
-      impact: "Assistive technologies may be unable to parse this content.",
+      impact:
+        "Assistive technologies may be unable to parse this content, so users may not be able to perceive the feature(s) or control(s) correctly, or may not be able to operate them.",
       issue:
         "There are elements with incomplete start or end tags. Examples include:\n- ",
       recommendation:
@@ -4355,6 +5809,7 @@ function dataPreferred() {
     },
     {
       bp: 1471,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "4.2.10", "9.3.3.1"],
       id: "response-form-errors-without-clear-indication",
       impact:
         "Screen reader users and users with cognitive disabilities will have difficulty determining that these messages are errors instead of general instructions on how to fill the fields. They will also have difficulty determining which error corresponds to which field.",
@@ -4370,6 +5825,7 @@ function dataPreferred() {
     },
     {
       bp: 1564,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "11.2.4.3"],
       id: "response-ios-dialog-focus",
       impact:
         "Screen reader users will be unable to determine that these dialogs have appeared unless they review the entire screen. Keyboard users will have difficulty navigating into the dialog.",
@@ -4385,6 +5841,7 @@ function dataPreferred() {
     },
     {
       bp: 1566,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "11.5.2.13", "11.2.4.7"],
       id: "response-ios-keyboard-focus-missing",
       impact:
         "Keyboard users will have difficulty determining their position on the screen.",
@@ -4400,6 +5857,7 @@ function dataPreferred() {
     },
     {
       bp: 1577,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "11.1.4.1"],
       id: "response-ios-color-only-identification",
       impact:
         "Users with color blindness will have difficulty identifying the colors used to convey this information.",
@@ -4415,6 +5873,7 @@ function dataPreferred() {
     },
     {
       bp: 1577,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "11.1.4.1"],
       id: "response-ios-color-only-links",
       impact:
         "Users with color blindness will have difficulty distinguishing which text is a link.",
@@ -4430,6 +5889,7 @@ function dataPreferred() {
     },
     {
       bp: 1581,
+      en301549: ["4.2.2", "4.2.3", "11.1.4.3"],
       id: "response-ios-text-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty reading this content.",
@@ -4447,6 +5907,14 @@ function dataPreferred() {
     },
     {
       bp: 1584,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.3.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-ios-elements-no-name",
       impact:
         "Screen reader users will not be able to determine the purpose of these controls.",
@@ -4457,13 +5925,14 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the control is focused.\n4. Notice that VoiceOver does not announce any name for the control.",
       dxCustomSTR:
-        "1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the control is focused.\n4. Notice that VoiceOver does not announce any name for the control.\nExpected result: VoiceOver announces, \"[Output]\".\nActual result: VoiceOver announces, \"[Output]\".",
+        '1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the control is focused.\n4. Notice that VoiceOver does not announce any name for the control.\nExpected result: VoiceOver announces, "[Output]".\nActual result: VoiceOver announces, "[Output]".',
       successCriteria: ["1.3.1", "4.1.2"],
       title: "Elements without accessible names",
       type: "ios",
     },
     {
       bp: 1585,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "4.2.10", "11.3.3.1.1"],
       id: "response-ios-top-of-form-errors",
       impact:
         "Screen reader users will be unable to determine that these errors have appeared unless they review the entire screen.",
@@ -4479,6 +5948,7 @@ function dataPreferred() {
     },
     {
       bp: 1585,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "4.2.10", "11.3.3.1.1"],
       id: "response-ios-inline-errors",
       impact:
         "Screen reader users will be unable to determine that these errors have appeared unless they review the entire screen.",
@@ -4494,6 +5964,15 @@ function dataPreferred() {
     },
     {
       bp: 1598,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.5.2.8",
+        "11.1.3.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-ios-unassociated-label",
       impact:
         "Screen reader users will have difficulty determining the purpose of these controls. Speech input users will have difficulty navigating to them.",
@@ -4509,8 +5988,10 @@ function dataPreferred() {
     },
     {
       bp: 1626,
+      en301549: ["4.2.1", "4.2.2", "9.4.1.2"],
       id: "response-aria-invalid",
-      impact: "Assistive technologies may be unable to parse this content.",
+      impact:
+        "Assistive technologies may be unable to parse this content, so users may not be able to perceive the feature(s) or control(s) correctly, or may not be able to operate them.",
       issue:
         "There are elements with invalid ARIA attributes or values. Examples include:\n- ",
       recommendation:
@@ -4523,6 +6004,7 @@ function dataPreferred() {
     },
     {
       bp: 1646,
+      en301549: ["4.2.1", "4.2.2", "11.4.1.2.1"],
       id: "response-ios-sr-focus",
       impact:
         "Screen reader users will be prevented from accessing this content.",
@@ -4538,6 +6020,7 @@ function dataPreferred() {
     },
     {
       bp: 1775,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-layout-table-marked-for-presentation",
       impact:
         "Screen readers will treat this content as a data table, causing confusion about its layout and impeding navigation.",
@@ -4553,6 +6036,7 @@ function dataPreferred() {
     },
     {
       bp: 1869,
+      en301549: ["4.2.1", "4.2.2", "10.4.1.2"],
       id: "response-pdf-document-security",
       impact:
         "Screen reader users will be prevented from accessing this document.",
@@ -4566,6 +6050,7 @@ function dataPreferred() {
     },
     {
       bp: 1871,
+      en301549: ["4.2.1", "4.2.2", "9.4.1.2"],
       id: "response-aria-properties-focusable-aria-hidden",
       impact:
         "Keyboard users will be able to navigate to this element even if it is off screen. Screen reader users will be able to focus this element if they press Tab, but they will be unable to determine its purpose.",
@@ -4581,6 +6066,7 @@ function dataPreferred() {
     },
     {
       bp: 1893,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.1.3.1", "9.2.4.2"],
       id: "response-no-dialog-title",
       impact:
         "Screen reader users will have difficulty determining the purpose of these dialogs.",
@@ -4596,6 +6082,14 @@ function dataPreferred() {
     },
     {
       bp: 1907,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.1.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-ios-decorative-with-alt",
       impact:
         "Screen reader users will receive unnecessary and potentially confusing information.",
@@ -4606,30 +6100,46 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces the presence and contents of the image unnecessarily.",
       dxCustomSTR:
-        "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right to navigate forward.\n4. Notice that VoiceOver announces the presence and contents of the image unnecessarily.\nExpected result: VoiceOver focus skips over this decorative content. It is not announced.\nActual result: VoiceOver focus moves to the image. VoiceOver announces, \"[Output]\".",
+        '1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right to navigate forward.\n4. Notice that VoiceOver announces the presence and contents of the image unnecessarily.\nExpected result: VoiceOver focus skips over this decorative content. It is not announced.\nActual result: VoiceOver focus moves to the image. VoiceOver announces, "[Output]".',
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Decorative images with textual equivalents",
       type: "ios",
     },
     {
       bp: 1907,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.1.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-ios-duplicated-elements",
       impact:
         "Screen reader users will receive redundant information and will be prevented from navigating efficiently.",
       issue:
         "There are non-meaningful, duplicated elements exposed to screen readers. Examples include:\n- ",
       recommendation:
-        'Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies.  Mark non-meaningful, duplicated content as decorative by removing any accessibilityLabel property and setting its isAccessibilityElement property to NO.',
+        "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies.  Mark non-meaningful, duplicated content as decorative by removing any accessibilityLabel property and setting its isAccessibilityElement property to NO.",
       stepsToReproduce:
         "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right to navigate through the contents of the screen.\n4. Notice that VoiceOver focuses on the content twice.",
       dxCustomSTR:
-        "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right to navigate forward.\n4. Notice that VoiceOver focuses on the content twice.\nExpected result: VoiceOver announces, \"[Output]\" only once.\nActual result: VoiceOver announces the [Component name] twice.",
+        '1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right to navigate forward.\n4. Notice that VoiceOver focuses on the content twice.\nExpected result: VoiceOver announces, "[Output]" only once.\nActual result: VoiceOver announces the [Output] twice.',
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Duplicated elements",
       type: "ios",
     },
     {
       bp: 1907,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.1.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-ios-hidden-content",
       impact:
         "Screen reader and keyboard users will be able to access hidden content, such as form fields, text, or links.",
@@ -4645,6 +6155,14 @@ function dataPreferred() {
     },
     {
       bp: 1907,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.1.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-ios-content-focusable-behind-dialog",
       impact:
         "Keyboard and/or screen reader users will have difficulty determining their position in the screen. They could also have unintended access to controls behind the dialog.",
@@ -4660,6 +6178,7 @@ function dataPreferred() {
     },
     {
       bp: 1908,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.5.2.5", "11.1.1.1.1"],
       id: "response-ios-decorative-with-bad-alt",
       impact:
         "Screen reader users will not receive an accurate impression of the contents of these images.",
@@ -4670,13 +6189,14 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces an improper name for the image.",
       dxCustomSTR:
-        "1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces an improper name for the image.\nExpected result: VoiceOver announces, \"[Expected text], Image\".\nActual result: VoiceOver announces, \"[Actual text], Image\".",
+        '1. Locate the image.\n2. Turn on VoiceOver.\n3. Swipe right until the image is focused.\n4. Notice that VoiceOver announces an improper name for the image.\nExpected result: VoiceOver announces, "[Expected text], Image".\nActual result: VoiceOver announces, "[Actual text], Image".',
       successCriteria: ["1.1.1"],
       title: "Meaningful images with improper equivalents",
       type: "ios",
     },
     {
       bp: 1909,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.5.2.5", "11.1.1.1.1"],
       id: "response-ios-meaningful-without-alt",
       impact:
         "Screen reader users will be unable to determine what these images represent.",
@@ -4692,6 +6212,7 @@ function dataPreferred() {
     },
     {
       bp: 1911,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.5.2.5", "11.4.1.2.1"],
       id: "response-ios-role-state",
       impact:
         "Screen reader users will have difficulty understanding the purpose and current state of these controls.",
@@ -4702,13 +6223,14 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right until the content is focused.\n4. Notice that VoiceOver does not announce the appropriate role or state for the content.",
       dxCustomSTR:
-        "1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right until the content is focused.\n4. Notice that VoiceOver does not announce the appropriate role or state for the content.\nExpected result: VoiceOver announces, \"[Output]\".\nActual result: VoiceOver announces, \"[Output]\".",
+        '1. Locate the content.\n2. Turn on VoiceOver.\n3. Swipe right until the content is focused.\n4. Notice that VoiceOver does not announce the appropriate role or state for the content.\nExpected result: VoiceOver announces, "[Output]".\nActual result: VoiceOver announces, "[Output]".',
       successCriteria: ["4.1.2"],
       title: "Elements with improper roles and states",
       type: "ios",
     },
     {
       bp: 1916,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.2.1.1.1"],
       id: "response-ios-no-keyboard-interactivity",
       impact:
         "Keyboard users will be prevented from accessing the functionality provided by these controls.",
@@ -4724,6 +6246,7 @@ function dataPreferred() {
     },
     {
       bp: 1922,
+      en301549: ["4.2.1", "11.1.3.2.1"],
       id: "response-ios-reading-order",
       impact: "Screen reader users will be unable to understand this content.",
       issue: "The following reading order is illogical:\n1.",
@@ -4737,6 +6260,7 @@ function dataPreferred() {
     },
     {
       bp: 1928,
+      en301549: ["4.2.2", "11.1.4.4.1"],
       id: "response-ios-text-resizing",
       impact:
         "Users with low vision who need to resize text will be prevented from accessing this content.",
@@ -4754,6 +6278,7 @@ function dataPreferred() {
     },
     {
       bp: 1928,
+      en301549: ["4.2.2", "11.1.4.4.1"],
       id: "response-ios-text-resizing-not-responding",
       impact:
         "Users with low vision who need to resize text will be prevented from accessing this content.",
@@ -4771,6 +6296,7 @@ function dataPreferred() {
     },
     {
       bp: 1943,
+      en301549: ["4.2.2", "4.2.3", "11.1.4.3"],
       id: "response-android-text-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty reading this content.",
@@ -4788,6 +6314,7 @@ function dataPreferred() {
     },
     {
       bp: 1952,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "4.2.10", "11.3.3.1.1"],
       id: "response-android-top-of-form-error",
       impact:
         "Screen reader users will be unable to determine that these errors have appeared unless they review the entire screen.",
@@ -4803,6 +6330,7 @@ function dataPreferred() {
     },
     {
       bp: 1952,
+      en301549: ["4.2.1", "4.2.2", "4.2.3", "4.2.10", "11.3.3.1.1"],
       id: "response-android-inline-error",
       impact:
         "Screen reader users will be unable to determine that these errors have appeared unless they review the entire screen.",
@@ -4818,6 +6346,7 @@ function dataPreferred() {
     },
     {
       bp: 1960,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "11.2.4.3"],
       id: "response-android-dialog-focus",
       impact:
         "Screen reader users will be unable to determine that these dialogs have appeared unless they review the entire screen. Keyboard users will have difficulty navigating into the dialog.",
@@ -4833,6 +6362,7 @@ function dataPreferred() {
     },
     {
       bp: 1962,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.2.1.1.1"],
       id: "response-android-not-keyboard-focusable",
       impact: "Keyboard users will be prevented from accessing these controls.",
       issue:
@@ -4847,6 +6377,14 @@ function dataPreferred() {
     },
     {
       bp: 1963,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.3.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-android-control-no-name",
       impact:
         "Screen reader users will not be able to determine the purpose of these controls.",
@@ -4857,13 +6395,22 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the control is focused.\n4. Notice that TalkBack does not announce any name for the control.",
       dxCustomSTR:
-        "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the control is focused.\n4. Notice that TalkBack does not announce any name for the control.\nExpected result: TalkBack announces, \"[Output]\".\nActual result: TalkBack announces, \"[Output]\".",
+        '1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the control is focused.\n4. Notice that TalkBack does not announce any name for the control.\nExpected result: TalkBack announces, "[Output]".\nActual result: TalkBack announces, "[Output]".',
       successCriteria: ["1.3.1", "4.1.2"],
       title: "Controls with no name",
       type: "android",
     },
     {
       bp: 1968,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.5.2.8",
+        "11.1.3.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-android-unassociated-label",
       impact:
         "Screen reader users will have difficulty determining the purpose of these controls. Speech input users will have difficulty navigating to them.",
@@ -4873,12 +6420,15 @@ function dataPreferred() {
         "Provide valid labels for all form elements. Add an android:labelFor attribute to the label, then set it to the ID of the corresponding form field.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the form control is focused.\n4. Notice that TalkBack does not announce the visual label for the control.",
+      dxCustomSTR:
+        '1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the form control is focused.\n4. Notice that TalkBack does not announce the visual label for the control.\nExpected result: TalkBack announces, "[Output]".\nActual result: TalkBack announces, "[Output]".',
       successCriteria: ["1.3.1", "4.1.2"],
       title: "Unassociated label",
       type: "android",
     },
     {
       bp: 1970,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.5.2.5", "11.4.1.2.1"],
       id: "response-android-sr-focus",
       impact:
         "Screen reader users will be prevented from accessing this content.",
@@ -4888,12 +6438,15 @@ function dataPreferred() {
         'Ensure all controls and non-decorative content support accessibility. Set the android:importantForAccessibility attribute of meaningful content to "yes". If it is non-text content, also set the element\'s android:contentDescription attribute to a meaningful equivalent.',
       stepsToReproduce:
         "1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right through the content on the screen.\n4. Notice that TalkBack does not focus the content.",
+      dxCustomSTR:
+        '1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right through the content on the screen.\n4. Notice that TalkBack does not focus the content.\nExpected result: TalkBack announces, "[Output]".\nActual result: TalkBack announces, "[Output]".',
       successCriteria: ["1.3.1", "4.1.2"],
       title: "Content that cannot be focused with TalkBack",
       type: "android",
     },
     {
       bp: 1973,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.5.2.5", "11.4.1.2.1"],
       id: "response-android-role-state",
       impact:
         "Screen reader users will have difficulty understanding the purpose and current state of these controls.",
@@ -4904,13 +6457,14 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the control.\n4. Notice that TalkBack does not announce the appropriate role or state for the control.",
       dxCustomSTR:
-        "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the control.\n4. Notice that TalkBack does not announce the appropriate role or state for the control.\nExpected result: TalkBack announces, \"[Output]\".\nActual result: TalkBack announces, \"[Output]\".",
+        '1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the control.\n4. Notice that TalkBack does not announce the appropriate role or state for the control.\nExpected result: TalkBack announces, "[Output]".\nActual result: TalkBack announces, "[Output]".',
       successCriteria: ["4.1.2"],
       title: "Controls with improper role and state",
       type: "android",
     },
     {
       bp: 1975,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.5.2.5", "11.1.1.1.1"],
       id: "response-android-meaningful-with-bad-alt",
       impact:
         "Screen reader users will not receive an accurate impression of the contents of these images.",
@@ -4921,13 +6475,14 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce an appropriate name for the image.",
       dxCustomSTR:
-        "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce an appropriate name for the image.\nExpected result: TalkBack announces, \"[Expected text], Image\".\nActual result: TalkBack announces, \"[Actual text], Image\".",
+        '1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce an appropriate name for the image.\nExpected result: TalkBack announces, "[Output], Image".\nActual result: TalkBack announces, "[Output], Image".',
       successCriteria: ["1.1.1"],
       title: "Meaningful images with improper textual equivalents",
       type: "android",
     },
     {
       bp: 1976,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.5.2.5", "11.1.1.1.1"],
       id: "response-android-meaningful-without-alt",
       impact:
         "Screen reader users will be unable to determine what these images represent.",
@@ -4938,13 +6493,21 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce any name for the image.",
       dxCustomSTR:
-        "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce any name for the image.",
+        '1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack does not announce any name for the image.\nExpected result: TalkBack announces, "[Output]".\nActual result: TalkBack announces, "[Output]".',
       successCriteria: ["1.1.1"],
       title: "Meaningful images without textual equivalents",
       type: "android",
     },
     {
       bp: 1978,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.1.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-android-decorative-with-alt",
       impact:
         "Screen reader users will receive unnecessary and potentially confusing information.",
@@ -4955,13 +6518,21 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right until TalkBack focuses the image.\n4. Notice that TalkBack announces the presence of the image unnecessarily.",
       dxCustomSTR:
-        "1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right to navigate forward.\n4. Notice that TalkBack announces the presence of the image unnecessarily.\nExpected result: TalkBack focus skips over this decorative content. It is not announced.\nActual result: TalkBack focus moves to the image. TalkBack announces, \"[Output]\".",
+        '1. Locate the image.\n2. Turn on TalkBack.\n3. Swipe right to navigate forward.\n4. Notice that TalkBack announces the presence of the image unnecessarily.\nExpected result: TalkBack focus skips over this decorative content. It is not announced.\nActual result: TalkBack focus moves to the image. TalkBack announces, "[Output]".',
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Decorative image with textual equivalent",
       type: "android",
     },
     {
       bp: 1978,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.1.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-android-duplicated-elements",
       impact:
         "Screen reader users will receive redundant information and will be prevented from navigating efficiently.",
@@ -4972,13 +6543,21 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right to navigate through the contents of the screen.\n4. Notice that TalkBack focuses on the content twice.",
       dxCustomSTR:
-        "1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right to navigate forward.\n4. Notice that TalkBack focuses on the content twice.\nExpected result: TalkBack announces, \"[Output]\" only once.\nActual result: TalkBack announces the [Component name] twice.",
+        '1. Locate the content.\n2. Turn on TalkBack.\n3. Swipe right to navigate forward.\n4. Notice that TalkBack focuses on the content twice.\nExpected result: TalkBack announces, "[Output]" only once.\nActual result: TalkBack announces [Output] twice.',
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Duplicated elements",
       type: "android",
     },
     {
       bp: 1978,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.1.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-android-hidden-content",
       impact:
         "Screen reader and keyboard users will be able to access hidden content, such as form fields, text, or links.",
@@ -4988,12 +6567,22 @@ function dataPreferred() {
         'Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. Set the android:importantForAccessibility attribute of this content to "no".',
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right through the contents of the screen.\n3. Notice that TalkBack focuses on hidden content that is not meant to be exposed to users.",
+      dxCustomSTR:
+        '1. Turn on TalkBack.\n2. Swipe right through the contents of the screen.\n3. Notice that TalkBack focuses on hidden content that is not meant to be exposed to users.\nExpected result: TalkBack only announces visible content. It does not announce visually hidden content.\nActual result: TalkBack announces, "[Output]", even though this content is meant to be hidden from all users.',
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Hidden content exposed to ATs",
       type: "android",
     },
     {
       bp: 1978,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "11.5.2.5",
+        "11.1.1.1.1",
+        "11.4.1.2.1",
+      ],
       id: "response-android-content-behind-dialog",
       impact:
         "Keyboard and/or screen reader users will have difficulty determining their position in the screen. They could also have unintended access to controls behind the dialog.",
@@ -5003,12 +6592,15 @@ function dataPreferred() {
         "Ensure hidden, decorative and duplicate content and artifact elements are not exposed to assistive technologies. This includes content behind modal dialogs.\n\nThe best way to prevent access to content behind dialogs is to:\n- Ensure that the dialog container is separate from the container that holds the rest of the screen's content.\n- For the container that holds the rest of the screen's content, set the android:importantForAccessibility attribute to \"noHideDescendants\".\n- When the dialog is closed, remove the importantForAccessibility attribute from the container holding the rest of the screen's contents.",
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right through the contents of the screen.\n3. Notice that TalkBack focuses on content behind the dialog.",
+      dxCustomSTR:
+        "1. Turn on TalkBack.\n2. Swipe right through the contents of the screen.\n3. Notice that TalkBack focuses on content behind the dialog.\nExpected result: TalkBack focus stays inside the boundaries of the dialog.\nActual result: TalkBack focus strays to content outside of the dialog.",
       successCriteria: ["1.1.1", "4.1.2"],
       title: "Dialogs allow focus behind them",
       type: "android",
     },
     {
       bp: 1983,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.2.1.1.1"],
       id: "response-android-not-keyboard-operable",
       impact: "Keyboard users will be prevented from accessing these controls.",
       issue:
@@ -5023,6 +6615,7 @@ function dataPreferred() {
     },
     {
       bp: 1993,
+      en301549: ["4.2.1", "11.1.3.2.1"],
       id: "response-android-reading-order",
       impact: "Screen reader users will be unable to understand this content.",
       issue: "The following reading order is illogical:\n1.",
@@ -5030,12 +6623,15 @@ function dataPreferred() {
         "Ensure that the reading order of content is logical. Ensure the elements follow the screen layout order. Alternatively, use the accessibilityTraversalBefore or accessibilityTraversalAfter attributes to manually set the focus order.",
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right through the contents of the screen.\n3. Notice that the order in which TalkBack focuses content does not reflect the natural reading order of the content.",
+      dxCustomSTR:
+        '1. Turn on TalkBack.\n2. Swipe right through the contents of the screen.\n3. Notice that the order in which TalkBack focuses content does not reflect the natural reading order of the content.\nExpected result: TalkBack focus moves in this order, "[Output]".\nActual result: TalkBack focus moves in this order, "[Output]".',
       successCriteria: ["1.3.2"],
       title: "Reading order",
       type: "android",
     },
     {
       bp: 1995,
+      en301549: ["4.2.2", "11.1.4.4.1"],
       id: "response-android-text-resizing",
       impact:
         "Users with low vision who need to resize text will be prevented from accessing this content.",
@@ -5053,6 +6649,7 @@ function dataPreferred() {
     },
     {
       bp: 1995,
+      en301549: ["4.2.2", "11.1.4.4.1"],
       id: "response-android-text-resizing-not-responding",
       impact:
         "Users with low vision who need to resize text will be prevented from accessing this content.",
@@ -5070,6 +6667,18 @@ function dataPreferred() {
     },
     {
       bp: 2042,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.3",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.8",
+        "4.2.9",
+        "4.2.10",
+        "9.1.4.10",
+      ],
       id: "response-audio-plays-automatically",
       impact:
         "Screen reader users may have difficulty hearing speech output over autoplaying audio. Users with cognitive disabilities may be distracted by the audio.",
@@ -5079,12 +6688,15 @@ function dataPreferred() {
         "Ensure audio is not played automatically on load. If audio content must load automatically, ensure the audio output plays for a maximum of three seconds or that there is a mechanism near the top of the page to stop or pause the audio.",
       stepsToReproduce:
         "1. Open the page.\n2. Notice that audio plays automatically.",
+      dxCustomSTR:
+        "1. Open the page.\n2. Notice that audio plays automatically.\nExpected result: EITHER audio does not play automatically, OR audio plays for a maximum of 3 seconds.\nActual result: Audio plays automatically for more than 3 seconds.",
       successCriteria: ["1.4.2"],
       title: "Audio plays automatically",
       type: "web",
     },
     {
       bp: 2049,
+      en301549: ["4.2.4", "4.2.5", "9.1.2.2"],
       id: "response-captions-missing",
       impact:
         "Users who are deaf or hard of hearing will be prevented from accessing this content.",
@@ -5094,12 +6706,15 @@ function dataPreferred() {
         "Provide synchronized captions for video (which includes audio) or other multimedia. This includes all spoken language as well as music and sounds pertinent to the content of the video.",
       stepsToReproduce:
         "1. Locate the video.\n2. Notice that there are no captions.",
+      dxCustomSTR:
+        "1. Locate the video.\n2. Notice that there are no captions.\nExpected result: The prerecorded multimedia provides captions.\nActual result: The prerecorded multimedia does not provide captions.",
       successCriteria: ["1.2.2"],
       title: "Captions missing",
       type: "web",
     },
     {
       bp: 2049,
+      en301549: ["4.2.4", "4.2.5", "9.1.2.2"],
       id: "response-inaccurate-captions",
       impact:
         "Users who are deaf or hard of hearing will be unable to receive an accurate impression of the contents of the video.",
@@ -5109,12 +6724,15 @@ function dataPreferred() {
         "Provide synchronized captions for video (which includes audio) or other multimedia. Captions must accurately represent the audio content in the video.",
       stepsToReproduce:
         "1. Locate the video.\n2. Review the captions.\n3. Notice that the captions are inaccurate or incomplete.",
+      dxCustomSTR:
+        '1. Locate the video.\n2. Review the captions.\n3. Notice that the captions are inaccurate or incomplete.\nExpected result: Caption text reads, "[Output],".\nActual result: Caption text reads, "[Output]", which does not match the audio.',
       successCriteria: ["1.2.2"],
       title: "Inaccurate captions",
       type: "web",
     },
     {
       bp: 2264,
+      en301549: ["4.2.2", "4.2.3", "11.1.4.5.1"],
       id: "response-android-images-of-text",
       impact:
         "Users with low vision and users with cognitive disabilities will be unable to modify or enlarge this text.",
@@ -5130,6 +6748,7 @@ function dataPreferred() {
     },
     {
       bp: 2265,
+      en301549: ["4.2.2", "4.2.3", "11.1.4.5.1"],
       id: "response-ios-images-of-text",
       impact:
         "Users with low vision and users with cognitive disabilities will be unable to modify or enlarge this text.",
@@ -5145,6 +6764,7 @@ function dataPreferred() {
     },
     {
       bp: 2349,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "11.2.4.3"],
       id: "response-ios-focus-order",
       impact:
         "Screen reader users and keyboard users will have difficulty efficiently navigating the app.",
@@ -5159,6 +6779,7 @@ function dataPreferred() {
     },
     {
       bp: 2440,
+      en301549: ["4.2.1", "4.2.2", "9.1.3.1", "9.4.1.2"],
       id: "response-avoid-placeholder-to-label-input",
       impact:
         "Users with cognitive disabilities may be unable to determine the purpose of the field after the placeholder disappears. Some assistive technologies will not use the placeholder attribute as a field's accessible name, so screen reader users will have difficulty determining what fields are for and speech input users will have difficulty navigating to them.",
@@ -5174,6 +6795,7 @@ function dataPreferred() {
     },
     {
       bp: 2493,
+      en301549: ["4.2.1", "11.1.3.1.1"],
       id: "response-ios-implicit-headings",
       impact:
         "Screen reader users will have difficulty efficiently navigating the screen.",
@@ -5184,13 +6806,14 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the text.\n2. Turn on VoiceOver.\n3. Swipe right until the text is focused.\n4. Note that VoiceOver does not announce the content as a heading.",
       dxCustomSTR:
-        "1. Locate the text.\n2. Turn on VoiceOver.\n3. Swipe right until the text is focused.\n4. Note that VoiceOver does not announce the content as a heading.\nExpected result: VoiceOver announces, \"[Text], heading.\"\nActual result: VoiceOver announces, \"[Text]\" without the heading role.",
+        '1. Locate the text.\n2. Turn on VoiceOver.\n3. Swipe right until the text is focused.\n4. Note that VoiceOver does not announce the content as a heading.\nExpected result: VoiceOver announces, "[Output], heading."\nActual result: VoiceOver announces, "[Output]" without the heading role.',
       successCriteria: ["1.3.1"],
       title: "Implicit headings",
       type: "ios",
     },
     {
       bp: 2519,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-non-unique-nav-name",
       impact:
         "Screen reader users will have difficulty distinguishing between these regions.",
@@ -5206,6 +6829,7 @@ function dataPreferred() {
     },
     {
       bp: 2519,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-non-unique-aside-name",
       impact:
         "Screen reader users will have difficulty distinguishing between these regions.",
@@ -5221,6 +6845,7 @@ function dataPreferred() {
     },
     {
       bp: 2519,
+      en301549: ["4.2.1", "9.1.3.1"],
       id: "response-non-unique-region-name",
       impact:
         "Screen reader users will be unable to determine the purpose of these regions.",
@@ -5236,6 +6861,7 @@ function dataPreferred() {
     },
     {
       bp: 2520,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.2.1.1.1"],
       id: "response-ios-keyboard-inaccessible",
       impact: "Keyboard users will be prevented from accessing these controls.",
       issue:
@@ -5250,6 +6876,7 @@ function dataPreferred() {
     },
     {
       bp: 2554,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1", "9.4.1.2"],
       id: "response-progress-accessible-name-missing",
       impact:
         "Screen reader users will not know the purpose of these progress bars.",
@@ -5265,6 +6892,7 @@ function dataPreferred() {
     },
     {
       bp: 2561,
+      en301549: ["4.2.1", "4.2.2", "11.4.1.2.1"],
       id: "response-ios-loading",
       impact:
         "Screen reader users will be unaware when the screen is in a loading state.",
@@ -5280,6 +6908,7 @@ function dataPreferred() {
     },
     {
       bp: 2562,
+      en301549: ["4.2.1", "4.2.2", "11.4.1.2.1"],
       id: "response-android-loading",
       impact:
         "Screen reader users will be unaware when the screen is in a loading state.",
@@ -5289,12 +6918,15 @@ function dataPreferred() {
         'Provide an accessible alert method for content changes that occur without explicit user knowledge.\n\nSet an accessibilityLiveRegion attribute on the loading element to "polite" or use the announceForAccessibility() method.',
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right repeatedly until the trigger for the loading indicator is focused.\n3. Double tap the trigger.\n4. Notice that TalkBack does not announce anything to suggest that content is loading.",
+      dxCustomSTR:
+        '1. Turn on TalkBack.\n2. Swipe right repeatedly until the trigger for the loading indicator is focused.\n3. Double tap the trigger.\n4. Notice that TalkBack does not announce anything to suggest that content is loading.\nExpected result: TalkBack announces, "Loading [Output]," or equivalent.\nActual result: TalkBack does not indicate any loading message.',
       successCriteria: ["4.1.2"],
       title: "Loading indicator",
       type: "android",
     },
     {
       bp: 2570,
+      en301549: [],
       id: "response-pdf-hidden",
       impact: "Screen reader will be able to access hidden content.",
       issue:
@@ -5307,6 +6939,15 @@ function dataPreferred() {
     },
     {
       bp: 2587,
+      en301549: [
+        "4.2.1",
+        "4.2.4",
+        "4.2.5",
+        "10.1.2.2",
+        "10.1.2.3",
+        "10.1.2.4",
+        "10.1.2.5",
+      ],
       id: "response-pdf-captions-missing",
       impact:
         "Users who are deaf or hard of hearing will be prevented from accessing this content.",
@@ -5320,11 +6961,20 @@ function dataPreferred() {
     },
     {
       bp: 2587,
+      en301549: [
+        "4.2.1",
+        "4.2.4",
+        "4.2.5",
+        "10.1.2.2",
+        "10.1.2.3",
+        "10.1.2.4",
+        "10.1.2.5",
+      ],
       id: "response-pdf-audio-descriptions",
       impact:
         "Users who are blind will be prevented from accessing important visual information provided in the video.",
       issue:
-        "There are prerecorded videos with audio that do not have audio descriptions. Examples include:\n- ",
+        "There are prerecorded videos with audio that have important visual content that is not conveyed by the existing audio, and do not have audio descriptions. Examples include:\n- ",
       recommendation:
         "Provide synchronized equivalent for multimedia (audio and video). Audio description must accurately convey all important visual information, such as actions or unspoken text.",
       successCriteria: ["1.2.2", "1.2.3", "1.2.4", "1.2.5"],
@@ -5333,6 +6983,15 @@ function dataPreferred() {
     },
     {
       bp: 2587,
+      en301549: [
+        "4.2.1",
+        "4.2.4",
+        "4.2.5",
+        "10.1.2.2",
+        "10.1.2.3",
+        "10.1.2.4",
+        "10.1.2.5",
+      ],
       id: "response-pdf-live-captions-missing",
       impact:
         "Users who are deaf or hard of hearing will be prevented from accessing this content.",
@@ -5346,6 +7005,7 @@ function dataPreferred() {
     },
     {
       bp: 2607,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-icon-fonts-without-text-equivalent",
       impact:
         "Screen reader users will be unable to determine what these images represent.",
@@ -5361,6 +7021,7 @@ function dataPreferred() {
     },
     {
       bp: 2607,
+      en301549: ["4.2.1", "4.2.2", "9.1.1.1"],
       id: "response-decorative-font-icons",
       impact:
         "Screen readers may announce this content by its Unicode name. This gives screen reader users confusing and irrelevant information.",
@@ -5376,6 +7037,7 @@ function dataPreferred() {
     },
     {
       bp: 2617,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.2.1.1.1"],
       id: "response-android-focusable-containers",
       impact:
         "Static content within focusable containers cannot be focused, so screen reader users will not be able to access this content.",
@@ -5384,12 +7046,15 @@ function dataPreferred() {
         "Avoid making containers focusable. This can usually be achieved by removing any android:focusable or android:contentDescription properties that are set on the container.",
       stepsToReproduce:
         "1. Turn on TalkBack.\n2. Swipe right repeatedly until the container is focused.\n3. Continue swiping right and note that content within the container cannot be focused.",
+      dxCustomSTR:
+        "1. Turn on TalkBack.\n2. Swipe right repeatedly until the container is focused.\n3. Continue swiping right and note that content within the container cannot be focused.\nExpected result: TalkBack focus moves to each item within the container, independently.\nActual result: TalkBack focus moves to the container as a whole, announcing the contents in one long stream.",
       successCriteria: ["2.1.1"],
       title: "Focusable containers",
       type: "android",
     },
     {
       bp: 2619,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.2.1.1.1"],
       id: "response-ios-focusable-containers",
       impact:
         "Some content within focusable containers cannot be focused, so screen reader users will not be able to access it.",
@@ -5398,12 +7063,15 @@ function dataPreferred() {
         "Ensure container views themselves are not accessible. Set isAccessibilityElement to NO on the container.",
       stepsToReproduce:
         "1. Turn on VoiceOver.\n2. Swipe right repeatedly until the container is focused.\n3. Continue swiping right and note that content within the container cannot be focused.",
+      dxCustomSTR:
+        "1. Turn on VoiceOver.\n2. Swipe right repeatedly until the container is focused.\n3. Continue swiping right and note that content within the container cannot be focused.\nExpected result: VoiceOver focus moves to each item within the container, independently.\nActual result: VoiceOver focus moves to the container as a whole, announcing the contents in one long stream.",
       successCriteria: ["2.1.1"],
       title: "Focusable containers",
       type: "ios",
     },
     {
       bp: 2621,
+      en301549: ["4.2.1", "10.1.3.1"],
       id: "response-pdf-layout-tables",
       impact:
         "Screen readers will treat this content as a data table, causing confusion about its layout and impeding navigation.",
@@ -5417,6 +7085,7 @@ function dataPreferred() {
     },
     {
       bp: 2622,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "11.5.2.5", "11.4.1.2.1"],
       id: "response-ios-multipart",
       impact:
         "Screen reader users will have difficulty understanding and interacting with the controls.",
@@ -5426,12 +7095,15 @@ function dataPreferred() {
         "Ensure multi part controls that act as a single unit appear as a single accessible control. Consolidate these controls into a single accessible element with appropriate accessibility traits and a label. Once this is done, hide any controls with duplicate functionality from assistive technologies by using the isAccessibilityEnabled() function.",
       stepsToReproduce:
         "1. Turn on VoiceOver.\n2. Swipe right repeatedly until you reach the multi-part control.\n3. Notice that VoiceOver focuses each part of the control independently rather than as one single element.",
+      dxCustomSTR:
+        '1. Turn on VoiceOver.\n2. Swipe right repeatedly until you reach the multi-part control.\n3. Notice that VoiceOver focuses each part of the control independently rather than as one single element.\nExpected result: VoiceOver announces, "[Output]", as a single unit.\nActual result: VoiceOver announces, "[Output]".',
       successCriteria: ["4.1.2"],
       title: "Multi-part controls",
       type: "ios",
     },
     {
       bp: 2627,
+      en301549: [],
       id: "response-pdf-decorative-not-hidden",
       impact:
         'Screen readers may announce images with no accessible name by number or as simply "graphic." This gives screen reader users irrelevant and confusing information.',
@@ -5445,6 +7117,7 @@ function dataPreferred() {
     },
     {
       bp: 2891,
+      en301549: ["4.2.2", "9.1.3.5"],
       id: "response-form-fields-missing-autocomplete",
       impact:
         "Users with cognitive and motor disabilities will be unable to use autofill form features to quickly prefill common form fields. Additionally, some users with cognitive disabilities use assistive technologies that add icons next to common form fields. This allows them to identify the field's purpose more easily. When the input purpose is not programmatically indicated, these icons will not be displayed, so these users will have difficulty determining the fields' purpose.",
@@ -5460,6 +7133,7 @@ function dataPreferred() {
     },
     {
       bp: 2892,
+      en301549: ["4.2.2", "9.1.4.2"],
       id: "response-reflow-content-loss",
       impact:
         "Users with low vision who need to resize text will be prevented from accessing this content.",
@@ -5475,6 +7149,7 @@ function dataPreferred() {
     },
     {
       bp: 2893,
+      en301549: ["4.2.7", "4.2.8", "4.2.10", "9.2.5.1"],
       id: "response-multipoint-path-based-gestures-required",
       impact:
         "Users with dexterity or mobility disabilities may be unable to perform these gestures.",
@@ -5484,12 +7159,15 @@ function dataPreferred() {
         "Ensure that functionality can be operated through a single pointer except when a multi-point or path-based gesture is essential. Multipoint gestures include any action conducted with multiple fingers, such as multi-finger taps and pinching to zoom. Path-based gestures include specifically drawn shapes or patterns. Essential applications for path-based gestures include signatures and artistic drawing. Instead of relying on multipoint or path-based gestures, use single-point activation instead. Single-point activation includes tapping, double-tapping, and long-presses.",
       stepsToReproduce:
         "1. Locate the functionality.\n2. Notice that there is no way to activate the functionality without using multipoint touch or swipe gestures.",
+      dxCustomSTR:
+        "1. Locate the functionality.\n2. Notice that there is no way to activate the functionality without using multipoint touch or swipe gestures.\nExpected result: EITHER multipoint/path-based gestures are removed OR an accessible equivalent is provided using tap, double-tap, or longpress.\nActual result: No single-point, non-path based option exists.",
       successCriteria: ["2.5.1"],
       title: "Multipoint path-based gestures required",
       type: "web",
     },
     {
       bp: 2894,
+      en301549: ["4.2.2", "4.2.7", "4.2.8", "4.2.10", "9.2.5.2"],
       id: "response-single-point-activation-cannot-be-cancelled",
       impact:
         "Users with disabilities may accidentally trigger touch or mouse events with unwanted results.",
@@ -5505,21 +7183,23 @@ function dataPreferred() {
     },
     {
       bp: 2895,
+      en301549: ["4.2.1", "9.1.2.3", "9.1.2.5"],
       id: "response-audio-descriptions-for-visual-only-content-missing",
       impact:
         "Users who are blind will be prevented from accessing important visual information provided in the video.",
       issue:
-        "There are prerecorded videos with audio that do not have audio descriptions. Examples include:\n- ",
+        "There are prerecorded videos with audio that have important visual content that is not conveyed by the existing audio, and do not have audio descriptions. Examples include:\n- ",
       recommendation:
         "Provide synchronized audio description for video (which includes audio) or other multimedia. Audio description must accurately convey all important visual information, such as actions or unspoken text.",
       stepsToReproduce:
-        "1. Locate the video.\n2. Notice that an audio description track is not provided.",
+        "1. Locate the video.\n2. Play the video.\n3. Notice that there is important visual content that is not conveyed by the existing audio, and an audio description track is not provided.",
       successCriteria: ["1.2.3", "1.2.5", "1.2.7"],
       title: "Audio descriptions missing",
       type: "web",
     },
     {
       bp: 2896,
+      en301549: ["4.2.2", "4.2.10", "9.1.4.4"],
       id: "response-text-spacing-content-loss",
       impact:
         "Users with low vision and users with dyslexia will have difficulty reading this content.",
@@ -5535,6 +7215,7 @@ function dataPreferred() {
     },
     {
       bp: 2899,
+      en301549: ["4.2.7", "4.2.8", "9.2.5.4"],
       id: "response-motion-required-to-use-function",
       impact:
         "Users with dexterity and mobility disabilities may be unable to perform these actions, or they may inadvertently activate it.",
@@ -5550,6 +7231,7 @@ function dataPreferred() {
     },
     {
       bp: 2900,
+      en301549: ["4.2.7", "4.2.8", "9.1.3.4"],
       id: "response-orientation-locked",
       impact:
         "Users with a mounted device in a different orientation, such as some wheelchair users, will have difficulty viewing and interacting with the app.",
@@ -5565,6 +7247,18 @@ function dataPreferred() {
     },
     {
       bp: 2901,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.3",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.8",
+        "4.2.9",
+        "4.2.10",
+        "9.4.1.3",
+      ],
       id: "response-status-message-not-communicated",
       impact:
         "Screen reader users will be unaware of important updates to this content when they occur.",
@@ -5574,12 +7268,26 @@ function dataPreferred() {
         'Ensure that status messages can be determined programmatically without receiving focus. This can be done with ARIA live regions. Live regions can be created by adding a role attribute set to "log", "status", "alert", "progressbar", "marquee", or "timer" as appropriate. Alternatively, custom behavior can be created by using the aria-live, aria-atomic, and aria-relevant attributes. Text injected into this live region element will be announced by screen readers.\n\nImportantly, the element with the ARIA live attributes must be available when the page loads. Otherwise, many screen readers will be unable to detect updates to the element. Additionally, the element must be empty on page load unless an immediate screen reader announcement is desired.',
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Trigger the dynamic content updates.\n3. Observe the resulting screen reader output.\nExpected result: JAWS announces, "[Output]".\nActual result: JAWS does not announce any change in status.',
       successCriteria: ["4.1.3"],
       title: "Status message not communicated",
       type: "web",
     },
     {
       bp: 2901,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.3",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.8",
+        "4.2.9",
+        "4.2.10",
+        "9.4.1.3",
+      ],
       id: "response-status-message-loading",
       impact:
         "Screen reader users will be unaware when the page is in a loading state.",
@@ -5589,12 +7297,26 @@ function dataPreferred() {
         'Ensure that status messages can be determined programmatically without receiving focus.\n\nFor a loading indicator, the best way to do this is to use a "status" ARIA live region. To create such a region:\n- Ensure that a visually hidden container <div> is present when the page loads. The <div> must be empty unless a visual loading indicator is visible.\n- Add a role="status" attribute to this <div>.\n- When the page is in a loading state, use JavaScript to inject text into this <div role="status"> that describes the loading behavior (e.g. "Loading more posts", "Processing email", etc.). If properly configured, this text will be announced to screen readers.',
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Activate the loading state.\n3. Observe the resulting screen reader output.\nExpected result: JAWS announces, "[Output] loading" or equivalent.\nActual result: JAWS does not indicating any loading status.',
       successCriteria: ["4.1.3"],
       title: "Loading status message",
       type: "web",
     },
     {
       bp: 2901,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.3",
+        "4.2.4",
+        "4.2.5",
+        "4.2.7",
+        "4.2.8",
+        "4.2.9",
+        "4.2.10",
+        "9.4.1.3",
+      ],
       id: "response-status-message-search-results",
       impact:
         "Screen reader users will be unaware that these search suggestions have appeared.",
@@ -5604,12 +7326,15 @@ function dataPreferred() {
         'Ensure that status messages can be determined programmatically without receiving focus.\n\nFor dynamically updated search results, the best way to do this is to use a "status" ARIA live region. To create such a region:\n- Ensure that a visually hidden container <div> is present when the page loads. The <div> must be empty until results are returned.\n- Add a role="status" attribute to this <div>.\n- When the page is in a loading state, use JavaScript to inject text into this <div role="status"> that describes the results available (e.g., "83 results available" or "Results available"). If properly configured, this text will be announced to screen readers.',
       stepsToReproduce:
         "1. Enable a screen reader.\n2. Using the Down Arrow key or Tab key, navigate to the dynamically updating content. Trigger it with the Enter key if necessary.\n3. Review any announcements given by the screen reader in response to the dynamic content update.",
+      jawsFunctionalSteps:
+        '1. Enable JAWS.\n2. Enter a valid search, and populate the search results.\n3. Review any announcements given by the screen reader in response to the updated search results.\nExpected result: JAWS announces, "[Output]".\nActual result: JAWS announces, "[Output]".',
       successCriteria: ["4.1.3"],
       title: "Search results status message",
       type: "web",
     },
     {
       bp: 2902,
+      en301549: ["4.2.7", "4.2.8", "9.2.1.4"],
       id: "response-shortcuts-cannot-reconfigure-or-deactivated",
       impact:
         "Speech input users will inadvertently activate the character shortcut whenever they dictate text or speak a command that contains the characters in the shortcut.",
@@ -5625,6 +7350,7 @@ function dataPreferred() {
     },
     {
       bp: 2903,
+      en301549: ["4.2.7", "4.2.8", "9.2.5.3"],
       id: "response-form-label-in-name-missing",
       impact:
         "Speech input users will have difficulty navigating to these controls.",
@@ -5634,12 +7360,15 @@ function dataPreferred() {
         "Ensure the visible text label for a control is included in the control's accessible name.",
       stepsToReproduce:
         '1. Locate the control.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".\n5. Notice that this value does not include the visible text of the control as a substring.',
+      dxCustomSTR:
+        '1. Locate the control.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Name".\n5. Compare the value for "Name" to the visible text of the control.\nExpected result: The visible text of the control is a substring of the Computed Name.\nActual result: The visible text of the control is not included in the Computed Name.',
       successCriteria: ["2.5.3"],
       title: "Form label in name missing",
       type: "web",
     },
     {
       bp: 2904,
+      en301549: ["4.2.2", "4.2.10", "9.1.4.5"],
       id: "response-hover-or-focus-content-cannot-be-dismissed",
       impact:
         "Screen magnification users will have difficulty moving the cursor or focus off the trigger while still keeping the content behind the revealed content in view. Keyboard users will be unable to review the content behind the revealed content.",
@@ -5655,6 +7384,7 @@ function dataPreferred() {
     },
     {
       bp: 2905,
+      en301549: ["4.2.2", "4.2.10", "9.1.4.5"],
       id: "response-hover-or-focus-content-disappears-when-pointer-moves-over",
       impact:
         "Screen magnification users will be unable to review the revealed content.",
@@ -5664,12 +7394,15 @@ function dataPreferred() {
         "Ensure that content that appears on hover may be moved over with a pointer without disappearing. For example, users must be able to hover over tooltips without the tooltip disappearing.",
       stepsToReproduce:
         "1. Trigger the appearance of the content.\n2. Attempt to hover over the revealed content with the mouse.\n3. Notice that the content disappears when it is hovered over.",
+      dxCustomSTR:
+        "1. Trigger the appearance of the content on hover or focus.\n2. Attempt to hover over the revealed content with the mouse.\nExpected result: The mouse can hover over the content without it disappearing.\nActual result: The content disappears when it is hovered over.",
       successCriteria: ["1.4.13"],
       title: "Hover or focus content disappears when pointer moves over",
       type: "web",
     },
     {
       bp: 2909,
+      en301549: ["4.2.2", "4.2.3", "9.1.4.3"],
       id: "response-active-interface-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty identifying this content.",
@@ -5687,6 +7420,7 @@ function dataPreferred() {
     },
     {
       bp: 2910,
+      en301549: ["4.2.2", "4.2.3", "9.1.4.3"],
       id: "response-graphical-object-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty identifying this content.",
@@ -5696,12 +7430,33 @@ function dataPreferred() {
         "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image. Graphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Accessible Color Picker Chrome extension: https://chrome.google.com/webstore/detail/accessible-color-picker/bgfhbflmeekopanooidljpnmnljdihld or the Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the graphical object.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.",
+      dxCustomSTR:
+        "1. Locate the graphical object.\n2. Inspect it with Chrome DevTools.\n3. Review its CSS to determine the foreground and background colors or select the colors of the foreground and background with a color picker.\n4. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n5. Notice that the contrast ratio is below 3.00:1.\nExpected result: The component has a color contrast ratio of 3:1 or greater.\nActual result: The component has a color contrast ratio of [ratio].",
       successCriteria: ["1.4.11"],
       title: "Graphical object contrast insufficient",
       type: "web",
     },
     {
+      bp: 2912,
+      en301549: ["4.2.2", "4.2.10", "9.1.4.5"],
+      id: "response-hover-or-focus-content-disappears-without-user-action",
+      impact:
+        "Users with low vision or cognitive disabilities will have difficulty reading the content before it disappears.",
+      issue:
+        "There is content that appears on hover and/or focus that disappears without user initiation. Examples include:",
+      recommendation:
+        "Ensure content that appears on hover or focus is persistent until dismissed, not valid, or the trigger is removed. New content that appears on hover and/or focus must remain visible until the pointer or keyboard focus is moved away from the triggering control, the new content is dismissed, or the new content is no longer relevant.",
+      stepsToReproduce:
+        "1. Trigger the appearance of the content.\n2. Notice that the revealed content eventually disappears without user action.",
+      dxCustomSTR:
+        "1. Trigger the appearance of the content on hover or focus.\n2. Do not interact with the revealed content.\nExpected result: The revealed content stays visible. It can be dismissed if the user takes action.\nActual result: The revealed content eventually disappears without user action.",
+      successCriteria: ["1.4.13"],
+      title: "Hover or focus content disappears without user action",
+      type: "web",
+    },
+    {
       bp: 2927,
+      en301549: ["4.2.2", "4.2.3", "10.1.4.11"],
       id: "response-pdf-active-interface-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty identifying this content.",
@@ -5715,6 +7470,7 @@ function dataPreferred() {
     },
     {
       bp: 2930,
+      en301549: ["4.2.2", "4.2.3", "11.1.4.11"],
       id: "response-android-active-interface-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty identifying this content.",
@@ -5732,6 +7488,7 @@ function dataPreferred() {
     },
     {
       bp: 2933,
+      en301549: ["4.2.2", "4.2.3", "11.1.4.11"],
       id: "response-ios-active-interface-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty identifying this content.",
@@ -5748,22 +7505,8 @@ function dataPreferred() {
       type: "ios",
     },
     {
-      bp: 2912,
-      id: "response-hover-or-focus-content-disappears-without-user-action",
-      impact:
-        "Users with low vision or cognitive disabilities will have difficulty reading the content before it disappears.",
-      issue:
-        "There is content that appears on hover and/or focus that disappears without user initiation. Examples include:",
-      recommendation:
-        "Ensure content that appears on hover or focus is persistent until dismissed, not valid, or the trigger is removed. New content that appears on hover and/or focus must remain visible until the pointer or keyboard focus is moved away from the triggering control, the new content is dismissed, or the new content is no longer relevant.",
-      stepsToReproduce:
-        "1. Trigger the appearance of the content.\n2. Notice that the revealed content eventually disappears without user action.",
-      successCriteria: ["1.4.13"],
-      title: "Hover or focus content disappears without user action",
-      type: "web",
-    },
-    {
       bp: 2941,
+      en301549: ["4.2.2", "4.2.3", "10.1.4.11"],
       id: "response-pdf-graphical-object-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty identifying this content.",
@@ -5777,6 +7520,7 @@ function dataPreferred() {
     },
     {
       bp: 2944,
+      en301549: ["4.2.2", "4.2.3", "11.1.4.11"],
       id: "response-android-graphical-object-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty identifying this content.",
@@ -5786,12 +7530,15 @@ function dataPreferred() {
         "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the graphic.\n2. Determine the graphic color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.",
+      dxCustomSTR:
+        "1. Locate the graphic.\n2. Determine the graphic color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.\nExpected result: The component has a color contrast ratio of 3:1 or greater.\nActual result: The component has a color contrast ratio of [ratio].",
       successCriteria: ["1.4.11"],
       title: "Graphical object contrast insufficient",
       type: "android",
     },
     {
       bp: 2947,
+      en301549: ["4.2.2", "4.2.3", "11.1.4.11"],
       id: "response-ios-graphical-object-contrast-insufficient",
       impact:
         "Users with low vision will have difficulty identifying this content.",
@@ -5801,12 +7548,15 @@ function dataPreferred() {
         "Ensure parts of graphical objects essential for understanding content have sufficient contrast. The required minimum contrast ratio is 3.00:1.\n\nCommon examples of qualifying objects include lines in a chart, meaningful icons, and annotations within an image.\n\nGraphics that require particular presentation to preserve their meaning are exempt from this requirement.\n\nTo calculate color contrast ratios, use a tool such as the Level Access Color Contrast Checker: https://www.levelaccess.com/color-contrast-checker-new/",
       stepsToReproduce:
         "1. Locate the graphic.\n2. Determine the graphic color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.",
+      dxCustomSTR:
+        "1. Locate the graphic.\n2. Determine the graphic color and background color.\n3. Use a calculator such as https://www.levelaccess.com/color-contrast-checker-new/ to determine the contrast ratio.\n4. Notice that the contrast ratio is below 3.00:1.\nExpected result: The component has a color contrast ratio of 3:1 or greater.\nActual result: The component has a color contrast ratio of [ratio].",
       successCriteria: ["1.4.11"],
       title: "Graphical object contrast insufficient",
       type: "ios",
     },
     {
       bp: 2983,
+      en301549: ["4.2.7", "4.2.8", "10.2.5.3"],
       id: "response-pdf-label-in-name",
       impact:
         "Speech input users will have difficulty navigating to these controls.",
@@ -5820,6 +7570,7 @@ function dataPreferred() {
     },
     {
       bp: 2986,
+      en301549: ["4.2.7", "4.2.8", "11.2.5.3.1"],
       id: "response-android-label-in-name",
       impact:
         "Speech input users will have difficulty navigating to these controls.",
@@ -5829,12 +7580,15 @@ function dataPreferred() {
         "Ensure the visible text label for a control is included in the control's accessible name. Alter the android:contentDescription attribute to include all of the visual text of the control.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the control is focused.\n4. Notice that TalkBack announces a name that does not include the visual label for the control.",
+      dxCustomSTR:
+        '1. Locate the control.\n2. Turn on TalkBack.\n3. Swipe right until the control is focused.\n4. Compare the name TalkBack announces to the visible text of the control.\nExpected result: TalkBack announces, "[Output]".\nActual result: TalkBack announces, "[Output]", which does not include the visible text for the control.',
       successCriteria: ["2.5.3"],
       title: "Accessible name does not include visible text",
       type: "android",
     },
     {
       bp: 2989,
+      en301549: ["4.2.7", "4.2.8", "11.2.5.3.1"],
       id: "response-ios-label-in-name",
       impact:
         "Speech input users will have difficulty navigating to these controls.",
@@ -5844,12 +7598,15 @@ function dataPreferred() {
         "Ensure the visible text label for a control is included in the control's accessible name. Alter the accessibilityLabel property to include all of the visual text of the control.",
       stepsToReproduce:
         "1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the control is focused.\n4. Notice that VoiceOver announces a name that does not include the visual label for the control.",
+      dxCustomSTR:
+        '1. Locate the control.\n2. Turn on VoiceOver.\n3. Swipe right until the control is focused.\n4. Compare the name VoiceOver announces to the visible text of the control.\nExpected result: VoiceOver announces, "[Output]".\nActual result: VoiceOver announces, "[Output]", which does not include the visible text for the control.',
       successCriteria: ["2.5.3"],
       title: "Accessible name does not include visible text",
       type: "ios",
     },
     {
       bp: 3067,
+      en301549: ["4.2.2", "4.2.7", "4.2.8", "4.2.10", "10.2.5.2"],
       id: "response-pdf-single-point-activation-cannot-be-cancelled",
       impact:
         "Users with disabilities may accidentally trigger mouse events with unwanted results.",
@@ -5863,6 +7620,7 @@ function dataPreferred() {
     },
     {
       bp: 3112,
+      en301549: ["4.2.7", "4.2.8", "11.1.3.4"],
       id: "response-android-orientation",
       impact:
         "Users with a mounted device in a different orientation, such as some wheelchair users, will have difficulty viewing and interacting with the app.",
@@ -5879,6 +7637,7 @@ function dataPreferred() {
     },
     {
       bp: 3115,
+      en301549: ["4.2.7", "4.2.8", "11.1.3.4"],
       id: "response-ios-orientation",
       impact:
         "Users with a mounted device in a different orientation, such as some wheelchair users, will have difficulty viewing and interacting with the app.",
@@ -5895,6 +7654,15 @@ function dataPreferred() {
     },
     {
       bp: 3159,
+      en301549: [
+        "4.2.1",
+        "4.2.2",
+        "4.2.7",
+        "9.2.1.1",
+        "10.2.1.1",
+        "11.2.1.1.1",
+        "11.2.1.1.2",
+      ],
       id: "response-no-keyboard-interactivity",
       impact:
         "Keyboard users will be prevented from accessing the functionality provided by these controls.",
@@ -5910,6 +7678,7 @@ function dataPreferred() {
     },
     {
       bp: 3160,
+      en301549: ["4.2.2", "10.1.4.4"],
       id: "response-pdf-text-resizing",
       impact:
         "Users with low vision who need to resize text will be prevented from accessing this content.",
@@ -5922,6 +7691,7 @@ function dataPreferred() {
     },
     {
       bp: 3195,
+      en301549: ["4.2.4", "4.2.5", "9.1.2.4"],
       id: "response-live-captions-missing",
       impact:
         "Users who are deaf or hard of hearing will be prevented from accessing this content.",
@@ -5931,12 +7701,15 @@ function dataPreferred() {
         "Provide synchronized captions for live video (which includes audio) or other multimedia. This includes all spoken language as well as music and sounds pertinent to the content of the video.",
       stepsToReproduce:
         "1. Locate the video.\n2. Notice that there are no captions.",
+      dxCustomSTR:
+        "1. Locate the video.\n2. Notice that there are no captions.\nExpected result: The live multimedia provides captions.\nActual result: The live multimedia does not provide captions.",
       successCriteria: ["1.2.4"],
       title: "Live captions missing",
       type: "web",
     },
     {
       bp: 3196,
+      en301549: ["4.2.1", "11.1.3.1.1"],
       id: "response-android-implicit-heading",
       impact:
         "Screen reader users will have difficulty efficiently navigating the screen.",
@@ -5947,13 +7720,14 @@ function dataPreferred() {
       stepsToReproduce:
         "1. Locate the text.\n2. Turn on TalkBack.\n3. Swipe right until the text is focused.\n4. Note that TalkBack does not announce the content as a heading.",
       dxCustomSTR:
-        "1. Locate the text.\n2. Turn on TalkBack.\n3. Swipe right until the text is focused.\n4. Note that TalkBack does not announce the content as a heading.\nExpected result: TalkBack announces, \"[Text], heading\".\nActual result: TalkBack announces, \"[Text]\" without the heading role.",
+        '1. Locate the text.\n2. Turn on TalkBack.\n3. Swipe right until the text is focused.\n4. Note that TalkBack does not announce the content as a heading.\nExpected result: TalkBack announces, "[Output], heading".\nActual result: TalkBack announces, "[Output]" without the heading role.',
       successCriteria: ["1.3.1"],
       title: "Implicit headings",
       type: "android",
     },
     {
       bp: 3199,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "10.3.2.1"],
       id: "response-pdf-focus-is-shifted-on-focus",
       impact:
         "Screen reader users and keyboard users will lose their spot on the page and may be prevented from accessing the information they intended.",
@@ -5967,6 +7741,7 @@ function dataPreferred() {
     },
     {
       bp: 3206,
+      en301549: [],
       id: "response-web-dragging-movements",
       impact:
         "Users with dexterity and mobility disabilities may be unable to perform dragging movements to use this functionality.",
@@ -5976,12 +7751,15 @@ function dataPreferred() {
         "Ensure all functionality that uses a dragging movement can be operated by a single pointer without dragging. One way to meet this requirement is to require users to perform a series of single-pointer, non-path-based interactions instead of dragging. Keyboard alternatives are not sufficient to meet this requirement. Exceptions include freeform drawing or games that require dragging.",
       stepsToReproduce:
         "1. Locate the functionality.\n2. Note that it can only be performed by dragging.",
+      dxCustomSTR:
+        "1. Locate the functionality.\n2. Note that it can only be performed by dragging.\nExpected result: EITHER an accessible control (button, form fields, etc.) is provided to perform the same action, OR dragging functionality is removed.\nActual result: Dragging functionality is present AND there is no accessible equivalent.",
       successCriteria: ["2.5.7"],
       title: "Dragging movements",
       type: "web",
     },
     {
       bp: 3207,
+      en301549: [],
       id: "response-web-target-minimum",
       impact:
         "Users with dexterity disabilities may be unable to activate these controls.",
@@ -5997,6 +7775,7 @@ function dataPreferred() {
     },
     {
       bp: 3209,
+      en301549: [],
       id: "response-web-consistent-help",
       impact:
         "Users with cognitive disabilities may be unable to find help with tasks on the website.",
@@ -6011,6 +7790,7 @@ function dataPreferred() {
     },
     {
       bp: 3210,
+      en301549: [],
       id: "response-web-pasting-disabled",
       impact:
         "Users with cognitive disabilities may be unable to manually transcribe their username, password, or MFA codes.",
@@ -6026,6 +7806,7 @@ function dataPreferred() {
     },
     {
       bp: 3210,
+      en301549: [],
       id: "response-web-cognitive-captcha",
       impact:
         "Users with cognitive disabilities may be unable to successfully solve the CAPTCHA in order to authenticate.",
@@ -6041,6 +7822,7 @@ function dataPreferred() {
     },
     {
       bp: 3211,
+      en301549: [],
       id: "response-web-redundant-entry",
       impact:
         "Users with cognitive disabilities may be unable to remember information that they previously entered into the form, so they may be prevented from completing the form.",
@@ -6056,6 +7838,7 @@ function dataPreferred() {
     },
     {
       bp: 3224,
+      en301549: [],
       id: "response-web-obscured-focused-element",
       impact:
         "Keyboard users will have difficulty finding their position on the page.",
@@ -6071,6 +7854,7 @@ function dataPreferred() {
     },
     {
       bp: 3285,
+      en301549: [],
       id: "response-ios-obscured-focused-element",
       impact:
         "Keyboard users will have difficulty finding their position on the page.",
@@ -6086,6 +7870,7 @@ function dataPreferred() {
     },
     {
       bp: 3293,
+      en301549: [],
       id: "response-ios-target-minimum",
       impact:
         "Users with dexterity disabilities may be unable to activate these controls.",
@@ -6101,6 +7886,7 @@ function dataPreferred() {
     },
     {
       bp: 3303,
+      en301549: [],
       id: "response-pdf-target-minimum",
       impact:
         "Users with dexterity disabilities may be unable to activate these controls.",
@@ -7609,16 +9395,13 @@ function dataStatus() {
       var1: "Type: DESIGN",
     },
     {
-      id: "status-wcag-a",
-      title: "WCAG: A",
+      div: "Standards",
+      id: "standards-en-301-549",
+      title: "EN 301 549",
     },
     {
-      id: "status-wcag-aa",
-      title: "WCAG: AA",
-    },
-    {
-      id: "status-wcag-aaa",
-      title: "WCAG: AAA",
+      id: "standards-wcag",
+      title: "WCAG",
     },
   ];
   return status;
@@ -9573,6 +11356,16 @@ function addEditor(reportID) {
         .val("");
     });
 
+    // Remove special characters
+    $("#remove-special-characters").on("click", () => {
+      const textFields = document.querySelectorAll(
+        "#modal_form input[type='text'], #modal_form textarea"
+      );
+      textFields.forEach((textField) => {
+        textField.value = removeSpecialCharacters(textField.value, "instance");
+      });
+    });
+
     // INJECT BOILERPLATE
     // When a response is given, this fills in the fields.
     $("body").delegate("[id*='response-']", "click", async (event) => {
@@ -9844,12 +11637,7 @@ function addEditor(reportID) {
       const status = dataStatus();
       const entry = status.find((e) => e.id === clickID);
       let text = "";
-      if (clickID.indexOf("status-wcag") >= 0) {
-        const level = clickID.split("-")[2].toUpperCase();
-        text = `[WCAG Level: ${level}]\n\n${$(
-          "textarea[id*='element']:first"
-        ).val()}`;
-      } else if (entry.date === "name") {
+      if (entry.date === "name") {
         const name = $("#userinfo ul li:first").text();
         const newText = entry.title.split("-")[0].trim();
         text = `[${newText.toUpperCase()} -${name}]\n\n${$(
@@ -10005,14 +11793,85 @@ function addEditor(reportID) {
       $("textarea[id*='element']:first").val(text);
     });
 
-    // Remove special characters
-    $("#remove-special-characters").on("click", () => {
-      const textFields = document.querySelectorAll(
-        "#modal_form input[type='text'], #modal_form textarea"
+    // EN 301 549
+    $("#standards-en-301-549").on("click", () => {
+      const violationSelect = document.querySelectorAll(
+        "select[id*='violation_']"
+      )[0];
+      const bpID = parseInt(violationSelect.value);
+      const allBoilerplate = dataPreferred();
+      const currentBoilerplate = allBoilerplate.find(
+        (instance) => instance.bp === bpID
       );
-      textFields.forEach((textField) => {
-        textField.value = removeSpecialCharacters(textField.value, "instance");
-      });
+
+      if (currentBoilerplate) {
+        const allClauses = dataEN301549();
+        const applicableClauses = currentBoilerplate.en301549;
+        let section = "\n\n[EN 301 549]\n";
+        applicableClauses.forEach((applicableClause) => {
+          fullClause = allClauses.find(
+            (clause) => clause.number === applicableClause
+          );
+          section += `${fullClause.number} ${fullClause.name}\n`;
+        });
+        section = section.trimEnd();
+
+        const descriptionTextarea = document.querySelectorAll(
+          "textarea[id*='element']"
+        )[0];
+        descriptionTextarea.value += section;
+        descriptionTextarea.focus();
+      } else {
+        const errorDialog = createDialog(
+          "Error",
+          "No EN 301 549 mapping exists for this BP."
+        );
+        errorDialog.showModal();
+      }
+    });
+
+    // WCAG
+    $("#standards-wcag").on("click", () => {
+      const violationSelect = document.querySelectorAll(
+        "select[id*='violation_']"
+      )[0];
+      const bpID = parseInt(violationSelect.value);
+      const allBoilerplate = dataPreferred();
+      const currentBoilerplate = allBoilerplate.find(
+        (instance) => instance.bp === bpID
+      );
+
+      if (currentBoilerplate) {
+        let allSuccessCriteria = dataSuccessCriteria();
+
+        // Filter out AAA for now
+        allSuccessCriteria = allSuccessCriteria.filter(
+          (criterion) => criterion.level !== "AAA"
+        );
+        const applicableSCs = currentBoilerplate.successCriteria;
+        let section = "\n\n[WCAG]\n";
+        applicableSCs.forEach((applicableSC) => {
+          fullSC = allSuccessCriteria.find(
+            (clause) => clause.number === applicableSC
+          );
+          if (fullSC) {
+            section += `${fullSC.number} ${fullSC.name} (${fullSC.version}, Level ${fullSC.level})\n`;
+          }
+        });
+        section = section.trimEnd();
+
+        const descriptionTextarea = document.querySelectorAll(
+          "textarea[id*='element']"
+        )[0];
+        descriptionTextarea.value += section;
+        descriptionTextarea.focus();
+      } else {
+        const errorDialog = createDialog(
+          "Error",
+          "No WCAG mapping exists for this BP."
+        );
+        errorDialog.showModal();
+      }
     });
 
     /* Miscellanious items for the add instance modal
