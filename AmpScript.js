@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.17.0
+// @version      6.17.1
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -5138,7 +5138,7 @@ function dataPreferred() {
     },
     {
       bp: 1233,
-      en301549: ["4.2.2", "4.2.3", "9.4.1.13"],
+      en301549: ["4.2.2", "4.2.3", "9.1.4.13"],
       id: "response-images-of-text",
       impact:
         "Users with low vision and users with cognitive disabilities will be prevented from modifying or enlarging this text.",
