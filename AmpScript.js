@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.17.1
+// @version      6.18.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -7142,7 +7142,7 @@ function dataPreferred() {
       recommendation:
         "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality. When the page has a viewport width of 320 CSS pixels, all content and functionality must still be available without requiring horizontal scrolling.\n\nMoving content to an accessible show/hide control, such as a hamburger menu, is acceptable.\n\nContent that requires two dimensions to be understood, such as a map or data table, is exempt from this requirement.",
       stepsToReproduce:
-        '1. Open Chrome DevTools.\n2. Activate "Toggle device toolbar" (laptop and cell phone icon).\n3. In "Dimensions", select "Responsive".\n4. In "Width", enter "320".\n5. Refresh the page.\n6. Notice that content disappears, is cut off, or overlaps.',
+        '1. Open Chrome DevTools.\n2. Activate "Customize and control DevTools" (kabob icon).\n3. Activate "Dock to left" or "Dock to right."\n4. Resize the browser viewport until 320CSS pixels are shown.\n5. Refresh the page.\n6. Notice that content disappears, overlaps, is cut off, or requires horizontal scrolling to view.',
       successCriteria: ["1.4.10"],
       title: "Reflow content loss",
       type: "web",
