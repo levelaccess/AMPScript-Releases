@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.18.0
+// @version      6.19.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -18,8 +18,8 @@
 // @downloadURL  https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
 // @supportURL   https://level-access.slack.com/messages/CK79W4PPU/
 // @icon         https://amp.levelaccess.net/img/favicon.png
-// @require      https://unpkg.com/prettier@3.1.0/standalone.js
-// @require      https://unpkg.com/prettier@3.1.0/plugins/html.js
+// @require      https://unpkg.com/prettier@3.6.2/standalone.js
+// @require      https://unpkg.com/prettier@3.6.2/plugins/html.js
 // ==/UserScript==
 
 // temp/BaseScript.js
@@ -614,6 +614,10 @@ function dataCustom() {
     {
       id: "custom-cloverGo-mobile",
       name: "CloverGo - Mobile",
+    },
+    {
+      id: "custom-netflix",
+      name: "Netflix",
     },
   ];
   return custom;
@@ -8574,6 +8578,91 @@ function dataSchemas() {
       },
     ],
     [
+      "netflix",
+      {
+        description: [
+          {
+            appearsByDefault: true,
+            instructions:
+              "** Pick one or more:\nEng only / Design only / TTS for TVUI / TTS for SR / Other\n**",
+            mapsTo: [],
+            name: "Type",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["successCriteria"],
+            name: "WCAG Requirement",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["issue"],
+            name: "Issue",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["stepsToReproduce"],
+            name: "Steps to Reproduce",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["impact"],
+            name: "User Impact",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["codeReference"],
+            name: "Code Reference",
+            requiredToExist: true,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        note: [
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["recommendation"],
+            name: "Recommendation",
+            requiredToExist: true,
+            requiredToHaveCode: false,
+            requiredToHaveContent: true,
+          },
+          {
+            appearsByDefault: true,
+            instructions: "",
+            mapsTo: ["compliantExample"],
+            name: "Compliant Code Example",
+            requiredToExist: false,
+            requiredToHaveCode: true,
+            requiredToHaveContent: true,
+          },
+        ],
+        thumbnail: {
+          required: true,
+        },
+      },
+    ],
+    [
       "pdf-software",
       {
         description: [
@@ -10084,6 +10173,8 @@ function getSchema() {
     currentSchema = schemaMap.get("disney-web");
   } else if (getCookieValue("kpmCustom-custom-disney-mobile")) {
     currentSchema = schemaMap.get("disney-mobile");
+  } else if (getCookieValue("kpmCustom-custom-netflix")) {
+    currentSchema = schemaMap.get("netflix");
   } else if (getCookieValue("kpmCustom-custom-pdf")) {
     currentSchema = schemaMap.get("pdf-software");
   } else if (getCookieValue("kpmCustom-custom-pod-web")) {
@@ -11504,7 +11595,8 @@ function addEditor(reportID) {
         });
       } else if (
         getCookieValue("kpmCustom-custom-disney") ||
-        getCookieValue("kpmCustom-custom-disney-mobile")
+        getCookieValue("kpmCustom-custom-disney-mobile") ||
+        getCookieValue("kpmCustom-custom-netflix")
       ) {
         boilerplate.successCriteria.forEach((criterion) => {
           formattedCriteria += `${criterion.number} ${criterion.name}\n`;
