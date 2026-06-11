@@ -15,3 +15,9 @@ Once installed this way, TamperMonkey will automatically check for and install u
 Open this page, and then drag the "Assign all to me" link to your bookmark bar/folder:
 
 [AssignToMeFavlet.html](https://html-preview.github.io/?url=https://github.com/levelaccess/AMPScript-Releases/blob/Other-Level-Access-tools/AssignToMeFavlet.html)
+
+### Several AMP favlets
+
+Open this page, and then drag any of the links to your bookmark bar/folder:
+
+[AMPFavlets.html](https://html-preview.github.io/?url=https://github.com/levelaccess/AMPScript-Releases/blob/Other-Level-Access-tools/AMPFavlets.html)
