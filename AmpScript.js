@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.20.0
+// @version      7.0.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -13,17 +13,29 @@
 // @match        *.levelaccess.us/index.php*
 // @match        *.levelaccess.us/public/reporting/*
 // @match        *.levelaccess.us/public/audit/*
-// @grant        none
+// @grant        GM_xmlhttpRequest
+// @grant        GM_download
+// @connect      self
 // @updateURL    https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
 // @downloadURL  https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
 // @supportURL   https://level-access.slack.com/messages/CK79W4PPU/
 // @icon         https://amp.levelaccess.net/img/favicon.png
 // @require      https://unpkg.com/prettier@3.6.2/standalone.js
 // @require      https://unpkg.com/prettier@3.6.2/plugins/html.js
+// @require      https://cdn.jsdelivr.net/npm/pdf-lib@1.17.0/dist/pdf-lib.min.js
+// @require      https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js
+// @require      https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js
+// @require      https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js
+// @require      https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js
+// @require      https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js
 // ==/UserScript==
 
 // temp/BaseScript.js
-const $ = window.jQuery;
+// NOTE: See https://wiki.greasespot.net/Content_Script_Injection for why this is necessary,
+//       instead of just `const $ = window.jQuery;`, now that the userscript is *not*
+//       @grant "none"
+const $ = window.eval('window.jQuery;');
+
 function dataBadSites() {
   // `reason` should be an adjective
   const sites = [
@@ -12186,6 +12198,1097 @@ function testModuleAlternate() {
     $("a[onclick^='modal_create_global']").hide();
   }
 }
+// Copy this exact line into the Tampermonkey userscript metadata block,
+// between // ==UserScript== and // ==/UserScript==:
+// @require https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js
+// @require https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js
+// @require https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js
+
+(function () {
+  "use strict";
+
+  const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_SCRIPT_VERSION = "0.10.5";
+  const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_SCRIPT_LOGGING = true; // Set to true to enable detailed logging for debugging purposes.
+  const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_DISPLAY_CONFIRMATION_DIALOG_TIMEOUT_MS = 5000;
+  const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_COMPANY_NAME = "Level Access";
+  const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_FILE_NAME_SUFFIX = "All Violation Instances";
+
+  // Override the auto-calculated width (in characters) for specific XLSX columns by header name.
+  const COLUMN_WIDTH_OVERRIDES = {
+    "Module": 50,
+    "Violation": 50,
+    "Description": 50,
+    "Note": 50,
+    "Thumbnail": 40,
+    "Thumbnail Alt Text": 50,
+    "Link to instance in AMP": 50
+  };
+
+  function logProgress(message, details) {
+    if (VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_SCRIPT_LOGGING) {
+      console.log(`[AMPScript Violation Instances Excel file processing] ${message}`, details || "");
+    }
+  }
+
+  function createProcessingDialogMarkup(message) {
+    return `
+      <div id="ampscript-violation-instances-excel-processing-dialog-overlay" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        font-family: Arial, sans-serif;
+      ">
+        <div style="
+          background-color: white;
+          border-radius: 8px;
+          padding: 30px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          max-width: 400px;
+          text-align: center;
+        " role="alert" aria-live="assertive" aria-atomic="true">
+          <div style="
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: amp-violation-instances-excel-processing-spin 1s linear infinite;
+            margin: 0 auto 20px;
+          "></div>
+          <p id="ampscript-violation-instances-excel-processing-dialog-message" style="
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.5;
+            white-space: pre-wrap;
+          ">${message}</p>
+        </div>
+        <style>
+          @keyframes amp-violation-instances-excel-processing-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        </style>
+      </div>
+    `;
+  }
+
+  function showProcessingDialog(message) {
+    if (typeof document === "undefined" || !document.body) return;
+    hideProcessingDialog();
+    document.body.insertAdjacentHTML("beforeend", createProcessingDialogMarkup(""));
+    updateProcessingDialog(message);
+  }
+
+  function updateProcessingDialog(message) {
+    if (typeof document === "undefined") return;
+    const messageElement = document.getElementById("ampscript-violation-instances-excel-processing-dialog-message");
+    if (messageElement) messageElement.textContent = message;
+  }
+
+  function hideProcessingDialog() {
+    if (typeof document === "undefined") return;
+    const overlay = document.getElementById("ampscript-violation-instances-excel-processing-dialog-overlay");
+    if (overlay) overlay.remove();
+  }
+
+  const requestOptions = {
+    "credentials": "include",
+    "headers": {
+      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+      "content-type": "application/x-www-form-urlencoded"
+    },
+    "body": "draw=4&" +
+      "columns[0][data]=instance_id&" +
+      "columns[0][name]=selection&" +
+      "columns[0][searchable]=true&" +
+      "columns[0][orderable]=false&" +
+      "columns[0][visible]=false&" +
+      "columns[0][search][value]=&" +
+      "columns[0][search][regex]=false&" +
+      "columns[1][data]=1&" +
+      "columns[1][name]=actions&" +
+      "columns[1][searchable]=true&" +
+      "columns[1][orderable]=false&" +
+      "columns[1][visible]=false&" +
+      "columns[1][search][value]=&" +
+      "columns[1][search][regex]=false&" +
+      "columns[2][data]=name&" +
+      "columns[2][name]=module_name&" +
+      "columns[2][searchable]=true&" +
+      "columns[2][orderable]=true&" +
+      "columns[2][visible]=true&" +
+      "columns[2][search][value]=-1&" +
+      "columns[2][search][regex]=false&" +
+      "columns[2][title]=Module&" +
+      "columns[3][data]=v_short_description&" +
+      "columns[3][name]=violation_name&" +
+      "columns[3][searchable]=true&" +
+      "columns[3][orderable]=true&" +
+      "columns[3][visible]=true&" +
+      "columns[3][search][value]=&" +
+      "columns[3][search][regex]=false&" +
+      "columns[3][title]=Violation&" +
+      "columns[4][data]=element&" +
+      "columns[4][name]=instance&" +
+      "columns[4][searchable]=true&" +
+      "columns[4][orderable]=true&" +
+      "columns[4][visible]=true&" +
+      "columns[4][search][value]=&" +
+      "columns[4][search][regex]=false&" +
+      "columns[4][title]=Description&" +
+      "columns[5][data]=instance_id&" +
+      "columns[5][name]=instance_id&" +
+      "columns[5][searchable]=true&" +
+      "columns[5][orderable]=true&" +
+      "columns[5][visible]=true&" +
+      "columns[5][search][value]=&" +
+      "columns[5][search][regex]=false&" +
+      "columns[5][title]=Instance+ID&" +
+      "columns[6][data]=severity&" +
+      "columns[6][name]=severity&" +
+      "columns[6][searchable]=true&" +
+      "columns[6][orderable]=true&" +
+      "columns[6][visible]=true&" +
+      "columns[6][search][value]=-1&" +
+      "columns[6][search][regex]=false&" +
+      "columns[6][title]=Severity&" +
+      "columns[7][data]=noticeability&" +
+      "columns[7][name]=noticeability&" +
+      "columns[7][searchable]=true&" +
+      "columns[7][orderable]=true&" +
+      "columns[7][visible]=true&" +
+      "columns[7][search][value]=&" +
+      "columns[7][search][regex]=false&" +
+      "columns[7][title]=Noticeability&" +
+      "columns[8][data]=tractability&" +
+      "columns[8][name]=tractability&" +
+      "columns[8][searchable]=true&" +
+      "columns[8][orderable]=true&" +
+      "columns[8][visible]=true&" +
+      "columns[8][search][value]=&" +
+      "columns[8][search][regex]=false&" +
+      "columns[8][title]=Tractability&" +
+      "columns[9][data]=pattern_name&" +
+      "columns[9][name]=pattern_name&" +
+      "columns[9][searchable]=true&" +
+      "columns[9][orderable]=true&" +
+      "columns[9][visible]=true&" +
+      "columns[9][search][value]=&" +
+      "columns[9][search][regex]=false&" +
+      "columns[9][title]=Pattern/Global&" +
+      "columns[10][data]=attribute&" +
+      "columns[10][name]=note&" +
+      "columns[10][searchable]=true&" +
+      "columns[10][orderable]=true&" +
+      "columns[10][visible]=true&" +
+      "columns[10][search][value]=&" +
+      "columns[10][search][regex]=false&" +
+      "columns[10][title]=Note&" +
+      "columns[11][data]=instance_state&" +
+      "columns[11][name]=instance_state&" +
+      "columns[11][searchable]=true&" +
+      "columns[11][orderable]=true&" +
+      "columns[11][visible]=true&" +
+      "columns[11][search][value]=0&" +
+      "columns[11][search][regex]=false&" +
+      "columns[11][title]=Instance+Status&" +
+      "columns[12][data]=location&" +
+      "columns[12][name]=location&" +
+      "columns[12][searchable]=true&" +
+      "columns[12][orderable]=true&" +
+      "columns[12][visible]=true&" +
+      "columns[12][search][value]=&" +
+      "columns[12][search][regex]=false&" +
+      "columns[12][title]=Module+Location&" +
+      "columns[13][data]=mt_short_description&" +
+      "columns[13][name]=media_type&" +
+      "columns[13][searchable]=true&" +
+      "columns[13][orderable]=true&" +
+      "columns[13][visible]=true&" +
+      "columns[13][search][value]=&" +
+      "columns[13][search][regex]=false&" +
+      "columns[13][title]=Media+Type&" +
+      "columns[14][data]=image_path&" +
+      "columns[14][name]=thumbnail&" +
+      "columns[14][searchable]=true&" +
+      "columns[14][orderable]=true&" +
+      "columns[14][visible]=true&" +
+      "columns[14][search][value]=&" +
+      "columns[14][search][regex]=false&" +
+      "columns[14][title]=Thumbnail&" +
+      "columns[15][data]=page_number&" +
+      "columns[15][name]=page_number&" +
+      "columns[15][searchable]=true&" +
+      "columns[15][orderable]=true&" +
+      "columns[15][visible]=true&" +
+      "columns[15][search][value]=&" +
+      "columns[15][search][regex]=false&" +
+      "columns[15][title]=Page+Number&" +
+      "columns[16][data]=defect_id&" +
+      "columns[16][name]=defect_id&" +
+      "columns[16][searchable]=true&" +
+      "columns[16][orderable]=true&" +
+      "columns[16][visible]=true&" +
+      "columns[16][search][value]=&" +
+      "columns[16][search][regex]=false&" +
+      "columns[16][title]=Defect+ID&" +
+      "columns[17][data]=defect_status&" +
+      "columns[17][name]=defect_status&" +
+      "columns[17][searchable]=true&" +
+      "columns[17][orderable]=true&" +
+      "columns[17][visible]=true&" +
+      "columns[17][search][value]=-1&" +
+      "columns[17][search][regex]=false&" +
+      "columns[17][title]=Defect+Status&" +
+      "columns[18][data]=defect_comments&" +
+      "columns[18][name]=defect_comments&" +
+      "columns[18][searchable]=true&" +
+      "columns[18][orderable]=true&" +
+      "columns[18][visible]=true&" +
+      "columns[18][search][value]=&" +
+      "columns[18][search][regex]=false&" +
+      "columns[18][title]=Defect+Comments&" +
+      "columns[19][data]=advisory&" +
+      "columns[19][name]=advisory&" +
+      "columns[19][searchable]=true&" +
+      "columns[19][orderable]=true&" +
+      "columns[19][visible]=true&" +
+      "columns[19][search][value]=-1&" +
+      "columns[19][search][regex]=false&" +
+      "columns[19][title]=Advisory&" +
+      "columns[20][data]=finding_id&" +
+      "columns[20][name]=finding_id&" +
+      "columns[20][searchable]=true&" +
+      "columns[20][orderable]=true&" +
+      "columns[20][visible]=true&" +
+      "columns[20][search][value]=&" +
+      "columns[20][search][regex]=false&" +
+      "columns[20][title]=Finding+ID&" +
+      "columns[21][data]=standard_id&" +
+      "columns[21][name]=standard_id&" +
+      "columns[21][searchable]=true&" +
+      "columns[21][orderable]=true&" +
+      "columns[21][visible]=false&" +
+      "columns[21][search][value]=-1&" +
+      "columns[21][search][regex]=false&" +
+      "columns[22][data]=media_type_id&" +
+      "columns[22][name]=media_type_id&" +
+      "columns[22][searchable]=true&" +
+      "columns[22][orderable]=true&" +
+      "columns[22][visible]=false&" +
+      "columns[22][search][value]=-1&" +
+      "columns[22][search][regex]=false&" +
+      "order[0][column]=2&" +
+      "order[0][dir]=asc&" +
+      "start=0&" +
+      "length=-1&" +
+      "search[value]=&" +
+      "search[regex]=false&" +
+      "mode[name]=excel&" +
+      "mode[fileName]=violation_instances_excel_file_filename",
+    "method": "POST"
+  };
+
+  function encodeBody(body) {
+    return body
+      .split("&")
+      .map((field) => field
+        .split("=")
+        .map((part) => encodeURIComponent(part).replaceAll("%2B", "+"))
+        .join("="))
+      .join("&");
+  }
+
+  function imageDataToBase64(imageData) {
+    if (typeof imageData === "string") {
+      return imageData.replace(/^data:[^,]+,/, "");
+    }
+
+    const bytes = imageData instanceof Uint8Array
+      ? imageData
+      : new Uint8Array(imageData);
+    let binary = "";
+    const chunkSize = 0x8000;
+
+    for (let index = 0; index < bytes.length; index += chunkSize) {
+      binary += String.fromCharCode(...bytes.subarray(index, index + chunkSize));
+    }
+
+    return btoa(binary);
+  }
+
+  function workbookToJson(XLSX, workbook) {
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+    const imagesByRow = new Map();
+
+    for (const image of worksheet["!images"] || []) {
+      const row = image.range?.s?.r ?? image.from?.r;
+      if (row === undefined || !image.data) continue;
+
+      imagesByRow.set(row - 1, imageDataToBase64(image.data));
+    }
+
+    return rows.map((row, index) => {
+      const screenshot = imagesByRow.get(index);
+      return screenshot ? { ...row, screenshot } : row;
+    });
+  }
+
+  async function fetchEapJsonArray(origin, reportId) {
+    const eapUrl = `${origin}/public/reporting/export_audit_results.php?report_id=${encodeURIComponent(reportId)}&mode=json`;
+    logProgress("Loading eAP JSON array", { url: eapUrl });
+    const response = await fetch(eapUrl, { credentials: "include" });
+    logProgress("eAP JSON response received", { status: response.status, statusText: response.statusText });
+
+    if (!response.ok) {
+      const responseText = await response.text();
+      console.log("eAP JSON error response:", responseText);
+      throw new Error(`eAP JSON request failed with HTTP ${response.status}`);
+    }
+
+    const eapJsonArray = await response.json();
+    if (!Array.isArray(eapJsonArray)) {
+      throw new Error("The eAP JSON response was not an array.");
+    }
+
+    logProgress("eAP JSON array parsed", { objectCount: eapJsonArray.length });
+    return eapJsonArray;
+  }
+
+  // Normalize each XLS row and merge matching eAP data into it. The final array
+  // intentionally keeps the XLS schema as its base and adds only useful eAP fields.
+  function combineJsonArrays(xlsJsonArray, eapJsonArray) {
+    const numericXlsAttributes = [
+      "Instance ID",
+      "Severity",
+      "Noticeability",
+      "Tractability"
+    ];
+    const discardedEapAttributes = new Set([
+      "instanceId",
+      "moduleName",
+      "moduleURL",
+      "description",
+      "note",
+      "altText",
+      "screenshot"
+    ]);
+    const platformAttributes = new Set(["status", "severity", "tractability", "global"]);
+    const eapByInstanceId = new Map();
+    const matchedEapIndexes = new Set();
+
+    function convertNumericXlsAttributes(xlsObject) {
+      const normalizedObject = { ...xlsObject };
+
+      delete normalizedObject.__EMPTY;
+      delete normalizedObject.screenshot;
+
+      numericXlsAttributes.forEach((attributeName) => {
+        const value = normalizedObject[attributeName];
+        if (value === undefined || value === null || /^\d+$/.test(String(value))) {
+          if (value !== undefined && value !== null) {
+            normalizedObject[attributeName] = Number(value);
+          }
+          return;
+        }
+
+        console.warn(`XLS attribute "${attributeName}" was not purely numeric:`, value);
+      });
+
+      return normalizedObject;
+    }
+
+    function addEapAttributes(combinedObject, eapObject) {
+      Object.entries(eapObject).forEach(([attributeName, attributeValue]) => {
+        if (discardedEapAttributes.has(attributeName)) {
+          if (attributeName === "screenshot" && attributeValue !== undefined && attributeValue !== null) {
+            combinedObject.Thumbnail = attributeValue;
+          }
+          return;
+        }
+
+        const outputName = platformAttributes.has(attributeName) || Object.hasOwn(combinedObject, attributeName)
+          ? `Platform-${attributeName}`
+          : attributeName;
+        combinedObject[outputName] = attributeValue;
+      });
+    }
+
+    eapJsonArray.forEach((eapObject, index) => {
+      const instanceId = eapObject?.instanceId;
+      if (instanceId !== undefined && instanceId !== null) {
+        eapByInstanceId.set(String(instanceId), { eapObject, index });
+      }
+    });
+
+    let combinedCount = 0;
+    const combinedXlsJsonArray = xlsJsonArray.map((xlsObject) => {
+      const normalizedXlsObject = convertNumericXlsAttributes(xlsObject);
+      const instanceId = normalizedXlsObject?.["Instance ID"];
+      const eapMatch = eapByInstanceId.get(String(instanceId));
+
+      if (!eapMatch) {
+        return normalizedXlsObject;
+      }
+
+      combinedCount += 1;
+      matchedEapIndexes.add(eapMatch.index);
+
+      const combinedObject = { ...normalizedXlsObject };
+      addEapAttributes(combinedObject, eapMatch.eapObject);
+
+      return combinedObject;
+    });
+
+    const unmatchedXlsCount = xlsJsonArray.filter((xlsObject) => {
+      const instanceId = xlsObject?.["Instance ID"];
+      return !eapByInstanceId.has(String(instanceId));
+    }).length;
+    const unmatchedEapCount = eapJsonArray.length - matchedEapIndexes.size;
+
+    logProgress("XLS and eAP arrays combined", {
+      combinedCount,
+      xlsObjectCount: xlsJsonArray.length,
+      eapObjectCount: eapJsonArray.length,
+      unmatchedXlsCount,
+      unmatchedEapCount
+    });
+    if (unmatchedXlsCount > 0) {
+      console.warn(`${unmatchedXlsCount} XLS objects did not have a matching eAP object.`);
+    }
+    if (unmatchedEapCount > 0) {
+      console.warn(`${unmatchedEapCount} eAP objects did not have a matching XLS object.`);
+    }
+
+    return combinedXlsJsonArray;
+  }
+
+  function decodeHtmlEntities(value) {
+    const element = document.createElement("textarea");
+    element.innerHTML = String(value);
+    return element.value;
+  }
+
+  function isNumericValue(value) {
+    return typeof value === "number" || (typeof value === "string" && /^-?\d+(\.\d+)?$/.test(value.trim()));
+  }
+
+  function detectImageType(base64) {
+    if (base64.startsWith("iVBORw0KGgo")) return "png";
+    if (base64.startsWith("/9j/")) return "jpeg";
+    if (base64.startsWith("R0lGOD")) return "gif";
+    return null;
+  }
+
+  // ExcelJS can only anchor images "over" cells. True "in cell" images (Excel's
+  // "Place in Cell" feature) require patching the generated XLSX zip to add the
+  // OOXML "rich value" parts Excel uses to bind an image to a cell's value, so
+  // that clearing the cell also clears the image. Reverse-engineered from the
+  // parts XlsxWriter (Python) generates for its equivalent embed_image() feature.
+  async function embedImagesInCells(workbookBytes, embeddedImages) {
+    const runtimeDiagnostics = {
+      scriptVersion: VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_SCRIPT_VERSION,
+      jsZipVersion: typeof JSZip !== "undefined" ? JSZip.version : "unavailable",
+      workbookBytesType: Object.prototype.toString.call(workbookBytes),
+      workbookBytesConstructor: workbookBytes?.constructor?.name,
+      workbookBytesIsUint8Array: workbookBytes instanceof Uint8Array,
+      workbookBytesIsArrayBuffer: workbookBytes instanceof ArrayBuffer,
+      promiseConstructor: Promise?.constructor?.name,
+      windowPromiseMatchesGlobal: typeof window !== "undefined" && window.Promise === Promise,
+      textDecoderAvailable: typeof TextDecoder !== "undefined",
+      imageCount: embeddedImages?.length
+    };
+    console.log("[AMPScript Violation Instances Excel file processing] embedImagesInCells runtime diagnostics", runtimeDiagnostics);
+    console.log("[AMPScript Violation Instances Excel file processing] embedImagesInCells entered", {
+      workbookByteCount: workbookBytes?.byteLength || workbookBytes?.length,
+      imageCount: embeddedImages?.length
+    });
+
+    if (typeof JSZip === "undefined") {
+      console.warn("JSZip is unavailable; thumbnails will not be embedded in cells. Add jszip.min.js with Tampermonkey @require.");
+      return workbookBytes;
+    }
+
+    if (!embeddedImages || embeddedImages.length === 0) {
+      console.warn("[AMPScript Violation Instances Excel file processing] embedImagesInCells received no images.");
+      return workbookBytes;
+    }
+
+    let zip;
+    try {
+      console.log("[AMPScript Violation Instances Excel file processing] Loading workbook bytes with JSZip.");
+      zip = await JSZip.loadAsync(workbookBytes);
+      console.log("[AMPScript Violation Instances Excel file processing] Workbook loaded with JSZip.", {
+        zipConstructor: zip?.constructor?.name,
+        zipEntryCount: zip ? Object.keys(zip.files).length : 0,
+        zipEntrySample: zip ? Object.keys(zip.files).slice(0, 10) : []
+      });
+    } catch (error) {
+      console.error("[AMPScript Violation Instances Excel file processing] JSZip failed to load the workbook.", error);
+      throw error;
+    }
+    const count = embeddedImages.length;
+    const contentTypesPath = "[Content_Types].xml";
+    const contentTypeEntries = [
+      '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>',
+      '<Default Extension="xml" ContentType="application/xml"/>',
+      '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>',
+      '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>',
+      '<Override PartName="/xl/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/>',
+      '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>',
+      '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>',
+      '<Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>'
+    ];
+    if (zip.files["xl/sharedStrings.xml"]) {
+      contentTypeEntries.push('<Override PartName="/xl/sharedStrings.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"/>');
+    }
+    let contentTypesXml =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">${contentTypeEntries.join("")}</Types>`;
+    console.log(`[AMPScript Violation Instances Excel file processing] Rebuilt ${contentTypesPath} without reading the original ZIP entry.`, {
+      entryCount: contentTypeEntries.length
+    });
+
+    console.log("[AMPScript Violation Instances Excel file processing] Adding embedded image files to ZIP.", { imageCount: count });
+    embeddedImages.forEach((image, index) => {
+      zip.file(`xl/media/cellImage${index + 1}.${image.extension}`, image.base64, { base64: true });
+    });
+    console.log("[AMPScript Violation Instances Excel file processing] Embedded image files added to ZIP.");
+
+    console.log("[AMPScript Violation Instances Excel file processing] Building rich value XML parts.");
+    const rdRichValueTypes =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<rvTypesInfo xmlns="http://schemas.microsoft.com/office/spreadsheetml/2017/richdata2" ' +
+      'xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x" ' +
+      'xmlns:x="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><global><keyFlags>' +
+      ["_Self", "_DisplayString", "_Flags", "_Format", "_SubLabel", "_Attribution", "_Icon", "_Display", "_CanonicalPropertyNames", "_ClassificationId"]
+        .map((name) => `<key name="${name}"><flag name="ExcludeFromCalcComparison" value="1"/></key>`)
+        .join("") +
+      "</keyFlags></global></rvTypesInfo>";
+
+    const rdRichValueStructure =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<rvStructures xmlns="http://schemas.microsoft.com/office/spreadsheetml/2017/richdata" count="1">' +
+      '<s t="_localImage"><k n="_rvRel:LocalImageIdentifier" t="i"/><k n="CalcOrigin" t="i"/></s></rvStructures>';
+
+    const rdRichValue =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      `<rvData xmlns="http://schemas.microsoft.com/office/spreadsheetml/2017/richdata" count="${count}">` +
+      embeddedImages.map((image, index) => `<rv s="0"><v>${index}</v><v>5</v></rv>`).join("") +
+      "</rvData>";
+
+    const richValueRel =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<richValueRels xmlns="http://schemas.microsoft.com/office/spreadsheetml/2022/richvaluerel" ' +
+      'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+      embeddedImages.map((image, index) => `<rel r:id="rId${index + 1}"/>`).join("") +
+      "</richValueRels>";
+
+    const richValueRelRels =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+      embeddedImages
+        .map((image, index) => `<Relationship Id="rId${index + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/cellImage${index + 1}.${image.extension}"/>`)
+        .join("") +
+      "</Relationships>";
+
+    const metadata =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<metadata xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+      'xmlns:xlrd="http://schemas.microsoft.com/office/spreadsheetml/2017/richdata">' +
+      '<metadataTypes count="1"><metadataType name="XLRICHVALUE" minSupportedVersion="120000" copy="1" pasteAll="1" ' +
+      'pasteValues="1" merge="1" splitFirst="1" rowColShift="1" clearFormats="1" clearComments="1" assign="1" coerce="1"/></metadataTypes>' +
+      `<futureMetadata name="XLRICHVALUE" count="${count}">` +
+      embeddedImages.map((image, index) => `<bk><extLst><ext uri="{3e2802c4-a4d2-4d8b-9148-e3be6c30e623}"><xlrd:rvb i="${index}"/></ext></extLst></bk>`).join("") +
+      "</futureMetadata>" +
+      `<valueMetadata count="${count}">` +
+      embeddedImages.map((image, index) => `<bk><rc t="1" v="${index}"/></bk>`).join("") +
+      "</valueMetadata></metadata>";
+    console.log("[AMPScript Violation Instances Excel file processing] Rich value XML parts built.", {
+      richValueTypesLength: rdRichValueTypes.length,
+      richValueLength: rdRichValue.length,
+      metadataLength: metadata.length
+    });
+
+    console.log("[AMPScript Violation Instances Excel file processing] Writing rich value XML parts to ZIP.");
+    zip.file("xl/richData/rdRichValueTypes.xml", rdRichValueTypes);
+    zip.file("xl/richData/rdrichvalue.xml", rdRichValue);
+    zip.file("xl/richData/rdrichvaluestructure.xml", rdRichValueStructure);
+    zip.file("xl/richData/richValueRel.xml", richValueRel);
+    zip.file("xl/richData/_rels/richValueRel.xml.rels", richValueRelRels);
+    zip.file("xl/metadata.xml", metadata);
+    console.log("[AMPScript Violation Instances Excel file processing] Rich value XML parts written to ZIP.");
+
+    const missingDefaults = [...new Set(embeddedImages.map((image) => image.extension))]
+      .filter((extension) => !new RegExp(`Extension="${extension}"`, "i").test(contentTypesXml))
+      .map((extension) => `<Default Extension="${extension}" ContentType="image/${extension}"/>`)
+      .join("");
+    const contentTypeOverrides =
+      '<Override PartName="/xl/richData/rdRichValueTypes.xml" ContentType="application/vnd.ms-excel.rdrichvaluetypes+xml"/>' +
+      '<Override PartName="/xl/richData/rdrichvalue.xml" ContentType="application/vnd.ms-excel.rdrichvalue+xml"/>' +
+      '<Override PartName="/xl/richData/rdrichvaluestructure.xml" ContentType="application/vnd.ms-excel.rdrichvaluestructure+xml"/>' +
+      '<Override PartName="/xl/richData/richValueRel.xml" ContentType="application/vnd.ms-excel.richvaluerel+xml"/>' +
+      '<Override PartName="/xl/metadata.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheetMetadata+xml"/>';
+    contentTypesXml = contentTypesXml.replace("</Types>", `${missingDefaults}${contentTypeOverrides}</Types>`);
+    zip.file(contentTypesPath, contentTypesXml);
+
+    const workbookRelsPath = "xl/_rels/workbook.xml.rels";
+    const workbookRelationshipEntries = [
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>',
+      '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"/>',
+      '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml"/>',
+      '<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'
+    ];
+    let workbookRelsXml =
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${workbookRelationshipEntries.join("")}</Relationships>`;
+    console.log(`[AMPScript Violation Instances Excel file processing] Rebuilt ${workbookRelsPath} without reading the original ZIP entry.`);
+    const newWorkbookRels =
+      '<Relationship Id="rIdCellImagesRichValueRel" Type="http://schemas.microsoft.com/office/2022/10/relationships/richValueRel" Target="richData/richValueRel.xml"/>' +
+      '<Relationship Id="rIdCellImagesRichValue" Type="http://schemas.microsoft.com/office/2017/06/relationships/rdRichValue" Target="richData/rdrichvalue.xml"/>' +
+      '<Relationship Id="rIdCellImagesRichValueStructure" Type="http://schemas.microsoft.com/office/2017/06/relationships/rdRichValueStructure" Target="richData/rdrichvaluestructure.xml"/>' +
+      '<Relationship Id="rIdCellImagesRichValueTypes" Type="http://schemas.microsoft.com/office/2017/06/relationships/rdRichValueTypes" Target="richData/rdRichValueTypes.xml"/>' +
+      '<Relationship Id="rIdCellImagesSheetMetadata" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sheetMetadata" Target="metadata.xml"/>';
+    workbookRelsXml = workbookRelsXml.replace("</Relationships>", `${newWorkbookRels}</Relationships>`);
+    zip.file(workbookRelsPath, workbookRelsXml);
+
+    console.warn("[AMPScript Violation Instances Excel file processing] Skipping worksheet XML patch because Tampermonkey JSZip cannot decompress existing XML entries. The workbook will still be generated, but thumbnails will not use Excel's in-cell vm bindings.");
+
+    console.log("[AMPScript Violation Instances Excel file processing] Generating modified workbook with JSZip.");
+    const generationStartedAt = performance.now();
+    let generationHeartbeatCount = 0;
+    const generationHeartbeat = setInterval(() => {
+      generationHeartbeatCount += 1;
+      console.log("[AMPScript Violation Instances Excel file processing] Still generating modified workbook with JSZip.", {
+        elapsedMs: Math.round(performance.now() - generationStartedAt),
+        heartbeatCount: generationHeartbeatCount
+      });
+    }, 1000);
+    let generationTimeout;
+    try {
+      const generationTimeoutPromise = new Promise((resolve, reject) => {
+        generationTimeout = setTimeout(() => reject(new Error("Timed out generating the modified XLSX workbook.")), 60000);
+      });
+      const generatedWorkbook = await Promise.race([
+        zip.generateAsync({ type: "uint8array", compression: "STORE" }),
+        generationTimeoutPromise
+      ]);
+      clearTimeout(generationTimeout);
+      clearInterval(generationHeartbeat);
+      console.log("[AMPScript Violation Instances Excel file processing] Modified workbook generated with JSZip.", {
+        workbookByteCount: generatedWorkbook.byteLength || generatedWorkbook.length,
+        elapsedMs: Math.round(performance.now() - generationStartedAt),
+        compression: "STORE"
+      });
+      return generatedWorkbook;
+    } catch (error) {
+      clearTimeout(generationTimeout);
+      clearInterval(generationHeartbeat);
+      console.error("[AMPScript Violation Instances Excel file processing] JSZip failed to generate the modified workbook.", error);
+      throw error;
+    }
+  }
+
+  // Build the final workbook from the merged JSON array. Headers follow the
+  // first-seen property order, while cell values receive explicit XLSX types.
+  async function downloadWorkbook(ExcelJS, origin, reportId, reportName, jsonArray, options = {}) {
+    const omitThumbnails = options.omitThumbnails === true;
+    const headers = [];
+    const knownHeaders = new Set();
+
+    jsonArray.forEach((row) => {
+      Object.keys(row).forEach((attributeName) => {
+        if (!knownHeaders.has(attributeName)) {
+          knownHeaders.add(attributeName);
+          headers.push(attributeName);
+        }
+      });
+    });
+    if (omitThumbnails) {
+      ["Thumbnail", "Thumbnail Alt Text"].forEach((header) => {
+        const headerIndex = headers.indexOf(header);
+        if (headerIndex >= 0) {
+          headers.splice(headerIndex, 1);
+        }
+      });
+    }
+    headers.push("Link to instance in AMP");
+
+    if (!ExcelJS) {
+      throw new Error("ExcelJS is unavailable. Add exceljs.min.js with Tampermonkey @require.");
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_COMPANY_NAME;
+    workbook.title = `${reportName} - ${VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_FILE_NAME_SUFFIX}`;
+    const worksheet = workbook.addWorksheet(VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_FILE_NAME_SUFFIX);
+    logProgress("Creating final XLSX workbook", { rowCount: jsonArray.length, columnCount: headers.length });
+    worksheet.columns = headers.map((header) => ({
+      header,
+      key: header,
+      width: COLUMN_WIDTH_OVERRIDES[header] ?? Math.min(Math.max(header.length + 2, 12), 35)
+    }));
+    worksheet.getRow(1).font = { bold: true };
+
+    const thumbnailColumn = headers.indexOf("Thumbnail") + 1;
+    const moduleLocationColumn = headers.indexOf("Module Location") + 1;
+    const instanceLinkColumn = headers.indexOf("Link to instance in AMP") + 1;
+    const createdTimestampColumn = headers.indexOf("createdTimestamp") + 1;
+    const descriptionColumn = headers.indexOf("Description") + 1;
+    const noteColumn = headers.indexOf("Note") + 1;
+    const embeddedImages = [];
+    const useExcelJsImageEmbedding = typeof process === "undefined";
+
+    jsonArray.forEach((row) => {
+      const outputRow = {};
+      headers.forEach((attributeName) => {
+        let value = row[attributeName];
+        if (attributeName === "Link to instance in AMP") {
+          const instanceId = row["Instance ID"];
+          value = instanceId === undefined || instanceId === null
+            ? ""
+            : `${origin}/public/reporting/view_instance.php?instance_id=${instanceId}`;
+        }
+        if (value === undefined || value === null) value = "";
+        value = decodeHtmlEntities(value);
+
+        if (attributeName === "Instance Status") {
+          value = value.replace(/<br\s*\/?>/gi, "\n");
+        }
+
+        if (attributeName === "createdTimestamp" && Number.isFinite(Number(value))) {
+          value = new Date(Number(value));
+        } else if (isNumericValue(value)) {
+          value = Number(value);
+        } else {
+          value = String(value);
+        }
+
+        if (attributeName === "Thumbnail" && typeof value === "string" && detectImageType(value)) {
+          value = "";
+        }
+
+        outputRow[attributeName] = value;
+      });
+
+      const worksheetRow = worksheet.addRow(outputRow);
+      headers.forEach((attributeName, columnIndex) => {
+        const cell = worksheetRow.getCell(columnIndex + 1);
+        cell.alignment = { vertical: "top" };
+        const cellValue = outputRow[attributeName];
+        if (typeof cellValue === "number") {
+          cell.numFmt = "0";
+        }
+      });
+      if (descriptionColumn > 0) {
+        worksheetRow.getCell(descriptionColumn).alignment = { vertical: "top", wrapText: true };
+      }
+      if (noteColumn > 0) {
+        worksheetRow.getCell(noteColumn).alignment = { vertical: "top", wrapText: true };
+      }
+      if (createdTimestampColumn > 0) {
+        worksheetRow.getCell(createdTimestampColumn).numFmt = "yyyy-mm-dd hh:mm:ss";
+      }
+      if (moduleLocationColumn > 0 && outputRow["Module Location"]) {
+        const cell = worksheetRow.getCell(moduleLocationColumn);
+        cell.value = { text: outputRow["Module Location"], hyperlink: outputRow["Module Location"] };
+        cell.font = { color: { argb: "FF0563C1" }, underline: true };
+      }
+      if (instanceLinkColumn > 0 && outputRow["Link to instance in AMP"]) {
+        const cell = worksheetRow.getCell(instanceLinkColumn);
+        cell.value = {
+          text: outputRow["Link to instance in AMP"],
+          hyperlink: outputRow["Link to instance in AMP"]
+        };
+        cell.font = { color: { argb: "FF0563C1" }, underline: true };
+      }
+
+      if (!omitThumbnails && thumbnailColumn > 0 && row.Thumbnail) {
+        const imageType = detectImageType(row.Thumbnail);
+        if (imageType) {
+          if (useExcelJsImageEmbedding) {
+            const imageId = workbook.addImage({
+              base64: `data:image/${imageType};base64,${row.Thumbnail}`,
+              extension: imageType
+            });
+            worksheet.addImage(imageId, {
+              tl: { col: thumbnailColumn - 1, row: worksheetRow.number - 1 },
+              ext: { width: 100, height: 100 }
+            });
+          }
+          embeddedImages.push({
+            base64: row.Thumbnail,
+            extension: imageType,
+            cellRef: worksheetRow.getCell(thumbnailColumn).address
+          });
+          worksheetRow.height = 100;
+        }
+      }
+    });
+
+    const tableRows = [];
+    for (let rowNumber = 2; rowNumber <= worksheet.rowCount; rowNumber += 1) {
+      tableRows.push(headers.map((header, columnIndex) => worksheet.getCell(rowNumber, columnIndex + 1).value));
+    }
+    const tableEndCell = worksheet.getCell(worksheet.rowCount, headers.length).address;
+    worksheet.addTable({
+      name: "AllViolationInstancesTable",
+      ref: `A1:${tableEndCell}`,
+      headerRow: true,
+      // ExcelJS 4.4.0 serializes totalsRowShown="1" when totalsRow is false.
+      // Use a blank totals row so the emitted table XML remains valid in Excel.
+      totalsRow: true,
+      style: {
+        theme: "TableStyleMedium2",
+        showFirstColumn: false,
+        showLastColumn: false,
+        showRowStripes: true,
+        showColumnStripes: false
+      },
+      columns: headers.map((header, index) => ({
+        name: header,
+        filterButton: true,
+        totalsRowLabel: index === 0 ? "" : undefined,
+        totalsRowFunction: index === 0 ? "none" : "none"
+      })),
+      rows: tableRows
+    });
+    logProgress("Formatted used worksheet range as an Excel table", {
+      ref: `A1:${tableEndCell}`,
+      rowCount: worksheet.rowCount - 1,
+      columnCount: headers.length,
+      style: "TableStyleMedium2",
+      autoFilter: true,
+      totalsRowShown: true
+    });
+
+    logProgress("Thumbnail images prepared for XLSX workbook", {
+      imageCount: embeddedImages.length,
+      omitted: omitThumbnails
+    });
+    logProgress("Creating final XLSX workbook");
+    let workbookBytes = await workbook.xlsx.writeBuffer();
+    if (embeddedImages.length > 0 && !useExcelJsImageEmbedding) {
+      logProgress("Embedding thumbnails in cells", { imageCount: embeddedImages.length });
+      try {
+        workbookBytes = await embedImagesInCells(workbookBytes, embeddedImages);
+      } catch (error) {
+        console.error("[AMPScript Violation Instances Excel file processing] embedImagesInCells failed.", error);
+        throw error;
+      }
+    } else if (embeddedImages.length > 0) {
+      console.warn("[AMPScript Violation Instances Excel file processing] Embedded thumbnails with ExcelJS worksheet images; skipping the Tampermonkey-incompatible JSZip rich-value patch.");
+    }
+    logProgress("Final XLSX workbook created", { byteCount: workbookBytes.byteLength || workbookBytes.length });
+    const outputFileName = omitThumbnails
+      ? `${reportName} - ${VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_FILE_NAME_SUFFIX} (no thumbnails).xlsx`
+      : `${reportName} - ${VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_FILE_NAME_SUFFIX}.xlsx`;
+    downloadResponse(
+      outputFileName,
+      workbookBytes,
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    updateProcessingDialog(`AMPScript: The enhanced XLSX spreadsheet has been created and downloaded through the browser.\n\nFile: ${outputFileName}`);
+    setTimeout(() => {
+      hideProcessingDialog();
+    }, VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_DISPLAY_CONFIRMATION_DIALOG_TIMEOUT_MS);
+    return workbookBytes;
+  }
+
+  async function retrieveAndDownloadViolationInstancesExcelFile(origin, reportId, reportName, options = {}) {
+    const requestUrl = `${origin}/api/instances?reportID=${encodeURIComponent(reportId)}`;
+    showProcessingDialog(`AMPScript: Fetching the violations XLS file from AMP.\n\nThis can take 30 seconds or more.\n\nPlease wait...`);
+    logProgress("Loading XLS file from AMP", { url: requestUrl, reportId, reportName });
+
+    const requestBody = encodeBody(
+      requestOptions.body.replace("violation_instances_excel_file_filename", `violation_instances_excel_file_${reportId}`)
+    );
+
+    const response = await fetch(requestUrl, { ...requestOptions, body: requestBody });
+
+    logProgress("XLS response received", { status: response.status, statusText: response.statusText });
+
+    if (!response.ok) {
+      const responseText = await response.text();
+      console.log("GetInstances error response:", responseText);
+      throw new Error(`Request failed with HTTP ${response.status}`);
+    }
+
+    const responseBlob = await response.blob();
+    logProgress("XLS file loaded", { byteCount: responseBlob.size });
+
+    if (typeof XLSX === "undefined") {
+      throw new Error("SheetJS is unavailable. Add xlsx.full.min.js with Tampermonkey @require.");
+    }
+    if (typeof ExcelJS === "undefined") {
+      throw new Error("ExcelJS is unavailable. Add exceljs.min.js with Tampermonkey @require.");
+    }
+
+    const workbook = XLSX.read(await responseBlob.arrayBuffer(), {
+      type: "array",
+      cellHTML: true,
+      cellImages: true
+    });
+    logProgress("XLS workbook parsed");
+    const xlsJsonArray = workbookToJson(XLSX, workbook);
+    logProgress("XLS workbook converted to JSON array", { objectCount: xlsJsonArray.length });
+    if (!xlsJsonArray.some((row) => row.screenshot)) {
+      console.warn("No embedded workbook images were exposed by the XLS parser.");
+    }
+
+    updateProcessingDialog(`AMPScript: The violations XLS file was received. Now fetching the "eAP Audit Report" JSON file from AMP for additional information.\n\nThis can take 30 seconds or more.\n\nPlease wait...`);
+    const eapJsonArray = await fetchEapJsonArray(origin, reportId);
+    const combinedJsonArray = combineJsonArrays(xlsJsonArray, eapJsonArray);
+    updateProcessingDialog("AMPScript: Both files were fetched from AMP. Starting creation of the enhanced XLSX spreadsheet.\n\nPlease wait...");
+    await downloadWorkbook(ExcelJS, origin, reportId, reportName, combinedJsonArray, options);
+  }
+
+  function downloadResponse(fileName, content, mimeType) {
+    if (typeof document === "undefined") {
+      logProgress("Skipping browser download in Node.js harness", { fileName, byteCount: content.byteLength || content.length, mimeType });
+      return;
+    }
+    const link = document.createElement("a");
+    const downloadBlob = new Blob([content], { type: mimeType });
+    link.href = URL.createObjectURL(downloadBlob);
+    link.download = fileName;
+    logProgress("Downloading final XLSX file to browser", { fileName, byteCount: downloadBlob.size, mimeType });
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 0);
+  }
+
+  window.__retrieveAndDownloadViolationInstancesExcelFile = retrieveAndDownloadViolationInstancesExcelFile;
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = {
+      combineJsonArrays,
+      detectImageType,
+      downloadWorkbook,
+      embedImagesInCells,
+      imageDataToBase64,
+      workbookToJson
+    };
+  }
+}());
+
+const allViolationInstancesReportVisibleLabel = "(New) All Violation Instances";
+const allViolationInstancesNoThumbnailImagesReportVisibleLabel = allViolationInstancesReportVisibleLabel + " (no thumbnail images)";
+const allViolationInstancesLinkFileType = "(Excel Report)";
+const allViolationInstancesReportSRLabel = allViolationInstancesReportVisibleLabel + " " + allViolationInstancesLinkFileType;
+const allViolationInstancesNoThumbnailImagesReportSRLabel = allViolationInstancesNoThumbnailImagesReportVisibleLabel + " " + allViolationInstancesLinkFileType;
+
+
+// Call this function from the `viewReport` function in the `src\script\viewReport.js` file in AMPScript
+function addAllInstanceViolationsReport() {
+  var reportsHeading = $('h4').filter(function () {
+    return $.trim($(this).text()) === 'Excel Reports';
+  }).first();
+  var reportsList = reportsHeading.next('ul');
+  var lastReport = reportsList.children('li').last();
+
+  if (!reportsHeading.length || !reportsList.length || !lastReport.length) {
+    return null;
+  }
+
+  const allViolationInstancesReport = lastReport.clone(true, true);
+
+  allViolationInstancesReport.find('span').filter(function () {
+    return !$(this).children().length && $.trim($(this).text()) === 'Instance Violations';
+  }).text(allViolationInstancesReportVisibleLabel);
+
+  allViolationInstancesReport.find('span').filter(function () {
+    return !$(this).children().length && $.trim($(this).text()) === 'Instance Violations (Excel Report)';
+  }).text(allViolationInstancesReportSRLabel);
+
+  allViolationInstancesReport.find('a').first().attr('href', '#');
+
+  allViolationInstancesReport.find('svg').first()
+    .attr('title', allViolationInstancesReportSRLabel)
+    .find('title')
+    .text(allViolationInstancesReportSRLabel);
+
+  const noThumbnailImagesReport = allViolationInstancesReport.clone(true, true);
+
+  noThumbnailImagesReport.find('span').filter(function () {
+    return !$(this).children().length && $.trim($(this).text()) === allViolationInstancesReportVisibleLabel;
+  }).text(allViolationInstancesNoThumbnailImagesReportVisibleLabel);
+
+  noThumbnailImagesReport.find('span').filter(function () {
+    return !$(this).children().length && $.trim($(this).text()) === allViolationInstancesReportSRLabel;
+  }).text(allViolationInstancesNoThumbnailImagesReportSRLabel);
+
+  noThumbnailImagesReport.find('a').first().attr('href', '#');
+
+  noThumbnailImagesReport.find('svg').first()
+    .attr('title', allViolationInstancesNoThumbnailImagesReportSRLabel)
+    .find('title')
+    .text(allViolationInstancesNoThumbnailImagesReportSRLabel);
+
+  lastReport.after(noThumbnailImagesReport);
+  lastReport.after(allViolationInstancesReport);
+
+  return lastReport;
+}
+
+
+// Call this function from the `viewReport` function in the `src\script\viewReport.js` file in AMPScript
+function interceptExcelClickOnInstancesPage() {
+
+  // Intercept clicks on the link labeled "Excel" on the View All Instances page,
+  // and capture the Excel file in the browser before downloading.
+  if (typeof document !== "undefined" && document.addEventListener) {
+    document.addEventListener("click", async (event) => {
+      const allViolationInstancesLinkName = "(New) All Violation Instances (Excel Report)";
+      const allViolationInstancesnoThumbnailImagesLinkName = "(New) All Violation Instances (no thumbnail images) (Excel Report)";
+      const labelsOfLinksToRemediate = new Set([allViolationInstancesReportSRLabel, allViolationInstancesNoThumbnailImagesReportSRLabel]);
+
+      const link = event.target.closest("a");
+
+      if (!link) return;
+      if (!link.innerText) return;
+      if (!labelsOfLinksToRemediate.has(link.innerText.trim())) return;
+
+      if (typeof window !== "undefined" && window.__retrieveAndDownloadViolationInstancesExcelFile) {
+        retrieveAndDownloadViolationInstancesExcelFile = window.__retrieveAndDownloadViolationInstancesExcelFile;
+      } else {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      console.log(`[AMPScript Violation Instances Excel file processing] handling PDF click for "${link.innerText.trim()}"`);
+
+      const reportName = document.querySelector('h1').textContent.replace(/ - View All Instances$/, "").replace(/ - Report Dashboard$/, "").trim();
+      if (!reportName) {
+        throw new Error("The report name could not be determined from the page.");
+      }
+
+      const reportId = new URL(window.location.href).searchParams.get("report_id");
+      if (!reportId || !/^\d+$/.test(reportId)) {
+        throw new Error("The page URL must contain a numeric report_id query parameter.");
+      }
+
+      const origin = window.location.origin;
+      const omitThumbnails = link.innerText.trim() === allViolationInstancesNoThumbnailImagesReportSRLabel;
+      retrieveAndDownloadViolationInstancesExcelFile(origin, reportId, reportName, { omitThumbnails }).catch((error) => {
+        hideProcessingDialog();
+        console.error("[AMPScript Violation Instances Excel file processing] XLSX creation or download failed.", error);
+        alert("The XLSX file could not be created and downloaded. AMP may have returned an incomplete file, or the browser could not finish creating the spreadsheet.\n\nSee the browser console for details.");
+      });
+    }, true);
+  }
+}
+
 function updateInstancesTable() {
   // INJECT WARNINGS FOR EACH BEST PRACTICE
   if (!getCookieValue("kpmPref-bpWarnings")) {
@@ -12658,7 +13761,2507 @@ function viewPattern() {
   $("a[onclick*='modal_create_pattern_violation']").attr("accesskey", "a");
   $("a[onclick*='modal_delete_pattern_violations']").attr("accesskey", "x");
 }
-function viewReport() {
+// PDFremediation.js: PDF Accessibility Remediation feature for AMP Use Case Results and Module List PDF files in AMPScript.
+//
+// NOTES:
+//  Much of the development of this script relied on GitHub Copilot AI recommendations and code generation.
+//  It used node.js for development and testing of PDF manipulation logic; some of that test functionality is still present.
+//  The final implementation runs entirely in the browser using Tampermonkey.
+//  It leverages the pdf-lib library for PDF manipulation.
+//  It does not send any PDF data to a server; all processing is done locally in the browser.
+
+(function () {
+  "use strict";
+
+  const PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_VERSION = "0.11.0";
+  const PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING = true; // Set to true to enable detailed logging for debugging purposes.
+
+  const PDF_ACCESSIBILITY_REMEDIATION_DEFAULT_FILENAME_HINT = "AMP-report.pdf";
+  const PDF_ACCESSIBILITY_REMEDIATION_COMPANY_NAME = "Level Access";
+  const PDF_ACCESSIBILITY_REMEDIATION_APPLICATION_NAME = "AMP Use Case Results PDF Accessibility Fixer";
+  const PDF_ACCESSIBILITY_REMEDIATION_CUSTOM_PROPERTY = "AccessibilityRemediation";
+
+  // TODO: Add a mechanism to handle if the PDF remediation process hangs.
+  // const REMEDIATOR_TIMEOUT_MS = 60000; // 1 minute
+  const PDF_FETCH_TIMEOUT_MS = 120000; // 2 minutes
+  const PDF_DISPLAY_CONFIRMATION_DIALOG_TIMEOUT_MS = 5000; // 5 seconds
+
+  const pageContext = (typeof unsafeWindow !== "undefined" && unsafeWindow) || (typeof window !== "undefined" && window) || (typeof globalThis !== "undefined" && globalThis);
+  const hasDocument = typeof document !== "undefined" && !!document;
+  const browserLatin1Decoder = typeof TextDecoder !== "undefined" ? new TextDecoder("latin1") : null;
+  let pdfLibModulePromise = null;
+  let pdfJsModulePromise = null;
+
+  const withTemporarilySanitizedPrototypeEnumerables = async (callback) => {
+    const prototypeTargets = [
+      { name: "Object", prototype: Object.prototype },
+      { name: "Array", prototype: Array.prototype },
+    ];
+    const restoredDescriptors = [];
+
+    try {
+      for (const { name, prototype } of prototypeTargets) {
+        if (!prototype) continue;
+
+        for (const key of Object.keys(prototype)) {
+          const descriptor = Object.getOwnPropertyDescriptor(prototype, key);
+          if (!descriptor || !descriptor.enumerable) {
+            continue;
+          }
+
+          restoredDescriptors.push({ name, prototype, key, descriptor });
+          try {
+            Object.defineProperty(prototype, key, {
+              ...descriptor,
+              enumerable: false,
+            });
+          } catch (error) {
+            // If a property cannot be adjusted, leave it in place and let pdf.js decide.
+          }
+        }
+      }
+
+      return await callback();
+    } finally {
+      for (const { prototype, key, descriptor } of restoredDescriptors.reverse()) {
+        try {
+          Object.defineProperty(prototype, key, descriptor);
+        } catch (error) {
+          // Best-effort restoration only.
+        }
+      }
+    }
+  };
+
+  const getPdfJsWorkerGlobal = () => {
+    if (typeof globalThis === "undefined") {
+      return null;
+    }
+
+    return globalThis.pdfjsWorker?.WorkerMessageHandler || null;
+  };
+
+  const configurePdfJsWorkerSrc = (pdfJsModule) => {
+    if (!hasDocument || !pdfJsModule || !pdfJsModule.GlobalWorkerOptions) {
+      return pdfJsModule;
+    }
+
+    if (pdfJsModule.GlobalWorkerOptions.workerSrc || getPdfJsWorkerGlobal()) {
+      return pdfJsModule;
+    }
+
+    const resolvedVersion = typeof pdfJsModule.version === "string" && pdfJsModule.version.trim()
+      ? pdfJsModule.version.trim()
+      : "3.11.174";
+    const majorVersion = Number.parseInt(resolvedVersion, 10);
+    const workerFileName = Number.isFinite(majorVersion) && majorVersion >= 6
+      ? "pdf.worker.min.mjs"
+      : "pdf.worker.min.js";
+    pdfJsModule.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${resolvedVersion}/build/${workerFileName}`;
+    return pdfJsModule;
+  };
+
+  const binaryToLatin1String = (value) => {
+    if (value == null) return "";
+    if (typeof value === "string") return value;
+
+    let bytes;
+    if (ArrayBuffer.isView(value)) {
+      bytes = new Uint8Array(value.buffer, value.byteOffset, value.byteLength);
+    } else if (value instanceof ArrayBuffer) {
+      bytes = new Uint8Array(value);
+    } else if (Array.isArray(value)) {
+      bytes = Uint8Array.from(value.map((entry) => Number(entry) & 0xff));
+    } else if (typeof value === "object" && typeof value.byteLength === "number") {
+      bytes = new Uint8Array(value.buffer || value, value.byteOffset || 0, value.byteLength);
+    } else {
+      return String(value);
+    }
+
+    if (browserLatin1Decoder) {
+      try {
+        return browserLatin1Decoder.decode(bytes);
+      } catch (error) {
+        // Fall through to a pure-JS conversion for environments without a working TextDecoder.
+      }
+    }
+
+    return Array.from(bytes, (byte) => String.fromCharCode(byte)).join("");
+  };
+
+  async function corePDFRemediation(pdfBytes, log = () => {}) {
+    if (!pdfBytes) {
+      throw new Error("Missing PDF bytes");
+    }
+
+    const resolvePdfDocumentClass = (pdfLibModule) => {
+      if (!pdfLibModule) return null;
+      if (pdfLibModule.PDFDocument && typeof pdfLibModule.PDFDocument.load === "function") {
+        return pdfLibModule.PDFDocument;
+      }
+      if (pdfLibModule.default && typeof pdfLibModule.default.load === "function") {
+        return pdfLibModule.default;
+      }
+      if (pdfLibModule.default && pdfLibModule.default.PDFDocument && typeof pdfLibModule.default.PDFDocument.load === "function") {
+        return pdfLibModule.default.PDFDocument;
+      }
+      if (pdfLibModule.PDFLib && pdfLibModule.PDFLib.PDFDocument && typeof pdfLibModule.PDFLib.PDFDocument.load === "function") {
+        return pdfLibModule.PDFLib.PDFDocument;
+      }
+      return null;
+    };
+
+    const resolvePdfJsModule = (candidate) => {
+      if (!candidate) return null;
+      if (typeof candidate.getDocument === "function") {
+        return candidate;
+      }
+      if (candidate.pdfjsLib && typeof candidate.pdfjsLib.getDocument === "function") {
+        return candidate.pdfjsLib;
+      }
+      if (candidate.default && typeof candidate.default.getDocument === "function") {
+        return candidate.default;
+      }
+      if (candidate.default && candidate.default.pdfjsLib && typeof candidate.default.pdfjsLib.getDocument === "function") {
+        return candidate.default.pdfjsLib;
+      }
+      return null;
+    };
+
+    const getPdfLibModule = async () => {
+      if (pdfLibModulePromise) {
+        return pdfLibModulePromise;
+      }
+
+      pdfLibModulePromise = (async () => {
+        const candidates = [
+          () => (pageContext && pageContext.pdfLib ? pageContext.pdfLib : null),
+          () => (pageContext && pageContext.PDFLib ? pageContext.PDFLib : null),
+          () => (pageContext && pageContext.PDFDocument ? { PDFDocument: pageContext.PDFDocument } : null),
+          () => (typeof window !== "undefined" && window.pdfLib ? window.pdfLib : null),
+          () => (typeof window !== "undefined" && window.PDFLib ? window.PDFLib : null),
+          () => (typeof globalThis !== "undefined" && globalThis.pdfLib ? globalThis.pdfLib : null),
+          () => (typeof globalThis !== "undefined" && globalThis.PDFLib ? globalThis.PDFLib : null),
+        ];
+
+        if (typeof require === "function") {
+          try {
+            const requiredModule = require("pdf-lib");
+            if (resolvePdfDocumentClass(requiredModule)) {
+              return requiredModule;
+            }
+          } catch (error) {
+            // Ignore and fall back to browser candidates.
+          }
+        }
+
+        const deadline = Date.now() + 10000;
+        while (Date.now() < deadline) {
+          for (const getCandidate of candidates) {
+            const candidate = getCandidate();
+            const PDFDocument = resolvePdfDocumentClass(candidate);
+            if (PDFDocument) {
+              return candidate;
+            }
+          }
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
+        throw new Error("Unable to load pdf-lib from the browser environment. Check that the @require script was loaded successfully.");
+      })();
+
+      return pdfLibModulePromise;
+    };
+
+    const getPdfJsModule = async () => {
+      if (pdfJsModulePromise) {
+        return pdfJsModulePromise;
+      }
+
+      pdfJsModulePromise = (async () => {
+        // Tampermonkey @require:
+        //   https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js
+        //   https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js
+        const candidates = [
+          () => (pageContext && pageContext.pdfjsLib ? pageContext.pdfjsLib : null),
+          () => (pageContext && pageContext.PDFJSLib ? pageContext.PDFJSLib : null),
+          () => (typeof window !== "undefined" && window.pdfjsLib ? window.pdfjsLib : null),
+          () => (typeof window !== "undefined" && window.PDFJSLib ? window.PDFJSLib : null),
+          () => (typeof globalThis !== "undefined" && globalThis.pdfjsLib ? globalThis.pdfjsLib : null),
+          () => (typeof globalThis !== "undefined" && globalThis.PDFJSLib ? globalThis.PDFJSLib : null),
+        ];
+
+        const resolveFromGlobalCandidates = () => {
+          for (const getCandidate of candidates) {
+            const candidate = getCandidate();
+            const resolvedModule = resolvePdfJsModule(candidate);
+            if (resolvedModule) {
+              return resolvedModule;
+            }
+          }
+          return null;
+        };
+
+        const globalResolved = resolveFromGlobalCandidates();
+        if (globalResolved) {
+          return configurePdfJsWorkerSrc(globalResolved);
+        }
+
+        if (typeof require === "function") {
+          const requireCandidates = [
+            "pdfjs-dist/legacy/build/pdf.js",
+            "pdfjs-dist/legacy/build/pdf.mjs",
+            "pdfjs-dist/build/pdf.mjs",
+            "pdfjs-dist",
+          ];
+          for (const moduleName of requireCandidates) {
+            try {
+              const requiredModule = require(moduleName);
+              const resolvedModule = resolvePdfJsModule(requiredModule);
+              if (resolvedModule) {
+                return configurePdfJsWorkerSrc(resolvedModule);
+              }
+            } catch (error) {
+              // Try other candidates.
+            }
+          }
+        }
+
+        const dynamicImport = (() => {
+          try {
+            return new Function("moduleName", "return import(moduleName);");
+          } catch (error) {
+            return null;
+          }
+        })();
+
+        if (dynamicImport) {
+          const importCandidates = [
+            "pdfjs-dist/legacy/build/pdf.mjs",
+            "pdfjs-dist/build/pdf.mjs",
+            "pdfjs-dist",
+          ];
+          for (const moduleName of importCandidates) {
+            try {
+              const importedModule = await dynamicImport(moduleName);
+              const resolvedModule = resolvePdfJsModule(importedModule);
+              if (resolvedModule) {
+                return configurePdfJsWorkerSrc(resolvedModule);
+              }
+            } catch (error) {
+              // Try other candidates.
+            }
+          }
+        }
+
+        const deadline = Date.now() + 10000;
+        while (Date.now() < deadline) {
+          const resolvedModule = resolveFromGlobalCandidates();
+          if (resolvedModule) {
+            return resolvedModule;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
+        throw new Error("Unable to load pdf.js. In Tampermonkey, verify @require loaded pdfjsLib; in Node, verify pdfjs-dist is installed.");
+      })();
+
+      return pdfJsModulePromise;
+    };
+
+    if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] version ${PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_VERSION}: starting remediation`);
+
+    const pdfLibModule = await getPdfLibModule();
+    const PDFDocument = resolvePdfDocumentClass(pdfLibModule);
+    const pdfLibExports = pdfLibModule && typeof pdfLibModule === "object" ? pdfLibModule : {};
+
+    const PDFName = pdfLibExports.PDFName || pdfLibExports.default?.PDFName || null;
+    const PDFDict = pdfLibExports.PDFDict || pdfLibExports.default?.PDFDict || null;
+    const PDFArray = pdfLibExports.PDFArray || pdfLibExports.default?.PDFArray || null;
+    const PDFString = pdfLibExports.PDFString || pdfLibExports.default?.PDFString || null;
+    const PDFHexString = pdfLibExports.PDFHexString || pdfLibExports.default?.PDFHexString || null;
+    const PDFNumber = pdfLibExports.PDFNumber || pdfLibExports.default?.PDFNumber || null;
+    const PDFRef = pdfLibExports.PDFRef || pdfLibExports.default?.PDFRef || null;
+    const asPDFName = pdfLibExports.asPDFName || pdfLibExports.default?.asPDFName || null;
+
+    if (!PDFDocument || typeof PDFDocument.load !== "function") {
+      throw new Error("pdf-lib is not available in this browser context.");
+    }
+
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+
+    const hasTitle = (pdfDoc) => {
+      const title = (pdfDoc && typeof pdfDoc.getTitle === "function" ? pdfDoc.getTitle() : "") || "";
+      return Boolean(String(title).trim());
+    };
+
+    const setDisplayDocTitle = (pdfDoc) => {
+      try {
+        const catalog = pdfDoc && typeof pdfDoc.catalog !== "undefined" ? pdfDoc.catalog : null;
+        if (catalog && typeof catalog.getOrCreateViewerPreferences === "function") {
+          const viewerPreferences = catalog.getOrCreateViewerPreferences();
+          if (viewerPreferences && typeof viewerPreferences.setDisplayDocTitle === "function") {
+            viewerPreferences.setDisplayDocTitle(true);
+          }
+        }
+      } catch (error) {
+        console.warn("Unable to set DisplayDocTitle viewer preference:", error);
+      }
+    };
+
+    const toDisplayString = (value) => {
+      if (value == null) return "";
+      if (typeof value === "string") return value;
+      if (typeof value === "object") {
+        if (typeof value.asString === "function") return value.asString();
+        if (typeof value.toString === "function") return value.toString();
+      }
+      return String(value);
+    };
+
+    const debugStructureObject = (label, value) => {
+      try {
+        const resolvedValue = resolvePdfObject(value);
+        const constructorName = resolvedValue && resolvedValue.constructor && resolvedValue.constructor.name ? resolvedValue.constructor.name : "(none)";
+        const propertyNames = resolvedValue && typeof resolvedValue === "object"
+          ? Object.getOwnPropertyNames(resolvedValue).slice(0, 20)
+          : [];
+        const arrayProp = resolvedValue && typeof resolvedValue === "object" && resolvedValue.array ? resolvedValue.array : null;
+        const hasArrayProp = Array.isArray(arrayProp) || Boolean(arrayProp && typeof arrayProp.length === "number");
+        const arrayLength = Array.isArray(arrayProp) ? arrayProp.length : (arrayProp && typeof arrayProp.length === "number" ? arrayProp.length : "none");
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] debug ${label}: ctor=${constructorName}; hasGet=${typeof resolvedValue?.get === "function"}; hasSet=${typeof resolvedValue?.set === "function"}; hasEntries=${typeof resolvedValue?.entries === "function"}; hasKeys=${typeof resolvedValue?.keys === "function"}; hasDict=${Boolean(resolvedValue?.dict || resolvedValue?._dict || resolvedValue?.dictionary)}; hasArray=${hasArrayProp}; arrayLen=${arrayLength}; props=${propertyNames.join(",") || "(none)"}`);
+      } catch (error) {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] debug ${label}: inspection failed (${error && error.message ? error.message : error})`);
+      }
+    };
+
+    const resolvePdfObject = (value) => {
+      if (value == null) return null;
+      if (typeof value !== "object") return value;
+
+      const constructorName = value.constructor && value.constructor.name ? value.constructor.name : "";
+      if (typeof value.get === "function" || typeof value.set === "function" || typeof value.entries === "function" || typeof value.keys === "function" || value.dict || value._dict || value.dictionary || /Dict|Catalog|PageTree|PageLeaf/i.test(constructorName)) {
+        return value;
+      }
+
+      if (pdfDoc && pdfDoc.context && typeof pdfDoc.context.lookup === "function") {
+        const indirectRefCandidates = [
+          value.objectNumber,
+          value.generationNumber,
+          value.num,
+          value.gen,
+          value.index,
+          value.ref,
+          value.obj,
+          value._ref,
+          value._object
+        ];
+        const isIndirectRef = indirectRefCandidates.some((candidate) => candidate != null);
+        if (isIndirectRef) {
+          try {
+            return pdfDoc.context.lookup(value);
+          } catch (error) {
+            // Ignore and fall back to the original object.
+          }
+        }
+      }
+
+      const nestedLookupValue = value.ref || value.obj || value._ref || value._object;
+      if (nestedLookupValue && nestedLookupValue !== value && pdfDoc && pdfDoc.context && typeof pdfDoc.context.lookup === "function") {
+        try {
+          return pdfDoc.context.lookup(nestedLookupValue);
+        } catch (error) {
+          // Ignore and fall back to the original object.
+        }
+      }
+
+      return value;
+    };
+
+    const toArrayEntries = (value) => {
+      const resolvedValue = resolvePdfObject(value);
+      if (resolvedValue == null) return [];
+      if (Array.isArray(resolvedValue)) return resolvedValue.map((entry) => resolvePdfObject(entry));
+      if (resolvedValue && typeof resolvedValue === "object" && Array.isArray(resolvedValue.array)) {
+        return resolvedValue.array.map((entry) => resolvePdfObject(entry));
+      }
+      if (resolvedValue && typeof resolvedValue === "object" && resolvedValue.array && typeof resolvedValue.array.length === "number") {
+        return Array.from({ length: resolvedValue.array.length }, (_, index) => resolvePdfObject(resolvedValue.array[index]));
+      }
+      if (PDFArray && resolvedValue instanceof PDFArray) {
+        return Array.from({ length: resolvedValue.size() }, (_, index) => resolvePdfObject(resolvedValue.get(index)));
+      }
+      if (resolvedValue && typeof resolvedValue.size === "function" && typeof resolvedValue.get === "function") {
+        return Array.from({ length: resolvedValue.size() }, (_, index) => resolvePdfObject(resolvedValue.get(index)));
+      }
+      if (resolvedValue && typeof resolvedValue.entries === "function") {
+        return Array.from(resolvedValue.entries()).map(([, entry]) => resolvePdfObject(entry));
+      }
+      return [resolvedValue];
+    };
+
+    const ensureArray = (value) => toArrayEntries(value);
+
+    const getDictionaryContainer = (value) => {
+      const resolvedValue = resolvePdfObject(value);
+      if (!resolvedValue || typeof resolvedValue !== "object") return null;
+      const constructorName = resolvedValue.constructor && resolvedValue.constructor.name ? resolvedValue.constructor.name : "";
+      const isDictionaryLike = Boolean(
+        (typeof resolvedValue.set === "function" && typeof resolvedValue.get === "function")
+        || (typeof resolvedValue.entries === "function" && typeof resolvedValue.keys === "function")
+        || (resolvedValue.dict && typeof resolvedValue.dict === "object")
+        || (resolvedValue._dict && typeof resolvedValue._dict === "object")
+        || (resolvedValue.dictionary && typeof resolvedValue.dictionary === "object")
+        || /Dict|Catalog|PageTree|PageLeaf/i.test(constructorName)
+      );
+      if (!isDictionaryLike) return null;
+      if (typeof resolvedValue.get === "function") {
+        return resolvedValue;
+      }
+      if (resolvedValue.dict && typeof resolvedValue.dict === "object" && typeof resolvedValue.dict.get === "function") {
+        return resolvedValue.dict;
+      }
+      if (resolvedValue._dict && typeof resolvedValue._dict === "object" && typeof resolvedValue._dict.get === "function") {
+        return resolvedValue._dict;
+      }
+      if (resolvedValue.dictionary && typeof resolvedValue.dictionary === "object" && typeof resolvedValue.dictionary.get === "function") {
+        return resolvedValue.dictionary;
+      }
+      return null;
+    };
+
+    const isDict = (value) => {
+      const resolvedValue = resolvePdfObject(value);
+      if (!resolvedValue || typeof resolvedValue !== "object") return false;
+      const dictionaryContainer = getDictionaryContainer(resolvedValue);
+      if (dictionaryContainer) return true;
+      const constructorName = resolvedValue.constructor && resolvedValue.constructor.name ? resolvedValue.constructor.name : "";
+      return constructorName === "PDFDict" || constructorName === "PDFCatalog" || constructorName === "PDFPageTree" || constructorName === "PDFPageLeaf";
+    };
+
+    const normalizePdfName = (value) => {
+      if (value == null) return "";
+      if (typeof value === "object") {
+        if (value.encodedName) return String(value.encodedName).replace(/\/\#2F/g, "/");
+        if (typeof value.toString === "function") return String(value.toString()).replace(/\/\#2F/g, "/");
+      }
+      return String(value).replace(/\/\#2F/g, "/");
+    };
+
+    const normalizePdfNameKey = (value) => {
+      if (value == null) return "";
+      if (typeof value === "object") {
+        if (value.encodedName) {
+          const encodedName = String(value.encodedName);
+          return encodedName.startsWith("/") ? encodedName.slice(1) : encodedName;
+        }
+        if (typeof value.toString === "function") {
+          const stringValue = String(value.toString());
+          return stringValue.startsWith("/") ? stringValue.slice(1) : stringValue;
+        }
+      }
+      const stringValue = String(value);
+      return stringValue.startsWith("/") ? stringValue.slice(1) : stringValue;
+    };
+
+    const lookupDictionaryValue = (dict, lookupKey) => {
+      if (!dict || typeof dict !== "object") return undefined;
+      const dictionaryContainer = getDictionaryContainer(dict);
+      if (dictionaryContainer && typeof dictionaryContainer.get === "function") {
+        const directValue = dictionaryContainer.get(lookupKey);
+        if (directValue !== undefined) return directValue;
+        const strippedKey = normalizePdfNameKey(lookupKey);
+        if (strippedKey && strippedKey !== lookupKey) {
+          const strippedValue = dictionaryContainer.get(strippedKey);
+          if (strippedValue !== undefined) return strippedValue;
+        }
+      }
+      if (dictionaryContainer && typeof dictionaryContainer.entries === "function") {
+        const normalizedKey = normalizePdfName(lookupKey);
+        for (const [entryKey, entryValue] of dictionaryContainer.entries()) {
+          if (normalizePdfName(entryKey) === normalizedKey) {
+            return entryValue;
+          }
+        }
+      }
+      return undefined;
+    };
+
+    const getName = (obj, key) => {
+      const resolvedObj = resolvePdfObject(obj);
+      if (!isDict(resolvedObj)) return undefined;
+      const rawKey = typeof key === "string" ? normalizePdfNameKey(key) : null;
+      const pdfKey = typeof key === "string"
+        ? (asPDFName ? asPDFName(rawKey) : (PDFName && PDFName.of ? PDFName.of(rawKey) : null))
+        : key;
+      if (!pdfKey) return undefined;
+
+      const lookupCandidates = [];
+      const addCandidate = (candidateValue) => {
+        if (candidateValue == null) return;
+        const normalizedCandidate = normalizePdfName(candidateValue);
+        if (normalizedCandidate) lookupCandidates.push(normalizedCandidate);
+        const strippedCandidate = normalizePdfNameKey(candidateValue);
+        if (strippedCandidate) {
+          lookupCandidates.push(strippedCandidate);
+          lookupCandidates.push(`/${strippedCandidate}`);
+        }
+      };
+
+      addCandidate(pdfKey);
+      if (typeof key === "string") {
+        addCandidate(key);
+        addCandidate(rawKey);
+      }
+      if (typeof key === "object" && key != null) {
+        addCandidate(key);
+      }
+
+      const tryLookup = (targetKey) => {
+        if (!targetKey) return undefined;
+        const directValue = lookupDictionaryValue(resolvedObj, targetKey);
+        if (directValue !== undefined) return resolvePdfObject(directValue);
+        return undefined;
+      };
+
+      for (const candidateKey of new Set(lookupCandidates)) {
+        const directMatch = tryLookup(candidateKey);
+        if (directMatch !== undefined) return directMatch;
+      }
+
+      for (const candidateKey of new Set(lookupCandidates)) {
+        if (typeof resolvedObj.get === "function") {
+          const directValue = resolvedObj.get(candidateKey);
+          if (directValue !== undefined) return resolvePdfObject(directValue);
+        }
+      }
+
+      if (typeof resolvedObj.get === "function") {
+        const directValue = resolvedObj.get(pdfKey);
+        if (directValue !== undefined) return resolvePdfObject(directValue);
+      }
+
+      const dictionaryContainer = getDictionaryContainer(resolvedObj);
+      if (dictionaryContainer && typeof dictionaryContainer.entries === "function") {
+        for (const candidate of new Set(lookupCandidates)) {
+          for (const [candidateKey, candidateValue] of dictionaryContainer.entries()) {
+            const candidateEncodedName = normalizePdfName(candidateKey);
+            if (candidateEncodedName === candidate) {
+              return resolvePdfObject(candidateValue);
+            }
+          }
+        }
+      }
+
+      return undefined;
+    };
+
+    const isStructElem = (obj) => {
+      const resolvedObj = resolvePdfObject(obj);
+      return isDict(resolvedObj) && getName(resolvedObj, "/S") != null;
+    };
+
+    const rolemapLookup = (rolemap, structTypeName) => {
+      if (!structTypeName) return structTypeName;
+      const seen = new Set();
+      let current = toDisplayString(structTypeName);
+      while (true) {
+        if (seen.has(current)) return current;
+        seen.add(current);
+        const mapped = (rolemap && isDict(rolemap) ? toDisplayString(getName(rolemap, current)) : "");
+        if (!mapped || mapped === current) return current;
+        current = mapped;
+      }
+    };
+
+    const getStructTypeCanonical = (elemDict, rolemap) => {
+      const st = getName(elemDict, "/S");
+      const stName = st != null ? toDisplayString(st) : "";
+      return rolemapLookup(rolemap, stName);
+    };
+
+    const summarizeStructureNode = (node, rolemap) => {
+      const resolvedNode = resolvePdfObject(node);
+      if (!isDict(resolvedNode)) {
+        return `non-dict (${resolvedNode && resolvedNode.constructor && resolvedNode.constructor.name ? resolvedNode.constructor.name : typeof resolvedNode})`;
+      }
+
+      const type = getStructTypeCanonical(resolvedNode, rolemap);
+      const childCount = ensureArray(getName(resolvedNode, "/K")).length;
+      const rawKeys = [];
+      try {
+        if (resolvedNode.dict && typeof resolvedNode.dict.entries === "function") {
+          for (const [entryKey] of resolvedNode.dict.entries()) {
+            const normalizedKey = normalizePdfName(entryKey);
+            rawKeys.push(normalizedKey || String(entryKey));
+            if (rawKeys.length >= 8) break;
+          }
+        }
+      } catch (error) {
+        rawKeys.push("<inspect-error>");
+      }
+
+      const sValue = getName(resolvedNode, "/S");
+      return `type=${type || "(none)"}; children=${childCount}; /S=${sValue != null ? toDisplayString(sValue) : "(missing)"}; keys=${rawKeys.join(",") || "(none)"}`;
+    };
+
+    const structuralKids = (elemDict) => {
+      const resolvedElem = resolvePdfObject(elemDict);
+      const kidsAll = ensureArray(getName(resolvedElem, "/K"));
+      return kidsAll.filter((child) => isStructElem(child));
+    };
+
+    const eqObject = (a, b) => {
+      const resolvedA = resolvePdfObject(a);
+      const resolvedB = resolvePdfObject(b);
+      if (resolvedA === resolvedB) return true;
+      if (!resolvedA || !resolvedB) return false;
+      try {
+        return String(resolvedA) === String(resolvedB);
+      } catch (error) {
+        return false;
+      }
+    };
+
+    const setStructureNodeValue = (node, key, value) => {
+      const resolvedNode = resolvePdfObject(node);
+      if (!isDict(resolvedNode)) return false;
+      try {
+        const pdfKey = asPDFName ? asPDFName(key.startsWith("/") ? key.slice(1) : key) : null;
+        if (!pdfKey) return false;
+        resolvedNode.set(pdfKey, value);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    };
+
+    const setStructureType = (node, typeName) => {
+      const normalizedType = typeName == null ? "" : String(typeName).replace(/^\/+/, "");
+      if (!normalizedType) return false;
+      return setStructureNodeValue(node, "S", asPDFName ? asPDFName(normalizedType) : normalizedType);
+    };
+
+    const getOrCreateTrailerInfoDict = () => {
+      let infoDict = null;
+      const trailerInfo = pdfDoc && pdfDoc.context && pdfDoc.context.trailerInfo ? pdfDoc.context.trailerInfo : null;
+      if (trailerInfo && trailerInfo.Info && pdfDoc.context && typeof pdfDoc.context.lookup === "function") {
+        try {
+          infoDict = pdfDoc.context.lookup(trailerInfo.Info);
+        } catch (error) {
+          infoDict = null;
+        }
+      }
+
+      if ((!infoDict || typeof infoDict.set !== "function") && pdfDoc && pdfDoc.context && typeof pdfDoc.context.nextRef === "function" && typeof pdfDoc.context.obj === "function" && typeof pdfDoc.context.assign === "function") {
+        try {
+          const infoRef = pdfDoc.context.nextRef();
+          infoDict = pdfDoc.context.obj({});
+          pdfDoc.context.assign(infoRef, infoDict);
+          if (trailerInfo) {
+            trailerInfo.Info = infoRef;
+          }
+        } catch (error) {
+          console.warn("[AMPScript PDF remediation] Unable to create a trailer Info dictionary for custom metadata:", error);
+          infoDict = null;
+        }
+      }
+
+      return infoDict;
+    };
+
+    const addSemanticAccessibilityInfo = (structRoot, rolemap) => {
+      let tablesUpdated = 0;
+
+      const visit = (node, depth = 0) => {
+        const resolvedNode = resolvePdfObject(node);
+        if (!isDict(resolvedNode)) return;
+
+        const type = getStructTypeCanonical(resolvedNode, rolemap);
+        const childNodes = ensureArray(getName(resolvedNode, "/K"));
+
+        if (type === "/Table") {
+          const rows = [];
+          const collectRows = (currentNode) => {
+            const resolvedCurrent = resolvePdfObject(currentNode);
+            if (!isDict(resolvedCurrent)) return;
+            const currentType = getStructTypeCanonical(resolvedCurrent, rolemap);
+            if (currentType === "/TR") {
+              rows.push(resolvedCurrent);
+            }
+            for (const child of ensureArray(getName(resolvedCurrent, "/K"))) {
+              collectRows(child);
+            }
+          };
+          collectRows(resolvedNode);
+
+          rows.forEach((row) => {
+            const cells = ensureArray(getName(row, "/K")).filter((child) => isDict(child));
+            const headerCells = cells.filter((child) => getStructTypeCanonical(child, rolemap) === "/TH");
+            if (cells.length) {
+              const firstCell = cells[0];
+              if (!headerCells.length && firstCell && getStructTypeCanonical(firstCell, rolemap) !== "/TH") {
+                if (setStructureType(firstCell, "/TH")) {
+                  tablesUpdated += 1;
+                }
+              }
+            }
+          });
+        }
+
+        for (const child of childNodes) {
+          visit(child, depth + 1);
+        }
+      };
+
+      if (isDict(structRoot)) {
+        visit(structRoot);
+      }
+
+      return { tablesUpdated };
+    };
+
+    const collectDeletions = (structRoot, rolemap) => {
+      const targets = [];
+
+      const walkContainer = (containerDict) => {
+        const kids = ensureArray(getName(containerDict, "/K"));
+        for (const childRef of kids) {
+          const childDict = resolvePdfObject(childRef);
+          if (!isStructElem(childDict)) continue;
+          const stypeCan = getStructTypeCanonical(childDict, rolemap);
+          if (stypeCan === "/Sect") {
+            const sectStructKids = structuralKids(childDict);
+            const sectionContainsSingleParagraphWithFigure = sectStructKids.length === 1
+              && getStructTypeCanonical(sectStructKids[0], rolemap) === "/P"
+              && structuralKids(sectStructKids[0]).some((grandChild) => getStructTypeCanonical(grandChild, rolemap) === "/Figure");
+            if (sectionContainsSingleParagraphWithFigure) {
+              targets.push([containerDict, childRef]);
+            }
+          }
+          const childK = getName(childDict, "/K");
+          if (childK != null) {
+            walkContainer(childDict);
+          }
+        }
+      };
+
+      if (isDict(structRoot) && getName(structRoot, "/K") != null) {
+        walkContainer(structRoot);
+      }
+      return targets;
+    };
+
+    const removeSections = (deletionPairs) => {
+      let removedCount = 0;
+      for (const [containerDict, sectRef] of deletionPairs) {
+        const k = getName(containerDict, "/K");
+        if (k == null) continue;
+
+        const childEntries = [];
+        if (PDFArray && k instanceof PDFArray) {
+          for (let index = 0; index < k.size(); index += 1) {
+            childEntries.push(k.get(index));
+          }
+        } else if (Array.isArray(k)) {
+          childEntries.push(...k);
+        } else {
+          childEntries.push(k);
+        }
+
+        const nextEntries = childEntries.filter((entry) => !eqObject(entry, sectRef));
+        if (nextEntries.length !== childEntries.length) {
+          const next = new PDFArray();
+          for (const entry of nextEntries) {
+            next.push(entry);
+          }
+          containerDict.set(asPDFName("K"), next);
+          removedCount += 1;
+        }
+      }
+      return removedCount;
+    };
+
+    const parseHeadingLevel = (typeName) => {
+      if (!typeName) return null;
+      if (String(typeName).toUpperCase() === "/H") return 1;
+      const match = /^\/H([1-9][0-9]*)$/i.exec(String(typeName));
+      return match ? Number.parseInt(match[1], 10) : null;
+    };
+
+    const getPageLookupKey = (value) => {
+      if (value == null) return null;
+      if (typeof value === "number") return value;
+      if (typeof value === "string") {
+        const trimmed = value.trim();
+        return trimmed || null;
+      }
+      if (typeof value === "object") {
+        const objectNumber = value.objectNumber ?? value.num ?? value._num ?? null;
+        const generationNumber = value.generationNumber ?? value.gen ?? value._gen ?? null;
+        if (objectNumber != null || generationNumber != null) {
+          return `${objectNumber ?? 0}:${generationNumber ?? 0}`;
+        }
+        if (value.ref) return getPageLookupKey(value.ref);
+        if (value.obj) return getPageLookupKey(value.obj);
+        if (typeof value.toString === "function") {
+          const stringValue = String(value.toString());
+          return stringValue && stringValue !== "[object Object]" ? stringValue : null;
+        }
+      }
+      return null;
+    };
+
+    const addPageIndexEntry = (pageIndex, value, pageNumber) => {
+      const keys = [];
+      const pushKey = (key) => {
+        if (key == null || key === "") return;
+        if (!keys.includes(key)) keys.push(key);
+      };
+      pushKey(value);
+      pushKey(getPageLookupKey(value));
+      if (value && typeof value === "object") {
+        pushKey(value.ref);
+        pushKey(value.obj);
+        pushKey(value._ref);
+        pushKey(value._object);
+        pushKey(getPageLookupKey(value.ref));
+        pushKey(getPageLookupKey(value.obj));
+        pushKey(getPageLookupKey(value._ref));
+        pushKey(getPageLookupKey(value._object));
+        if (value.objectNumber != null) pushKey(`${value.objectNumber}:${value.generationNumber ?? 0}`);
+        if (value.num != null) pushKey(`${value.num}:${value.gen ?? 0}`);
+      }
+      for (const key of keys) {
+        pageIndex[key] = pageNumber;
+        pageIndex[String(key)] = pageNumber;
+      }
+    };
+
+    const buildPageIndex = (pdfDocument) => {
+      const pageIndex = {};
+      const pages = Array.isArray(pdfDocument.getPages) ? pdfDocument.getPages() : [];
+      pages.forEach((page, index) => {
+        const pageNumber = index + 1;
+        addPageIndexEntry(pageIndex, page && page._pageIndex != null ? page._pageIndex : index, pageNumber);
+        addPageIndexEntry(pageIndex, page, pageNumber);
+        addPageIndexEntry(pageIndex, page && page.ref ? page.ref : null, pageNumber);
+        addPageIndexEntry(pageIndex, page && page.obj ? page.obj : null, pageNumber);
+      });
+      return pageIndex;
+    };
+
+    const resolvePageNumber = (pageIndex, candidate) => {
+      const keys = [];
+      const pushKey = (key) => {
+        if (key == null || key === "") return;
+        if (!keys.includes(key)) keys.push(key);
+      };
+      pushKey(candidate);
+      pushKey(getPageLookupKey(candidate));
+      if (candidate && typeof candidate === "object") {
+        pushKey(candidate.ref);
+        pushKey(candidate.obj);
+        pushKey(candidate._ref);
+        pushKey(candidate._object);
+        pushKey(getPageLookupKey(candidate.ref));
+        pushKey(getPageLookupKey(candidate.obj));
+        pushKey(getPageLookupKey(candidate._ref));
+        pushKey(getPageLookupKey(candidate._object));
+        if (candidate.objectNumber != null) pushKey(`${candidate.objectNumber}:${candidate.generationNumber ?? 0}`);
+        if (candidate.num != null) pushKey(`${candidate.num}:${candidate.gen ?? 0}`);
+      }
+      for (const key of keys) {
+        const directMatch = pageIndex[key];
+        if (directMatch != null) return directMatch;
+        const stringMatch = pageIndex[String(key)];
+        if (stringMatch != null) return stringMatch;
+      }
+      return null;
+    };
+
+    const extractPageText = async (pdfDocument, pageNumber) => {
+      try {
+        const page = pdfDocument.getPage ? pdfDocument.getPage(pageNumber - 1) : null;
+        if (!page || typeof page.getTextContent !== "function") return "";
+        const textContent = await page.getTextContent();
+        const strings = (textContent && Array.isArray(textContent.items) ? textContent.items : [])
+          .map((item) => (item && (item.str || item.text || item.content)) || "")
+          .filter((text) => typeof text === "string" && text.trim())
+          .map((text) => text.trim());
+        return strings.join(" ").replace(/\s+/g, " ").trim();
+      } catch (error) {
+        return "";
+      }
+    };
+
+    const firstPageForStructElem = (elemDict, pdfDocument, pageIndex) => {
+      const visited = new Set();
+      let current = resolvePdfObject(elemDict);
+
+      while (current && isDict(current)) {
+        const identity = current && typeof current === "object"
+          ? (current.ref || current._ref || current.obj || current)
+          : current;
+        if (identity != null && visited.has(identity)) break;
+        visited.add(identity);
+
+        const pg = getName(current, "/Pg");
+        if (pg != null) {
+          const candidates = [];
+          const addCandidate = (candidate) => {
+            if (candidate == null) return;
+            if (!candidates.includes(candidate)) candidates.push(candidate);
+          };
+          const resolvedPg = resolvePdfObject(pg);
+          addCandidate(pg);
+          addCandidate(resolvedPg);
+          if (resolvedPg && typeof resolvedPg === "object") {
+            addCandidate(resolvedPg.ref);
+            addCandidate(resolvedPg._ref);
+            addCandidate(resolvedPg.obj);
+            addCandidate(resolvedPg.objectNumber);
+            addCandidate(resolvedPg.generationNumber);
+            addCandidate(resolvedPg._pageIndex);
+            addCandidate(resolvedPg.pageIndex);
+          }
+
+          for (const candidate of candidates) {
+            if (candidate != null) {
+              const pageNumber = resolvePageNumber(pageIndex, candidate);
+              if (pageNumber != null) return pageNumber;
+            }
+          }
+        }
+
+        const parent = getName(current, "/P");
+        current = parent != null ? resolvePdfObject(parent) : null;
+      }
+
+      return null;
+    };
+
+    const extractPageTextFromContentStream = async (pdfDocument, pageNumber) => {
+      try {
+        const page = pdfDocument.getPage ? pdfDocument.getPage(pageNumber - 1) : null;
+        if (!page || typeof page.node?.Contents !== "function") return "";
+
+        const contentStream = page.node.Contents();
+        if (!contentStream || typeof contentStream !== "object") return "";
+
+        const rawBytes = contentStream && typeof contentStream.asUint8Array === "function"
+          ? contentStream.asUint8Array()
+          : (contentStream.contents ? contentStream.contents : null);
+        if (!rawBytes) return "";
+
+        const decodedBytes = (() => {
+          try {
+            if (contentStream && typeof contentStream.getContentsString === "function") {
+              const contentsString = contentStream.getContentsString();
+              if (typeof contentsString === "string" && contentsString) {
+                return binaryToLatin1String(contentsString);
+              }
+            }
+            if (typeof require === "function") {
+              try {
+                const zlib = require("zlib");
+                const rawBytesUint8 = rawBytes instanceof Uint8Array ? rawBytes : new Uint8Array(rawBytes);
+                if (typeof zlib.inflateSync === "function") {
+                  const inflated = zlib.inflateSync(rawBytesUint8);
+                  return binaryToLatin1String(inflated);
+                }
+              } catch (error) {
+                // Fall through to a plain binary decode for browser and mixed environments.
+              }
+            }
+          } catch (error) {
+            // Fall back to the raw bytes; the stream can be plain text in some files.
+          }
+          return binaryToLatin1String(rawBytes);
+        })();
+
+        const contentText = decodedBytes;
+        if (!contentText) return "";
+
+        return contentText.replace(/\s+/g, " ").trim();
+      } catch (error) {
+        return "";
+      }
+    };
+
+    const extractFirstTextSnippet = (text) => {
+      if (!text) return "";
+      const compact = String(text).replace(/\s+/g, " ").trim();
+      if (!compact) return "";
+
+      const literalMatches = compact.match(/\((?:\\.|[^\\)])*\)/g) || [];
+      for (const literalMatch of literalMatches) {
+        const unescaped = literalMatch
+          .slice(1, -1)
+          .replace(/\\n/g, " ")
+          .replace(/\\r/g, " ")
+          .replace(/\\t/g, " ")
+          .replace(/\\\(/g, "(")
+          .replace(/\\\)/g, ")")
+          .replace(/\\([0-7]{1,3})/g, (_, octal) => String.fromCharCode(parseInt(octal, 8)))
+          .replace(/\\([\\()])/g, "$1");
+        const trimmed = unescaped.trim();
+        if (trimmed) return trimmed;
+      }
+
+      return compact;
+    };
+
+    const extractStructureText = async (node, pdfDocument, pageNumber, pageTextCache, visited = new Set()) => {
+      const resolvedNode = resolvePdfObject(node);
+      if (!isDict(resolvedNode)) return "";
+
+      const nodeIdentity = resolvedNode && typeof resolvedNode === "object"
+        ? (resolvedNode.ref || resolvedNode._ref || resolvedNode.obj || resolvedNode)
+        : resolvedNode;
+      if (nodeIdentity != null && visited.has(nodeIdentity)) return "";
+      if (nodeIdentity != null) visited.add(nodeIdentity);
+
+      const directCandidates = [getName(resolvedNode, "/T"), getName(resolvedNode, "/Alt"), getName(resolvedNode, "/ActualText")];
+      for (const candidate of directCandidates) {
+        const text = extractFirstTextSnippet(toDisplayString(candidate));
+        if (!text) continue;
+        if (/^(heading|figure)\s+\d+$/i.test(text)) continue;
+        return text;
+      }
+
+      const mcidValue = getName(resolvedNode, "/MCID");
+      if (mcidValue != null && pageNumber != null && Number.isFinite(Number(pageNumber))) {
+        const cacheKey = Number(pageNumber);
+        if (!pageTextCache[cacheKey]) {
+          pageTextCache[cacheKey] = await extractPageTextFromContentStream(pdfDocument, cacheKey);
+        }
+        const pageText = pageTextCache[cacheKey] || "";
+        if (pageText) {
+          const normalizedMcid = String(mcidValue).trim();
+          const mcidBlockPattern = new RegExp(`/\s*${normalizedMcid}\s*>>\s*BDC([\s\S]*?)(?:EMC)`, "i");
+          const mcidMatch = pageText.match(mcidBlockPattern);
+          if (mcidMatch && mcidMatch[1]) {
+            const blockText = extractFirstTextSnippet(mcidMatch[1]);
+            if (blockText) return blockText;
+          }
+        }
+      }
+
+      for (const child of ensureArray(getName(resolvedNode, "/K"))) {
+        const childText = await extractStructureText(child, pdfDocument, pageNumber, pageTextCache, visited);
+        if (childText) return childText;
+      }
+
+      return "";
+    };
+
+    const inferHeadingTitle = (pageText, level) => {
+      const compactText = String(pageText || "").replace(/\s+/g, " ").trim();
+      if (!compactText) return `Heading ${level}`;
+
+      const lines = compactText
+        .split(/\n|\r/)
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+
+      const headingLikeLine = lines.find((line) => {
+        const cleaned = String(line).replace(/^[-•*\s]+/, "").trim();
+        if (!cleaned || cleaned.length < 3) return false;
+        if (/^(page|figure|table|section|chapter|appendix)\b/i.test(cleaned)) return false;
+        if (/^\d+(?:\.\d+)?(?:\s|$)/.test(cleaned)) return false;
+        if (/^(use case results|module list|report deliverables|level access|amp|summary|results|analysis|recommendations|notes|overview)$/i.test(cleaned)) return false;
+        if (/^[A-Z]{2,}$/i.test(cleaned) && cleaned.length < 5) return false;
+        if (/^[^a-zA-Z0-9]+$/.test(cleaned)) return false;
+        return true;
+      });
+
+      const cleaned = String(headingLikeLine || lines[0] || "").replace(/^[-•*\s]+/, "").trim();
+      if (!cleaned) return `Heading ${level}`;
+      if (/^[A-Z]{2,}$/i.test(cleaned) && cleaned.length < 5) return `Heading ${level}`;
+      if (/^\d+(?:\.\d+)?$/.test(cleaned)) return `Heading ${level}`;
+      if (/^https?:\/\//i.test(cleaned)) return `Heading ${level}`;
+      if (cleaned.length > 180) return cleaned.slice(0, 177).trimEnd() + "...";
+
+      return cleaned;
+    };
+
+    const collectHeadings = async (structRoot, rolemap, pdfDocument, logFn = null) => {
+      const headings = [];
+      const pageIndex = buildPageIndex(pdfDocument);
+      const pageTextCache = {};
+      const emitLog = typeof logFn === "function" ? logFn : (() => {});
+
+      const visit = async (node) => {
+        const resolvedElem = resolvePdfObject(node);
+        if (!isDict(resolvedElem)) return;
+
+        const type = getStructTypeCanonical(resolvedElem, rolemap);
+        const level = parseHeadingLevel(type);
+        if (level != null) {
+          const pageNo = firstPageForStructElem(resolvedElem, pdfDocument, pageIndex);
+          const structureText = await extractStructureText(resolvedElem, pdfDocument, pageNo, pageTextCache);
+          let titleText = structureText || `Heading ${level}`;
+          if (!structureText) {
+            if (pageNo != null) {
+              const cacheKey = Number(pageNo);
+              if (!pageTextCache[cacheKey]) {
+                pageTextCache[cacheKey] = await extractPageText(pdfDocument, cacheKey);
+              }
+              const pageText = pageTextCache[cacheKey] || "";
+              titleText = inferHeadingTitle(pageText, level);
+            } else {
+              titleText = `Heading ${level}`;
+            }
+          }
+          headings.push({ elemDict: resolvedElem, level, page: pageNo, titleText });
+          // emitLog(`[AMPScript PDF remediation] heading level=${level} page=${pageNo} structureText=${JSON.stringify(structureText)} titleText=${JSON.stringify(titleText)}`);
+        }
+
+        for (const child of ensureArray(getName(resolvedElem, "/K"))) {
+          await visit(child);
+        }
+      };
+
+      if (!isDict(structRoot) || getName(structRoot, "/K") == null) return headings;
+      await visit(structRoot);
+      return headings;
+    };
+
+    const reportHeadingViolations = (headings) => {
+      const msgs = [];
+      for (let index = 1; index < headings.length; index += 1) {
+        const prev = headings[index - 1];
+        const curr = headings[index];
+        if (curr.level > prev.level + 1) {
+          const suggested = prev.level + 1;
+          msgs.push(`Heading #${index + 1} on page ${curr.page || "?"}: H${curr.level} follows H${prev.level} — violates rule; suggested → H${suggested}.`);
+        }
+      }
+      return msgs;
+    };
+
+    const demoteNonFirstH1Headings = (headings) => {
+      let firstH1Found = false;
+      let demotedCount = 0;
+
+      for (let index = 0; index < headings.length; index += 1) {
+        const heading = headings[index];
+        if (!heading || heading.level !== 1) continue;
+        if (!firstH1Found) {
+          firstH1Found = true;
+          continue;
+        }
+
+        // If the H1 is immediately followed by an H2, demote that whole sub-tree by one level
+        // first, so it doesn't collide with the H2 this H1 is about to become.
+        const nextHeading = headings[index + 1];
+        if (nextHeading && nextHeading.level === 2) {
+          for (let followingIndex = index + 1; followingIndex < headings.length; followingIndex += 1) {
+            const followingHeading = headings[followingIndex];
+            if (!followingHeading || followingHeading.level === 1) break;
+
+            const followingElem = resolvePdfObject(followingHeading.elemDict);
+            if (isDict(followingElem) && asPDFName) {
+              const newLevel = followingHeading.level + 1;
+              followingElem.set(asPDFName("S"), asPDFName(`H${newLevel}`));
+              followingHeading.level = newLevel;
+            }
+          }
+        }
+
+        const elem = resolvePdfObject(heading.elemDict);
+        if (isDict(elem) && asPDFName) {
+          elem.set(asPDFName("S"), asPDFName("H2"));
+          heading.level = 2;
+          demotedCount += 1;
+        }
+      }
+
+      return demotedCount;
+    };
+
+    const normalizeHeadingsInPlace = (headings, pdfDocument, structRoot, rolemap) => {
+      let totalChanges = 0;
+      let iterations = 0;
+      let previousHeadingLevel = null;
+
+      const visit = (node, parentHeadingLevel) => {
+        const resolvedNode = resolvePdfObject(node);
+        if (!isDict(resolvedNode)) return;
+
+        const currentType = getStructTypeCanonical(resolvedNode, rolemap);
+        const currentLevel = parseHeadingLevel(currentType);
+        let effectiveLevel = currentLevel;
+
+        if (currentLevel != null) {
+          let expectedLevel = currentLevel;
+          if (parentHeadingLevel != null) {
+            expectedLevel = Math.min(6, parentHeadingLevel + 1);
+          }
+          if (previousHeadingLevel != null && expectedLevel > previousHeadingLevel + 1) {
+            expectedLevel = previousHeadingLevel + 1;
+          }
+          expectedLevel = Math.max(1, Math.min(6, expectedLevel));
+
+          if (expectedLevel !== currentLevel) {
+            const elem = resolvedNode;
+            if (isDict(elem)) {
+              elem.set(asPDFName("S"), asPDFName(`H${expectedLevel}`));
+            }
+            totalChanges += 1;
+          }
+
+          previousHeadingLevel = expectedLevel;
+          parentHeadingLevel = expectedLevel;
+          effectiveLevel = expectedLevel;
+        }
+
+        const childParentHeadingLevel = currentLevel != null ? effectiveLevel : parentHeadingLevel;
+        for (const child of ensureArray(getName(resolvedNode, "/K"))) {
+          visit(child, childParentHeadingLevel);
+        }
+      };
+
+      if (isDict(structRoot)) {
+        visit(structRoot, null);
+        iterations = 1;
+        return [totalChanges, iterations];
+      }
+
+      while (true) {
+        let changes = 0;
+        for (let index = 1; index < headings.length; index += 1) {
+          const prev = headings[index - 1];
+          const curr = headings[index];
+          if (curr.level > prev.level + 1) {
+            const newLevel = prev.level + 1;
+            curr.level = newLevel;
+            const elem = curr.elemDict;
+            if (isDict(elem)) {
+              elem.set(asPDFName("S"), asPDFName(`H${newLevel}`));
+            }
+            changes += 1;
+          }
+        }
+        totalChanges += changes;
+        iterations += changes ? 1 : 0;
+        if (changes === 0) break;
+      }
+      return [totalChanges, iterations];
+    };
+
+    const tableHasAnyTh = (tableDict, rolemap) => {
+      let found = false;
+      const walk = (dictionary) => {
+        if (found) return;
+        const resolvedDict = resolvePdfObject(dictionary);
+        if (!resolvedDict) return;
+        const type = getStructTypeCanonical(resolvedDict, rolemap);
+        if (type === "/TH") {
+          found = true;
+          return;
+        }
+        for (const child of structuralKids(resolvedDict)) {
+          if (isDict(child)) walk(child);
+        }
+      };
+      walk(tableDict);
+      return found;
+    };
+
+    const processTableMakeFirstCellHeader = (tableDict, rolemap) => {
+      if (tableHasAnyTh(tableDict, rolemap)) return 0;
+      let rowsChanged = 0;
+      const walk = (dictionary) => {
+        const resolvedDict = resolvePdfObject(dictionary);
+        if (!resolvedDict) return;
+        const type = getStructTypeCanonical(resolvedDict, rolemap);
+        if (type === "/TR") {
+          const cells = [];
+          for (const child of structuralKids(resolvedDict)) {
+            if (isDict(child)) {
+              const childType = getStructTypeCanonical(child, rolemap);
+              if (childType === "/TD" || childType === "/TH") cells.push(child);
+            }
+          }
+          if (cells.length === 2) {
+            const [c1, c2] = cells;
+            const c1t = getStructTypeCanonical(c1, rolemap);
+            const c2t = getStructTypeCanonical(c2, rolemap);
+            if (c1t === "/TD" && c2t === "/TD") {
+              c1.set(asPDFName("S"), asPDFName("TH"));
+              rowsChanged += 1;
+            }
+          }
+        }
+        for (const child of structuralKids(resolvedDict)) {
+          if (isDict(child)) walk(child);
+        }
+      };
+      walk(tableDict);
+      return rowsChanged;
+    };
+
+    const normalizeTables = (structRoot, rolemap) => {
+      let tablesChanged = 0;
+      let rowsChangedTotal = 0;
+      const walk = (dictionary) => {
+        const type = getStructTypeCanonical(dictionary, rolemap);
+        if (type === "/Table") {
+          const changedRows = processTableMakeFirstCellHeader(dictionary, rolemap);
+          if (changedRows > 0) {
+            tablesChanged += 1;
+            rowsChangedTotal += changedRows;
+          }
+        }
+        for (const child of structuralKids(dictionary)) {
+          if (isDict(child)) walk(child);
+        }
+      };
+      if (!isDict(structRoot) || getName(structRoot, "/K") == null) return [0, 0];
+      walk(structRoot);
+      return [tablesChanged, rowsChangedTotal];
+    };
+
+    // -----------------------------------------------
+
+    /**
+     * JavaScript/pdf-lib and pdf.js version of create_bookmarks_from_tagged_headings.
+     *
+     * Builds a PDF outline/bookmark tree from tagged PDF headings H, H1..H6.
+     *
+     * @param {PDFDocument} pdfDoc - Loaded pdf-lib PDFDocument.
+     * @param {PDFDict|PDFRef|null} structRoot - Optional StructTreeRoot. If omitted, read from catalog.
+     * @param {PDFDict|PDFRef|null} roleMap - Optional RoleMap. If omitted, read from StructTreeRoot.
+     * @param {(message: string) => void} log - Optional logger.
+     * @returns {number} Number of bookmarks created.
+     */
+    async function create_bookmarks_from_tagged_headings(
+      pdfDoc,
+      structRoot = null,
+      roleMap = null,
+      log = () => {},
+    ) {
+
+
+      /* -------------------------------------------------------------------------- */
+      /* Core PDF helpers                                                           */
+      /* -------------------------------------------------------------------------- */
+
+      function lookup(obj, context) {
+        if (!obj) return null;
+        if (obj instanceof PDFRef) return context.lookup(obj);
+        return obj;
+      }
+
+      function asDict(obj, context) {
+        const value = lookup(obj, context);
+        return value instanceof PDFDict ? value : null;
+      }
+
+      function ensureArray(obj, context) {
+        if (!obj) return [];
+        const value = lookup(obj, context);
+        if (value instanceof PDFArray) return value.asArray();
+        return [value];
+      }
+
+      function objectToString(obj) {
+        if (!obj) return '';
+
+        if (obj instanceof PDFName) return obj.toString();
+
+        if (obj instanceof PDFString || obj instanceof PDFHexString) {
+          try {
+            return obj.decodeText();
+          } catch {
+            return obj.toString();
+          }
+        }
+
+        return obj.toString ? obj.toString() : String(obj);
+      }
+
+      function getNameString(dict, key, context) {
+        const d = asDict(dict, context);
+        if (!d) return '';
+        const value = d.get(PDFName.of(key));
+        return objectToString(value);
+      }
+
+      function refKey(ref) {
+        return ref && ref.toString ? ref.toString() : String(ref);
+      }
+
+      function isStructElem(obj, context) {
+        const d = asDict(obj, context);
+        return !!d && d.has(PDFName.of('S'));
+      }
+
+      function structuralKids(elemDict, context) {
+        const kids = ensureArray(elemDict.get(PDFName.of('K')), context);
+        return kids.filter((kid) => isStructElem(kid, context));
+      }
+
+      /* -------------------------------------------------------------------------- */
+      /* Role map and heading detection                                             */
+      /* -------------------------------------------------------------------------- */
+
+      function roleMapLookup(roleMap, structTypeName, context) {
+        if (!structTypeName) return structTypeName;
+
+        const seen = new Set();
+        let current = structTypeName;
+
+        while (true) {
+          if (seen.has(current)) return current;
+          seen.add(current);
+
+          const rm = asDict(roleMap, context);
+          if (!rm) return current;
+
+          const mapped = rm.get(PDFName.of(current.replace(/^\//, '')));
+          const mappedName = objectToString(mapped);
+
+          if (!mappedName || mappedName === current) return current;
+          current = mappedName;
+        }
+      }
+
+      function getStructTypeCanonical(elemDict, roleMap, context) {
+        const rawType = getNameString(elemDict, 'S', context);
+        return roleMapLookup(roleMap, rawType, context);
+      }
+
+      function parseHeadingLevel(typeName) {
+        if (!typeName) return null;
+
+        const normalized = typeName.toUpperCase();
+
+        if (normalized === '/H') return 1;
+
+        const match = normalized.match(/^\/H([1-9][0-9]*)$/);
+        if (!match) return null;
+
+        return Number.parseInt(match[1], 10);
+      }
+
+      /* -------------------------------------------------------------------------- */
+      /* Heading collection                                                         */
+      /* -------------------------------------------------------------------------- */
+
+      function buildPageRefToIndex(pdfDoc) {
+        const map = new Map();
+
+        pdfDoc.getPages().forEach((page, index) => {
+          if (page.ref) {
+            map.set(refKey(page.ref), index);
+          }
+        });
+
+        return map;
+      }
+
+      function firstPageRefForStructElem(elemDict, context) {
+        const stack = [elemDict];
+
+        while (stack.length > 0) {
+          const current = asDict(stack.pop(), context);
+          if (!current) continue;
+
+          const pageRef = current.get(PDFName.of('Pg'));
+          if (pageRef instanceof PDFRef) return pageRef;
+
+          const kids = ensureArray(current.get(PDFName.of('K')), context);
+          for (let i = kids.length - 1; i >= 0; i -= 1) {
+            const kidDict = asDict(kids[i], context);
+            if (kidDict) stack.push(kidDict);
+          }
+        }
+
+        return null;
+      }
+
+      function collectHeadingsFromStructTree(structRoot, roleMap, pdfDoc, pageRefToIndex) {
+        const context = pdfDoc.context;
+        const headings = [];
+
+        function walk(elem) {
+          const elemDict = asDict(elem, context);
+          if (!elemDict) return;
+
+          const type = getStructTypeCanonical(elemDict, roleMap, context);
+          const level = parseHeadingLevel(type);
+
+          if (level !== null) {
+            const pageRef = firstPageRefForStructElem(elemDict, context);
+            headings.push({
+              level,
+              elemDict,
+              pageRef,
+              pageIndex: pageRef ? pageRefToIndex.get(refKey(pageRef)) : undefined,
+            });
+          }
+
+          for (const kid of structuralKids(elemDict, context)) {
+            walk(kid);
+          }
+        }
+
+        const rootKids = ensureArray(structRoot.get(PDFName.of('K')), context);
+        for (const kid of rootKids) {
+          walk(kid);
+        }
+
+        return headings;
+      }
+
+      /* -------------------------------------------------------------------------- */
+      /* Heading label extraction                                                   */
+      /* -------------------------------------------------------------------------- */
+
+      function cleanHeadingText(value) {
+        return String(value || '')
+          .replace(/\s+/g, ' ')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&amp;/g, '&')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .trim()
+          .split(/\r?\n/)[0]
+          .slice(0, 240);
+      }
+
+      function headingLabelFromStruct(elemDict, pdfDoc, pageRefToIndex, pageMcidTextMap) {
+        const context = pdfDoc.context;
+
+        const metadataText = firstStructMetadataText(elemDict, context);
+        if (metadataText) return metadataText;
+
+        const mcidText = firstMcidTextFromHeading(elemDict, context, pageRefToIndex, pageMcidTextMap);
+        if (mcidText) return mcidText;
+
+        return '';
+      }
+
+      function firstStructMetadataText(elemDict, context) {
+        const stack = [elemDict];
+
+        while (stack.length > 0) {
+          const current = asDict(stack.pop(), context);
+          if (!current) continue;
+
+          for (const key of ['ActualText', 'Alt', 'T']) {
+            const value = current.get(PDFName.of(key));
+            const text = cleanHeadingText(objectToString(value));
+            if (text) return text;
+          }
+
+          const kids = ensureArray(current.get(PDFName.of('K')), context);
+          for (let i = kids.length - 1; i >= 0; i -= 1) {
+            const kidDict = asDict(kids[i], context);
+            if (kidDict) stack.push(kidDict);
+          }
+        }
+
+        return '';
+      }
+
+      function firstMcidTextFromHeading(elemDict, context, pageRefToIndex, pageMcidTextMap) {
+        const hit = firstMcidAndPageRefInStruct(elemDict, context);
+        if (!hit) return '';
+
+        const pageIndex = pageRefToIndex.get(refKey(hit.pageRef));
+        if (!Number.isInteger(pageIndex)) return '';
+
+        const perPageMap = pageMcidTextMap.get(pageIndex);
+        if (!perPageMap) return '';
+
+        const text = perPageMap.get(hit.mcid);
+        return cleanHeadingText(text);
+      }
+
+      function firstMcidAndPageRefInStruct(elemDict, context) {
+        const stack = [{ dict: elemDict, inheritedPageRef: null }];
+
+        while (stack.length > 0) {
+          const { dict, inheritedPageRef } = stack.pop();
+          const current = asDict(dict, context);
+          if (!current) continue;
+
+          const localPageRef =
+            current.get(PDFName.of('Pg')) instanceof PDFRef
+              ? current.get(PDFName.of('Pg'))
+              : inheritedPageRef;
+
+          const kids = ensureArray(current.get(PDFName.of('K')), context);
+
+          for (const kid of kids) {
+            const kidDict = asDict(kid, context);
+
+            if (kidDict && kidDict.has(PDFName.of('MCID'))) {
+              const mcidObj = kidDict.get(PDFName.of('MCID'));
+              const mcid = Number.parseInt(objectToString(mcidObj), 10);
+              const kidPageRef =
+                kidDict.get(PDFName.of('Pg')) instanceof PDFRef
+                  ? kidDict.get(PDFName.of('Pg'))
+                  : localPageRef;
+
+              if (Number.isInteger(mcid) && kidPageRef) {
+                return { mcid, pageRef: kidPageRef };
+              }
+            }
+
+            if (kidDict && kidDict.has(PDFName.of('S'))) {
+              stack.push({ dict: kidDict, inheritedPageRef: localPageRef });
+            }
+          }
+        }
+
+        return null;
+      }
+
+      function firstMcidDebugInfoInStruct(elemDict, context) {
+        const stack = [{ dict: elemDict, inheritedPageRef: null }];
+
+        while (stack.length > 0) {
+          const { dict, inheritedPageRef } = stack.pop();
+          const current = asDict(dict, context);
+          if (!current) continue;
+
+          const localPageRef =
+            current.get(PDFName.of('Pg')) instanceof PDFRef
+              ? current.get(PDFName.of('Pg'))
+              : inheritedPageRef;
+
+          const kids = ensureArray(current.get(PDFName.of('K')), context);
+
+          for (const kid of kids) {
+            const kidDict = asDict(kid, context);
+
+            if (kidDict && kidDict.has(PDFName.of('MCID'))) {
+              const mcidObj = kidDict.get(PDFName.of('MCID'));
+              const mcid = Number.parseInt(objectToString(mcidObj), 10);
+              const kidPageRef =
+                kidDict.get(PDFName.of('Pg')) instanceof PDFRef
+                  ? kidDict.get(PDFName.of('Pg'))
+                  : localPageRef;
+
+              if (Number.isInteger(mcid)) {
+                return {
+                  mcid,
+                  pageRef: kidPageRef || null,
+                };
+              }
+            }
+
+            if (kidDict && kidDict.has(PDFName.of('S'))) {
+              stack.push({ dict: kidDict, inheritedPageRef: localPageRef });
+            }
+          }
+        }
+
+        return null;
+      }
+
+      function appendSegment(existing, segment) {
+        const current = String(existing || '');
+        const next = String(segment || '');
+        if (!next) return current;
+        if (!current) return next;
+        const needsSpace = /[\p{L}\p{N}]$/u.test(current) && /^[\p{L}\p{N}]/u.test(next);
+        return needsSpace ? `${current} ${next}` : `${current}${next}`;
+      }
+
+      function parseMcidValue(value) {
+        if (value == null) return null;
+        if (typeof value === 'number' && Number.isInteger(value)) return value;
+        if (typeof value === 'string') {
+          const trimmed = value.trim();
+          if (!trimmed) return null;
+          if (/^-?\d+$/.test(trimmed)) return Number.parseInt(trimmed, 10);
+          const tailDigits = trimmed.match(/(\d+)\s*$/);
+          if (tailDigits) return Number.parseInt(tailDigits[1], 10);
+          return null;
+        }
+        if (typeof value === 'object') {
+          return parseMcidValue(
+            value.mcid
+            ?? value.id
+            ?? value.markedContentId
+            ?? value.MCID
+            ?? value.Num
+            ?? value.num
+            ?? null,
+          );
+        }
+        return null;
+      }
+
+      function extractMcidFromMarkedContentItem(item) {
+        if (!item || typeof item !== 'object') return null;
+
+        const direct = parseMcidValue(
+          item.mcid
+          ?? item.markedContentId
+          ?? item.id
+          ?? item.MCID
+          ?? null,
+        );
+        if (Number.isInteger(direct)) return direct;
+
+        const nested = parseMcidValue(
+          item.properties
+          ?? item.props
+          ?? item.markedContent
+          ?? item.attributes
+          ?? null,
+        );
+        if (Number.isInteger(nested)) return nested;
+
+        return null;
+      }
+
+      async function buildPdfJsMcidTextMap(pdfBytesValue, emitLog) {
+        const pageMcidTextMap = new Map();
+
+        return withTemporarilySanitizedPrototypeEnumerables(async () => {
+          const pdfJsModule = await getPdfJsModule();
+          const getDocument = pdfJsModule && typeof pdfJsModule.getDocument === "function"
+            ? pdfJsModule.getDocument.bind(pdfJsModule)
+            : null;
+          if (!getDocument) {
+            throw new Error('pdf.js getDocument() is unavailable.');
+          }
+
+          const toUint8Array = (value) => {
+            if (typeof Buffer !== 'undefined' && Buffer.isBuffer && Buffer.isBuffer(value)) {
+              return new Uint8Array(value);
+            }
+            if (value instanceof Uint8Array) {
+              return value;
+            }
+            if (ArrayBuffer.isView(value)) {
+              return new Uint8Array(value.buffer, value.byteOffset, value.byteLength);
+            }
+            if (value instanceof ArrayBuffer) {
+              return new Uint8Array(value);
+            }
+            if (Array.isArray(value)) {
+              return Uint8Array.from(value);
+            }
+            throw new Error('PDF bytes must be ArrayBuffer or Uint8Array-compatible for pdf.js.');
+          };
+
+          const pdfJsBytes = toUint8Array(pdfBytesValue);
+          const pdfJsErrorsOnlyVerbosity = pdfJsModule
+            && pdfJsModule.VerbosityLevel
+            && Number.isFinite(Number(pdfJsModule.VerbosityLevel.ERRORS))
+            ? Number(pdfJsModule.VerbosityLevel.ERRORS)
+            : undefined;
+
+          const loadingTask = getDocument({
+            data: pdfJsBytes,
+            useSystemFonts: true,
+            verbosity: pdfJsErrorsOnlyVerbosity,
+          });
+          const pdfJsDoc = await (loadingTask && loadingTask.promise ? loadingTask.promise : loadingTask);
+
+          try {
+            const totalPages = pdfJsDoc && Number.isInteger(pdfJsDoc.numPages) ? pdfJsDoc.numPages : 0;
+            for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
+              const page = await pdfJsDoc.getPage(pageNumber);
+              const textContent = await page.getTextContent({ includeMarkedContent: true });
+              const items = textContent && Array.isArray(textContent.items) ? textContent.items : [];
+              const activeMcidStack = [];
+              const perPageMap = new Map();
+
+              for (const item of items) {
+                if (!item) continue;
+
+                const itemType = typeof item.type === 'string' ? item.type : '';
+                if (itemType === 'beginMarkedContent' || itemType === 'beginMarkedContentProps') {
+                  activeMcidStack.push(extractMcidFromMarkedContentItem(item));
+                  continue;
+                }
+                if (itemType === 'endMarkedContent') {
+                  if (activeMcidStack.length) activeMcidStack.pop();
+                  continue;
+                }
+
+                const itemText = typeof item.str === 'string'
+                  ? item.str
+                  : (typeof item.text === 'string' ? item.text : '');
+                if (!itemText || !itemText.trim()) continue;
+
+                let activeMcid = null;
+                for (let i = activeMcidStack.length - 1; i >= 0; i -= 1) {
+                  if (Number.isInteger(activeMcidStack[i])) {
+                    activeMcid = activeMcidStack[i];
+                    break;
+                  }
+                }
+                if (!Number.isInteger(activeMcid)) {
+                  activeMcid = extractMcidFromMarkedContentItem(item);
+                }
+                if (!Number.isInteger(activeMcid)) continue;
+
+                const prior = perPageMap.get(activeMcid) || '';
+                perPageMap.set(activeMcid, appendSegment(prior, itemText));
+              }
+
+              pageMcidTextMap.set(pageNumber - 1, perPageMap);
+            }
+          } finally {
+            if (pdfJsDoc && typeof pdfJsDoc.destroy === 'function') {
+              try {
+                await pdfJsDoc.destroy();
+              } catch (error) {
+                // Ignore cleanup failures.
+              }
+            }
+            if (loadingTask && typeof loadingTask.destroy === 'function') {
+              try {
+                await loadingTask.destroy();
+              } catch (error) {
+                // Ignore cleanup failures.
+              }
+            }
+          }
+
+          if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) {
+            emitLog(`Bookmarks: pdf.js MCID text map built for ${pageMcidTextMap.size} page(s).`);
+          }
+
+          return pageMcidTextMap;
+        });
+      }
+
+      /* -------------------------------------------------------------------------- */
+      /* Outline tree construction                                                  */
+      /* -------------------------------------------------------------------------- */
+
+      function headingsToOutlineTree(headings) {
+        const root = { children: [] };
+        const stack = [{ level: 0, node: root }];
+
+        for (const heading of headings) {
+          const node = {
+            title: heading.title,
+            level: heading.level,
+            pageRef: heading.pageRef,
+            children: [],
+          };
+
+          while (stack.length > 1 && stack[stack.length - 1].level >= heading.level) {
+            stack.pop();
+          }
+
+          stack[stack.length - 1].node.children.push(node);
+          stack.push({ level: heading.level, node });
+        }
+
+        return root.children;
+      }
+
+      /* -------------------------------------------------------------------------- */
+      /* Low-level /Outlines writer                                                 */
+      /* -------------------------------------------------------------------------- */
+
+      function writeOutlineTree(pdfDoc, rootNodes) {
+        const context = pdfDoc.context;
+        const outlineRootRef = context.nextRef();
+
+        const itemRefs = new Map();
+        visitOutlineNodes(rootNodes, (node) => {
+          itemRefs.set(node, context.nextRef());
+        });
+
+        assignOutlineSiblingsAndChildren(pdfDoc, rootNodes, outlineRootRef, itemRefs);
+
+        const outlineRoot = PDFDict.withContext(context);
+        outlineRoot.set(PDFName.of('Type'), PDFName.of('Outlines'));
+
+        if (rootNodes.length > 0) {
+          outlineRoot.set(PDFName.of('First'), itemRefs.get(rootNodes[0]));
+          outlineRoot.set(PDFName.of('Last'), itemRefs.get(rootNodes[rootNodes.length - 1]));
+          outlineRoot.set(PDFName.of('Count'), PDFNumber.of(countOutlineDescendants(rootNodes)));
+        }
+
+        context.assign(outlineRootRef, outlineRoot);
+
+        pdfDoc.catalog.set(PDFName.of('Outlines'), outlineRootRef);
+        // Setting this causes Adobe Acrobat to open the bookmarks panel by default, which is not what we want.
+        // pdfDoc.catalog.set(PDFName.of('PageMode'), PDFName.of('UseOutlines'));
+      }
+
+      function assignOutlineSiblingsAndChildren(pdfDoc, nodes, parentRef, itemRefs) {
+        const context = pdfDoc.context;
+
+        nodes.forEach((node, index) => {
+          const itemRef = itemRefs.get(node);
+          const item = PDFDict.withContext(context);
+
+          item.set(PDFName.of('Title'), PDFHexString.fromText(node.title));
+          item.set(PDFName.of('Parent'), parentRef);
+          item.set(PDFName.of('Dest'), makeFitDestinationArray(context, node.pageRef));
+
+          if (index > 0) {
+            item.set(PDFName.of('Prev'), itemRefs.get(nodes[index - 1]));
+          }
+
+          if (index < nodes.length - 1) {
+            item.set(PDFName.of('Next'), itemRefs.get(nodes[index + 1]));
+          }
+
+          if (node.children.length > 0) {
+            item.set(PDFName.of('First'), itemRefs.get(node.children[0]));
+            item.set(PDFName.of('Last'), itemRefs.get(node.children[node.children.length - 1]));
+            item.set(PDFName.of('Count'), PDFNumber.of(countOutlineDescendants(node.children)));
+          }
+
+          context.assign(itemRef, item);
+
+          if (node.children.length > 0) {
+            assignOutlineSiblingsAndChildren(pdfDoc, node.children, itemRef, itemRefs);
+          }
+        });
+      }
+
+      function makeFitDestinationArray(context, pageRef) {
+        const dest = PDFArray.withContext(context);
+        dest.push(pageRef);
+        dest.push(PDFName.of('Fit'));
+        return dest;
+      }
+
+      function countOutlineDescendants(nodes) {
+        let count = 0;
+
+        for (const node of nodes) {
+          count += 1;
+          count += countOutlineDescendants(node.children);
+        }
+
+        return count;
+      }
+
+      function visitOutlineNodes(nodes, callback) {
+        for (const node of nodes) {
+          callback(node);
+          visitOutlineNodes(node.children, callback);
+        }
+      }
+
+      /* -------------------------------------------------------------------------- */
+
+      const context = pdfDoc.context;
+
+      const catalog = pdfDoc.catalog;
+      const resolvedStructRoot = asDict(
+        structRoot || catalog.get(PDFName.of('StructTreeRoot')),
+        context,
+      );
+
+      if (!resolvedStructRoot) {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log('[AMPScript PDF remediation] No StructTreeRoot found. No bookmarks created.');
+        return 0;
+      }
+
+      const resolvedRoleMap = asDict(
+        roleMap || resolvedStructRoot.get(PDFName.of('RoleMap')),
+        context,
+      );
+
+      const pageRefToIndex = buildPageRefToIndex(pdfDoc);
+      const headings = collectHeadingsFromStructTree(
+        resolvedStructRoot,
+        resolvedRoleMap,
+        pdfDoc,
+        pageRefToIndex,
+      );
+
+      let pageMcidTextMap = new Map();
+      try {
+        pageMcidTextMap = await buildPdfJsMcidTextMap(pdfBytes, log);
+      } catch (error) {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) {
+          log(`[AMPScript PDF remediation] Bookmarks: pdf.js MCID extraction unavailable (${error && error.message ? error.message : error}). Falling back to struct metadata labels only.`);
+        }
+      }
+
+      if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) {
+        const debugSampleCount = Math.min(8, headings.length);
+        for (let i = 0; i < debugSampleCount; i += 1) {
+          const heading = headings[i];
+          const pageRefString = heading && heading.pageRef ? refKey(heading.pageRef) : '(none)';
+          const pageIndex = Number.isInteger(heading && heading.pageIndex) ? heading.pageIndex : null;
+          const mcidHit = heading ? firstMcidDebugInfoInStruct(heading.elemDict, context) : null;
+          const firstMcid = mcidHit && Number.isInteger(mcidHit.mcid) ? mcidHit.mcid : null;
+          const mcidPageRef = mcidHit && mcidHit.pageRef ? refKey(mcidHit.pageRef) : '(none)';
+          const mcidPageIndex = mcidHit && mcidHit.pageRef ? pageRefToIndex.get(refKey(mcidHit.pageRef)) : null;
+          const lookupPageIndex = Number.isInteger(mcidPageIndex)
+            ? mcidPageIndex
+            : (Number.isInteger(pageIndex) ? pageIndex : null);
+          const perPageMap = Number.isInteger(lookupPageIndex)
+            ? pageMcidTextMap.get(lookupPageIndex)
+            : null;
+          const hasPdfJsMcidTextMatch = Boolean(
+            Number.isInteger(firstMcid)
+            && perPageMap
+            && typeof perPageMap.get === 'function'
+            && String(perPageMap.get(firstMcid) || '').trim(),
+          );
+
+          log(
+            `[AMPScript PDF remediation] Bookmarks debug #${i + 1}: pageRef=${pageRefString} pageIndex=${pageIndex != null ? pageIndex : '(none)'} `
+            + `firstMCID=${firstMcid != null ? firstMcid : '(none)'} `
+            + `mcidPageRef=${mcidPageRef} mcidPageIndex=${mcidPageIndex != null ? mcidPageIndex : '(none)'} `
+            + `pdfjsMcidTextMatch=${hasPdfJsMcidTextMatch}`,
+          );
+        }
+      }
+
+      const usableHeadings = headings
+        .filter((h) => h.level >= 1 && h.level <= 6 && h.pageRef)
+        .map((h, index) => ({
+          ...h,
+          title:
+            headingLabelFromStruct(h.elemDict, pdfDoc, pageRefToIndex, pageMcidTextMap) ||
+            `Heading ${index + 1}`,
+        }));
+
+      if (usableHeadings.length === 0) {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log('[AMPScript PDF remediation] No tagged headings H1-H6 with resolvable pages found. No bookmarks created.');
+        return 0;
+      }
+
+      const tree = headingsToOutlineTree(usableHeadings);
+      writeOutlineTree(pdfDoc, tree);
+
+      if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Created ${usableHeadings.length} bookmark(s) from tagged headings.`);
+      return usableHeadings.length;
+    }
+
+
+    // -----------------------------------------------
+    // Start of main processing/remediation of the PDF
+    // -----------------------------------------------
+
+    const catalog = pdfDoc.catalog || (pdfDoc.getCatalog && pdfDoc.getCatalog()) || null;
+    const structRoot = catalog && PDFName && isDict(catalog) ? getName(catalog, "/StructTreeRoot") : null;
+    const rolemap = structRoot && isDict(structRoot) ? getName(structRoot, "/RoleMap") : null;
+    const structureTreeSummary = (() => {
+      if (!isDict(structRoot)) {
+        return "not discovered";
+      }
+
+      const rawK = getName(structRoot, "/K");
+      debugStructureObject("struct-root-K", rawK);
+      const structureKids = ensureArray(rawK);
+      structureKids.slice(0, 6).forEach((child, index) => {
+        debugStructureObject(`struct-root-child-${index}`, child);
+      });
+      const sampleTypes = structureKids.slice(0, 6).map((child) => summarizeStructureNode(child, rolemap));
+      return `discovered (${structureKids.length} top-level entry${structureKids.length === 1 ? "" : "ies"}); sample details: ${sampleTypes.join(" | ") || "none"}`;
+    })();
+    if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Structure tree ${structureTreeSummary}`);
+    if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] StructRoot=${Boolean(structRoot)} roleMap=${Boolean(rolemap)}`);
+
+    if (!isDict(structRoot)) {
+      if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log("[AMPScript PDF remediation] No tagged structure tree was discovered in this PDF, so no accessibility remediation was applied.");
+    } else if (isDict(structRoot) && getName(structRoot, "/K") != null) {
+      if (!isDict(rolemap)) {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log("[AMPScript PDF remediation] A role map was not present; continuing with the structure element types directly.");
+      }
+
+      const deletionPairs = collectDeletions(structRoot, rolemap);
+      const deletionsCount = deletionPairs.length ? removeSections(deletionPairs) : 0;
+      if (deletionsCount) {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Deleted ${deletionsCount} /Sect wrapper(s).`);
+      } else {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log("[AMPScript PDF remediation] No qualifying /Sect wrappers found.");
+      }
+
+      const headings = await collectHeadings(structRoot, rolemap, pdfDoc, log);
+      const demotedH1Count = demoteNonFirstH1Headings(headings);
+      if (demotedH1Count) {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Demoted ${demotedH1Count} non-leading H1 heading(s) to H2 before heading normalization.`);
+      }
+      const violations = reportHeadingViolations(headings);
+      if (violations.length) {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log("[AMPScript PDF remediation] Heading rule violations detected:");
+        for (const violation of violations) log(` - ${violation}`);
+      } else {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log("[AMPScript PDF remediation] Headings: no rule violations detected.");
+      }
+
+      const [headingChanges, headingIterations] = normalizeHeadingsInPlace(headings, pdfDoc, structRoot, rolemap);
+      if (headingChanges) {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Headings normalized: ${headingChanges} change(s) over ${headingIterations} iteration(s).`);
+      } else {
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log("[AMPScript PDF remediation] Headings required no normalization changes.");
+      }
+
+      const [tablesChanged, rowsChanged] = normalizeTables(structRoot, rolemap);
+      if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Headings=${headings.length} tables=${tablesChanged} rows=${rowsChanged}`);
+      if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Tables normalized: ${tablesChanged} table(s), ${rowsChanged} row(s) updated.`);
+
+      const semanticSummary = addSemanticAccessibilityInfo(structRoot, rolemap);
+      if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Semantic remediation promoted ${semanticSummary.tablesUpdated} table header cell(s).`);
+
+      // Create bookmarks from tagged headings (using the JavaScript/pdf-lib *and* pdf.js implementation from Microsoft Copilot and GitHub Copilot.)
+      await create_bookmarks_from_tagged_headings(pdfDoc, structRoot, rolemap, log);
+    }
+
+    // -----------------------------------------------
+    // Set specific metadata for the PDF document, 
+    // including the flag to  display the document title 
+    // (rather than the filename) in PDF viewers, 
+    // language, producer, and custom metadata.
+    // -----------------------------------------------
+
+    if (!hasTitle(pdfDoc)) {
+      console.warn("[AMPScript PDF remediation] Warning: The input PDF has no Title (/Title). Set a Title and retry.");
+    }
+
+    // // TODO: Create a better fallback title if the PDF does not have one.
+    // if (typeof pdfDoc.setTitle === "function" && !hasTitle(pdfDoc)) {
+    //   pdfDoc.setTitle("AMP Use Case Results");
+    // }
+
+    if (typeof pdfDoc.setAuthor === "function") {
+      pdfDoc.setAuthor(PDF_ACCESSIBILITY_REMEDIATION_COMPANY_NAME);
+    }
+
+    setDisplayDocTitle(pdfDoc);
+
+    if (typeof pdfDoc.setLanguage === "function") {
+      pdfDoc.setLanguage("en");
+    }
+
+    if (catalog && typeof catalog.set === "function" && asPDFName && PDFString) {
+      try {
+        catalog.set(asPDFName("Lang"), PDFString.of("en"));
+      } catch (error) {
+        console.warn("[AMPScript PDF remediation] Unable to set document language:", error);
+      }
+    }
+
+    // Don't set the "subject" or "keywords" for now; we may add this in the future, though.
+    // if (typeof pdfDoc.setSubject === "function") {
+    //   pdfDoc.setSubject("Accessibility evaluation results");
+    // }
+    // if (typeof pdfDoc.setKeywords === "function") {
+    //   pdfDoc.setKeywords(["Accessibility, Level Access, Use Cases, Functional Accessibility Testing"]);
+    // }
+
+    // Set the "PDF Producer" metadata to the one provided by AMP *and* this script
+    // NOTE: Otherwise, this is modified by pdf-lib to "pdf-lib (https://github.com/Hopding/pdf-lib)"
+    // NOTE: The "PDF Producer" metadata from AMP is "Apache FOP Version 2.8" 
+    //   (see https://xmlgraphics.apache.org/fop/dev/design/pdf-library.html)
+    let originalProducer = "Apache FOP Version 2.8";
+    if (typeof pdfDoc.setProducer === "function") {
+      const pdfProducerName = originalProducer + " in AMP and " + PDF_ACCESSIBILITY_REMEDIATION_APPLICATION_NAME + " v" + PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_VERSION;
+      pdfDoc.setProducer(pdfProducerName);
+      if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Set "PDF Producer" to "${pdfProducerName}"`);
+    }
+
+    // Write custom metadata into the trailer /Info dictionary to mark that the PDF has been remediated by this script.
+    const infoDict = getOrCreateTrailerInfoDict();
+
+    if (infoDict && typeof infoDict.set === "function" && asPDFName && PDFString) {
+      const pdfAccessibilityRemediationFullName = PDF_ACCESSIBILITY_REMEDIATION_COMPANY_NAME + " " + PDF_ACCESSIBILITY_REMEDIATION_APPLICATION_NAME + " v" + PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_VERSION;
+      try {
+        infoDict.set(asPDFName(PDF_ACCESSIBILITY_REMEDIATION_CUSTOM_PROPERTY), PDFString.of(pdfAccessibilityRemediationFullName));
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) log(`[AMPScript PDF remediation] Set custom property "${PDF_ACCESSIBILITY_REMEDIATION_CUSTOM_PROPERTY}": "${pdfAccessibilityRemediationFullName}"`);
+      } catch (error) {
+        console.warn("[AMPScript PDF remediation] Unable to set " + PDF_ACCESSIBILITY_REMEDIATION_CUSTOM_PROPERTY + " info entry:", error);
+      }
+    }
+
+    return pdfDoc.save();
+  }
+
+  // Top-level function for handling PDF remediation in the browser.
+  // This calls `corePDFRemediation` to perform the actual PDF accessibility remediation.
+
+  async function fetchPDFRemediateAndDownload(pdfUrl, filenameHint) {
+
+    function createDialogMarkup(message) {
+      return `
+        <div id="ampscript-pdf-remediation-dialog-overlay" style="
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 10000;
+          font-family: Arial, sans-serif;
+        ">
+          <div id="ampscript-pdf-remediation-dialog-body" style="
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: center;
+          "
+          role="alert" aria-live="assertive" aria-atomic="true"
+          >
+            <div style="
+              width: 40px;
+              height: 40px;
+              border: 4px solid #f3f3f3;
+              border-top: 4px solid #3498db;
+              border-radius: 50%;
+              animation: amp-spin 1s linear infinite;
+              margin: 0 auto 20px;
+            "></div>
+            <p id="ampscript-pdf-remediation-dialog-message" style="
+              margin: 0;
+              font-size: 16px;
+              color: #333;
+              line-height: 1.5;
+              white-space: pre-wrap;
+            ">${message}</p>
+          </div>
+          <style>
+            @keyframes amp-spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          </style>
+        </div>
+      `;
+    }
+
+    // Show the dialog HTML *first*, then add the message into it with `updateDialog`, so that the ARIA Live works correctly
+    function showDialog(message) {
+      if (!hasDocument || !document.body) return;
+      hideDialog();
+      const markup = createDialogMarkup("");
+      document.body.insertAdjacentHTML("beforeend", markup);
+      updateDialog(message);
+    }
+
+    function updateDialog(message) {
+      const messageElement = document.getElementById("ampscript-pdf-remediation-dialog-message");
+      if (messageElement) {
+        messageElement.textContent = message;
+      }
+    }
+
+    function hideDialog() {
+      if (!hasDocument) return;
+      const overlay = document.getElementById("ampscript-pdf-remediation-dialog-overlay");
+      if (overlay) {
+        overlay.remove();
+      }
+    }
+
+    function gmRequest(details) {
+      if (typeof GM_xmlhttpRequest === "function") {
+        return new Promise((resolve, reject) => {
+          GM_xmlhttpRequest({
+            ...details,
+            onload: resolve,
+            onerror: reject,
+            ontimeout: reject
+          });
+        });
+      }
+
+      const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+      const timeoutId = details.timeout && typeof setTimeout === "function"
+        ? setTimeout(() => controller && controller.abort(), details.timeout)
+        : null;
+
+      return fetch(details.url, {
+        method: details.method || "GET",
+        headers: details.headers || {},
+        body: details.data,
+        signal: controller ? controller.signal : undefined
+      }).then(async (response) => {
+        const payload = await response.arrayBuffer();
+        if (timeoutId) clearTimeout(timeoutId);
+        if (!response.ok) {
+          const error = new Error(`PDF request failed: HTTP ${response.status}`);
+          error.status = response.status;
+          throw error;
+        }
+        return { status: response.status, response: payload, headers: response.headers, ok: response.ok };
+      }).catch((error) => {
+        if (timeoutId) clearTimeout(timeoutId);
+        throw error;
+      });
+    }
+
+    async function fetchPdfBytes(pdfUrl) {
+      const response = await gmRequest({
+        method: "GET",
+        url: pdfUrl,
+        responseType: "arraybuffer",
+        timeout: PDF_FETCH_TIMEOUT_MS
+      });
+
+      if (response.status < 200 || response.status >= 300) {
+        throw new Error(`PDF request failed: HTTP ${response.status}`);
+      }
+
+      return response.response;
+    }
+
+    async function remediatePdf(pdfBytes, filenameHint) {
+      const remediatedBytes = await corePDFRemediation(pdfBytes, (message) => {
+        // updateDialog(message);
+        console.log(message);
+      });
+      return new Blob([remediatedBytes], { type: "application/pdf" });
+    }
+
+    // Handle fetching the PDF from AMP, passing it through the accessibility remediation in the browser, and downloading the result.
+
+    showDialog("AMPScript: Fetching \""+ filenameHint + "\" from AMP for accessibility remediation in the browser.\n\nThis can take 30 seconds or more.\n\nPlease wait...");
+
+    try {
+      const originalBytes = await fetchPdfBytes(pdfUrl);
+
+      updateDialog("AMPScript: \""+ filenameHint + "\" fetched.\n\nApplying \"" + PDF_ACCESSIBILITY_REMEDIATION_APPLICATION_NAME + "\" remediation in the browser now.\n\nPlease wait...");
+
+      try {
+        const remediatedBlob = await remediatePdf(originalBytes, filenameHint);
+
+        const remediatedFileName = (filenameHint || PDF_ACCESSIBILITY_REMEDIATION_DEFAULT_FILENAME_HINT);
+
+        if (typeof GM_download === "function") {
+          GM_download({
+            url: remediatedBlob,
+            name: remediatedFileName,
+            saveAs: false
+          });
+        } else {
+          const browserDownloadUrl = URL.createObjectURL(remediatedBlob);
+          const anchor = document.createElement("a");
+          anchor.href = browserDownloadUrl;
+          anchor.download = remediatedFileName;
+          anchor.style.display = "none";
+          document.body.appendChild(anchor);
+          anchor.click();
+          anchor.remove();
+          URL.revokeObjectURL(browserDownloadUrl);
+        }
+
+        updateDialog(`AMPScript: "${filenameHint}" fetched and remediated successfully.\n\nThe remediated PDF "${remediatedFileName}" has been downloaded through the browser.`);
+
+        if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) console.log(`[AMPScript PDF remediation] version ${PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_VERSION}: PDF remediation completed succesfully for "${remediatedFileName}", remediated PDF downloaded through browser.`);
+
+        setTimeout(() => {
+          hideDialog();
+        }, PDF_DISPLAY_CONFIRMATION_DIALOG_TIMEOUT_MS);
+
+      } catch (error) {
+        // NOTE: Confirmed to work in version 0.8.54 by a bug that was accidentally introduced into `corePDFRemediation`!
+
+        const unremediatedFileName = (filenameHint || PDF_ACCESSIBILITY_REMEDIATION_DEFAULT_FILENAME_HINT).replace(/\.pdf$/i, "-UNREMEDIATED.pdf");
+
+        if (typeof GM_download === "function") {
+          GM_download({
+            url: new Blob([originalBytes], { type: "application/pdf" }),
+            name: unremediatedFileName,
+            saveAs: false
+          });
+        } else if (hasDocument) {
+          const browserDownloadUrl = URL.createObjectURL(new Blob([originalBytes], { type: "application/pdf" }));
+          const anchor = document.createElement("a");
+          anchor.href = browserDownloadUrl;
+          anchor.download = unremediatedFileName;
+          anchor.style.display = "none";
+          document.body.appendChild(anchor);
+          anchor.click();
+          anchor.remove();
+          URL.revokeObjectURL(browserDownloadUrl);
+        }
+
+        hideDialog();
+
+        console.error(`PDF remediation failed. The unremediated PDF "${unremediatedFileName}" was downloaded instead.\n\n Error: ${error}`);
+        alert(`PDF remediation failed. The unremediated PDF "${unremediatedFileName}" was downloaded instead.\n\nThis happens if "${PDF_ACCESSIBILITY_REMEDIATION_APPLICATION_NAME}" could not process the PDF in this browser environment.\n\n Error: ${error.message}`);
+      }
+    } catch (error) {
+      hideDialog();
+
+      console.error("PDF remediation failed. The original PDF could not be fetched from AMP.\n\n Error: ", error);
+      alert("PDF remediation failed. The original PDF could not be fetched from AMP.\n\n Error: " + error.message);
+    }
+  }
+
+  if (typeof window !== "undefined") {
+    window.__corePDFRemediation = corePDFRemediation;
+    window.__fetchPDFRemediateAndDownload = fetchPDFRemediateAndDownload;
+  }
+
+  if (PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_LOGGING) console.log(`[AMPScript PDF remediation] userscript version ${PDF_ACCESSIBILITY_REMEDIATION_SCRIPT_VERSION} loaded; waiting for PDF links.`);
+
+  if (pageContext) {
+    pageContext.AMPPDFAccessibilityFixer = pageContext.AMPPDFAccessibilityFixer || {};
+    pageContext.AMPPDFAccessibilityFixer.corePDFRemediation = corePDFRemediation;
+    pageContext.corePDFRemediation = corePDFRemediation;
+  }
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = {
+      corePDFRemediation: corePDFRemediation,
+      fetchPDFRemediateAndDownload: fetchPDFRemediateAndDownload
+    };
+  }
+})();
+
+// Call this function from the `viewReport` function in the `src\script\viewReport.js` file in AMPScript
+function interceptPDFClickOnReportPage() {
+
+  // Intercept clicks on the PDF links labeled "Use Case Results (PDF)" and "Module List (PDF)" on the report dashboard page,
+  // and remediate the accessibility of the PDF in the browser before downloading.
+  if (typeof document !== "undefined" && document.addEventListener) {
+    document.addEventListener("click", async (event) => {
+      const labelsOfLinksToRemediate = new Set(["Use Case Results (PDF)", "Module List (PDF)"]);
+
+      const link = event.target.closest("a[href*='mode=pdf']");
+
+      if (!link) return;
+      if (!link.innerText) return;
+      if (!labelsOfLinksToRemediate.has(link.innerText.trim())) return;
+
+      if (typeof window !== "undefined" && window.__fetchPDFRemediateAndDownload) {
+        fetchPDFRemediateAndDownload = window.__fetchPDFRemediateAndDownload;
+      } else {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      console.log(`[AMPScript PDF remediation] handling PDF click for "${link.innerText.trim()}"`);
+
+      let filenameHint = link.getAttribute("download") || "";
+      if (link.innerText && link.innerText.replace("(PDF)", "").trim()){
+        filenameHint = link.innerText.replace("(PDF)", "").trim() + ".pdf";
+      }
+
+      const reportName = document.querySelector('h1').textContent.replace(/ - Report Dashboard$/, "").trim();
+      if (reportName) {
+        filenameHint = reportName + " - " + filenameHint;
+      }
+
+      await fetchPDFRemediateAndDownload(link.href, filenameHint);
+    }, true);
+  }
+}function viewReport() {
   // ALWAYS ON: if Dashboard, checkbox for full description
   $(".description:first h3").prepend(
     buildCheckbox(
@@ -12668,6 +16271,18 @@ function viewReport() {
       "kpmDescPref"
     )
   );
+
+  if (typeof interceptPDFClickOnReportPage === "function") {
+    interceptPDFClickOnReportPage();
+  }
+
+  if (typeof addAllInstanceViolationsReport === "function") {
+    addAllInstanceViolationsReport();
+  }
+
+  if (typeof interceptExcelClickOnInstancesPage === "function") {
+    interceptExcelClickOnInstancesPage();
+  }
 }
 // USE CASES
 function copyUseCasesToClipboard() {
