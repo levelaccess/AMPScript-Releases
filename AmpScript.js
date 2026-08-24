@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      6.19.0
+// @version      6.20.0
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -3070,7 +3070,7 @@ function dataPreferred() {
       issue:
         "There are visually grouped form controls that are not programmatically grouped. Examples include:\n- ",
       recommendation:
-        "Provide fieldsets for groups of form controls. Common groups of form controls include related radio buttons, checkboxes, and shipping/billing address groupings. The <fieldset> element must have a descriptive <legend> element as its first child. The form controls must appear as descendants of the fieldset.",
+        "Provide fieldsets or ARIA groups for groups of form controls. Common groups of form controls include related radio buttons, checkboxes, and shipping/billing address groupings. The <fieldset> element must have a descriptive <legend> element as its first child; an ARIA group must have an aria-label or aria-labelledby attribute. The form controls must appear as descendants of the fieldset or group.",
       stepsToReproduce:
         '1. Locate the form field grouping.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Review the value for "Role".',
       jawsFunctionalSteps:
@@ -3900,6 +3900,22 @@ function dataPreferred() {
       type: "web",
     },
     {
+      bp: 524,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "9.2.1.1"],
+      id: "response-focusable-inactive-element",
+      impact:
+        "Keyboard users, including screen reader users, will be confused as to why focus lands on an element they cannot activate or interact with.",
+      issue:
+        'There are keyboard-focusable elements that are not active controls. Examples include:\n- ',
+      recommendation:
+        "Avoid placing inactive elements in the focus order. If content is meant to be interactive, include keypress and click handlers and assign an appropriate role. If content is meant to be inactive, it should not receive keyboard focus except in some special cases (e.g., scrollable <div>s, and the tabpanel of a set of ARIA tabs).",
+      stepsToReproduce:
+        '1. Locate the element and move focus to it.\n2. Inspect it with Chrome DevTools.\n3. In the Accessibility tab, expand the Computed Properties section.\n4. Notice that both "focusable" and "focused" are set to true, even though the role of the element is an inactive element type.',
+      successCriteria: ["2.1.1"],
+      title: 'Focusable inactive element',
+      type: "web",
+    },
+    {
       bp: 542,
       en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.2.4.2"],
       id: "response-page-title-repetitive",
@@ -4317,11 +4333,29 @@ function dataPreferred() {
       recommendation:
         "Ensure content updates define focus updates appropriately. When new content appears after activating a load more control, keyboard focus must move to the newly revealed content. Use the JavaScript focus() method to move keyboard focus to the first focusable element in the newly revealed content.",
       stepsToReproduce:
-        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the load more control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the first focusable element in the newly revealed content.',
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the load more control is focused.\n5. Press Enter on the load more control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is not the first focusable element in the newly revealed content.',
       dxCustomSTR:
-        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the load more control is focused.\n5. Press Enter on the close control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\nExpected result: Focus moves to the [Output], [** REVIEW: **] with tabindex="-1" set to the element in order to receive focus.\nActual result: The focused element is not the first focusable element in the newly revealed content.',
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the load more control is focused.\n5. Press Enter on the load more control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\nExpected result: Focus moves to the [Output], [** REVIEW: **] with tabindex="-1" set to the element in order to receive focus.\nActual result: The focused element is not the first focusable element in the newly revealed content.',
       successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not updated with load more controls",
+      type: "web",
+    },
+    {
+      bp: 605,
+      en301549: ["4.2.1", "4.2.2", "4.2.7", "4.2.10", "9.1.3.1", "9.2.4.3"],
+      id: "response-focus-not-moved-when-control-disappears-on-activation",
+      impact:
+        "Screen reader users and screen magnification users may become disoriented.",
+      issue:
+        "There are controls which, when activated, disappear from the page, but focus is not moved programmatically to another element in the page, leaving it in an indeterminate state. Examples include:\n- ",
+      recommendation:
+        "Ensure content updates define focus updates appropriately. If a control disappears when activated, keyboard focus must move to a logical location, such as the previous or next control on the page, or the results of the activation of that control. Use the JavaScript focus() method to move keyboard focus to the appropriate element.",
+      stepsToReproduce:
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the "Next" control is focused.\n5. Press Enter on the control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is the <body> of the page, but pressing the Tab key does *not* move focus to the first focusable element in the body; this indicates that focus was in an indeterminate state.",
+      dxCustomSTR:
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the "Next" control is focused.\n5. Press Enter on the control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\nExpected result: Focus moves to a defined element.\nActual result: Focus strays to the HTML <body> element (focus is in an indeterminate state).",
+      successCriteria: ["1.3.1", "2.4.3"],
+      title: "Focus not moved when control disappears on activation",
       type: "web",
     },
     {
@@ -8118,7 +8152,7 @@ function dataReading() {
       id: "reading-tabs",
       title: "Tabs",
       value:
-        "For more information about creating accessible tab controls, please see the W3C Web Accessibility Initiative's ARIA Authoring Practices Guide: https://www.w3.org/WAI/ARIA/apg/patterns/tabpanel/",
+        "For more information about creating accessible tab controls, please see the W3C Web Accessibility Initiative's ARIA Authoring Practices Guide: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/",
     },
     {
       id: "reading-toggles-switches",
