@@ -30,8 +30,8 @@ If AMPScript cannot complete the remediation in the current browser environment,
 
 Two new links are added under `Report Deliverables > Excel Reports` on AMP report dashboards:
 
-- `(New) All Violation Instances`  (link accessible name: `(New) All Violation Instances (Excel Report)`)
-- `(New) All Violation Instances (no thumbnail images)`  (link accessible name: `(New) All Violation Instances (no thumbnail images) (Excel Report)`)
+- `(BETA) All Violation Instances`  (link accessible name: `(BETA) All Violation Instances (Excel Report)`)
+- `(BETA) All Violation Instances (no thumbnail images)`  (link accessible name: `(BETA) All Violation Instances (no thumbnail images) (Excel Report)`)
 
 These links generate an Excel spreadsheet that mirrors the full All Violation Instances view, including all available columns, as though you had opened the Violations page, enabled all columns, and exported the data to Excel.
 

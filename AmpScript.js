@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      7.0.1
+// @version      7.0.2
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -12207,7 +12207,7 @@ function testModuleAlternate() {
 (function () {
   "use strict";
 
-  const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_SCRIPT_VERSION = "0.10.5";
+  const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_SCRIPT_VERSION = "0.10.6";
   const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_SCRIPT_LOGGING = true; // Set to true to enable detailed logging for debugging purposes.
   const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_DISPLAY_CONFIRMATION_DIALOG_TIMEOUT_MS = 5000;
   const VIOLATION_INSTANCES_EXCEL_FILE_PROCESSING_COMPANY_NAME = "Level Access";
@@ -13180,7 +13180,7 @@ function testModuleAlternate() {
   }
 }());
 
-const allViolationInstancesReportVisibleLabel = "(New) All Violation Instances";
+const allViolationInstancesReportVisibleLabel = "(BETA) All Violation Instances";
 const allViolationInstancesNoThumbnailImagesReportVisibleLabel = allViolationInstancesReportVisibleLabel + " (no thumbnail images)";
 const allViolationInstancesLinkFileType = "(Excel Report)";
 const allViolationInstancesReportSRLabel = allViolationInstancesReportVisibleLabel + " " + allViolationInstancesLinkFileType;
@@ -13247,8 +13247,6 @@ function interceptExcelClickOnInstancesPage() {
   // and capture the Excel file in the browser before downloading.
   if (typeof document !== "undefined" && document.addEventListener) {
     document.addEventListener("click", async (event) => {
-      const allViolationInstancesLinkName = "(New) All Violation Instances (Excel Report)";
-      const allViolationInstancesnoThumbnailImagesLinkName = "(New) All Violation Instances (no thumbnail images) (Excel Report)";
       const labelsOfLinksToRemediate = new Set([allViolationInstancesReportSRLabel, allViolationInstancesNoThumbnailImagesReportSRLabel]);
 
       const link = event.target.closest("a");
