@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The ACE AMP Script (formerly 'AMP - Insert Add Instances')
 // @namespace    http://tampermonkey.net/
-// @version      7.0.0
+// @version      7.0.1
 // @description  The ACE AMP Script - Adds some much needed functionality to AMP.
 // @author       Kevin Murphy
 // @match        *.levelaccess.net/index.php*
@@ -4363,9 +4363,9 @@ function dataPreferred() {
       recommendation:
         "Ensure content updates define focus updates appropriately. If a control disappears when activated, keyboard focus must move to a logical location, such as the previous or next control on the page, or the results of the activation of that control. Use the JavaScript focus() method to move keyboard focus to the appropriate element.",
       stepsToReproduce:
-        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the "Next" control is focused.\n5. Press Enter on the control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is the <body> of the page, but pressing the Tab key does *not* move focus to the first focusable element in the body; this indicates that focus was in an indeterminate state.",
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the "Next" control is focused.\n5. Press Enter on the control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\n7. Notice that the focused element is the <body> of the page, but pressing the Tab key does *not* move focus to the first focusable element in the body; this indicates that focus was in an indeterminate state.',
       dxCustomSTR:
-        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the "Next" control is focused.\n5. Press Enter on the control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\nExpected result: Focus moves to a defined element.\nActual result: Focus strays to the HTML <body> element (focus is in an indeterminate state).",
+        '1. Open Chrome DevTools.\n2. In the Console tab, activate the "Create live expression" (eye icon) control.\n3. In the Expression field, enter document.activeElement.\n4. On the page, press the Tab key repeatedly until the "Next" control is focused.\n5. Press Enter on the control.\n6. Review the value shown for document.activeElement live expression to determine the currently focused element.\nExpected result: Focus moves to a defined element.\nActual result: Focus strays to the HTML <body> element (focus is in an indeterminate state).',
       successCriteria: ["1.3.1", "2.4.3"],
       title: "Focus not moved when control disappears on activation",
       type: "web",
