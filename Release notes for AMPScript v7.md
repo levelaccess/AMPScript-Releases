@@ -20,11 +20,11 @@ This remediation runs locally in the browser. It focuses on the issues that are 
 - document title, language, producer, and custom metadata updates
 - marking the resulting PDF as remediated by AMPScript
 
-This script only fixes issues that are detected by Adobe Acrobat Pro (see [Remediating Use Case PDF for Platform in Confluence](https://levelaccess.atlassian.net/wiki/spaces/CXD/pages/1432650036/Remediating+Use+Case+PDF+for+Platform)); PAC will still report some low-impact accessibility issues which are not fixed, because of how AMP builds the original file. Users should still check the resulting PDF for accessibility wth Acrobat Pro, and manually fix any remaining issues.
+This script only fixes issues that are detected by Adobe Acrobat Pro (see [Remediating Use Case PDF for Platform in Confluence](https://levelaccess.atlassian.net/wiki/spaces/CXD/pages/1432650036/Remediating+Use+Case+PDF+for+Platform)); PAC will still report some low-impact accessibility issues that are not fixed (because of issues in how AMP builds the original file, which make it essentially impossible to fix these issues). Users should still check the resulting PDF for accessibility wth Acrobat Pro, and manually fix any remaining issues.
 
-AMPScript shows a status dialog while the file is being processed, and the downloaded file uses the report name in the filename, such as `Report Name - Module List.pdf`.
+AMPScript shows a status dialog while it processes the file, and the downloaded file uses the report name in the filename, such as `Report Name - Module List.pdf`.
 
-If AMPScript cannot complete the remediation in the current browser environment, the original unremediated PDF is downloaded instead. Users can bypass the automated fix by opening the original AMP link in a new tab (via right-clicking on the link).
+If AMPScript cannot complete the remediation in the current browser environment, it downloads the original, unremediated PDF instead. Users can bypass the automated fix by opening the original AMP link in a new tab (via right-clicking on the link).
 
 ## Improved All Violation Instances Excel file creation
 
@@ -33,10 +33,12 @@ Two new links are added under `Report Deliverables > Excel Reports` on AMP repor
 - `(BETA) All Violation Instances`  (link accessible name: `(BETA) All Violation Instances (Excel Report)`)
 - `(BETA) All Violation Instances (no thumbnail images)`  (link accessible name: `(BETA) All Violation Instances (no thumbnail images) (Excel Report)`)
 
-These links generate an Excel spreadsheet that mirrors the full All Violation Instances view, including all available columns, as though you had opened the Violations page, enabled all columns, and exported the data to Excel.
+These links generate an Excel spreadsheet that expands on the spreadsheet you can download from the All Violation Instances page of the report, including all available columns, as though you had opened the Violations page, enabled all columns, and exported the data to Excel.
 
-The spreadsheet also merges information from the eAP Audit Report JSON export and adds useful fields such as `Platform-Severity`, `Platform-Tractability`, `Platform-Status`, `Platform-Global`, and `BP-ID`. The exported data is formatted as a real Excel table with proper headers, filters, and column names so it is immediately usable in Excel, and is formatted in the modern XLSX format (instead of the old XLS format). Columns with just numeric information, such as Instance ID and Severity, are also handled correctly in the new spreadsheet.
+The spreadsheet also merges information from the eAP Audit Report JSON export and adds useful fields such as `Platform-Severity`, `Platform-Tractability`, `Platform-Status`, `Platform-Global`, and `BP-ID`. The exported data is formatted as a real Excel table with proper headers, filters, and column names so it is immediately usable in Excel, and is created in the modern XLSX format (instead of the old XLS format). The new spreadsheet also handles columns with only numeric information, such as Instance ID and Severity, correctly. The spreadsheet also adds columns for mapped WCAG Success Criteria, and Section 508 (Revised) and EN 301 549 clauses if the report includes those standards.
 
-By default, the generated spreadsheet includes thumbnail images when they are available; a no-thumbnails variant is also available, which gives much smaller files that are easier to work with. The images are inserted as over-cell images rather than true in-cell images, which is a current AMPScript limitation, but they remain useful for review and can be adjusted in Excel if needed (Copilot in Excel can adjust them all in a single pass, if necessary). The workbook also creates `Link to instance in AMP` values that point to the correct AMP instance even when the report is not hosted on `amp.levelaccess.net`.
+By default, the generated spreadsheet includes images when available (note that these are actually full-sized images, not the thumbnails). A no-thumbnails variant is also available, which produces a much smaller file that is easier to work with. The images are inserted correctly into the spreadsheet cells, so they now work properly when you sort or filter the table. The workbook also creates `Link to instance in AMP` values that point to the correct AMP instance even when the report is not hosted on `amp.levelaccess.net`.
+
+The spreadsheet also includes a second sheet, "One row per WCAG SC", which lets you filter by WCAG Success Criteria by duplicating rows where the Best Practice maps to two or more Success Criteria, then keeping only one SC per row.
 
 The export process includes a progress dialog while AMPScript fetches the AMP data, merges the supplemental eAP fields, and downloads the XLSX file through the browser.
