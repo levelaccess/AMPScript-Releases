@@ -7,3 +7,8 @@ If a user hasn't already installed the AMPScript script into TamperMonkey, they 
 https://raw.githubusercontent.com/levelaccess/AMPScript-Releases/main/AmpScript.js
 
 Once installed this way, TamperMonkey will automatically check for and install updates to the script.
+
+# Other Level Access tools
+Other Level Access tools (bookmarklets/favlets) are available at:
+
+https://github.com/levelaccess/AMPScript-Releases/tree/Other-Level-Access-tools
