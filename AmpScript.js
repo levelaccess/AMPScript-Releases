@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The AMP Script - Adds some much needed functionality to AMP.
 // @namespace    http://tampermonkey.net/
-// @version      7.2.0
+// @version      7.3.1
 // @description  The AMP Script - Adds some much needed functionality to AMP.
 // @author       Level Access
 // @match        *.levelaccess.net/index.php*
@@ -13268,6 +13268,15 @@ function handleEditMultipleModuleForm() {
   const fixDiv = document.createElement("div");
   const fixButton = document.createElement("button");
   const injectionPoint = document.querySelector("#modal_form #modules");
+  const modulesForm = injectionPoint?.closest("form");
+  const moduleSelect = injectionPoint?.querySelector(
+    "select[id^='module_tester']"
+  );
+
+  if (!injectionPoint || !modulesForm || !moduleSelect) {
+    return;
+  }
+
   fixButton.setAttribute("type", "button");
   fixButton.textContent = "Remove special characters";
   fixButton.addEventListener("click", () => {
@@ -13280,6 +13289,75 @@ function handleEditMultipleModuleForm() {
   });
   fixDiv.append(fixButton);
   injectionPoint.after(fixDiv);
+
+  const assignContainer = document.createElement("div");
+  const assignLabel = document.createElement("label");
+  const assignSelect = document.createElement("select");
+  const assignButton = document.createElement("button");
+  const submitButton = document.createElement("button");
+  const lineBreak = document.createElement("br");
+  const horizontalRule = document.createElement("hr");
+  const emptyOption = document.createElement("option");
+
+  assignSelect.id = "assign-all-modules";
+  assignSelect.setAttribute("style", "width: 382px");
+  assignLabel.setAttribute("for", assignSelect.id);
+  assignLabel.textContent = "Assign all these modules to:";
+  assignButton.setAttribute("type", "button");
+  assignButton.disabled = true;
+  assignButton.textContent = "Assign";
+  submitButton.setAttribute("type", "button");
+  submitButton.disabled = true;
+  submitButton.textContent = "Submit";
+
+  emptyOption.value = "-1";
+  emptyOption.textContent = "";
+  emptyOption.selected = true;
+  assignSelect.append(emptyOption);
+  moduleSelect.querySelectorAll("option").forEach((option) => {
+    const clonedOption = option.cloneNode(true);
+    clonedOption.selected = false;
+    assignSelect.append(clonedOption);
+  });
+
+  assignSelect.addEventListener("change", () => {
+    assignButton.disabled = assignSelect.value === "-1";
+  });
+  assignButton.addEventListener("click", () => {
+    if (assignButton.disabled) {
+      return;
+    }
+
+    injectionPoint
+      .querySelectorAll("select[id^='module_tester']")
+      .forEach((select) => {
+        select.value = assignSelect.value;
+      });
+    submitButton.disabled = false;
+  });
+  submitButton.addEventListener("click", () => {
+    const submitButtons = modulesForm.querySelectorAll(
+      'input[type="submit"][value="Submit"]'
+    );
+    if (submitButtons.length !== 1) {
+      window.alert(
+        `Expected exactly one Submit button, but found ${submitButtons.length}.`
+      );
+      return;
+    }
+
+    submitButtons[0].click();
+  });
+
+  assignContainer.classList.add("elementline");
+  assignContainer.append(
+    assignLabel,
+    assignSelect,
+    assignButton,
+    submitButton,
+    lineBreak
+  );
+  modulesForm.before(assignContainer, horizontalRule);
 }
 /* START USE CASE
    This stuff is for adding use case related functionality */
