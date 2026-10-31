@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The AMP Script - Adds some much needed functionality to AMP.
 // @namespace    http://tampermonkey.net/
-// @version      7.3.1
+// @version      7.4.0
 // @description  The AMP Script - Adds some much needed functionality to AMP.
 // @author       Level Access
 // @match        *.levelaccess.net/index.php*
@@ -9196,6 +9196,370 @@ function dataReading() {
   ];
   return reading;
 }
+// Disney-specific reading options. (Compare to the standard reading options in dataReading.js)
+// See dataSchemas.js for how these are mapped into the schema, via the name of this function.
+// Note that the "id" values must be unique within a single reading option set. 
+// They probably *don't* need to be unique across different reading option sets, 
+// because only one set is used at a time, but we'll keep them unique for clarity.
+function dataReadingDisney() {
+  const reading = [
+    {
+      id: "reading-disney-alert-dialog",
+      title: "Alert Dialogs",
+      value:
+        "For more information about Alert Dialogs, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Alert-Dialog-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-alert-status-message",
+      title: "Alerts / Status Messages",
+      value:
+        "For more information about Alerts / Status Messages, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Alert.aspx",
+    },
+    {
+      id: "reading-disney-badge",
+      title: "Badges",
+      value:
+        "For more information about Badges, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Badge-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-error-message",
+      title: "Error Messages",
+      value:
+        "For more information about Error Messages, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Error-Message-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-timer",
+      title: "Timers",
+      value:
+        "For more information about Timers, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Timer-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-toast",
+      title: "Toasts",
+      value:
+        "For more information about Toasts, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Toast-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-advertisement",
+      title: "Advertisements",
+      value:
+        "For more information about Advertisements, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Advertisement-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-avatar",
+      title: "Avatars",
+      value:
+        "For more information about Avatars, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Avatar-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-icon",
+      title: "Icons",
+      value:
+        "For more information about Icons, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Icon-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-image",
+      title: "Images",
+      value:
+        "For more information about Images, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Image-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-qr-code",
+      title: "QR Codes",
+      value:
+        "For more information about QR Codes, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/QR-Code-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-video-audio",
+      title: "Videos / Audio",
+      value:
+        "For more information about Videos / Audio, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Video-Audio-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-accordion",
+      title: "Accordions",
+      value:
+        "For more information about Accordions, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Accordion-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-button",
+      title: "Buttons",
+      value:
+        "For more information about Buttons, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Button-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-card",
+      title: "Cards",
+      value:
+        "For more information about Cards, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Card.aspx",
+    },
+    {
+      id: "reading-disney-carousel",
+      title: "Carousels",
+      value:
+        "For more information about Carousels, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Carousel-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-checkbox",
+      title: "Checkboxes",
+      value:
+        "For more information about Checkboxes, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Checkbox-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-chip",
+      title: "Chips",
+      value:
+        "For more information about Chips, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Chip-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-date-picker-calendar",
+      title: "Date Pickers / Calendars",
+      value:
+        "For more information about Date Pickers / Calendars, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Date-Picker-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-drag-drop",
+      title: "Drag & Drop",
+      value:
+        "For more information about Drag & Drop, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Drag-Drop-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-form",
+      title: "Forms",
+      value:
+        "For more information about Forms, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Form-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-long-press-context-menu",
+      title: "Long Press / Context Menus",
+      value:
+        "For more information about Long Press / Context Menus, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Long-Press-Context-Menu-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-menu-button",
+      title: "Menu Buttons",
+      value:
+        "For more information about Menu Buttons, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Menu-Button-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-popover",
+      title: "Popovers",
+      value:
+        "For more information about Popovers, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Popover-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-radio-button",
+      title: "Radio Buttons",
+      value:
+        "For more information about Radio Buttons, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Radio-Button-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-scroll-bar",
+      title: "Scroll Bars",
+      value:
+        "For more information about Scroll Bars, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Scrollbar.aspx",
+    },
+    {
+      id: "reading-disney-search",
+      title: "Search",
+      value:
+        "For more information about Search, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Search-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-select-dropdown-combobox",
+      title: "Select Dropdowns / Comboboxes",
+      value:
+        "For more information about Select Dropdowns / Comboboxes, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Select-Dropdown-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-stepper-spin-button",
+      title: "Steppers / Spin Buttons",
+      value:
+        "For more information about Steppers / Spin Buttons, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Spinbutton-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-tabs",
+      title: "Tabs",
+      value:
+        "For more information about Tabs, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Tabs-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-text-input",
+      title: "Text Inputs",
+      value:
+        "For more information about Text Inputs, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Input-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-toggle-switch",
+      title: "Toggle Switches",
+      value:
+        "For more information about Toggle Switches, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Toggle-Switch-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-toolbar",
+      title: "Toolbars",
+      value:
+        "For more information about Toolbars, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Toolbar-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-tooltip",
+      title: "Tooltips",
+      value:
+        "For more information about Tooltips, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Tooltip-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-treeview",
+      title: "Treeviews",
+      value:
+        "For more information about Treeviews, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Treeview-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-breadcrumbs",
+      title: "Breadcrumbs",
+      value:
+        "For more information about Breadcrumbs, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Breadcrumb-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-link",
+      title: "Links",
+      value:
+        "For more information about Links, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Link-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-navigation",
+      title: "Navigation",
+      value:
+        "For more information about Navigation, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Navigation.aspx",
+    },
+    {
+      id: "reading-disney-pagination",
+      title: "Pagination",
+      value:
+        "For more information about Pagination, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Pagination-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-skip-link",
+      title: "Skip Links",
+      value:
+        "For more information about Skip Links, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Skip-Links.aspx",
+    },
+    {
+      id: "reading-disney-drawer-panel",
+      title: "Drawers / Panels",
+      value:
+        "For more information about Drawers / Panels, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Drawer-Panel-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-floating-action-button-fab",
+      title: "Floating Action Buttons (FABs)",
+      value:
+        "For more information about Floating Action Buttons (FABs), please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Floating-Action-Button-(FAB)-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-modal-dialog",
+      title: "Modal Dialogs",
+      value:
+        "For more information about Modal Dialogs, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Dialog-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-loader",
+      title: "Loaders",
+      value:
+        "For more information about Loaders, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Loader.aspx",
+    },
+    {
+      id: "reading-disney-progress-bar",
+      title: "Progress Bars",
+      value:
+        "For more information about Progress Bars, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Progress-Bar.aspx",
+    },
+    {
+      id: "reading-disney-step-progress-indicator",
+      title: "Step Progress Indicators",
+      value:
+        "For more information about Step Progress Indicators, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Step-Progress-Indicator.aspx",
+    },
+    {
+      id: "reading-disney-divider-separator",
+      title: "Dividers / Separators",
+      value:
+        "For more information about Dividers / Separators, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Separator-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-heading",
+      title: "Headings",
+      value:
+        "For more information about Headings, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Heading-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-list",
+      title: "Lists",
+      value:
+        "For more information about Lists, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/List-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-sticky-content",
+      title: "Sticky Content",
+      value:
+        "For more information about Sticky Content, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Sticky-Content-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-table-grid",
+      title: "Tables / Grids",
+      value:
+        "For more information about Tables / Grids, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Table-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-text",
+      title: "Text",
+      value:
+        "For more information about Text, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Text-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-color-contrast",
+      title: "Color Contrast",
+      value:
+        "For more information about Color Contrast, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Color-Contrast.aspx",
+    },
+    {
+      id: "reading-disney-focus-indicator",
+      title: "Focus Indicators",
+      value:
+        "For more information about Focus Indicators, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Focus-Indicator-Accessibility.aspx",
+    },
+    {
+      id: "reading-disney-landmarks",
+      title: "Landmarks",
+      value:
+        "For more information about Landmarks, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Landmarks.aspx",
+    },
+    {
+      id: "reading-disney-mobile-app-core-requirements",
+      title: "Mobile App Core Requirements",
+      value:
+        "For more information about Mobile App Core Requirements, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Native-Mobile-Core-Accessibility-Requirements.aspx",
+    },
+    {
+      id: "reading-disney-ott-core-requirements",
+      title: "OTT Core Requirements",
+      value:
+        "For more information about OTT Core Requirements, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/OTT-Core-Accessibility-Requirements.aspx",
+    },
+    {
+      id: "reading-disney-visually-hidden-text",
+      title: "Visually Hidden Text",
+      value:
+        "For more information about Visually Hidden Text, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/Visually-Hidden-Text.aspx",
+    },
+    {
+      id: "reading-disney-web-core-requirements",
+      title: "Web Core Requirements",
+      value:
+        "For more information about Web Core Requirements, please see: https://twdc.sharepoint.com/sites/AccessibilityCenterofExcellence/SitePages/requirements-web.aspx",
+    },
+  ];
+  return reading;
+}
 function dataReviews() {
   const reviews = [
     {
@@ -9561,6 +9925,10 @@ function dataSchemas() {
         thumbnail: {
           required: false,
         },
+        // Override the default reading options with Disney-specific reading options.
+        // This value is the name of a function that returns data in the same format as dataReading() (in dataReading.js).
+        // See dataReadingDisney.js for these Disney-specific reading options.
+        readingOptions: dataReadingDisney
       },
     ],
     [
@@ -12568,6 +12936,7 @@ function stripAngularFeatures(codeText) {
     editedText = editedText.replaceAll(/\<\!\-\-\-\-\>/g, "");
   }
 
+  // TODO: It seems like this function should return the edited text instead of the original codeText
   return codeText;
 }
 
@@ -12599,12 +12968,20 @@ function addEditor(reportID) {
       10
     );
 
+    // Support for custom reading options based on the current schema.
+    const currentSchema = getSchema();
+    if (currentSchema && typeof currentSchema.readingOptions === "function") {
+      currentDataReading = currentSchema.readingOptions;
+    } else {
+      currentDataReading = dataReading;
+    }
+
     // Place the boilerplate buttons
     $("#AmpOpts").after(
       createAddInstanceButtons(
         dataPreferredFiltered(currentID),
         dataStatus(),
-        dataReading(),
+        currentDataReading(),
         dataCode(),
         dataReviews()
       )
@@ -13040,7 +13417,17 @@ function addEditor(reportID) {
     // When a reading is given, this appends the second field
     $("[id*='reading-']").on("click", (event) => {
       const clickID = $(event.target).attr("id");
-      const reading = dataReading();
+
+      // Support for custom reading options based on the current schema.
+      const currentSchema = getSchema();
+      if (currentSchema && typeof currentSchema.readingOptions === "function") {
+        currentDataReading = currentSchema.readingOptions;
+      } else {
+        currentDataReading = dataReading;
+      }
+
+      const reading = currentDataReading();
+
       const entry = reading.find((e) => e.id === clickID);
 
       const prefix = "\n\n[Recommended Reading]\n";
